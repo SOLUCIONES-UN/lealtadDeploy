@@ -45,7 +45,7 @@ $(function () {
         const id = $('#id').val();
 
         var raw = JSON.stringify({
-            "nombre": $('#nombreEdit').val
+            "nombre": $('#nombreEdit').val()
         });
 
         var requestOptions = {
@@ -56,7 +56,7 @@ $(function () {
         };
 
         fetch(`${url}Departamento/${id}`, requestOptions)
-            .then(response.json())
+            .then(response => response.json())
             .then(result => {
 
                 if(result.code == "ok"){
@@ -73,7 +73,7 @@ $(function () {
         return false;
     });
 
-    $('BtnDelete').click(function () {
+    $('#BtnDelete').click(function () {
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -192,19 +192,21 @@ const OpenEdit = (id) => {
         redirect: 'follow'
     };
 
-    fetch(`${url}Departamento7${id}`, requestOptions)
+    fetch(`${url}Departamento/${id}`, requestOptions)
         .then(response => response.json())
         .then(result => {
             console.log(result);
             $('#id').val(id);
             $('#nombreEdit').val(result.nombre);
-            $('#modalEdit').val('toggle');
+            $('#modalEdit').modal('toggle');
         })
         .catch(error => console.log('error', error));
 }
 
 const OpenDelete = (id) => {
+
     $('#idDelete').val(id);
     $('#modalDelete').modal('toggle');
+
 }
 
