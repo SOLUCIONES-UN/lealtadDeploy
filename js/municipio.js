@@ -126,6 +126,7 @@ const getMunicipios = () => {
         columns: [
             { data: "id" },
             { data: "nombre" },
+            { data: "departamento.nombre" },
             {
                 data: "id", render: function (data) {
                     return `
@@ -221,7 +222,7 @@ const OpenEdit = (id) => {
 
 const OpenDelete = (id) => {
 
-    console.log(id);
+    //console.log(id);
 
     $('#idDelete').val(id);
     $('#modalDelete').modal('toggle');
