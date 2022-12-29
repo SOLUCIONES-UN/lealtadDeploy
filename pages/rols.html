@@ -64,7 +64,7 @@
         <ul class="nav navbar-nav">
           <li class="nav-item">
             <a class="nav-link menu-toggle" href="javascript:void(0);">
-              <b>Administración de Categorias</b>
+              <b>Administración de Roles</b>
             </a>
           </li>
         </ul>
@@ -258,7 +258,7 @@
         <li class=" navigation-header"><span data-i18n="Apps &amp; Pages">Administración</span><i
             data-feather="more-horizontal"></i>
         </li>
-        <li class="nav-item </ul>active">
+        <li class="nav-item">
           <a class="d-flex align-items-center" href="categorias.html">
             <i data-feather="award"></i><span class="menu-title text-truncate"
               data-i18n="categorias">Categorias</span></a>
@@ -275,27 +275,26 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="d-flex align-items-center" href="departamentos.html">
-            <i data-feather="map"></i><span class="menu-title text-truncate" data-i18n="Departamentos">Departamentos</span>
-          </a>
+            <a class="d-flex align-items-center" href="departamentos.html">
+              <i data-feather="database"></i><span class="menu-title text-truncate" data-i18n="Departamentos">Departamentos</span>
+            </a>
         </li>
         <li class="nav-item">
           <a class="d-flex align-items-center" href="municipios.html">
             <i data-feather="database"></i><span class="menu-title text-truncate" data-i18n="Columnas">Municipios</span>
           </a>
-      </li>
-      <li class="nav-item ">
-        <a class="d-flex align-items-center" href="rols.html">
-          <i data-feather="database"></i><span class="menu-title text-truncate" data-i18n="Roles">Roles</span>
-        </a>
-      </li>
+        </li>
+        <li class="nav-item active">
+            <a class="d-flex align-items-center" href="rols.html">
+              <i data-feather="database"></i><span class="menu-title text-truncate" data-i18n="Roles">Roles</span>
+            </a>
+          </li>
         <li class=" navigation-header"><span data-i18n="Apps &amp; Pages">Configuración</span><i
             data-feather="more-horizontal"></i>
         </li>
         <li class="nav-item">
           <a class="d-flex align-items-center" href="promociones.html">
-            <i data-feather="gift"></i><span class="menu-title text-truncate"
-              data-i18n="Columnas">Promociones</span>
+            <i data-feather="gift"></i><span class="menu-title text-truncate" data-i18n="Columnas">Promociones</span>
           </a>
         </li>
       </ul>
@@ -318,7 +317,7 @@
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>Nombre</th>
+                    <th>Descripcion</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -336,13 +335,13 @@
       <form id="formNew" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Agregar Nueva Categoria</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Agregar Nuevo Rol</h5>
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
-            <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
-            <input type="text" class="form-control dt-full-name" id="nombre" placeholder="Nombre de la categoria"
-              name="nombre" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
+            <label class="form-label" for="descripcion">Descripcion</label>
+            <input type="text" class="form-control " id="descripcion" placeholder="Descripcion del rol"
+              name="descripcion" required />
           </div>
           <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
@@ -356,14 +355,14 @@
       <form id="formEdit" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Actualizar La Categoria</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Actualizacion del Rol</h5>
         </div>
         <div class="modal-body flex-grow-1">
+          <input type="hidden" id="id">
           <div class="form-group">
-            <input id="id" type="hidden">
-            <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
-            <input type="text" class="form-control dt-full-name" id="nombreEdit" placeholder="Nombre de la categoria"
-              name="nombreEdit" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
+            <label class="form-label" for="descripcionEdit">Descripcion</label>
+            <input type="text" class="form-control " id="descripcionEdit" placeholder="Descripcion del rol"
+              name="nombreEdit" required />
           </div>
           <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
@@ -377,12 +376,12 @@
       <form id="formDelete" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Inhabilitar La Categoria</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Inhabilitar el Rol</h5>
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
             <input id="idDelete" type="hidden">
-            <p>¿Esta seguro que desea <b>Inhabilitar esta Categoria?</b></p>
+            <p>¿Esta seguro que desea <b>Inhabilitar este Rol?</b></p>
           </div>
           <button id="BtnDelete" type="button" class="btn btn-danger mr-1 data-submit">Confirmar </button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
@@ -424,7 +423,7 @@
   <!-- END: Theme JS-->
 
   <!-- BEGIN: Page JS-->
-  <script src="../js/categoria.js"></script>
+  <script src="../js/rol.js"></script>
   <!-- END: Page JS-->
 
   <script>
