@@ -263,7 +263,7 @@
             <i data-feather="award"></i><span class="menu-title text-truncate"
               data-i18n="categorias">Categorias</span></a>
         </li>
-        <li class="nav-item active">
+        <li class="nav-item ">
           <a class="d-flex align-items-center" href="transacciones.html">
             <i data-feather="dollar-sign"></i><span class="menu-title text-truncate"
               data-i18n="Transacciones">Transacciones</span>
@@ -274,9 +274,15 @@
             <i data-feather="database"></i><span class="menu-title text-truncate" data-i18n="Columnas">Columnas</span>
           </a>
         </li>
+
         <li class="nav-item">
+            <a class="d-flex align-items-center" href="departamentos.html">
+              <i data-feather="database"></i><span class="menu-title text-truncate" data-i18n="Departamentos">Departamentos</span>
+            </a>
+          </li>
+          <li class="nav-item active">
             <a class="d-flex align-items-center" href="municipios.html">
-              <i data-feather="database"></i><span class="menu-title text-truncate" data-i18n="Columnas">Municipios</span>
+              <i data-feather="database"></i><span class="menu-title text-truncate" data-i18n="Municipios">Municipios</span>
             </a>
         </li>
         <li class=" navigation-header"><span data-i18n="Apps &amp; Pages">Configuración</span><i
@@ -308,7 +314,6 @@
                   <tr>
                     <th>#</th>
                     <th>Nombre</th>
-                    <th>Puntos</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -331,8 +336,7 @@
         <div class="modal-body flex-grow-1">
           <div class="form-group">
             <label class="form-label" for="nombre">Nombre</label>
-            <input type="text" class="form-control " id="nombre" placeholder="Nombre de la Transaccion" name="nombre"
-              required />
+            <input type="text" class="form-control " id="nombre" placeholder="Nombre del Municipio" name="nombre" required />
           </div>
           <div class="form-group">
             <label class="form-label" for="departamento">Departamento</label>
@@ -359,8 +363,8 @@
             <input type="text" class="form-control " id="nombreEdit" placeholder="Nombre de la Transaccion"
               name="nombreEdit" required />
               <div class="form-group">
-                <label class="form-label" for="departamento">Departamento</label>
-                <select type="text" class="form-control" id="departamento" name="departamento" required></select>
+                <label class="form-label" for="departamentoActualizar">Departamento</label>
+                <select type="text" class="form-control" id="departamentoActualizar" name="departamentoActualizar" required></select>
               </div>
           <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>

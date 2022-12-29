@@ -50,7 +50,7 @@ $(function () {
 
         var raw = JSON.stringify({
             "nombre": $('#nombreEdit').val(),
-            "departamento": $('#departamentoEdit').val(),
+            "departamento": $('#departamentoActualizar').val(),
         });
 
 
@@ -205,16 +205,13 @@ const OpenEdit = (id) => {
         redirect: 'follow'
     };
 
-    fetch(`${url}Transaccion/${id}`, requestOptions)
+    fetch(`${url}Municipio/${id}`, requestOptions)
         .then(response => response.json())
         .then(result => {
-            console.log(result)
+            console.log($('#departamentoActualizar'))
             $('#id').val(id);
             $('#nombreEdit').val(result.nombre);
-            $('#descripcionEdit').val(result.descripcion);
-            $('#bottonEdit').val(result.idBotton);
-            $('#puntosEdit').val(result.puntos);
-            $('#columnaEdit').val(result.idColumna);
+            $('#departamentoActualizar').val(result.idDepartamento);
             $('#modalEdit').modal('toggle');
         })
         .catch(error => console.log('error', error));
@@ -224,27 +221,29 @@ const OpenEdit = (id) => {
 
 const OpenDelete = (id) => {
 
+    console.log(id);
+
     $('#idDelete').val(id);
     $('#modalDelete').modal('toggle');
 
 }
 
 
-const getColumnas = () => {
+const getDepartamentos = () => {
     var requestOptions = {
         method: 'GET',
         redirect: 'follow'
     };
 
-    $('#columna').html('<option value="0" selected disabled>Selecciona una Opcion</option>');
-    $('#columnaEdit').html('<option value="0" selected disabled>Selecciona una Opcion</option>');
-    fetch(`${url}Columna`, requestOptions)
+    $('#departamento').html('<option value="0" selected disabled>Selecciona una Opcion</option>');
+    $('#departamentoActualizar').html('<option value="0" selected disabled>Selecciona una Opcion</option>');
+    fetch(`${url}Departamento`, requestOptions)
         .then(response => response.json())
         .then(result => {
             result.forEach(element => {
                var opc  = `<option value="${element.id}">${element.nombre}</option>`;
-               $('#columna').append(opc);
-               $('#columnaEdit').append(opc);
+               $('#departamento').append(opc);
+               $('#departamentoActualizar').append(opc);
             });
         })
         .catch(error => console.log('error', error));

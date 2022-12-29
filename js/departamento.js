@@ -73,7 +73,7 @@ $(function () {
         return false;
     });
 
-    $('BtnDelete').click(function () {
+    $('#BtnDelete').click(function () {
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
