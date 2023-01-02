@@ -1,13 +1,16 @@
 const url = 'http://localhost:3000/'
 let codigos = [];
+let premios = [];
 $(function () {
   'use strict';
   ChangePanel(2)
 
+  getPremios();
+
   var bsStepper = document.querySelectorAll('.bs-stepper'),
     select = $('.select2'),
     verticalWizard = document.querySelector('.vertical-wizard-example');
-  
+
 
   // Adds crossed class
   if (typeof bsStepper !== undefined && bsStepper !== null) {
@@ -88,9 +91,6 @@ $(function () {
 
   getAllPromociones();
 
-
-
-
   $('.BtnBottador').click(function () {
     var data = {
       "nemonico": $('#nemonico').val(),
@@ -110,9 +110,6 @@ $(function () {
     saveData(data);
     Limpiar();
   });
-
-
-
 
   $('#btnGenerar').click(function () {
     const cantidad = $('#cantidad').val();
@@ -136,6 +133,16 @@ $(function () {
       i++;
     });
 
+  })
+
+  $('#BtnPremios').click(function () {
+    var cantidad = $('#cantidaPremio').val();
+    var premio = $('#premio').val();
+    var valor = $('#valorPremio').val();
+    var premioDescripcion = $('#premio option:selected').text();
+    var data = { cantidad, premio, valor, premioDescripcion };
+    premios = [...premios, data];
+    DrawPremios();
   })
 
 });
@@ -171,7 +178,6 @@ const getAllPromociones = () => {
     .catch(error => console.log('error', error));
 
 }
-
 
 const table = (table, data) => {
   $('#' + table).dataTable({
@@ -346,4 +352,42 @@ const Limpiar = () => {
   $('#tamanio').val(null);
   $('#tipogeneracion').val(1);
   ChangePanel(1)
+}
+
+
+const DrawPremios = () => {
+  $('#detallePremios').html(null);
+  premios.forEach((element,index) => {
+    var tr = `<tr>
+        <td>${element.cantidad}</td>
+        <td>${element.premioDescripcion}</td>
+        <td>${element.valor}</td>
+        <td><span class="btn-sm btn btn-outline-danger" onclick="removePremio(${index})">Eliminar</span></td>
+      </tr>`
+    $('#detallePremios').append(tr);
+  });
+} 
+
+const getPremios = () => {
+  var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+  };
+
+  $('#premio').html('<option value="0" selected disabled>Selecciona una opcion</option>');
+  fetch(`${url}Premios`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+          result.forEach(element => {
+             var opc  = `<option value="${element.id}">${element.nombre}</option>`;
+             $('#premio').append(opc);
+          });
+      })
+      .catch(error => console.log('error', error));
+
+}
+
+const  removePremio = (index) => {
+  premios.splice(index,1);
+  DrawPremios()
 }
