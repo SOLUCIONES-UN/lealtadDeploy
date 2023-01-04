@@ -2,11 +2,11 @@ const url = 'http://localhost:3000/';
 
 $(function() {
     let tabla = getPremios();
-
+    
     //evento submit del formulario
-
     $('#formNew').submit(function(){
 
+       
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
@@ -57,6 +57,7 @@ $(function() {
             .catch(error => {Alert(error, 'error')
         });
         return false;
+
     });
 
     $('#formEdit').submit(function (){
@@ -410,7 +411,7 @@ const getTrasacciones = () => {
 
 function limpiarCampos(){
 
-    $('#transaccion').val("0");
+    $('#tipoTransaccion').val("0");
 
     $('#tipoForm').empty();
 
