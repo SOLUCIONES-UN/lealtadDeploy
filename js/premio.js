@@ -247,10 +247,10 @@ const OpenEdit = (id) =>{
     fetch(`${url}Premio/${id}`, requestOptions)
         .then(response => response.json())
         .then(result => {
+
             $('#id').val(id);
-            console.log(result);
-            $('#tipoTransaccionEdit').val(result.tipo)
-            tipoTransaccionFormEdit();
+            $('#tipoTransaccionEdit').val(result.tipo);
+            tipoTransaccionFormEdit(result.idTransaccion); 
             if(result.tipo == 1){
                 $('#descripcionEditPremio').val(result.descripcion);
                 $('#nombreEdit').val(result.nombre);
@@ -261,6 +261,7 @@ const OpenEdit = (id) =>{
                 $('#nombreEdit').val(result.nombre);
                 $('#linkEdit').val(result.link);
                 $('#claveEdit').val(result.claveSecreta);
+                
             }
             $('#modalEdit').modal('toggle');
         })
@@ -276,8 +277,7 @@ function tipoTransaccionForm() {
 
     
     var valor = $('#tipoTransaccion').val();
-    console.log(typeof(valor))
-    
+
     if(valor !== "0"){
         if (valor === "1"){
 
@@ -336,11 +336,10 @@ function tipoTransaccionForm() {
     }
 }
 
-function tipoTransaccionFormEdit() {
+function tipoTransaccionFormEdit(idTransaccion) {
 
     
     var valor = $('#tipoTransaccionEdit').val();
-    console.log(typeof(valor))
     
     if(valor !== "0"){
         if (valor === "1"){
@@ -361,13 +360,14 @@ function tipoTransaccionFormEdit() {
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="basic-icon-default-fullname">Transaccion</label>
-                    <select type="text" class="form-control dt-full-name" id="transaccionEdit" placeholder="Transaccion"
-                    name="transaccionEdit" aria-label="" aria-describedby="basic-icon-default-fullname2" required >
+                    <select type="text" class="form-control dt-full-name" id="transaccionEdit" placeholder="Transaccion" name="transaccionEdit" aria-label="" aria-describedby="basic-icon-default-fullname2" required >
                     </select>
                 </div>
             `);
+            
+            getTrasacciones(idTransaccion);
 
-            getTrasacciones();
+            
         } else if( valor === "2"){
 
             $('#tipoFormEdit').empty();
@@ -400,7 +400,7 @@ function tipoTransaccionFormEdit() {
     }
 }
 
-const getTrasacciones = () => {
+const getTrasacciones = (idTransaccion) => {
     var requestOptions = {
         method: 'GET',
         redirect: 'follow'
@@ -412,7 +412,12 @@ const getTrasacciones = () => {
         .then(response => response.json())
         .then(result => {
             result.forEach(element => {
-               var opc  = `<option value="${element.id}">${element.nombre}</option>`;
+
+                var opc  = `<option value="${element.id}">${element.nombre}</option>`;
+                if(element.id === idTransaccion){
+                    opc  = `<option value="${element.id}" selected>${element.nombre}</option>`
+                }
+              
                $('#transaccion').append(opc);
                $('#transaccionEdit').append(opc);
             });
@@ -427,10 +432,4 @@ function limpiarCampos(){
 
     $('#tipoForm').empty();
 
-}
-
-const tipoTransaccion = () => {
-     $('#tableData').each(function (idx, fila){
-        console.log(fila)
-     });
 }
