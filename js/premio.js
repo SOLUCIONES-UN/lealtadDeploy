@@ -146,6 +146,8 @@ $(function() {
 
 const getPremios = () => {
     
+    var tipoTransaccion; 
+
     return $('#tableData').dataTable({
         ajax: {
             url: `${url}Premio`,
@@ -156,6 +158,13 @@ const getPremios = () => {
         columns: [
             {data: "id"},
             {data: "descripcion"},
+            {data: "tipo",render: function(data){
+                if(data == 1){
+                    return "Transaccion"
+                } else if (data == 2){
+                    return "OfertCraft"
+                }
+            }},
             {
                 data: "id", render: function (data) {
                     return `
@@ -209,7 +218,10 @@ const getPremios = () => {
                 },
             },
         ],
+
     });
+
+    
 }
 
 const limpiarForm = () => {
@@ -415,4 +427,10 @@ function limpiarCampos(){
 
     $('#tipoForm').empty();
 
+}
+
+const tipoTransaccion = () => {
+     $('#tableData').each(function (idx, fila){
+        console.log(fila)
+     });
 }
