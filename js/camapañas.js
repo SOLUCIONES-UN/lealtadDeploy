@@ -4,8 +4,8 @@ let premios = [];
 $(function () {
   'use strict';
   ChangePanel(2)
-
-  getPremios();
+  getDepartamentos();
+  getMunicipios();
 
   var bsStepper = document.querySelectorAll('.bs-stepper'),
     select = $('.select2'),
@@ -19,7 +19,7 @@ $(function () {
         var index = event.detail.indexStep;
         var numberOfSteps = $(event.target).find('.step').length - 1;
         var line = $(event.target).find('.step');
-        console.log(numberOfSteps)
+        console.log(line)
         // The first for loop is for increasing the steps,
         // the second is for turning them off when going back
         // and the third with the if statement because the last line
@@ -93,25 +93,21 @@ $(function () {
 
   $('.BtnBottador').click(function () {
     var data = {
-      "nemonico": $('#nemonico').val(),
       "nombre": $('#nombre').val(),
       "descripcion": $('#descripcion').val(),
-      "mesajeExito": $('#successaMessage').val(),
-      "mesajeFail": $('#failMessage').val(),
       "imgSuccess": "test.png",
       "imgFail": "test.png",
       "fechaInicio": $('#fechaInicio').val(),
       "fechaFin": $('#fechaFin').val(),
-      "PremioXcampania": 0,
-      "estado": 3,
-      "codigos": codigos
+      "fechaCreacion": $('#fechaRegistro').val(),
+      "estado": 3
 
     }
     saveData(data);
     Limpiar();
   });
 
-  $('#btnGenerar').click(function () {
+  /*$('#btnGenerar').click(function () {
     const cantidad = $('#cantidad').val();
     const tamanio = $('#tamanio').val();
     const tipo = $('#tipogeneracion').val();
@@ -133,9 +129,9 @@ $(function () {
       i++;
     });
 
-  })
+  })*/
 
-  $('#BtnPremios').click(function () {
+  /*$('#BtnPremios').click(function () {
     var cantidad = $('#cantidaPremio').val();
     var premio = $('#premio').val();
     var valor = $('#valorPremio').val();
@@ -143,9 +139,60 @@ $(function () {
     var data = { cantidad, premio, valor, premioDescripcion };
     premios = [...premios, data];
     DrawPremios();
-  })
+  })*/
 
 });
+
+const getDepartamentos = () => {
+  var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+  };
+  fetch(`${url}Departamento`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+          result.forEach(element => {
+             var opc  = `<option value="${element.id}">${element.nombre}</option>`;
+             $('#departamento').append(opc);
+          });
+      })
+      .catch(error => console.log('error', error));
+
+}
+
+const getMunicipios = () => {
+  var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+  };
+  fetch(`${url}Municipio`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+          result.forEach(element => {
+             var opc  = `<option value="${element.id}">${element.nombre}</option>`;
+             $('#municipio').append(opc);
+          });
+      })
+      .catch(error => console.log('error', error));
+
+}
+
+const getTransacciones = () => {
+  var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+  };
+  fetch(`${url}Transaccion`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+          result.forEach(element => {
+             var opc  = `<option value="${element.id}">${element.nombre}</option>`;
+             $('#Transacciones').append(opc);
+          });
+      })
+      .catch(error => console.log('error', error));
+
+}
 
 const getAllPromociones = () => {
 
@@ -317,7 +364,7 @@ const Alert = function (message, status) // si se proceso correctamente la solic
   });
 }
 
-const generaCupon = (num, optionCharacters) => {
+/*const generaCupon = (num, optionCharacters) => {
   let characters = ""; // abcdefghijklmnopqrstuvwxyz
   if (optionCharacters == 1) // letras y numeros
   {
@@ -338,7 +385,7 @@ const generaCupon = (num, optionCharacters) => {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   return result;
-}
+}*/
 
 const Limpiar = () => {
   $('#nemonico').val(null);
@@ -355,7 +402,7 @@ const Limpiar = () => {
 }
 
 
-const DrawPremios = () => {
+/*const DrawPremios = () => {
   $('#detallePremios').html(null);
   premios.forEach((element,index) => {
     var tr = `<tr>
@@ -366,9 +413,9 @@ const DrawPremios = () => {
       </tr>`
     $('#detallePremios').append(tr);
   });
-} 
+}*/ 
 
-const getPremios = () => {
+/*const getPremios = () => {
   var requestOptions = {
       method: 'GET',
       redirect: 'follow'
@@ -385,9 +432,9 @@ const getPremios = () => {
       })
       .catch(error => console.log('error', error));
 
-}
+}*/
 
-const  removePremio = (index) => {
+/*const  removePremio = (index) => {
   premios.splice(index,1);
   DrawPremios()
-}
+}*/
