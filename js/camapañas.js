@@ -1,11 +1,16 @@
 const url = 'http://localhost:3000/'
 let codigos = [];
 let premios = [];
+let index = 1;
+const inputFile = document.getElementById('formFile');
+const inputFileBloqueados = document.getElementById('formFileBloqueados');
 $(function () {
   'use strict';
   ChangePanel(2)
   getDepartamentos();
   getMunicipios();
+  $('#formFile').hide();
+  $('#tableParticipantes').hide();
 
   var bsStepper = document.querySelectorAll('.bs-stepper'),
     select = $('.select2'),
@@ -53,6 +58,8 @@ $(function () {
   });
 
 
+
+
   // Vertical Wizard
   // --------------------------------------------------------------------
   if (typeof verticalWizard !== undefined && verticalWizard !== null) {
@@ -77,6 +84,8 @@ $(function () {
       });
   }
 
+
+  $().html(null)
 
 
   //Inicializacion de Navs
@@ -194,6 +203,129 @@ const getTransacciones = () => {
 
 }
 
+function tipoParticipante() {
+
+  let valor = $('#tipoParticipante').val();
+
+  if(valor == 2){
+    $('#formFile').show();
+    $('#tableParticipantes').show();
+  } else{
+    $('#formFile').hide();
+    $('#tableParticipantes').hide();
+    $('#detalleParticipantes').html(null);
+    $('#formFile').val("");
+  }
+}
+
+inputFile.addEventListener('change', function(){
+
+  const extPermitidas = /(.xlsx)$/; 
+
+  if(!extPermitidas.exec($('#formFile').val())){
+    
+    Alert('El archivo debe ser un excel', 'error')
+
+    $('#formFile').val("");
+    
+  } else {
+    readXlsxFile(inputFile.files[0]).then(function(data) {
+
+      data.map((row, index) =>{
+        var tr = `<tr id="fila${index}">
+        <td >${index+1}</td>
+        <td>${row[0]}</td>
+        <td >
+            <div class="btn-group">
+              <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
+                  ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
+              </a>
+              <div class="dropdown-menu dropdown-menu-right">
+                  <a href="#" onclick="eliminarFila(${index})" id="delete" class="btn_delete dropdown-item">
+                    ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
+                  </a>
+              </div>
+            </div>
+        </td>
+        </tr>`
+  
+        $('#detalleParticipantes').append(tr);
+        console.log($('#detalleParticipantes'))
+  
+      })
+
+      
+  
+    })
+
+    
+  }
+})
+
+function eliminarFila(id) {
+  $("#fila" + id).remove();
+  console.log(id)
+}
+
+inputFileBloqueados.addEventListener('change', function(){
+
+  const extPermitidas = /(.xlsx)$/; 
+
+  if(!extPermitidas.exec($('#formFileBloqueados').val())){
+    
+    Alert('El archivo debe ser un excel', 'error')
+
+    $('#formFile').val("");
+    
+  } else {
+    readXlsxFile(inputFileBloqueados.files[0]).then(function(data) {
+
+      data.map((row, index) =>{
+        var tr = `<tr id="fila${index}">
+        <td>${index++}</td>
+        <td>${row[0]}</td>
+        <td>
+            <div class="btn-group">
+              <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
+                  ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
+              </a>
+              <div class="dropdown-menu dropdown-menu-right">
+                  <a href="#" onclick="eliminarFila(${index})" class="btn_edit dropdown-item">
+                      ${feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' })} Actualizar
+                  </a>
+              
+              <div class="dropdown-menu dropdown-menu-right">
+                  <a href="#" onclick="eliminarFila(${index})" class="btn_delete dropdown-item">
+                    ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
+                  </a>
+              </div>
+              </div>
+            </div>
+        </td>
+        </tr>`
+        
+        console.log( $('#detalleParticipantesBloqueados'))
+        $('#detalleParticipantesBloqueados').append(tr);
+  
+      })
+  
+    })
+  }
+})
+
+function agregarUsuarioBloqueado() {
+
+  let usuario = $('#numeroBloqueado').val();
+
+  var tr = `<tr>
+  <td>${index++}</td>
+  <td>${usuario}</td>
+  </tr>`
+
+  $('#detalleParticipantesBloqueados').append(tr);
+  $('#numeroBloqueado').val("");
+}
+
 const getAllPromociones = () => {
 
 
@@ -268,7 +400,7 @@ const table = (table, data) => {
                 ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-                <a href="#" onclick="OpenEdit(${data})" class="btn_edit dropdown-item">
+                <a href="#" onclick="OpenEdit(${data})" class="borrar btn_edit dropdown-item">
                     ${feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' })} Actualizar
                 </a>
             
@@ -323,6 +455,30 @@ const ChangePanel = (estado) => {
     $('#panelListado').hide();
     $('#panelCreacion').show();
   }
+}
+
+
+
+function saveLocal() {
+
+  const data = {
+
+    "config": {
+      "nombre" : $('#nombre').val(),
+      "descripcion": $('#descripcion').val(),
+      "tituloNotificacion" : $('#successaMessage').val(),
+      "fechaInicio": $('#fechaInicio').val(),
+      "fechaFin": $('#fechaFin').val(),
+      "fechaRegistro": $('#fechaRegistro').val(),
+      "edadInicial": $('#edadIni').val(),
+      "edadFinal": $('#edadFini').val(),
+      "tipoUsuario": $('#tipoUsuario').val(),
+      "Sexo": $('#sexo').val()
+    }
+  }
+
+  console.log(data);
+
 }
 
 const saveData = (data) => {

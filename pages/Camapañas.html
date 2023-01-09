@@ -458,9 +458,18 @@
                                         </span>
                                     </button>
                                 </div>
+                                <div class="step" data-target="#participantes-info-vertical">
+                                    <button type="button" class="step-trigger" >
+                                        <span class="bs-stepper-box">2</span>
+                                        <span class="bs-stepper-label">
+                                            <span class="bs-stepper-title">Configuracion De Participantes</span>
+                                            <span class="bs-stepper-subtitle">Configure sus participantes</span>
+                                        </span>
+                                    </button>
+                                </div>
                                 <div class="step" data-target="#personal-info-vertical">
                                     <button type="button" class="step-trigger" disabled>
-                                        <span class="bs-stepper-box">2</span>
+                                        <span class="bs-stepper-box">3</span>
                                         <span class="bs-stepper-label">
                                             <span class="bs-stepper-title">Configuracion De Las Etapas</span>
                                             <span class="bs-stepper-subtitle">Genera o Carga tus Etapas</span>
@@ -469,7 +478,7 @@
                                 </div>
                                 <div class="step" data-target="#address-step-vertical">
                                     <button type="button" class="step-trigger" >
-                                        <span class="bs-stepper-box">3</span>
+                                        <span class="bs-stepper-box">4</span>
                                         <span class="bs-stepper-label">
                                             <span class="bs-stepper-title">Presupuesto</span>
                                             <span class="bs-stepper-subtitle">Configura los Premios</span>
@@ -479,7 +488,7 @@
                                 
                                 <div class="step" data-target="#social-links-vertical">
                                     <button type="button" class="step-trigger" disabled>
-                                        <span class="bs-stepper-box">4</span>
+                                        <span class="bs-stepper-box">5</span>
                                         <span class="bs-stepper-label">
                                             <span class="bs-stepper-title">Parametros</span>
                                             <span class="bs-stepper-subtitle">Agregar Parametros</span>
@@ -489,10 +498,19 @@
 
                                 <div class="step" data-target="#Premio-Campaña-vertical">
                                     <button type="button" class="step-trigger" disabled>
-                                        <span class="bs-stepper-box">4</span>
+                                        <span class="bs-stepper-box">6</span>
                                         <span class="bs-stepper-label">
                                             <span class="bs-stepper-title">Premio De La Campaña</span>
                                             <span class="bs-stepper-subtitle">Agregar Premios De La Camapaña</span>
+                                        </span>
+                                    </button>
+                                </div>
+                                <div class="step" data-target="#resumen-Campaña-vertical">
+                                    <button type="button" class="step-trigger" disabled>
+                                        <span class="bs-stepper-box">7</span>
+                                        <span class="bs-stepper-label">
+                                            <span class="bs-stepper-title">Resumen De La Campaña</span>
+                                            <span class="bs-stepper-subtitle">Muestra un resumen de la configuracion creada</span>
                                         </span>
                                     </button>
                                 </div>
@@ -501,6 +519,7 @@
                             </div>
                             
                             <div class="bs-stepper-content">
+                                <!--CONFIGURACION DE LA CAMPAÑA-->
                                 <div id="account-details-vertical" class="content" style="height: 700px;">
                                     <div class="content-header">
                                         <h5 class="mb-0">Configuración de Camapaña</h5>
@@ -610,12 +629,94 @@
                                                 <i data-feather="trash-2" class="align-middle ml-sm-25 ml-0"></i>
                                             </button>
                                             <button class="btn btn-primary btn-next">
+                                                <span onclick="saveLocal()" class="align-middle d-sm-inline-block d-none">Siguiente</span>
+                                                <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--CONFIGURACION DE LOS PARTICIPANTES-->
+                                <div id="participantes-info-vertical" class="content" style="height: auto;">
+                                    <div class="content-header">
+                                        <h5 class="mb-0">Configuración de los participantes.</h5>
+                                        <small>Configure los participantes.</small>
+                                    </div>
+                                    <div class="row" id="panelGenerar">
+                                        <div class="form-group col-md-6">
+                                            <label class="form-label" for="tipoParticipante col-md-8">Tipo De Participante</label>
+                                            <select type="text" id="tipoParticipante" class="form-control" onchange="tipoParticipante()"
+                                                placeholder="Tipo De Participante" > 
+                                                <option value="0" selected disabled>Seleccione una Opcion</option>
+                                                <option value="1">Globales</option>
+                                                <option value="2">Espesificos</option>
+                                            </select>
+                                        </div>   
+                                    </div>
+                                    <div  class="mt-2 row col-md-6" id="container-tipo-participante">
+                                        <input class="form-control" type="file" id="formFile" style="margin-left: 15px;">
+                                    </div>
+                                    <div class="mt-3" >
+                                        <table class="datatables-basic table" id="tableParticipantes">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Telefono</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="detalleParticipantes">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="content-header mt-5">
+                                        <h5 class="mb-0">Configuración de Usuarios Bloqueados.</h5>
+                                    </div>
+                                    <div  class="mt-2 row" id="container-tipo-participante">
+                                        <input class="form-control col-md-6" type="file" id="formFileBloqueados" style="margin-left: 15px;">
+                                    </div>
+                                    <div class="row">
+                                        <input type="number" id="numeroBloqueado" class="form-control col-md-6 mt-2"
+                                                placeholder="Ingresa el numero" style="margin-left: 15px;" 
+                                        />
+
+                                        <button class="btn btn-outline-success mt-2 btn-block col-md-5 ml-5" type="button" onclick="agregarUsuarioBloqueado()" id="btnAgregar">Agregar</button>
+                                        
+                                    </div>
+                                    <div class="mt-3" >
+                                        <table class="datatables-basic table" id="tableParticipantesBloqueados">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Telefono</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="detalleParticipantesBloqueados">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-5">
+                                        <div>
+                                            <button class="btn btn-primary btn-prev">
+                                                <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
+                                                <span class="align-middle d-sm-inline-block d-none">Atras</span>
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-warning BtnBottador">
+                                                <span class="align-middle d-sm-inline-block d-none">Borrador</span>
+                                                <i data-feather="trash-2" class="align-middle ml-sm-25 ml-0"></i>
+                                            </button>
+                                            <button class="btn btn-primary btn-next">
                                                 <span class="align-middle d-sm-inline-block d-none">Siguiente</span>
                                                 <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
                                             </button>
                                         </div>
                                     </div>
                                 </div>
+                                <!--CONFIGURACION DE LAS ETAPAS-->
                                 <div id="personal-info-vertical" class="content" style="height: 650px;">
                                     <div class="content-header">
                                         <h5 class="mb-0">Configuración de Etapas</h5>
@@ -637,24 +738,6 @@
                                             </textarea>
                                         </div>
                                     </div>
-                                    <!--<div class="row">
-                                        <div class="col-md-3">
-                                            <button class="btn btn-outline-success mt-2 btn-block" type="button" id="btnGenerar">Generar</button>
-                                        </div>
-                                    </div>
-                                    <div class=" mt-5">
-                                        <div style="height:200px; width:auto;overflow-y: scroll;">
-                                            <table class="table table-bordered table-striped">
-                                                <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>CODIGO</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="PreviewCodigo"  ></tbody>
-                                            </table>
-                                        </div>
-                                    </div>-->
                                     <div class="d-flex justify-content-between mt-5">
                                         <div>
                                             <button class="btn btn-primary btn-prev">
@@ -674,6 +757,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!--CONFIGURACION DEL PRESUPUESTO-->
                                 <div id="address-step-vertical" class="content"  style="height: 650px;">
                                     <div class="content-header">
                                         <h5 class="mb-0">Presupuesto</h5>
@@ -705,25 +789,6 @@
                                         </div>
                                         
                                     </div>
-                                    <!--<div class="row">
-                                        <div class="form-group col-md-6">
-                                            <br/>
-                                            <button class="btn btn-success" type="button" id="BtnPremios">AGREGAR</button>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12" style="height: 300px;">
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th>Cantidad</th>
-                                                    <th>Premio</th>
-                                                    <th>Valor</th>
-                                                    <th>&nbsp;</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="detallePremios"></tbody>
-                                        </table>
-                                    </div>-->
                                     <div class="d-flex justify-content-between mt-5">
                                         <div>
                                             <button class="btn btn-primary btn-prev">
@@ -743,6 +808,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!--CONFIGURACION DE LOS PARAMETROS-->
                                 <div id="social-links-vertical" class="content"  style="height: 650px;">
                                     <div class="content-header">
                                         <h5 class="mb-0">Parametros De La Campaña</h5>
@@ -794,6 +860,7 @@
                                         </button>
                                     </div>
                                 </div>
+                                <!--CONFIGURACION DE LOS PREMIOS-->
                                 <div id="Premio-Campaña-vertical" class="content" style="height: 650px;">
                                     <div class="content-header">
                                         <h5 class="mb-0">Premios De La Camapaña</h5>
@@ -813,6 +880,38 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="d-flex justify-content-between mt-5">
+                                        <button class="btn btn-primary btn-prev">
+                                            <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
+                                            <span class="align-middle d-sm-inline-block d-none">Atras</span>
+                                        </button>
+                                        <button class="btn btn-primary btn-next">
+                                            <span class="align-middle d-sm-inline-block d-none">Siguiente</span>
+                                            <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!--CONFIGURACION DEL RESUMEN-->
+                                <div id="resumen-Campaña-vertical" class="content" style="height: 650px;">
+                                    <div class="content-header">
+                                        <h5 class="mb-0">Resumen De La Campaña</h5>
+                                        <small></small>
+                                    </div>
+                                    <!--<div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label class="form-label" for="Premios">Premios</label>
+                                            <select class="form-control"  id="Premios">
+                                                <option>Seleccione Un Premio</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label class="form-label" for="EtapaPremio">Etapa</label>
+                                            <select class="form-control"  id="EtapaPremio">
+                                                <option>Seleccione Una Etapa</option>
+                                            </select>
+                                        </div>
+                                    </div>-->
                                     <div class="d-flex justify-content-between mt-5">
                                         <button class="btn btn-primary btn-prev">
                                             <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
@@ -868,6 +967,9 @@
     <!-- BEGIN: Page JS-->
     <script src="../js/camapañas.js"></script>
     <!-- END: Page JS-->
+
+     <!-- leer excel-->
+    <script src="https://unpkg.com/read-excel-file@5.x/bundle/read-excel-file.min.js"></script>
 
     <script>
         $(window).on('load', function () {
