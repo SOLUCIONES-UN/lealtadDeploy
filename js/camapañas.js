@@ -1,6 +1,7 @@
 const url = 'http://localhost:3000/'
 let codigos = [];
 let premios = [];
+let idData=1;
 let index = 1;
 const inputFile = document.getElementById('formFile');
 const inputFileBloqueados = document.getElementById('formFileBloqueados');
@@ -98,7 +99,8 @@ $(function () {
   })
 
 
-  getAllPromociones();
+  //getAllPromociones();
+  agregarLocalTabla()
 
   $('.BtnBottador').click(function () {
     var data = {
@@ -280,7 +282,7 @@ inputFileBloqueados.addEventListener('change', function(){
   } else {
     readXlsxFile(inputFileBloqueados.files[0]).then(function(data) {
 
-      data.map((row, index) =>{
+      data.map((row) =>{
         var tr = `<tr id="fila${index}">
         <td>${index++}</td>
         <td>${row[0]}</td>
@@ -320,13 +322,26 @@ function agregarUsuarioBloqueado() {
   var tr = `<tr>
   <td>${index++}</td>
   <td>${usuario}</td>
+  <td>
+            <div class="btn-group">
+              <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
+                  ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
+              </a>
+              
+              <div class="dropdown-menu dropdown-menu-right">
+                  <a href="#" onclick="eliminarFila(${index})" class="btn_delete dropdown-item">
+                    ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
+                  </a>
+              </div>
+            </div>
+        </td>
   </tr>`
 
   $('#detalleParticipantesBloqueados').append(tr);
   $('#numeroBloqueado').val("");
 }
 
-const getAllPromociones = () => {
+/*const getAllPromociones = () => {
 
 
   var requestOptions = {
@@ -356,18 +371,18 @@ const getAllPromociones = () => {
     })
     .catch(error => console.log('error', error));
 
-}
+}*/
 
 const table = (table, data) => {
+  console.log(data)
   $('#' + table).dataTable({
     destroy: true,
     data,
     columns: [
       { data: "id" },
-      { data: "descripcion" },
-      { data: "nemonico" },
+      { data: "campaña" },
       {
-        data: "estado", render: function (data) {
+        data: "Estado", render: function (data) {
           switch (data) {
             case 1:
               return `Activa`
@@ -381,16 +396,10 @@ const table = (table, data) => {
         }
       },
       {
-        data: "fechaInicio", render: function (data) {
-          let fecha = data.split("-");
-          return fecha[2] + '/' + fecha[1] + '/' + fecha[0]
-        }
+        data: "Inicio"
       },
       {
-        data: "fechaFin", render: function (data) {
-          let fecha = data.split("-");
-          return fecha[2] + '/' + fecha[1] + '/' + fecha[0]
-        }
+        data: "Fin"
       },
       {
         data: "id", render: function (data) {
@@ -457,27 +466,30 @@ const ChangePanel = (estado) => {
   }
 }
 
-
+function agregarLocalTabla() {
+  const data = JSON.parse(localStorage.getItem("Camapañas"));
+  console.log(data);
+  table('tableTodasCamapaña', data);
+}
 
 function saveLocal() {
-
+ 
+  let campañasArray = JSON.parse(localStorage.getItem("Camapañas")) || [];
   const data = {
-
-    "config": {
-      "nombre" : $('#nombre').val(),
-      "descripcion": $('#descripcion').val(),
-      "tituloNotificacion" : $('#successaMessage').val(),
-      "fechaInicio": $('#fechaInicio').val(),
-      "fechaFin": $('#fechaFin').val(),
-      "fechaRegistro": $('#fechaRegistro').val(),
-      "edadInicial": $('#edadIni').val(),
-      "edadFinal": $('#edadFini').val(),
-      "tipoUsuario": $('#tipoUsuario').val(),
-      "Sexo": $('#sexo').val()
-    }
+      "id": idData,
+      "campaña" : $('#nombre').val(),
+      "Inicio": $('#fechaInicio').val(),
+      "Fin": $('#fechaFin').val(),
+      "Estado": 1
   }
 
-  console.log(data);
+  campañasArray.push(data);
+  console.log(campañasArray)
+
+  localStorage.setItem("Camapañas", JSON.stringify(campañasArray));
+  
+  idData+1;
+  
 
 }
 
