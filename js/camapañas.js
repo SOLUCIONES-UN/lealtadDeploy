@@ -1,11 +1,17 @@
 const url = 'http://localhost:3000/'
 let codigos = [];
 let premios = [];
+let idData=1;
+let index = 1;
+const inputFile = document.getElementById('formFile');
+const inputFileBloqueados = document.getElementById('formFileBloqueados');
 $(function () {
   'use strict';
   ChangePanel(2)
-
-  getPremios();
+  getDepartamentos();
+  getMunicipios();
+  $('#formFile').hide();
+  $('#tableParticipantes').hide();
 
   var bsStepper = document.querySelectorAll('.bs-stepper'),
     select = $('.select2'),
@@ -19,7 +25,7 @@ $(function () {
         var index = event.detail.indexStep;
         var numberOfSteps = $(event.target).find('.step').length - 1;
         var line = $(event.target).find('.step');
-        console.log(numberOfSteps)
+        console.log(line)
         // The first for loop is for increasing the steps,
         // the second is for turning them off when going back
         // and the third with the if statement because the last line
@@ -53,6 +59,8 @@ $(function () {
   });
 
 
+
+
   // Vertical Wizard
   // --------------------------------------------------------------------
   if (typeof verticalWizard !== undefined && verticalWizard !== null) {
@@ -62,13 +70,6 @@ $(function () {
     $(verticalWizard)
       .find('.btn-next')
       .on('click', function () {
-        $('#text-nemonico').text($('#nemonico').val());
-        $('#text-nombre').text($('#nombre').val());
-        $('#text-descripcion').text($('#descripcion').val());
-        $('#text-success').text($('#successaMessage').val());
-        $('#text-fail').text($('#failMessage').val());
-        $('#text-fechaInicio').text($('#fechaInicio').val());
-        $('#text-fechaFin').text($('#fechaFin').val());
         verticalStepper.next();
       });
     $(verticalWizard)
@@ -80,26 +81,12 @@ $(function () {
     $(verticalWizard)
       .find('.btn-submit')
       .on('click', function () {
-        var data = {
-          "nemonico": $('#nemonico').val(),
-          "nombre": $('#nombre').val(),
-          "descripcion": $('#descripcion').val(),
-          "mesajeExito": $('#successaMessage').val(),
-          "mesajeFail": $('#failMessage').val(),
-          "imgSuccess": "test.png",
-          "imgFail": "test.png",
-          "fechaInicio": $('#fechaInicio').val(),
-          "fechaFin": $('#fechaFin').val(),
-          "PremioXcampania": 0,
-          "estado": 1,
-          "codigos": codigos
-
-        }
-        saveData(data);
-        Limpiar();
+        alert('Submitted..!!');
       });
   }
 
+
+  $().html(null)
 
 
   //Inicializacion de Navs
@@ -112,29 +99,26 @@ $(function () {
   })
 
 
-  getAllPromociones();
+  //getAllPromociones();
+  agregarLocalTabla()
 
   $('.BtnBottador').click(function () {
     var data = {
-      "nemonico": $('#nemonico').val(),
       "nombre": $('#nombre').val(),
       "descripcion": $('#descripcion').val(),
-      "mesajeExito": $('#successaMessage').val(),
-      "mesajeFail": $('#failMessage').val(),
       "imgSuccess": "test.png",
       "imgFail": "test.png",
       "fechaInicio": $('#fechaInicio').val(),
       "fechaFin": $('#fechaFin').val(),
-      "PremioXcampania": 0,
-      "estado": 3,
-      "codigos": codigos
+      "fechaCreacion": $('#fechaRegistro').val(),
+      "estado": 3
 
     }
     saveData(data);
     Limpiar();
   });
 
-  $('#btnGenerar').click(function () {
+  /*$('#btnGenerar').click(function () {
     const cantidad = $('#cantidad').val();
     const tamanio = $('#tamanio').val();
     const tipo = $('#tipogeneracion').val();
@@ -143,15 +127,22 @@ $(function () {
       var newCode = 'TEMP' + generaCupon(tamanio, tipo);
       codigos.push({ cupon: newCode, estado: 1, esPremio: 0 });
     }
-    DrawCodigos();
+    $('#PreviewCodigo').html(null)
 
-    $('#cantidad').val(null);
-    $('#tamanio').val(null);
-    $('#tipogeneracion').val(1);
+    var i = 1;
+    codigos.forEach(element => {
+      var tr = `<tr>
+        <td>${i}</td>
+        <td>${element.cupon}</td>
+        </tr>`
 
-  })
+      $('#PreviewCodigo').append(tr);
+      i++;
+    });
 
-  $('#BtnPremios').click(function () {
+  })*/
+
+  /*$('#BtnPremios').click(function () {
     var cantidad = $('#cantidaPremio').val();
     var premio = $('#premio').val();
     var valor = $('#valorPremio').val();
@@ -159,15 +150,198 @@ $(function () {
     var data = { cantidad, premio, valor, premioDescripcion };
     premios = [...premios, data];
     DrawPremios();
-
-    $('#cantidaPremio').val(null);
-    $('#premio').val(0);
-    $('#valorPremio').val(null);
-  })
+  })*/
 
 });
 
-const getAllPromociones = () => {
+const getDepartamentos = () => {
+  var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+  };
+  fetch(`${url}Departamento`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+          result.forEach(element => {
+             var opc  = `<option value="${element.id}">${element.nombre}</option>`;
+             $('#departamento').append(opc);
+          });
+      })
+      .catch(error => console.log('error', error));
+
+}
+
+const getMunicipios = () => {
+  var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+  };
+  fetch(`${url}Municipio`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+          result.forEach(element => {
+             var opc  = `<option value="${element.id}">${element.nombre}</option>`;
+             $('#municipio').append(opc);
+          });
+      })
+      .catch(error => console.log('error', error));
+
+}
+
+const getTransacciones = () => {
+  var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+  };
+  fetch(`${url}Transaccion`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+          result.forEach(element => {
+             var opc  = `<option value="${element.id}">${element.nombre}</option>`;
+             $('#Transacciones').append(opc);
+          });
+      })
+      .catch(error => console.log('error', error));
+
+}
+
+function tipoParticipante() {
+
+  let valor = $('#tipoParticipante').val();
+
+  if(valor == 2){
+    $('#formFile').show();
+    $('#tableParticipantes').show();
+  } else{
+    $('#formFile').hide();
+    $('#tableParticipantes').hide();
+    $('#detalleParticipantes').html(null);
+    $('#formFile').val("");
+  }
+}
+
+inputFile.addEventListener('change', function(){
+
+  const extPermitidas = /(.xlsx)$/; 
+
+  if(!extPermitidas.exec($('#formFile').val())){
+    
+    Alert('El archivo debe ser un excel', 'error')
+
+    $('#formFile').val("");
+    
+  } else {
+    readXlsxFile(inputFile.files[0]).then(function(data) {
+
+      data.map((row, index) =>{
+        var tr = `<tr id="fila${index}">
+        <td >${index+1}</td>
+        <td>${row[0]}</td>
+        <td >
+            <div class="btn-group">
+              <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
+                  ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
+              </a>
+              <div class="dropdown-menu dropdown-menu-right">
+                  <a href="#" onclick="eliminarFila(${index})" id="delete" class="btn_delete dropdown-item">
+                    ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
+                  </a>
+              </div>
+            </div>
+        </td>
+        </tr>`
+  
+        $('#detalleParticipantes').append(tr);
+        console.log($('#detalleParticipantes'))
+  
+      })
+
+      
+  
+    })
+
+    
+  }
+})
+
+function eliminarFila(id) {
+  $("#fila" + id).remove();
+  console.log(id)
+}
+
+inputFileBloqueados.addEventListener('change', function(){
+
+  const extPermitidas = /(.xlsx)$/; 
+
+  if(!extPermitidas.exec($('#formFileBloqueados').val())){
+    
+    Alert('El archivo debe ser un excel', 'error')
+
+    $('#formFile').val("");
+    
+  } else {
+    readXlsxFile(inputFileBloqueados.files[0]).then(function(data) {
+
+      data.map((row) =>{
+        var tr = `<tr id="fila${index}">
+        <td>${index++}</td>
+        <td>${row[0]}</td>
+        <td>
+            <div class="btn-group">
+              <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
+                  ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
+              </a>
+              <div class="dropdown-menu dropdown-menu-right">
+                  <a href="#" onclick="eliminarFila(${index})" class="btn_edit dropdown-item">
+                      ${feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' })} Actualizar
+                  </a>
+              
+              <div class="dropdown-menu dropdown-menu-right">
+                  <a href="#" onclick="eliminarFila(${index})" class="btn_delete dropdown-item">
+                    ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
+                  </a>
+              </div>
+              </div>
+            </div>
+        </td>
+        </tr>`
+        
+        console.log( $('#detalleParticipantesBloqueados'))
+        $('#detalleParticipantesBloqueados').append(tr);
+  
+      })
+  
+    })
+  }
+})
+
+function agregarUsuarioBloqueado() {
+
+  let usuario = $('#numeroBloqueado').val();
+
+  var tr = `<tr>
+  <td>${index++}</td>
+  <td>${usuario}</td>
+  <td>
+            <div class="btn-group">
+              <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
+                  ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
+              </a>
+              
+              <div class="dropdown-menu dropdown-menu-right">
+                  <a href="#" onclick="eliminarFila(${index})" class="btn_delete dropdown-item">
+                    ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
+                  </a>
+              </div>
+            </div>
+        </td>
+  </tr>`
+
+  $('#detalleParticipantesBloqueados').append(tr);
+  $('#numeroBloqueado').val("");
+}
+
+/*const getAllPromociones = () => {
 
 
   var requestOptions = {
@@ -197,18 +371,18 @@ const getAllPromociones = () => {
     })
     .catch(error => console.log('error', error));
 
-}
+}*/
 
 const table = (table, data) => {
+  console.log(data)
   $('#' + table).dataTable({
     destroy: true,
     data,
     columns: [
       { data: "id" },
-      { data: "nombre" },
-      { data: "nemonico" },
+      { data: "campaña" },
       {
-        data: "estado", render: function (data) {
+        data: "Estado", render: function (data) {
           switch (data) {
             case 1:
               return `Activa`
@@ -222,54 +396,28 @@ const table = (table, data) => {
         }
       },
       {
-        data: "fechaInicio", render: function (data) {
-          let fecha = data.split("-");
-          return fecha[2] + '/' + fecha[1] + '/' + fecha[0]
-        }
+        data: "Inicio"
       },
       {
-        data: "fechaFin", render: function (data) {
-          let fecha = data.split("-");
-          return fecha[2] + '/' + fecha[1] + '/' + fecha[0]
-        }
+        data: "Fin"
       },
       {
-        data: "id", render: function (data, type, row) {
-          console.log(row.estado)
-
-          var opcAdd = ``;
-
-
-
-          switch (row.estado) {
-            case 1:
-              opcAdd += `<a href="#" onclick="UpdatePromocion(${data},2)" class="btn_delete dropdown-item">
-              ${feather.icons['pause-circle'].toSvg({ class: 'font-small-4 mr-50' })} Pausar
-            </a>`
-              break;
-            case 2:
-              opcAdd += `<a href="#" onclick="UpdatePromocion(${data},1)" class="btn_delete dropdown-item">
-                ${feather.icons['play'].toSvg({ class: 'font-small-4 mr-50' })} Activar
-              </a>`
-              break;
-          }
-
-          if (row.estado != 0) {
-            opcAdd += `<a href="#" onclick="OpenEdit(${data})" class="btn_edit dropdown-item">
-            ${feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' })} Actualizar
-            </a><a href="#" onclick="OpenDelete(${data})" class="btn_delete dropdown-item">
-                ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
-                    </a>`
-              }
-
-
+        data: "id", render: function (data) {
           return `
           <div class="btn-group">
             <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
                 ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-               ${opcAdd}
+                <a href="#" onclick="OpenEdit(${data})" class="borrar btn_edit dropdown-item">
+                    ${feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' })} Actualizar
+                </a>
+            
+            <div class="dropdown-menu dropdown-menu-right">
+                <a href="#" onclick="OpenDelete(${data})" class="btn_delete dropdown-item">
+                  ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
+                </a>
+            </div>
             </div>
           </div> 
         `;
@@ -318,6 +466,33 @@ const ChangePanel = (estado) => {
   }
 }
 
+function agregarLocalTabla() {
+  const data = JSON.parse(localStorage.getItem("Camapañas"));
+  console.log(data);
+  table('tableTodasCamapaña', data);
+}
+
+function saveLocal() {
+ 
+  let campañasArray = JSON.parse(localStorage.getItem("Camapañas")) || [];
+  const data = {
+      "id": idData,
+      "campaña" : $('#nombre').val(),
+      "Inicio": $('#fechaInicio').val(),
+      "Fin": $('#fechaFin').val(),
+      "Estado": 1
+  }
+
+  campañasArray.push(data);
+  console.log(campañasArray)
+
+  localStorage.setItem("Camapañas", JSON.stringify(campañasArray));
+  
+  idData+1;
+  
+
+}
+
 const saveData = (data) => {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
@@ -336,7 +511,7 @@ const saveData = (data) => {
     .then(result => {
       if (result.code == "ok") {
         getAllPromociones();
-        Alert(result.message, 'success')
+        Alert(result.message, 'warning')
       } else {
         Alert(result.message, 'error')
       }
@@ -357,7 +532,7 @@ const Alert = function (message, status) // si se proceso correctamente la solic
   });
 }
 
-const generaCupon = (num, optionCharacters) => {
+/*const generaCupon = (num, optionCharacters) => {
   let characters = ""; // abcdefghijklmnopqrstuvwxyz
   if (optionCharacters == 1) // letras y numeros
   {
@@ -378,7 +553,7 @@ const generaCupon = (num, optionCharacters) => {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
   return result;
-}
+}*/
 
 const Limpiar = () => {
   $('#nemonico').val(null);
@@ -391,88 +566,43 @@ const Limpiar = () => {
   $('#cantidad').val(null);
   $('#tamanio').val(null);
   $('#tipogeneracion').val(1);
-  premios = [];
-  codigos = [];
-  DrawPremios();
-  DrawCodigos();
   ChangePanel(1)
 }
 
-const DrawCodigos = () => {
-  $('#PreviewCodigo').html(null)
 
-  codigos.forEach((element, index) => {
-    var tr = `<tr>
-        <td>${index + 1}</td>
-        <td>${element.cupon}</td>
-        </tr>`
-
-    $('#PreviewCodigo').append(tr);
-  });
-}
-
-const DrawPremios = () => {
+/*const DrawPremios = () => {
   $('#detallePremios').html(null);
-  $('#detallePremioRes').html(null);
-  premios.forEach((element, index) => {
+  premios.forEach((element,index) => {
     var tr = `<tr>
         <td>${element.cantidad}</td>
         <td>${element.premioDescripcion}</td>
         <td>${element.valor}</td>
         <td><span class="btn-sm btn btn-outline-danger" onclick="removePremio(${index})">Eliminar</span></td>
       </tr>`
-    var tr2 = `<tr>
-      <td>${element.cantidad}</td>
-      <td>${element.premioDescripcion}</td>
-      <td>${element.valor}</td>
-    </tr>`
     $('#detallePremios').append(tr);
-    $('#detallePremioRes').append(tr2);
   });
-}
+}*/ 
 
-const getPremios = () => {
+/*const getPremios = () => {
   var requestOptions = {
-    method: 'GET',
-    redirect: 'follow'
+      method: 'GET',
+      redirect: 'follow'
   };
 
   $('#premio').html('<option value="0" selected disabled>Selecciona una opcion</option>');
   fetch(`${url}Premios`, requestOptions)
-    .then(response => response.json())
-    .then(result => {
-      result.forEach(element => {
-        var opc = `<option value="${element.id}">${element.nombre}</option>`;
-        $('#premio').append(opc);
-      });
-    })
-    .catch(error => console.log('error', error));
+      .then(response => response.json())
+      .then(result => {
+          result.forEach(element => {
+             var opc  = `<option value="${element.id}">${element.nombre}</option>`;
+             $('#premio').append(opc);
+          });
+      })
+      .catch(error => console.log('error', error));
 
-}
+}*/
 
-const removePremio = (index) => {
-  premios.splice(index, 1);
+/*const  removePremio = (index) => {
+  premios.splice(index,1);
   DrawPremios()
-}
-
-const UpdatePromocion = (id, type) => {
-  var requestOptions = {
-    method: 'PUT',
-    redirect: 'follow'
-  };
-
-  fetch(`${url}Promocion/${type == 1 ? 'Act' : 'Pau'}/${id}`, requestOptions)
-    .then(response => response.json())
-    .then(result => {
-      if (result.code == "ok") {
-        getAllPromociones();
-        Alert(result.message, 'success')
-      } else {
-        Alert(result.message, 'error')
-      }
-    })
-    .catch(error => {
-      console.log(error)
-      Alert(error, 'error')
-    });
-}
+}*/
