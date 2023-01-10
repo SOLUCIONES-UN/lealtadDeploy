@@ -1,7 +1,8 @@
 const url = 'http://localhost:3000/'
 let codigos = [];
 let premios = [];
-let idData=1;
+let etapas = [];
+let idData = 1;
 let index = 1;
 const inputFile = document.getElementById('formFile');
 const inputFileBloqueados = document.getElementById('formFileBloqueados');
@@ -10,6 +11,8 @@ $(function () {
   ChangePanel(2)
   getDepartamentos();
   getMunicipios();
+  getTransacciones();
+  getPremios();
   $('#formFile').hide();
   $('#tableParticipantes').hide();
 
@@ -81,12 +84,14 @@ $(function () {
     $(verticalWizard)
       .find('.btn-submit')
       .on('click', function () {
-        alert('Submitted..!!');
+        Alert('Campaña Creada con Exito', 'success');
+        ChangePanel(1);
+        agregarLocalTabla()
       });
   }
 
 
-  $().html(null)
+  // $().html(null)
 
 
   //Inicializacion de Navs
@@ -117,6 +122,110 @@ $(function () {
     saveData(data);
     Limpiar();
   });
+
+  $('#btnAddCampania').click(function () {
+    var nombre = $('#nombreEtapa');
+    var orden = $('#ordenEtapa');
+    var descripcion = $('#descEtapa');
+
+    etapas.push({
+      nombre: nombre.val(),
+      orden: orden.val(),
+      descripcion: descripcion.val()
+    })
+
+
+    $('#tbetapas').html(null);
+    $('#Etapa').html(null);
+    $('#EtapaPremio').html(null);
+    etapas.forEach((element, index) => {
+      var opc = `<option>${element.nombre}</option>`;
+
+      var tr = `<tr>
+          <th>${index + 1}</th>
+          <th>${element.nombre}</th>
+          <th></th>
+      </tr>`;
+
+
+      $('#tbetapas').append(tr);
+      $('#Etapa').append(opc);
+      $('#EtapaPremio').append(opc);
+
+
+    });
+
+
+    nombre.val(null);
+    orden.val(null);
+    descripcion.val(null);
+
+
+  });
+
+  $('#btnAddPresupuesto').click(function () {
+
+    var departamento = $('#departamento option:selected').text();
+    var municipio = $('#municipio option:selected').text();
+    var limite = $('#limiteGanadores').val();
+    var presupuesto = $('#Presupuesto').val();
+    var tr = `<tr>
+          <th>${departamento}</th>
+          <th>${municipio}</th>
+          <th>${limite}</th>
+          <th>${presupuesto}</th>
+          <th></th>
+      </tr>`;
+
+
+    $('#tbPresupuesto').append(tr);
+    $('#limiteGanadores').val(null);
+    $('#Presupuesto').val(null);
+    $('#departamento').val(0);
+    $('#municipio').val(0);
+  });
+
+
+  $('#btnAddParametro').click(function () {
+    var etapa = $('#Etapa option:selected').text();
+    var Transacciones = $('#Transacciones option:selected').text();
+    var vMinimo = $('#vMinimo').val();
+    var vMaximo = $('#vMaximo').val();
+
+
+    var tr = `<tr>
+        <th>${etapa}</th>
+        <th>${Transacciones}</th>
+        <th>${vMinimo}</th>
+        <th>${vMaximo}</th>
+        <th></th>
+    </tr>`;
+
+
+    $('#Etapa').val(0);
+    $('#Transacciones').val(0);
+    $('#vMinimo').val(0);
+    $('#vMaximo').val(0);
+    $('#tbParametros').append(tr);
+  });
+
+
+
+  $('#btnAddPremio').click(function () {
+    var etapa = $('#EtapaPremio option:selected').text();
+    var Premios = $('#Premios option:selected').text();
+    var valor = $('#valorP').val();
+
+    var tr = `<tr>
+    <th>${etapa}</th>
+    <th>${Premios}</th>
+    <th>${valor}</th>
+    <th></th>
+</tr>`;
+    $('#tbPremio').append(tr);
+  })
+
+
 
   /*$('#btnGenerar').click(function () {
     const cantidad = $('#cantidad').val();
@@ -156,52 +265,52 @@ $(function () {
 
 const getDepartamentos = () => {
   var requestOptions = {
-      method: 'GET',
-      redirect: 'follow'
+    method: 'GET',
+    redirect: 'follow'
   };
   fetch(`${url}Departamento`, requestOptions)
-      .then(response => response.json())
-      .then(result => {
-          result.forEach(element => {
-             var opc  = `<option value="${element.id}">${element.nombre}</option>`;
-             $('#departamento').append(opc);
-          });
-      })
-      .catch(error => console.log('error', error));
+    .then(response => response.json())
+    .then(result => {
+      result.forEach(element => {
+        var opc = `<option value="${element.id}">${element.nombre}</option>`;
+        $('#departamento').append(opc);
+      });
+    })
+    .catch(error => console.log('error', error));
 
 }
 
 const getMunicipios = () => {
   var requestOptions = {
-      method: 'GET',
-      redirect: 'follow'
+    method: 'GET',
+    redirect: 'follow'
   };
   fetch(`${url}Municipio`, requestOptions)
-      .then(response => response.json())
-      .then(result => {
-          result.forEach(element => {
-             var opc  = `<option value="${element.id}">${element.nombre}</option>`;
-             $('#municipio').append(opc);
-          });
-      })
-      .catch(error => console.log('error', error));
+    .then(response => response.json())
+    .then(result => {
+      result.forEach(element => {
+        var opc = `<option value="${element.id}">${element.nombre}</option>`;
+        $('#municipio').append(opc);
+      });
+    })
+    .catch(error => console.log('error', error));
 
 }
 
 const getTransacciones = () => {
   var requestOptions = {
-      method: 'GET',
-      redirect: 'follow'
+    method: 'GET',
+    redirect: 'follow'
   };
   fetch(`${url}Transaccion`, requestOptions)
-      .then(response => response.json())
-      .then(result => {
-          result.forEach(element => {
-             var opc  = `<option value="${element.id}">${element.nombre}</option>`;
-             $('#Transacciones').append(opc);
-          });
-      })
-      .catch(error => console.log('error', error));
+    .then(response => response.json())
+    .then(result => {
+      result.forEach(element => {
+        var opc = `<option value="${element.id}">${element.nombre}</option>`;
+        $('#Transacciones').append(opc);
+      });
+    })
+    .catch(error => console.log('error', error));
 
 }
 
@@ -209,10 +318,10 @@ function tipoParticipante() {
 
   let valor = $('#tipoParticipante').val();
 
-  if(valor == 2){
+  if (valor == 2) {
     $('#formFile').show();
     $('#tableParticipantes').show();
-  } else{
+  } else {
     $('#formFile').hide();
     $('#tableParticipantes').hide();
     $('#detalleParticipantes').html(null);
@@ -220,22 +329,22 @@ function tipoParticipante() {
   }
 }
 
-inputFile.addEventListener('change', function(){
+inputFile.addEventListener('change', function () {
 
-  const extPermitidas = /(.xlsx)$/; 
+  const extPermitidas = /(.xlsx)$/;
 
-  if(!extPermitidas.exec($('#formFile').val())){
-    
+  if (!extPermitidas.exec($('#formFile').val())) {
+
     Alert('El archivo debe ser un excel', 'error')
 
     $('#formFile').val("");
-    
-  } else {
-    readXlsxFile(inputFile.files[0]).then(function(data) {
 
-      data.map((row, index) =>{
+  } else {
+    readXlsxFile(inputFile.files[0]).then(function (data) {
+
+      data.map((row, index) => {
         var tr = `<tr id="fila${index}">
-        <td >${index+1}</td>
+        <td >${index + 1}</td>
         <td>${row[0]}</td>
         <td >
             <div class="btn-group">
@@ -250,17 +359,17 @@ inputFile.addEventListener('change', function(){
             </div>
         </td>
         </tr>`
-  
+
         $('#detalleParticipantes').append(tr);
         console.log($('#detalleParticipantes'))
-  
+
       })
 
-      
-  
+
+
     })
 
-    
+
   }
 })
 
@@ -269,20 +378,20 @@ function eliminarFila(id) {
   console.log(id)
 }
 
-inputFileBloqueados.addEventListener('change', function(){
+inputFileBloqueados.addEventListener('change', function () {
 
-  const extPermitidas = /(.xlsx)$/; 
+  const extPermitidas = /(.xlsx)$/;
 
-  if(!extPermitidas.exec($('#formFileBloqueados').val())){
-    
+  if (!extPermitidas.exec($('#formFileBloqueados').val())) {
+
     Alert('El archivo debe ser un excel', 'error')
 
     $('#formFile').val("");
-    
-  } else {
-    readXlsxFile(inputFileBloqueados.files[0]).then(function(data) {
 
-      data.map((row) =>{
+  } else {
+    readXlsxFile(inputFileBloqueados.files[0]).then(function (data) {
+
+      data.map((row) => {
         var tr = `<tr id="fila${index}">
         <td>${index++}</td>
         <td>${row[0]}</td>
@@ -305,12 +414,12 @@ inputFileBloqueados.addEventListener('change', function(){
             </div>
         </td>
         </tr>`
-        
-        console.log( $('#detalleParticipantesBloqueados'))
+
+        console.log($('#detalleParticipantesBloqueados'))
         $('#detalleParticipantesBloqueados').append(tr);
-  
+
       })
-  
+
     })
   }
 })
@@ -473,23 +582,23 @@ function agregarLocalTabla() {
 }
 
 function saveLocal() {
- 
+
   let campañasArray = JSON.parse(localStorage.getItem("Camapañas")) || [];
   const data = {
-      "id": idData,
-      "campaña" : $('#nombre').val(),
-      "Inicio": $('#fechaInicio').val(),
-      "Fin": $('#fechaFin').val(),
-      "Estado": 1
+    "id": idData,
+    "campaña": $('#nombre').val(),
+    "Inicio": $('#fechaInicio').val(),
+    "Fin": $('#fechaFin').val(),
+    "Estado": 1
   }
 
   campañasArray.push(data);
   console.log(campañasArray)
 
   localStorage.setItem("Camapañas", JSON.stringify(campañasArray));
-  
-  idData+1;
-  
+
+  idData + 1;
+
 
 }
 
@@ -581,26 +690,26 @@ const Limpiar = () => {
       </tr>`
     $('#detallePremios').append(tr);
   });
-}*/ 
+}*/
 
-/*const getPremios = () => {
+const getPremios = () => {
   var requestOptions = {
-      method: 'GET',
-      redirect: 'follow'
+    method: 'GET',
+    redirect: 'follow'
   };
 
   $('#premio').html('<option value="0" selected disabled>Selecciona una opcion</option>');
   fetch(`${url}Premios`, requestOptions)
-      .then(response => response.json())
-      .then(result => {
-          result.forEach(element => {
-             var opc  = `<option value="${element.id}">${element.nombre}</option>`;
-             $('#premio').append(opc);
-          });
-      })
-      .catch(error => console.log('error', error));
+    .then(response => response.json())
+    .then(result => {
+      result.forEach(element => {
+        var opc = `<option value="${element.id}">${element.nombre}</option>`;
+        $('#Premios').append(opc);
+      });
+    })
+    .catch(error => console.log('error', error));
 
-}*/
+}
 
 /*const  removePremio = (index) => {
   premios.splice(index,1);
