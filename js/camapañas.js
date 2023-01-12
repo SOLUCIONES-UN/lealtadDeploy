@@ -2,24 +2,163 @@ const url = 'http://localhost:3000/'
 let codigos = [];
 let premios = [];
 let etapas = [];
+let dataEtapas = [];
+let parametros = [];
 let idData = 1;
 let index = 1;
+var numConfigButtons = 4;
 const inputFile = document.getElementById('formFile');
 const inputFileBloqueados = document.getElementById('formFileBloqueados');
 $(function () {
+  loadMenu()
   'use strict';
   ChangePanel(2)
-  getDepartamentos();
-  getMunicipios();
-  getTransacciones();
-  getPremios();
   $('#formFile').hide();
   $('#tableParticipantes').hide();
+
+  
+
+  // $().html(null)
+
+
+  //Inicializacion de Navs
+  $('#NavsOpc button').on('click', function (event) {
+    let data = $(this).attr("data-bs-target");
+    event.preventDefault()
+    $(this).tab('show');
+    $('.opcLista').removeClass('show active')
+    $(data).addClass('show active')
+  })
+
+
+  //getAllPromociones();
+  agregarLocalTabla()
+
+  $('.BtnBottador').click(function () {
+    var data = {
+      "nombre": $('#nombre').val(),
+      "descripcion": $('#descripcion').val(),
+      "imgSuccess": "test.png",
+      "imgFail": "test.png",
+      "fechaInicio": $('#fechaInicio').val(),
+      "fechaFin": $('#fechaFin').val(),
+      "fechaCreacion": $('#fechaRegistro').val(),
+      "estado": 3
+
+    }
+    saveData(data);
+    Limpiar();
+  });
+
+  $('#btnAddEtapa').click(function () {
+    var nombre = $('#nombreEtapa');
+    var orden = $('#ordenEtapa');
+    var descripcion = $('#descEtapa');
+    var tipoTransaccion = $('#TipoTransaccion');
+
+    etapas.push({
+      nombre: nombre.val(),
+      orden: orden.val(),
+      descripcion: descripcion.val(),
+      tipoTransaccion: tipoTransaccion.children('option:selected').text()
+    })
+
+
+    $('#tbetapas').html(null);
+    $('.etapaSelect').html(null);
+    $('#descEtapa').html(null);
+    addConfig(index++, nombre.val())
+    etapas.forEach((element, index) => {
+      var opc = `<option>${element.nombre}</option>`;
+
+      var tr = `<tr id='fila${index+1}'>
+          <th>${index + 1}</th>
+          <th>${element.nombre}</th>
+          <th>${element.tipoTransaccion}</th>
+          <th><div class="btn-group">
+          <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
+              ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
+          </a>
+          <div class="dropdown-menu dropdown-menu-right">
+              <a href="#" class="btn_edit dropdown-item">
+                  ${feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' })} Actualizar
+              </a>
+          
+          <div class="dropdown-menu dropdown-menu-right">
+              <a href="#" onclick="eliminarEtapa(${index+1})" class="btn_delete dropdown-item">
+                ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
+              </a>
+          </div>
+          </div>
+        </div> </th>
+      </tr>`;
+      
+      $('#tbetapas').append(tr);
+      //console.log(index);
+      $('.etapaSelect').append(opc);
+      //$('#EtapaPremio').append(opc);
+      
+    });
+
+    dataEtapas= {
+      etapas
+    }
+    nombre.val(null);
+    orden.val(null);
+    descripcion.val(null);
+
+
+  });
+
+
+
+
+
+  
+
+
+
+  /*$('#btnGenerar').click(function () {
+    const cantidad = $('#cantidad').val();
+    const tamanio = $('#tamanio').val();
+    const tipo = $('#tipogeneracion').val();
+    codigos = [];
+    for (let index = 0; index < cantidad; index++) {
+      var newCode = 'TEMP' + generaCupon(tamanio, tipo);
+      codigos.push({ cupon: newCode, estado: 1, esPremio: 0 });
+    }
+    $('#PreviewCodigo').html(null)
+
+    var i = 1;
+    codigos.forEach(element => {
+      var tr = `<tr>
+        <td>${i}</td>
+        <td>${element.cupon}</td>
+        </tr>`
+
+      $('#PreviewCodigo').append(tr);
+      i++;
+    });
+
+  })*/
+
+  /*$('#BtnPremios').click(function () {
+    var cantidad = $('#cantidaPremio').val();
+    var premio = $('#premio').val();
+    var valor = $('#valorPremio').val();
+    var premioDescripcion = $('#premio option:selected').text();
+    var data = { cantidad, premio, valor, premioDescripcion };
+    premios = [...premios, data];
+    DrawPremios();
+  })*/
+
+});
+
+function loadMenu() {
 
   var bsStepper = document.querySelectorAll('.bs-stepper'),
     select = $('.select2'),
     verticalWizard = document.querySelector('.vertical-wizard-example');
-
 
   // Adds crossed class
   if (typeof bsStepper !== undefined && bsStepper !== null) {
@@ -90,107 +229,215 @@ $(function () {
       });
   }
 
+}
 
-  // $().html(null)
+function addConfig(id, nombreEtapa) {
 
+  
+  console.log("voy a agregar una nueva configuracion" + id);
 
-  //Inicializacion de Navs
-  $('#NavsOpc button').on('click', function (event) {
-    let data = $(this).attr("data-bs-target");
-    event.preventDefault()
-    $(this).tab('show');
-    $('.opcLista').removeClass('show active')
-    $(data).addClass('show active')
-  })
+  
 
+  var configbuttons = `<div id="opc${id}" class="step" data-target="#social-links-vertical-${id}">
+    <button type="button" class="step-trigger">
+        <span class="bs-stepper-box">${numConfigButtons+1}</span>
+        <span class="bs-stepper-label">
+            <span class="bs-stepper-title">${nombreEtapa}</span>
+            <span class="bs-stepper-subtitle">Configuracion de la Etapa No. ${id}</span>
+        </span>
+    </button>
+  </div>`
 
-  //getAllPromociones();
-  agregarLocalTabla()
+  var configForm = `<div id="social-links-vertical-${id}" class="content" style="height: auto;">
+  <div class="content-header">
+      <h5 class="mb-0">Parametros De La Campaña</h5>
+      <small></small>
+  </div>
+  <div class="row">
+      <!--<div class="form-group col-md-6">
+          <label class="form-label" for="Etapa">Etapa</label>
+          <select class="form-control etapaSelect" id="Etapa${id}">
+              <option>Seleccione Una Etapa</option>
+          </select>
+      </div>-->
+      <div class="form-group col-md-6">
+          <label class="form-label" for="Transacciones">Transacciones</label>
+          <select class="form-control" id="Transacciones${id}">
+              <option>Seleccione Una Transaccion</option>
+          </select>
+      </div>
+  </div>
+  <div class="row">
+      <div class="form-group col-md-6">
+          <label class="form-label" for="vMinimo">Valor Minimo</label>
+          <input type="number" id="vMinimo${id}" class="form-control" />
+      </div>
+      <div class="form-group col-md-6">
+          <label class="form-label" for="vMaximo">Valor Maximo</label>
+          <input type="number" id="vMaximo${id}" class="form-control" />
+      </div>
+  </div>
+  <div class="row">
+      <div class="form-group col-md-6">
+          <label class="form-label" for="vertical-facebook">Limite
+              Participacion</label>
+          <input type="number" id="limiteParticipacion" class="form-control" />
+      </div>
+  </div>
+  <div class="row">
+      <div class="col-md-12">
+          <button class="btn btn-success" type="button" id="btnAddParametro${id}"
+              style="float: right;">
+              <span class="align-middle d-sm-inline-block d-none">AGREGAR</span>
+          </button>
+          <br />
+      </div>
+  </div>
+  <div class="row">
+      <table class="datatables-basic table mt-3">
+          <thead>
+              <tr>
+                  <td>Etapa</td>
+                  <td>Transaccion</td>
+                  <td>valor Minimo</td>
+                  <td>valor Maximo</td>
+                  <td>&nbsp;</td>
+              </tr>
+          </thead>
+          <tbody id="tbParametros${id}">
+  
+          </tbody>
+      </table>
+  </div>
+  <div class="content-header mt-5">
+                                        <h5 class="mb-0">Premios De La Camapaña</h5>
+                                        <small></small>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label class="form-label" for="EtapaPremio">Etapa</label>
+                                            <select class="form-control etapaSelect" id="EtapaPremio${id}">
+                                                <option>Seleccione Una Etapa</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label class="form-label" for="Premios">Premios</label>
+                                            <select class="form-control" id="Premios${id}">
+                                                <option>Seleccione Un Premio</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label class="form-label" for="valor">Valor</label>
+                                            <input class="form-control" id="valorP${id}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <button class="btn btn-success" type="button" id="btnAddPremio${id}"
+                                            style="float: right;">
+                                            <span class="align-middle d-sm-inline-block d-none">AGREGAR</span>
+                                        </button>
+                                        <br />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <table class="datatables-basic table mt-3">
+                                                <thead>
+                                                    <tr>
+                                                        <td>Etapa</td>
+                                                        <td>Premio</td>
+                                                        <td>valor</td>
+                                                        <td>&nbsp;</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tbPremio${id}">
+    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="content-header mt-5">
+                                        <h5 class="mb-0">Presupuesto</h5>
+                                        <small>Configuracion Del Presupuesto </small>
+                                    </div>
+                                    <!--Configuracion Presuouesto-->
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label class="form-label" for="departamento">Departamento</label>
+                                            <select class="form-control" id="departamento${id}">
+                                                <option value="0">Todos los departamentos</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label class="form-label" for="municipio">Municipio</label>
+                                            <select class="form-control" id="municipio${id}">
+                                                <option value="0">Todos los Municipios</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label class="form-label" for="limiteGanadores">Limite De Ganadores</label>
+                                            <input type="number" id="limiteGanadores${id}" class="form-control" />
+                                        </div>
 
-  $('.BtnBottador').click(function () {
-    var data = {
-      "nombre": $('#nombre').val(),
-      "descripcion": $('#descripcion').val(),
-      "imgSuccess": "test.png",
-      "imgFail": "test.png",
-      "fechaInicio": $('#fechaInicio').val(),
-      "fechaFin": $('#fechaFin').val(),
-      "fechaCreacion": $('#fechaRegistro').val(),
-      "estado": 3
+                                        <div class="form-group col-md-6">
+                                            <label class="form-label" for="Presupuesto">Presupuesto</label>
+                                            <input type="number" id="Presupuesto${id}" class="form-control" />
+                                        </div>
 
-    }
-    saveData(data);
-    Limpiar();
-  });
+                                    </div>
+                                    <div class="col-md-12">
+                                        <button class="btn btn-success" type="button" id="btnAddPresupuesto${id}"
+                                            style="float: right;">
+                                            <span class="align-middle d-sm-inline-block d-none">AGREGAR</span>
+                                        </button>
+                                        <br />
+                                    </div>
+                                    <div class="row">
+                                        <table class="datatables-basic table mt-3">
+                                            <thead>
+                                                <tr>
+                                                    <td>Departamento</td>
+                                                    <td>Municipio</td>
+                                                    <td>Limite</td>
+                                                    <td>Presupuesto</td>
+                                                    <td>&nbsp;</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbPresupuesto${id}">
 
-  $('#btnAddCampania').click(function () {
-    var nombre = $('#nombreEtapa');
-    var orden = $('#ordenEtapa');
-    var descripcion = $('#descEtapa');
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-5">
+                                        <button class="btn btn-primary btn-prev">
+                                            <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
+                                            <span class="align-middle d-sm-inline-block d-none">Atras</span>
+                                        </button>
+                                        <button class="btn btn-primary btn-next">
+                                            <span class="align-middle d-sm-inline-block d-none">Siguiente</span>
+                                            <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                                        </button>
+                                    </div>
+  </div>
+  `
 
-    etapas.push({
-      nombre: nombre.val(),
-      orden: orden.val(),
-      descripcion: descripcion.val()
-    })
+  //$('#presupuesto').after(configbuttons);
 
+  //$('#address-step-vertical').after(configForm);
 
-    $('#tbetapas').html(null);
-    $('#Etapa').html(null);
-    $('#EtapaPremio').html(null);
-    etapas.forEach((element, index) => {
-      var opc = `<option>${element.nombre}</option>`;
+  $('#addConfig').append(configbuttons);
+  $('#addFormConfig').append(configForm);
 
-      var tr = `<tr>
-          <th>${index + 1}</th>
-          <th>${element.nombre}</th>
-          <th></th>
-      </tr>`;
-
-
-      $('#tbetapas').append(tr);
-      $('#Etapa').append(opc);
-      $('#EtapaPremio').append(opc);
-
-
-    });
-
-
-    nombre.val(null);
-    orden.val(null);
-    descripcion.val(null);
-
-
-  });
-
-  $('#btnAddPresupuesto').click(function () {
-
-    var departamento = $('#departamento option:selected').text();
-    var municipio = $('#municipio option:selected').text();
-    var limite = $('#limiteGanadores').val();
-    var presupuesto = $('#Presupuesto').val();
-    var tr = `<tr>
-          <th>${departamento}</th>
-          <th>${municipio}</th>
-          <th>${limite}</th>
-          <th>${presupuesto}</th>
-          <th></th>
-      </tr>`;
-
-
-    $('#tbPresupuesto').append(tr);
-    $('#limiteGanadores').val(null);
-    $('#Presupuesto').val(null);
-    $('#departamento').val(0);
-    $('#municipio').val(0);
-  });
-
-
-  $('#btnAddParametro').click(function () {
-    var etapa = $('#Etapa option:selected').text();
-    var Transacciones = $('#Transacciones option:selected').text();
-    var vMinimo = $('#vMinimo').val();
-    var vMaximo = $('#vMaximo').val();
+  $('#btnAddParametro'+id).click(function () {
+    var etapa = $('#Etapa'+id).children('option:selected').text()
+    var Transacciones = $('#Transacciones' + id).children('option:selected').text()
+    var vMinimo = $('#vMinimo'+id).val();
+    var vMaximo = $('#vMaximo'+id).val();
 
 
     var tr = `<tr>
@@ -201,20 +448,25 @@ $(function () {
         <th></th>
     </tr>`;
 
+    parametros.push({
+        etapa,
+        Transacciones,
+        vMinimo,
+        vMaximo
+    })
 
-    $('#Etapa').val(0);
-    $('#Transacciones').val(0);
-    $('#vMinimo').val(0);
-    $('#vMaximo').val(0);
-    $('#tbParametros').append(tr);
+    $('#Etapa'+id).val(0);
+    $('#Transacciones'+id).val(0);
+    $('#vMinimo'+id).val(null);
+    $('#vMaximo'+id).val(null);
+    $('#limiteParticipacion'+id).val(null);
+    $('#tbParametros'+id).append(tr);
   });
 
-
-
-  $('#btnAddPremio').click(function () {
-    var etapa = $('#EtapaPremio option:selected').text();
-    var Premios = $('#Premios option:selected').text();
-    var valor = $('#valorP').val();
+  $('#btnAddPremio'+id).click(function () {
+    var etapa = $('#EtapaPremio'+id).children('option:selected').text();
+    var Premios = $('#Premios'+id).children('option:selected').text();
+    var valor = $('#valorP'+id).val();
 
     var tr = `<tr>
     <th>${etapa}</th>
@@ -222,48 +474,44 @@ $(function () {
     <th>${valor}</th>
     <th></th>
 </tr>`;
-    $('#tbPremio').append(tr);
+    $('#tbPremio'+id).append(tr);
+    $('#EtapaPremio'+id).val(0);
+    $('#Premios'+id).val(0)
+    $('#valorP'+id).val(null);
   })
 
+  $('#btnAddPresupuesto'+id).click(function () {
+
+    var departamento = $('#departamento'+id).children('option:selected').text();
+    var municipio = $('#municipio'+id).children('option:selected').text();
+    var limite = $('#limiteGanadores'+id).val();
+    var presupuesto = $('#Presupuesto'+id).val();
+    var tr = `<tr>
+          <th>${departamento}</th>
+          <th>${municipio}</th>
+          <th>${limite}</th>
+          <th>${presupuesto}</th>
+          <th></th>
+      </tr>`;
 
 
-  /*$('#btnGenerar').click(function () {
-    const cantidad = $('#cantidad').val();
-    const tamanio = $('#tamanio').val();
-    const tipo = $('#tipogeneracion').val();
-    codigos = [];
-    for (let index = 0; index < cantidad; index++) {
-      var newCode = 'TEMP' + generaCupon(tamanio, tipo);
-      codigos.push({ cupon: newCode, estado: 1, esPremio: 0 });
-    }
-    $('#PreviewCodigo').html(null)
+    $('#tbPresupuesto'+id).append(tr);
+    $('#limiteGanadores'+id).val(null);
+    $('#Presupuesto'+id).val(null);
+    $('#departamento'+id).val(0);
+    $('#municipio'+id).val(0);
+  });
 
-    var i = 1;
-    codigos.forEach(element => {
-      var tr = `<tr>
-        <td>${i}</td>
-        <td>${element.cupon}</td>
-        </tr>`
+  
+  getTransacciones(id);
+  getPremios(id);
+  getDepartamentos(id);
+  getMunicipios(id);
+  loadMenu();
 
-      $('#PreviewCodigo').append(tr);
-      i++;
-    });
+}
 
-  })*/
-
-  /*$('#BtnPremios').click(function () {
-    var cantidad = $('#cantidaPremio').val();
-    var premio = $('#premio').val();
-    var valor = $('#valorPremio').val();
-    var premioDescripcion = $('#premio option:selected').text();
-    var data = { cantidad, premio, valor, premioDescripcion };
-    premios = [...premios, data];
-    DrawPremios();
-  })*/
-
-});
-
-const getDepartamentos = () => {
+const getDepartamentos = (id) => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow'
@@ -273,14 +521,14 @@ const getDepartamentos = () => {
     .then(result => {
       result.forEach(element => {
         var opc = `<option value="${element.id}">${element.nombre}</option>`;
-        $('#departamento').append(opc);
+        $('#departamento'+id).append(opc);
       });
     })
     .catch(error => console.log('error', error));
 
 }
 
-const getMunicipios = () => {
+const getMunicipios = (id) => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow'
@@ -290,14 +538,14 @@ const getMunicipios = () => {
     .then(result => {
       result.forEach(element => {
         var opc = `<option value="${element.id}">${element.nombre}</option>`;
-        $('#municipio').append(opc);
+        $('#municipio'+id).append(opc);
       });
     })
     .catch(error => console.log('error', error));
 
 }
 
-const getTransacciones = () => {
+const getTransacciones = (id) => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow'
@@ -307,7 +555,7 @@ const getTransacciones = () => {
     .then(result => {
       result.forEach(element => {
         var opc = `<option value="${element.id}">${element.nombre}</option>`;
-        $('#Transacciones').append(opc);
+        $('#Transacciones'+id).append(opc);
       });
     })
     .catch(error => console.log('error', error));
@@ -376,6 +624,13 @@ inputFile.addEventListener('change', function () {
 function eliminarFila(id) {
   $("#fila" + id).remove();
   console.log(id)
+}
+
+function eliminarEtapa(id) {
+  console.log("voy a eliminar")
+  $("#fila" + id).remove();
+  $('#social-links-vertical-'+ id).remove();
+  $('#opc'+id).remove();
 }
 
 inputFileBloqueados.addEventListener('change', function () {
@@ -483,7 +738,6 @@ function agregarUsuarioBloqueado() {
 }*/
 
 const table = (table, data) => {
-  console.log(data)
   $('#' + table).dataTable({
     destroy: true,
     data,
@@ -577,7 +831,6 @@ const ChangePanel = (estado) => {
 
 function agregarLocalTabla() {
   const data = JSON.parse(localStorage.getItem("Camapañas"));
-  console.log(data);
   table('tableTodasCamapaña', data);
 }
 
@@ -601,6 +854,33 @@ function saveLocal() {
 
 
 }
+
+const createData = () => {
+
+  let myConfig = [{
+    "configCampaña" : {
+      "campaña": $('#nombre').val(),
+      "descripcionCampaña": $('#descripcion').val(),
+      "tituloNotificacion": $('#successaMessage').val(),
+      "descripcionNotificacion": $('#descripcionNotificacion').val(),
+      "limiteParticipacion": $('#limiteParticipacion').val(),
+      "fechaInicio": $('#fechaInicio').val(),
+      "fechaFinal": $('#fechaFin').val(),
+      "fechaRegistro": $('#fechaRegistro').val(),
+      "edadInicial": $('#edadIni').val(),
+      "edadFinal": $('#edadFini').val(),
+      "tipoUsuario": $('#tipoUsuario').children('option:selected').text(),
+      "Sexo": $('#sexo').children('option:selected').text()
+    },
+    "configEtapas" : etapas,
+    "configParametros": parametros
+  }]
+
+
+  console.log(myConfig);
+}
+
+
 
 const saveData = (data) => {
   var myHeaders = new Headers();
@@ -640,30 +920,6 @@ const Alert = function (message, status) // si se proceso correctamente la solic
     rtl: false
   });
 }
-
-/*const generaCupon = (num, optionCharacters) => {
-  let characters = ""; // abcdefghijklmnopqrstuvwxyz
-  if (optionCharacters == 1) // letras y numeros
-  {
-    characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  }
-  else if (optionCharacters == 2) // solo numeros
-  {
-    characters = '0123456789';
-  }
-  else if (optionCharacters == 3) // solo letras
-  {
-    characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  }
-
-  let result = '';
-  const charactersLength = characters.length;
-  for (let i = 0; i < num; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-}*/
-
 const Limpiar = () => {
   $('#nemonico').val(null);
   $('#nombre').val(null);
@@ -678,33 +934,19 @@ const Limpiar = () => {
   ChangePanel(1)
 }
 
-
-/*const DrawPremios = () => {
-  $('#detallePremios').html(null);
-  premios.forEach((element,index) => {
-    var tr = `<tr>
-        <td>${element.cantidad}</td>
-        <td>${element.premioDescripcion}</td>
-        <td>${element.valor}</td>
-        <td><span class="btn-sm btn btn-outline-danger" onclick="removePremio(${index})">Eliminar</span></td>
-      </tr>`
-    $('#detallePremios').append(tr);
-  });
-}*/
-
-const getPremios = () => {
+const getPremios = (id) => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow'
   };
 
   $('#premio').html('<option value="0" selected disabled>Selecciona una opcion</option>');
-  fetch(`${url}Premios`, requestOptions)
+  fetch(`${url}Premio`, requestOptions)
     .then(response => response.json())
     .then(result => {
       result.forEach(element => {
         var opc = `<option value="${element.id}">${element.nombre}</option>`;
-        $('#Premios').append(opc);
+        $('#Premios'+id).append(opc);
       });
     })
     .catch(error => console.log('error', error));

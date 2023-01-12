@@ -464,7 +464,7 @@
                                     </button>
                                 </div>
                                 <div class="step" data-target="#personal-info-vertical">
-                                    <button type="button" class="step-trigger" disabled>
+                                    <button type="button" class="step-trigger" >
                                         <span class="bs-stepper-box">3</span>
                                         <span class="bs-stepper-label">
                                             <span class="bs-stepper-title">Configuracion De Las Etapas</span>
@@ -472,34 +472,9 @@
                                         </span>
                                     </button>
                                 </div>
-                                <div class="step" data-target="#address-step-vertical">
-                                    <button type="button" class="step-trigger">
-                                        <span class="bs-stepper-box">4</span>
-                                        <span class="bs-stepper-label">
-                                            <span class="bs-stepper-title">Presupuesto</span>
-                                            <span class="bs-stepper-subtitle">Configura los Premios</span>
-                                        </span>
-                                    </button>
-                                </div>
 
-                                <div class="step" data-target="#social-links-vertical">
-                                    <button type="button" class="step-trigger" disabled>
-                                        <span class="bs-stepper-box">5</span>
-                                        <span class="bs-stepper-label">
-                                            <span class="bs-stepper-title">Parametros</span>
-                                            <span class="bs-stepper-subtitle">Agregar Parametros</span>
-                                        </span>
-                                    </button>
-                                </div>
+                                <div id="addConfig">
 
-                                <div class="step" data-target="#Premio-Campaña-vertical">
-                                    <button type="button" class="step-trigger" disabled>
-                                        <span class="bs-stepper-box">6</span>
-                                        <span class="bs-stepper-label">
-                                            <span class="bs-stepper-title">Premio De La Campaña</span>
-                                            <span class="bs-stepper-subtitle">Agregar Premios De La Camapaña</span>
-                                        </span>
-                                    </button>
                                 </div>
                                 <div class="step" data-target="#resumen-Campaña-vertical">
                                     <button type="button" class="step-trigger" disabled>
@@ -517,7 +492,7 @@
 
                             <div class="bs-stepper-content">
                                 <!--CONFIGURACION DE LA CAMPAÑA-->
-                                <div id="account-details-vertical" class="content" style="height: 700px;">
+                                <div id="account-details-vertical" class="content" style="height: 800px;">
                                     <div class="content-header">
                                         <h5 class="mb-0">Configuración de Camapaña</h5>
                                         <small class="text-muted">Ingresa los datos basicos de la Camapaña.</small>
@@ -542,7 +517,19 @@
                                                 placeholder="Ingrese el titulo">
                                             </input>
                                         </div>
+                                        <div class="form-group form-password-toggle col-md-6">
+                                            <label class="form-label" for="descripcion">Descripción De La Notificacion</label>
+                                            <textarea type="password" id="descripcionNotificacion" class="form-control"
+                                                placeholder="Ingrese la descripcion" rows="2"></textarea>
+                                        </div>
 
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label class="form-label" for="vertical-facebook">Limite
+                                                Participacion</label>
+                                            <input type="number" id="limiteParticipacion" class="form-control" />
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="form-group form-password-toggle col-md-6">
@@ -732,14 +719,25 @@
                                             <label for="orden">Orden</label>
                                             <input class="form-control" id="ordenEtapa" />
                                         </div>
-                                        <div class="col-md-12 mt-2">
-                                            <label for="descEtapa">Descripcion Etapa</label>
-                                            <textarea type="text" id="descEtapa" class="form-control"
-                                                placeholder="Ingrese la descripcion" rows="2">
-                                            </textarea>
+                                        <div class="form-group form-password-toggle col-md-12">
+                                            <label class="form-label" for="descripcion">Descripción De Las Etapas</label>
+                                            <textarea type="password" id="descEtapa" class="form-control"
+                                                placeholder="Ingrese la descripcion de la etapa" rows="2"></textarea>
+                                        </div>
+                                        <div class="form-group col-md-8">
+                                            <label class="form-label" for="TipoTransaccion">Tipo Transaccion</label>
+                                            <!-- <input type="number" id="TipoTransaccion${id}" class="form-control" /> -->
+                                            <select class="form-control" id="TipoTransaccion">
+                                                <option>Por Transaccion</option>
+                                                <option>Recurrente</option>
+                                                <option>Acumular Transacciones</option>
+                                                <option>Acumular Recurentes</option>
+                                                <option>Acumular valor</option>
+                                                <option>Combinar Transacciones</option>
+                                            </select>
                                         </div>
                                         <div class="col-md-12 mt-2">
-                                            <button class="btn btn-success" type="button" id="btnAddCampania"
+                                            <button class="btn btn-success" type="button" id="btnAddEtapa"
                                                 style="float: right;">
                                                 <span class="align-middle d-sm-inline-block d-none">AGREGAR</span>
                                             </button>
@@ -754,6 +752,7 @@
                                                     <tr>
                                                         <th>#</th>
                                                         <th>Nombre</th>
+                                                        <th>Tipo Transaccion</th>
                                                         <th>Accion</th>
                                                     </tr>
                                                 </thead>
@@ -782,228 +781,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--CONFIGURACION DEL PRESUPUESTO-->
-                                <div id="address-step-vertical" class="content" style="height: 650px;">
-                                    <div class="content-header">
-                                        <h5 class="mb-0">Presupuesto</h5>
-                                        <small>Configuracion Del Presupuesto </small>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-md-6">
-                                            <label class="form-label" for="departamento">Departamento</label>
-                                            <select class="form-control" id="departamento">
-                                                <option value="0">Todos los departamentos</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <label class="form-label" for="municipio">Municipio</label>
-                                            <select class="form-control" id="municipio">
-                                                <option value="0">Todos los Municipios</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-md-6">
-                                            <label class="form-label" for="limiteGanadores">Limite De Ganadores</label>
-                                            <input type="number" id="limiteGanadores" class="form-control" />
-                                        </div>
-
-                                        <div class="form-group col-md-6">
-                                            <label class="form-label" for="Presupuesto">Presupuesto</label>
-                                            <input type="number" id="Presupuesto" class="form-control" />
-                                        </div>
-
-                                    </div>
-                                    <div class="col-md-12">
-                                        <button class="btn btn-success" type="button" id="btnAddPresupuesto"
-                                            style="float: right;">
-                                            <span class="align-middle d-sm-inline-block d-none">AGREGAR</span>
-                                        </button>
-                                        <br />
-                                    </div>
-                                    <div class="row">
-                                        <table class="datatables-basic table mt-3">
-                                            <thead>
-                                                <tr>
-                                                    <td>Departamento</td>
-                                                    <td>Municipio</td>
-                                                    <td>Limite</td>
-                                                    <td>Presupuesto</td>
-                                                    <td>&nbsp;</td>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="tbPresupuesto">
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="d-flex justify-content-between mt-5">
-                                        <div>
-                                            <button class="btn btn-primary btn-prev">
-                                                <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
-                                                <span class="align-middle d-sm-inline-block d-none">Atras</span>
-                                            </button>
-                                        </div>
-                                        <div>
-                                            <button class="btn btn-warning BtnBottador">
-                                                <span class="align-middle d-sm-inline-block d-none">Borrador</span>
-                                                <i data-feather="trash-2" class="align-middle ml-sm-25 ml-0"></i>
-                                            </button>
-                                            <button class="btn btn-primary btn-next">
-                                                <span class="align-middle d-sm-inline-block d-none">Siguiente</span>
-                                                <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--CONFIGURACION DE LOS PARAMETROS-->
-                                <div id="social-links-vertical" class="content" style="height: 650px;">
-                                    <div class="content-header">
-                                        <h5 class="mb-0">Parametros De La Campaña</h5>
-                                        <small></small>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-md-6">
-                                            <label class="form-label" for="TipoTransaccion">TipoTransaccion</label>
-                                            <!-- <input type="number" id="TipoTransaccion" class="form-control" /> -->
-                                            <select class="form-control" id="TipoTransaccion">
-                                                <option>Por Transaccion</option>
-                                                <option>Recurrente</option>
-                                                <option>Acumular Transacciones</option>
-                                                <option>Acumular Recurentes</option>
-                                                <option>Acumular valor</option>
-                                                <option>Combinar Transacciones</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <label class="form-label" for="vertical-facebook">Limite
-                                                Participacion</label>
-                                            <input type="number" id="limiteParticipacion" class="form-control" />
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-md-6">
-                                            <label class="form-label" for="Etapa">Etapa</label>
-                                            <select class="form-control" id="Etapa">
-                                                <option>Seleccione Una Etapa</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <label class="form-label" for="Transacciones">Transacciones</label>
-                                            <select class="form-control" id="Transacciones">
-                                                <option>Seleccione Una Transaccion</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-md-6">
-                                            <label class="form-label" for="vMinimo">Valor Minimo</label>
-                                            <input type="number" id="vMinimo" class="form-control" />
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <label class="form-label" for="vMaximo">Valor Maximo</label>
-                                            <input type="number" id="vMaximo" class="form-control" />
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <button class="btn btn-success" type="button" id="btnAddParametro"
-                                                style="float: right;">
-                                                <span class="align-middle d-sm-inline-block d-none">AGREGAR</span>
-                                            </button>
-                                            <br />
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <table class="datatables-basic table mt-3">
-                                            <thead>
-                                                <tr>
-                                                    <td>Etapa</td>
-                                                    <td>Transaccion</td>
-                                                    <td>valor Minimo</td>
-                                                    <td>valor Maximo</td>
-                                                    <td>&nbsp;</td>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="tbParametros">
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="d-flex justify-content-between mt-5">
-                                        <button class="btn btn-primary btn-prev">
-                                            <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
-                                            <span class="align-middle d-sm-inline-block d-none">Atras</span>
-                                        </button>
-                                        <!--<button class="btn btn-success btn-submit">Submit</button>-->
-                                        <button class="btn btn-primary btn-next">
-                                            <span class="align-middle d-sm-inline-block d-none">Siguiente</span>
-                                            <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <!--CONFIGURACION DE LOS PREMIOS-->
-                                <div id="Premio-Campaña-vertical" class="content" style="height: 650px;">
-                                    <div class="content-header">
-                                        <h5 class="mb-0">Premios De La Camapaña</h5>
-                                        <small></small>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-md-6">
-                                            <label class="form-label" for="EtapaPremio">Etapa</label>
-                                            <select class="form-control" id="EtapaPremio">
-                                                <option>Seleccione Una Etapa</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <label class="form-label" for="Premios">Premios</label>
-                                            <select class="form-control" id="Premios">
-                                                <option>Seleccione Un Premio</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-md-6">
-                                            <label class="form-label" for="valor">Valor</label>
-                                            <input class="form-control" id="valorP">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <button class="btn btn-success" type="button" id="btnAddPremio"
-                                            style="float: right;">
-                                            <span class="align-middle d-sm-inline-block d-none">AGREGAR</span>
-                                        </button>
-                                        <br />
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <table class="datatables-basic table mt-3">
-                                                <thead>
-                                                    <tr>
-                                                        <td>Etapa</td>
-                                                        <td>Premio</td>
-                                                        <td>valor</td>
-                                                        <td>&nbsp;</td>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="tbPremio">
-    
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-between mt-5">
-                                        <button class="btn btn-primary btn-prev">
-                                            <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
-                                            <span class="align-middle d-sm-inline-block d-none">Atras</span>
-                                        </button>
-                                        <button class="btn btn-primary btn-next">
-                                            <span class="align-middle d-sm-inline-block d-none">Siguiente</span>
-                                            <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
-                                        </button>
-                                    </div>
+                                <div id="addFormConfig">
+                                    
                                 </div>
 
                                 <!--CONFIGURACION DEL RESUMEN-->
@@ -1031,7 +810,7 @@
                                             <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
                                             <span class="align-middle d-sm-inline-block d-none">Atras</span>
                                         </button>
-                                        <button class="btn btn-success btn-submit">Submit</button>
+                                        <button class="btn btn-success btn-submit" onclick="createData()">Submit</button>
                                     </div>
                                 </div>
                             </div>
@@ -1039,6 +818,28 @@
                     </div>
                 </section>
             </div>
+        </div>
+    </div>
+
+    
+    <div class="modal modal-slide-in new-user-modal fade" id="modalEdit">
+        <div class="modal-dialog">
+          <form id="formEdit" class="add-new-user modal-content pt-0" autocomplete="off">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            <div class="modal-header mb-1">
+              <h5 class="modal-title" id="exampleModalLabel">Actualizar El Departamento</h5>
+            </div>
+            <div class="modal-body flex-grow-1">
+              <div class="form-group">
+                <input id="id" type="hidden">
+                <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
+                <input type="text" class="form-control dt-full-name" id="nombreEdit" placeholder="Nombre del departamento"
+                  name="nombreEdit" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
+              </div>
+              <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
+              <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+            </div>
+          </form>
         </div>
     </div>
     <!-- END: Content-->
