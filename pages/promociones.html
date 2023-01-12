@@ -770,7 +770,202 @@
                         </div>
                     </div>
                 </section>
+
+                <!--Panel Edicion-->
+                
+                <!--endEdicion-->
             </div>
+        </div>
+        
+    </div>
+
+    <div class="modal modal-slide-in new-user-modal fade" id="modalEdit">
+        <div class="modal-dialog w-75">
+          <form id="formEdit" class="add-new-user modal-content pt-0 " autocomplete="off">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                <div class="modal-header mb-1">
+                <h5 class="modal-title" id="exampleModalLabel">Actualizar El Departamento</h5>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="bs-stepper vertical vertical-wizard-example-Edit">
+                        <div class="bs-stepper-header">
+                            <div class="step" data-target="#account-details-vertical-edit">
+                                <button type="button" class="step-trigger">
+                                    <span class="bs-stepper-box">1</span>
+                                    <span class="bs-stepper-label">
+                                        <span class="bs-stepper-title">Configuracion de Promoción</span>
+                                        <span class="bs-stepper-subtitle">datos de la promoción</span>
+                                    </span>
+                                </button>
+                            </div>
+                            <div class="step" data-target="#personal-info-vertical">
+                                <button type="button" class="step-trigger">
+                                    <span class="bs-stepper-box">2</span>
+                                    <span class="bs-stepper-label">
+                                        <span class="bs-stepper-title">Configuración de Codigos</span>
+                                        <span class="bs-stepper-subtitle">Genera o Carga tus Codigos</span>
+                                    </span>
+                                </button>
+                            </div>
+                            <div class="step" data-target="#address-step-vertical">
+                                <button type="button" class="step-trigger">
+                                    <span class="bs-stepper-box">3</span>
+                                    <span class="bs-stepper-label">
+                                        <span class="bs-stepper-title">Premios</span>
+                                        <span class="bs-stepper-subtitle">Configura los Premios</span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="bs-stepper-content">
+                            <div id="account-details-vertical-edit" class="content" style="height: 650px;">
+                                <div class="content-header">
+                                    <h5 class="mb-0">Configuración de Promoción</h5>
+                                    <small class="text-muted">Ingresa los datos basicos de la Promoción.</small>
+                                </div>
+                                <div class="row">
+                                    <input id="id" type="hidden">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label" for="nemonico">Nemonico</label>
+                                        <input type="text" id="nemonicoEdit" class="form-control"
+                                            placeholder="Nemonico" />
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label" for="nombre">Nombre</label>
+                                        <input type="text" id="nombreEdit" class="form-control"
+                                            placeholder="Ingresa el Nombre" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group form-password-toggle col-md-12">
+                                        <label class="form-label" for="descripcion">Descripción</label>
+                                        <textarea type="password" id="descripcionEdit" class="form-control"
+                                            placeholder="Ingrese la descripcion" rows="2"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group form-password-toggle col-md-6">
+                                        <label class="form-label" for="successaMessage">Mensaje Exito</label>
+                                        <textarea type="password" id="successaMessageEdit" class="form-control"
+                                            placeholder="Ingrese la descripcion" rows="2"></textarea>
+                                    </div>
+                                    <div class="form-group form-password-toggle col-md-6">
+                                        <label class="form-label" for="failMessage">Imagen Codigo Exitoso</label>
+                                        <div action="#" class="dropzone dropzone-area" id="dpz-single-file"
+                                            style="min-height: 70px;">
+                                            <div class="dz-message" style="font-size: 10px;">Drop files here or
+                                                click to
+                                                upload.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group form-password-toggle col-md-6">
+                                        <label class="form-label" for="failMessage">Mensaje Codigo No Valido</label>
+                                        <textarea type="password" id="failMessageEdit" class="form-control"
+                                            placeholder="Ingrese la descripcion" rows="2"></textarea>
+                                    </div>
+                                    <div class="form-group form-password-toggle col-md-6">
+                                        <label class="form-label" for="failMessage">Imagen Codigo No valido</label>
+                                        <div action="#" class="dropzone dropzone-area" id="dpz-single-file"
+                                            style="min-height: 70px;">
+                                            <div class="dz-message" style="font-size: 10px;">Drop files here or
+                                                click to
+                                                upload.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label" for="fechaInicioEdit">Fecha Inicio</label>
+                                        <input type="date" id="fechaInicioEdit" class="form-control"
+                                            placeholder="Nemonico" />
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label" for="fechaFinEdit">Fecha Fin</label>
+                                        <input type="date" id="fechaFinEdit" class="form-control"
+                                            placeholder="Ingresa el Nombre" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label" for="premioxCampana">Entrega Premios</label>
+                                        <select class="form-control" id="premioxCampana">
+                                            <option selected>NO</option>
+                                            <option>SI</option>
+                                        </select>  
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <button class="btn btn-primary btn-next btn-submit" type="submit" id="btnGuardarEdit">
+                                                <span class="align-middle d-sm-inline-block d-none">Guardar</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="personal-info-vertical" class="content" style="height: 650px;">
+                                <div class="content-header">
+                                    <h5 class="mb-0">Configuración de Codigos</h5>
+                                    <small>Genera o Carga tus Codigos.</small>
+                                </div>
+                                <div class=" mt-5">
+                                    <div style="height:200px; width:auto;overflow-y: scroll;">
+                                        <table class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>CODIGO</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="PreviewCodigo"  ></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="address-step-vertical" class="content"  style="height: 650px;">
+                                <div class="content-header">
+                                    <h5 class="mb-0">Premios</h5>
+                                    <small>Configura los premios </small>
+                                </div>
+                                <div class="col-md-12" style="height: 400px;">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Cantidad</th>
+                                                <th>Premio</th>
+                                                <th>Valor</th>
+                                                <th>&nbsp;</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="detallePremios"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!--<div id="social-links-vertical" class="content" style="height: 650px;">
+                                <div class="content-header">
+                                    <h5 class="mb-0">Resumen</h5>
+                                    <small>Resumen de la Promoción.</small>
+                                    <hr/>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <button class="btn btn-primary btn-next btn-submit">
+                                            <span class="align-middle d-sm-inline-block d-none">Guardar</span>
+                                            <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>-->
+                        </div>
+                    </div>
+                </div>
+            
+            
+            </form>
         </div>
     </div>
     <!-- END: Content-->
