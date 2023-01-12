@@ -210,6 +210,7 @@ const OpenEdit = (id) => {
         .then(response => response.json())
         .then(result => {
             console.log($('#departamentoActualizar'))
+            console.log(result)
             $('#id').val(id);
             $('#nombreEdit').val(result.nombre);
             $('#departamentoActualizar').val(result.idDepartamento);
@@ -237,7 +238,6 @@ const getDepartamentos = () => {
     };
 
     $('#departamento').html('<option value="0" selected disabled>Selecciona una Opcion</option>');
-    $('#departamentoActualizar').html('<option value="0" selected disabled>Selecciona una Opcion</option>');
     fetch(`${url}Departamento`, requestOptions)
         .then(response => response.json())
         .then(result => {

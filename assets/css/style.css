@@ -31,3 +31,9 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 	font-weight: normal;
 	-webkit-font-smoothing: antialiased;
 }
+
+.account-details-vertical::-webkit-scrollbar{
+	width: 5px;
+	height: 5px;
+	display: none;
+}

@@ -60,7 +60,7 @@
         <ul class="nav navbar-nav">
           <li class="nav-item">
             <a class="nav-link menu-toggle" href="javascript:void(0);">
-              <b>Administración de Departamentos</b>
+              <b>Administración de Premios</b>
             </a>
           </li>
         </ul>
@@ -254,7 +254,7 @@
         <li class=" navigation-header"><span data-i18n="Apps &amp; Pages">Administración</span><i
             data-feather="more-horizontal"></i>
         </li>
-        <li class="nav-item /ul>active">
+        <li class="nav-item </ul>active">
           <a class="d-flex align-items-center" href="categorias.html">
             <i data-feather="award"></i><span class="menu-title text-truncate"
               data-i18n="categorias">Categorias</span></a>
@@ -270,36 +270,21 @@
             <i data-feather="database"></i><span class="menu-title text-truncate" data-i18n="Columnas">Columnas</span>
           </a>
         </li>
-        <li class="nav-item active">
+        <li class="nav-item">
             <a class="d-flex align-items-center" href="departamentos.html">
               <i data-feather="map"></i><span class="menu-title text-truncate" data-i18n="Departamentos">Departamentos</span>
             </a>
-        </li>
-          <li class="nav-item">
-            <a class="d-flex align-items-center" href="terceros.html">
-              <i data-feather="person"></i><span class="menu-title text-truncate" data-i18n="Terceros">Terceros</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="d-flex align-items-center" href="municipios.html">
-              <i data-feather="database"></i><span class="menu-title text-truncate" data-i18n="Municipios">Municipios</span>
-            </a>
-        </li>
-          <li class="nav-item">
-            <a class="d-flex align-items-center" href="terceros.html">
-              <i data-feather="person"></i><span class="menu-title text-truncate" data-i18n="Terceros">Terceros</span>
-            </a>
           </li>
         <li class="nav-item">
-          <a class="d-flex align-items-center" href="rols.html">
-            <i data-feather="database"></i><span class="menu-title text-truncate" data-i18n="Roles">Roles</span>
-          </a>
+            <a class="d-flex align-items-center" href="terceros.html">
+              <i data-feather="database"></i><span class="menu-title text-truncate" data-i18n="Departamentos">Terceros</span>
+            </a>
         </li>
         <li class="nav-item">
-          <a class="d-flex align-items-center" href="premio.html">
-            <i data-feather="dollar-sign"></i><span class="menu-title text-truncate"
-              data-i18n="Premios">Premios</span>
-          </a>
+            <a class="d-flex align-items-center" href="premio.html">
+              <i data-feather="dollar-sign"></i><span class="menu-title text-truncate"
+                data-i18n="Premios">Premios</span>
+            </a>
         </li>
         <li class=" navigation-header"><span data-i18n="Apps &amp; Pages">Configuración</span><i
             data-feather="more-horizontal"></i>
@@ -330,8 +315,9 @@
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>Nombre</th>
-                    <th>Action</th>
+                    <th>Descripcion</th>
+                    <th>Tipo</th>
+                    <th></th>
                   </tr>
                 </thead>
               </table>
@@ -348,16 +334,25 @@
       <form id="formNew" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Agregar Nuevo Departamento</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Agregar Premio</h5>
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
-            <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
-            <input type="text" class="form-control dt-full-name" id="nombre" placeholder="Nombre del departamento"
-              name="nombre" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
+                <label class="form-label" for="basic-icon-default-fullname">Tipo De Transaccion</label>
+                <select onchange="tipoTransaccionForm()" type="text" class="form-control dt-full-name" id="tipoTransaccion" placeholder="Transaccion"
+                  name="tipoTransaccion" aria-label="" aria-describedby="basic-icon-default-fullname2" required >
+                  <option value="0" selected disabled>Seleccione una Opcion</option>
+                  <option value="1">Transaccion</option>
+                  <option value="2">Premio por Link</option>
+                </select>
           </div>
+          
+          <div class="form-group" id="tipoForm">
+
+          </div>
+          
           <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
-          <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal" onclick="limpiarCampos()">Cancelar</button>
         </div>
       </form>
     </div>
@@ -368,15 +363,22 @@
       <form id="formEdit" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Actualizar El Departamento</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Actualizar Premio</h5>
         </div>
         <div class="modal-body flex-grow-1">
+          <input id="id" type="hidden">
           <div class="form-group">
-            <input id="id" type="hidden">
-            <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
-            <input type="text" class="form-control dt-full-name" id="nombreEdit" placeholder="Nombre del departamento"
-              name="nombreEdit" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
+            <label class="form-label" for="basic-icon-default-fullname">Tipo De Transaccion</label>
+            <select onchange="tipoTransaccionFormEdit()" type="text" class="form-control dt-full-name" id="tipoTransaccionEdit" placeholder="Transaccion"
+              name="tipoTransaccionEdit" aria-label="" aria-describedby="basic-icon-default-fullname2" required >
+              <option value="0" selected disabled>Seleccione una Opcion</option>
+              <option value="1">Transaccion</option>
+              <option value="2">Premio por Link</option>
+            </select>
           </div>
+
+          <div class="form-group" id="tipoFormEdit"></div>
+
           <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
         </div>
@@ -389,12 +391,12 @@
       <form id="formDelete" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Inhabilitar el Departamento</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Inhabilitar Premio</h5>
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
             <input id="idDelete" type="hidden">
-            <p>¿Esta seguro que desea <b>Inhabilitar este Departamento?</b></p>
+            <p>¿Esta seguro que desea <b>Inhabilitar este Premio?</b></p>
           </div>
           <button id="BtnDelete" type="button" class="btn btn-danger mr-1 data-submit">Confirmar </button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
@@ -436,7 +438,7 @@
   <!-- END: Theme JS-->
 
   <!-- BEGIN: Page JS-->
-  <script src="../js/departamento.js"></script>
+  <script src="../js/premio.js"></script>
   <!-- END: Page JS-->
 
   <script>
