@@ -3,7 +3,7 @@ let codigos = [];
 let premios = [];
 $(function () {
   'use strict';
-  ChangePanel(2)
+  ChangePanel(1)
 
   getPremios();
 
@@ -92,7 +92,8 @@ $(function () {
           "fechaFin": $('#fechaFin').val(),
           "PremioXcampania": 0,
           "estado": 1,
-          "codigos": codigos
+          "codigos": codigos,
+          "premios": premios
 
         }
         saveData(data);
@@ -127,7 +128,8 @@ $(function () {
       "fechaFin": $('#fechaFin').val(),
       "PremioXcampania": 0,
       "estado": 3,
-      "codigos": codigos
+      "codigos": codigos,
+      "premios": premios
 
     }
     saveData(data);
@@ -283,12 +285,12 @@ const table = (table, data) => {
 
           switch (row.estado) {
             case 1:
-              opcAdd += `<a href="#" onclick="OpenEdit(${data})" class="btn_delete dropdown-item">
+              opcAdd += `<a href="#" onclick="UpdatePromocion(${data},2)" class="btn_pausar dropdown-item">
               ${feather.icons['pause-circle'].toSvg({ class: 'font-small-4 mr-50' })} Pausar
             </a>`
               break;
             case 2:
-              opcAdd += `<a href="#" onclick="UpdatePromocion(${data},1)" class="btn_delete dropdown-item">
+              opcAdd += `<a href="#" onclick="UpdatePromocion(${data},1)" class="btn_activar dropdown-item">
                 ${feather.icons['play'].toSvg({ class: 'font-small-4 mr-50' })} Activar
               </a>`
               break;
@@ -359,6 +361,7 @@ const ChangePanel = (estado) => {
 }
 
 const saveData = (data) => {
+  console.log(data)
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
 
@@ -478,7 +481,7 @@ const getPremios = () => {
   };
 
   $('#premio').html('<option value="0" selected disabled>Selecciona una opcion</option>');
-  fetch(`${url}Premios`, requestOptions)
+  fetch(`${url}Premio`, requestOptions)
     .then(response => response.json())
     .then(result => {
       result.forEach(element => {
@@ -592,13 +595,13 @@ const OpenEdit = (id) => {
 }
 
 const UpdatePromocion = (id, type) => {
-  OpenEdit(id)
+  //OpenEdit(id)
   var requestOptions = {
     method: 'PUT',
     redirect: 'follow'
   };
 
-  fetch(`${url}Promocion/${type == 1 ? 'Act' : 'Pau'}/?id=${id}`, requestOptions)
+  fetch(`${url}Promocion/${type == 1 ? 'Act' : 'Pau'}/${id}`, requestOptions)
     .then(response => response.json())
     .then(result => {
       if (result.code == "ok") {
