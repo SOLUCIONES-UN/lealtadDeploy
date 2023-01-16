@@ -254,12 +254,14 @@ function addConfig(id, nombreEtapa) {
       <small></small>
   </div>
   <div class="row">
-      <!--<div class="form-group col-md-6">
-          <label class="form-label" for="Etapa">Etapa</label>
-          <select class="form-control etapaSelect" id="Etapa${id}">
-              <option>Seleccione Una Etapa</option>
+      <div class="form-group col-md-6">
+          <label class="form-label" for="TipoTransaccion">Tipo Transaccion</label>
+          <select class="form-control" id="TipoTransaccion">
+            <option value="0" selected disabled>Seleccione Un Tipo De Transaccion</option>
+            <option value="1">Transaccion</option>
+            <option value="2">Categoria</option>
           </select>
-      </div>-->
+      </div>
       <div class="form-group col-md-6">
           <label class="form-label" for="Transacciones">Transacciones</label>
           <select class="form-control" id="Transacciones${id}">
@@ -439,9 +441,9 @@ function addConfig(id, nombreEtapa) {
     var vMinimo = $('#vMinimo'+id).val();
     var vMaximo = $('#vMaximo'+id).val();
 
-
+    console.log(id)
     var tr = `<tr>
-        <th>${etapa}</th>
+        <th>${id}</th>
         <th>${Transacciones}</th>
         <th>${vMinimo}</th>
         <th>${vMaximo}</th>
