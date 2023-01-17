@@ -339,10 +339,10 @@
                         <div class="card-body">
                             <div class="nav-tabs-shadow nav-align-top">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <h5>Lista De Promociones</h5>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <ul class="nav nav-tabs" role="tablist" id="NavsOpc">
                                             <li class="nav-item">
                                                 <button type="button" class="nav-link active" role="tab"
@@ -369,6 +369,14 @@
                                                         id="textBorrador"></span>)</button>
                                             </li>
                                         </ul>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-outline-primary btn-block"
+                                            id="BtnTestearPromocion">Participar</button>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-outline-success btn-block" id="BtnTestearPromocion"
+                                            data-toggle="modal" data-target="#ModalTest">Testear</button>
                                     </div>
                                 </div>
                                 <div class="divider">
@@ -561,7 +569,7 @@
                                             <select class="form-control" id="premioxCampana">
                                                 <option selected>NO</option>
                                                 <option>SI</option>
-                                            </select>  
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-between">
@@ -601,11 +609,11 @@
                                     <div class="row" id="panelGenerar">
                                         <div class="col-md-3">
                                             <label for="tamanio">Tamaño</label>
-                                            <input class="form-control" id="tamanio"/>
+                                            <input class="form-control" id="tamanio" />
                                         </div>
                                         <div class="col-md-3">
                                             <label for="cantidad">Cantidad</label>
-                                            <input class="form-control" id="cantidad"/>
+                                            <input class="form-control" id="cantidad" />
                                         </div>
                                         <div class="col-md-3">
                                             <label for="tipogeneracion">Tipo de Codigo</label>
@@ -616,7 +624,8 @@
                                             </select>
                                         </div>
                                         <div class="col-md-3">
-                                            <button class="btn btn-outline-success mt-2 btn-block" type="button" id="btnGenerar">Generar</button>
+                                            <button class="btn btn-outline-success mt-2 btn-block" type="button"
+                                                id="btnGenerar">Generar</button>
                                         </div>
                                     </div>
                                     <div class=" mt-5">
@@ -628,7 +637,7 @@
                                                         <th>CODIGO</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody id="PreviewCodigo"  ></tbody>
+                                                <tbody id="PreviewCodigo"></tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -651,7 +660,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="address-step-vertical" class="content"  style="height: 650px;">
+                                <div id="address-step-vertical" class="content" style="height: 650px;">
                                     <div class="content-header">
                                         <h5 class="mb-0">Premios</h5>
                                         <small>Configura los premios </small>
@@ -659,11 +668,11 @@
                                     <div class="row">
                                         <div class="form-group col-md-6">
                                             <label class="form-label" for="cantidaPremio">Cantidad</label>
-                                            <input type="number" id="cantidaPremio" class="form-control"/>
+                                            <input type="number" id="cantidaPremio" class="form-control" />
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label class="form-label" for="Premio">Premio</label>
-                                            <select class="form-control"  id="premio">
+                                            <select class="form-control" id="premio">
                                                 <option>Seleccione Un Premio</option>
                                             </select>
                                         </div>
@@ -671,11 +680,12 @@
                                     <div class="row">
                                         <div class="form-group col-md-6">
                                             <label class="form-label" for="valor">Valor</label>
-                                            <input type="number" id="valorPremio" class="form-control"/>
+                                            <input type="number" id="valorPremio" class="form-control" />
                                         </div>
                                         <div class="form-group col-md-6">
-                                            <br/>
-                                            <button class="btn btn-success" type="button" id="BtnPremios">AGREGAR</button>
+                                            <br />
+                                            <button class="btn btn-success" type="button"
+                                                id="BtnPremios">AGREGAR</button>
                                         </div>
                                     </div>
                                     <div class="col-md-12" style="height: 400px;">
@@ -714,20 +724,22 @@
                                     <div class="content-header">
                                         <h5 class="mb-0">Resumen</h5>
                                         <small>Resumen de la Promoción.</small>
-                                        <hr/>
+                                        <hr />
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <p><b>Nombre: </b><small  id="text-nemonico"></small> - <small  id="text-nombre"></small></p>
-                                            <p><b>Descripcion: </b> <small  id="text-descripcion"></small></p>
-                                            <p><b>Mensaje Codigo valido: <small  id="text-success"></small></b></p>
-                                            <p><b>Mensaje Codigo No valido: <small  id="text-fail"></small></b></p>
-                                            <p><b>Del  <span id="text-fechaInicio"></span> Al  <span id="text-fechaFin"></span></b></p>
+                                            <p><b>Nombre: </b><small id="text-nemonico"></small> - <small
+                                                    id="text-nombre"></small></p>
+                                            <p><b>Descripcion: </b> <small id="text-descripcion"></small></p>
+                                            <p><b>Mensaje Codigo valido: <small id="text-success"></small></b></p>
+                                            <p><b>Mensaje Codigo No valido: <small id="text-fail"></small></b></p>
+                                            <p><b>Del <span id="text-fechaInicio"></span> Al <span
+                                                        id="text-fechaFin"></span></b></p>
                                         </div>
                                         <div class="col-md-12">
                                             <h3>Premios Designados</h3>
                                             <hr>
-                                            <br/>
+                                            <br />
                                             <table class="table table-bordered">
                                                 <thead>
                                                     <tr>
@@ -740,7 +752,7 @@
                                             </table>
                                         </div>
                                         <div class="col-md-12">
-                                            <br/>
+                                            <br />
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-between">
@@ -752,7 +764,8 @@
                                         </div>
                                         <div>
                                             <button class="btn btn-success BtnExcel">
-                                                <span class="align-middle d-sm-inline-block d-none">Codigos en Excel</span>
+                                                <span class="align-middle d-sm-inline-block d-none">Codigos en
+                                                    Excel</span>
                                                 <i data-feather="download" class="align-middle ml-sm-25 ml-0"></i>
                                             </button>
                                             <button class="btn btn-danger BtnPDF">
@@ -772,19 +785,19 @@
                 </section>
 
                 <!--Panel Edicion-->
-                
+
                 <!--endEdicion-->
             </div>
         </div>
-        
+
     </div>
 
-    <div class="modal modal-slide-in new-user-modal fade" id="modalEdit">
+    <div class="modal modal-slide-in test-modal fade" id="modalEdit">
         <div class="modal-dialog w-75">
-          <form id="formEdit" class="add-new-user modal-content pt-0 " autocomplete="off">
+            <form id="formEdit" class="add-new-user modal-content pt-0 " autocomplete="off">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
                 <div class="modal-header mb-1">
-                <h5 class="modal-title" id="exampleModalLabel">Actualizar El Departamento</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Actualizar El Departamento</h5>
                 </div>
 
                 <div class="col-md-12">
@@ -894,13 +907,14 @@
                                         <select class="form-control" id="premioxCampana">
                                             <option selected>NO</option>
                                             <option>SI</option>
-                                        </select>  
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <div class="d-flex justify-content-between">
                                         <div>
-                                            <button class="btn btn-primary btn-next btn-submit" type="submit" id="btnGuardarEdit">
+                                            <button class="btn btn-primary btn-next btn-submit" type="submit"
+                                                id="btnGuardarEdit">
                                                 <span class="align-middle d-sm-inline-block d-none">Guardar</span>
                                             </button>
                                         </div>
@@ -921,12 +935,12 @@
                                                     <th>CODIGO</th>
                                                 </tr>
                                             </thead>
-                                            <tbody id="PreviewCodigo"  ></tbody>
+                                            <tbody id="PreviewCodigo"></tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
-                            <div id="address-step-vertical" class="content"  style="height: 650px;">
+                            <div id="address-step-vertical" class="content" style="height: 650px;">
                                 <div class="content-header">
                                     <h5 class="mb-0">Premios</h5>
                                     <small>Configura los premios </small>
@@ -963,8 +977,54 @@
                         </div>
                     </div>
                 </div>
-            
-            
+
+
+            </form>
+        </div>
+    </div>
+
+
+    <div class="modal modal-slide-in new-user-modal fade" id="modalDelete">
+        <div class="modal-dialog">
+            <form id="formDelete" class="add-new-user modal-content pt-0" autocomplete="off">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                <div class="modal-header mb-1">
+                    <h5 class="modal-title" id="exampleModalLabel">Inhabilitar La Columna</h5>
+                </div>
+                <div class="modal-body flex-grow-1">
+                    <div class="form-group">
+                        <input id="idDelete" type="hidden">
+                        <p>¿Esta seguro que desea <b>Inhabilitar esta Columna?</b></p>
+                    </div>
+                    <button id="BtnDelete" type="button" class="btn btn-danger mr-1 data-submit">Confirmar </button>
+                    <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="modal modal-slide-in new-user-modal fade" id="ModalTest">
+        <div class="modal-dialog">
+            <form id="formTestear" class="add-new-user modal-content pt-0" autocomplete="off">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                <div class="modal-header mb-1">
+                    <h5 class="modal-title" id="exampleModalLabel"><b>Testear Promocion</b></h5>
+                </div>
+                <div class="modal-body flex-grow-1">
+                    <div class="form-group">
+                        <p>Verifica La respuesta de cualquier codigo en base a la Configuración realizada.</p>
+                        <br/>
+                        <input class="form-control" id="codigoTest" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" id="PanelTest">
+
+                        </div>
+                    </div>
+                    <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+                    <button id="btnConfirmar" type="submit" class="btn btn-success mr-1 data-submit">Confirmar </button>
+                </div>
             </form>
         </div>
     </div>

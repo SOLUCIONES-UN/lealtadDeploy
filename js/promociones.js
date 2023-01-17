@@ -140,9 +140,10 @@ $(function () {
     const cantidad = $('#cantidad').val();
     const tamanio = $('#tamanio').val();
     const tipo = $('#tipogeneracion').val();
+    const nemonico = $('#nemonico').val();
     codigos = [];
     for (let index = 0; index < cantidad; index++) {
-      var newCode = 'TEMP' + generaCupon(tamanio, tipo);
+      var newCode = nemonico + generaCupon(tamanio, tipo);
       codigos.push({ cupon: newCode, estado: 1, esPremio: 0 });
     }
     DrawCodigos();
@@ -153,45 +154,83 @@ $(function () {
 
   })
 
-  $('#formEdit').submit(function() {
-      var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
+  $('#formEdit').submit(function () {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
 
-        const id = $('#id').val();
+    const id = $('#id').val();
 
-        var raw = JSON.stringify({
-          "nemonico": $('#nemonicoEdit').val(),
-          "nombre": $('#nombreEdit').val(),
-          "descripcion": $('#descripcionEdit').val(),
-          "mesajeExito": $('#successaMessageEdit').val(),
-          "mesajeFail": $('#failMessageEdit').val(),
-          "fechaInicio": $('#fechaInicioEdit').val(),
-          "fechaFin": $('#fechaFinEdit').val(),
+    var raw = JSON.stringify({
+      "nemonico": $('#nemonicoEdit').val(),
+      "nombre": $('#nombreEdit').val(),
+      "descripcion": $('#descripcionEdit').val(),
+      "mesajeExito": $('#successaMessageEdit').val(),
+      "mesajeFail": $('#failMessageEdit').val(),
+      "fechaInicio": $('#fechaInicioEdit').val(),
+      "fechaFin": $('#fechaFinEdit').val(),
+    });
+
+    var requestOptions = {
+      method: 'PUT',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
+
+    fetch(`${url}Promocion/${id}`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+
+        if (result.code == "ok") {
+          getAllPromociones();
+          $('#modalEdit').modal('toggle');
+          Alert(result.message, 'success');
+        } else {
+
+          Alert(result.message, 'error')
+        }
+      })
+      .catch(error => { Alert(error.errors, 'error') });
+    return false;
+
+  })
+
+
+  $('#formTestear').submit(function () {
+
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      "cupon": $('#codigoTest').val()
+    });
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
+
+    fetch(`${url}Promocion/Testear`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        if (result.code == "01") {
+          Alert(result.messagge, 'success')
+        } else if (result.code == "02") {
+          Alert(result.messagge, 'warning')
+        }
+        else {
+          Alert(result.messagge, 'error')
+        }
+      })
+      .catch(error => {
+        console.log(error)
+        Alert(error, 'error')
       });
 
-      var requestOptions = {
-        method: 'PUT',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow'
-      };
 
-      fetch(`${url}Promocion/${id}`, requestOptions)
-            .then(response => response.json())
-            .then(result => {
-                
-                if(result.code == "ok"){
-                  getAllPromociones();
-                    $('#modalEdit').modal('toggle');
-                    Alert(result.message, 'success');
-                } else {
-                    
-                    Alert(result.message, 'error')
-                }
-            })
-            .catch(error => {Alert(error.errors, 'error')});
-        return false;
-
+    return false;
   })
 
   $('#BtnPremios').click(function () {
@@ -302,7 +341,7 @@ const table = (table, data) => {
             </a><a href="#" onclick="OpenDelete(${data})" class="btn_delete dropdown-item">
                 ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
                     </a>`
-              }
+          }
 
 
           return `
@@ -573,25 +612,25 @@ const loadMenuEdit = () => {
 
 const OpenEdit = (id) => {
   var requestOptions = {
-      method: 'GET',
-      redirect: 'follow'
+    method: 'GET',
+    redirect: 'follow'
   };
 
   fetch(`${url}Promocion/${id}`, requestOptions)
-      .then(response => response.json())
-      .then(result => {
-          $('#id').val(id);
-          $('#nemonicoEdit').val(result.nemonico);
-          $('#nombreEdit').val(result.nombre); 
-          $('#descripcionEdit').val(result.descripcion);
-          $('#successaMessageEdit').val(result.mesajeExito);
-          $('#failMessageEdit').val(result.mesajeFail);
-          $('#fechaInicioEdit').val(result.fechaInicio);
-          $('#fechaFinEdit').val(result.fechaFin);
-          $('#modalEdit').modal('toggle');
-      })
-      .catch(error => console.log('error', error));
-      loadMenuEdit();
+    .then(response => response.json())
+    .then(result => {
+      $('#id').val(id);
+      $('#nemonicoEdit').val(result.nemonico);
+      $('#nombreEdit').val(result.nombre);
+      $('#descripcionEdit').val(result.descripcion);
+      $('#successaMessageEdit').val(result.mesajeExito);
+      $('#failMessageEdit').val(result.mesajeFail);
+      $('#fechaInicioEdit').val(result.fechaInicio);
+      $('#fechaFinEdit').val(result.fechaFin);
+      $('#modalEdit').modal('toggle');
+    })
+    .catch(error => console.log('error', error));
+  loadMenuEdit();
 }
 
 const UpdatePromocion = (id, type) => {
