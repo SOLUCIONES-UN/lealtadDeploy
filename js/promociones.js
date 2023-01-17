@@ -197,10 +197,10 @@ $(function () {
 
   $('#BtnPremios').click(function () {
     var cantidad = $('#cantidaPremio').val();
-    var premio = $('#premio').val();
+    var idPremio = $('#premio').val();
     var valor = $('#valorPremio').val();
     var premioDescripcion = $('#premio option:selected').text();
-    var data = { cantidad, premio, valor, premioDescripcion };
+    var data = { cantidad, idPremio, valor, premioDescripcion };
     premios = [...premios, data];
     DrawPremios();
 
@@ -599,11 +599,13 @@ const OpenEdit = (id) => {
             $('#PreviewCodigoEdit').append(opcTableCodigos); 
           })
 
-          result.premioPromocions.forEach(element => {
-            var opcTableCodigos = `<tr>
-              <td>${element.cantidad}</td>
-              <td>${element.id}</td>
-              <td>${element.valor}</td>
+          result.premioPromocions.forEach(elementx => {
+            console.log(elementx)
+           var opcTableCodigos = `<tr>
+              <td>${elementx.cantidad}</td>
+              <td>${elementx.premio.nombre}</td>
+              <td>${elementx.id}</td>
+              <td>${elementx.valor}</td>
               </tr>`
 
             $('#detallePremiosEdit').append(opcTableCodigos); 
