@@ -512,7 +512,6 @@ const loadMenuEdit = () => {
         var index = event.detail.indexStep;
         var numberOfSteps = $(event.target).find('.step').length - 1;
         var line = $(event.target).find('.step');
-        console.log(numberOfSteps)
         // The first for loop is for increasing the steps,
         // the second is for turning them off when going back
         // and the third with the if statement because the last line
@@ -581,6 +580,7 @@ const OpenEdit = (id) => {
   fetch(`${url}Promocion/${id}`, requestOptions)
       .then(response => response.json())
       .then(result => {
+        console.log(result)
           $('#id').val(id);
           $('#nemonicoEdit').val(result.nemonico);
           $('#nombreEdit').val(result.nombre); 
@@ -589,6 +589,26 @@ const OpenEdit = (id) => {
           $('#failMessageEdit').val(result.mesajeFail);
           $('#fechaInicioEdit').val(result.fechaInicio);
           $('#fechaFinEdit').val(result.fechaFin);
+
+          result.detallePromocions.forEach(element => {
+            var opcTableCodigos = `<tr>
+              <td>${element.id}</td>
+              <td>${element.cupon}</td>
+              </tr>`
+
+            $('#PreviewCodigoEdit').append(opcTableCodigos); 
+          })
+
+          result.premioPromocions.forEach(element => {
+            var opcTableCodigos = `<tr>
+              <td>${element.cantidad}</td>
+              <td>${element.id}</td>
+              <td>${element.valor}</td>
+              </tr>`
+
+            $('#detallePremiosEdit').append(opcTableCodigos); 
+          })
+
           $('#modalEdit').modal('toggle');
       })
       .catch(error => console.log('error', error));
