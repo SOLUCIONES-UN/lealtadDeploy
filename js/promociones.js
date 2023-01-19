@@ -238,7 +238,7 @@ $(function () {
     var premio = $('#premio').val();
     var valor = $('#valorPremio').val();
     var premioDescripcion = $('#premio option:selected').text();
-    var data = { cantidad, premio, valor, premioDescripcion };
+    var data = { cantidad, idPremio: premio, valor, premioDescripcion };
     premios = [...premios, data];
     DrawPremios();
 
@@ -617,20 +617,43 @@ const OpenEdit = (id) => {
   };
 
   fetch(`${url}Promocion/${id}`, requestOptions)
-    .then(response => response.json())
-    .then(result => {
-      $('#id').val(id);
-      $('#nemonicoEdit').val(result.nemonico);
-      $('#nombreEdit').val(result.nombre);
-      $('#descripcionEdit').val(result.descripcion);
-      $('#successaMessageEdit').val(result.mesajeExito);
-      $('#failMessageEdit').val(result.mesajeFail);
-      $('#fechaInicioEdit').val(result.fechaInicio);
-      $('#fechaFinEdit').val(result.fechaFin);
-      $('#modalEdit').modal('toggle');
-    })
-    .catch(error => console.log('error', error));
-  loadMenuEdit();
+      .then(response => response.json())
+      .then(result => {
+        console.log(result)
+          $('#id').val(id);
+          $('#nemonicoEdit').val(result.nemonico);
+          $('#nombreEdit').val(result.nombre); 
+          $('#descripcionEdit').val(result.descripcion);
+          $('#successaMessageEdit').val(result.mesajeExito);
+          $('#failMessageEdit').val(result.mesajeFail);
+          $('#fechaInicioEdit').val(result.fechaInicio);
+          $('#fechaFinEdit').val(result.fechaFin);
+
+          result.detallePromocions.forEach(element => {
+            var opcTableCodigos = `<tr>
+              <td>${element.id}</td>
+              <td>${element.cupon}</td>
+              </tr>`
+
+            $('#PreviewCodigoEdit').append(opcTableCodigos); 
+          })
+
+          result.premioPromocions.forEach(elementx => {
+            console.log(elementx)
+           var opcTableCodigos = `<tr>
+              <td>${elementx.cantidad}</td>
+              <td>${elementx.premio.nombre}</td>
+              <td>${elementx.id}</td>
+              <td>${elementx.valor}</td>
+              </tr>`
+
+            $('#detallePremiosEdit').append(opcTableCodigos); 
+          })
+
+          $('#modalEdit').modal('toggle');
+      })
+      .catch(error => console.log('error', error));
+      loadMenuEdit();
 }
 
 const UpdatePromocion = (id, type) => {

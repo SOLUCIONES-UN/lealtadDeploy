@@ -3,7 +3,7 @@
 <!-- BEGIN: Head-->
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimal-ui">
   <meta name="description"
@@ -44,6 +44,10 @@
   <!-- END: Custom CSS-->
 
 </head>
+<!-- END: Head-->
+
+<!-- BEGIN: Body-->
+
 <body class="vertical-layout vertical-menu-modern  navbar-floating footer-static  " data-open="click"
   data-menu="vertical-menu-modern" data-col="">
   <nav
@@ -60,7 +64,7 @@
         <ul class="nav navbar-nav">
           <li class="nav-item">
             <a class="nav-link menu-toggle" href="javascript:void(0);">
-              <b>Administración de Municipios</b>
+              <b>Testear Transaccion Por Campaña</b>
             </a>
           </li>
         </ul>
@@ -276,7 +280,7 @@
               data-i18n="Departamentos">Departamentos</span>
           </a>
         </li>
-        <li class="nav-item active">
+        <li class="nav-item">
           <a class="d-flex align-items-center" href="municipios.html">
             <i data-feather="database"></i><span class="menu-title text-truncate" data-i18n="Municipios">Municipios</span>
           </a>
@@ -320,6 +324,11 @@
             <i data-feather="shopping-bag"></i><span class="menu-title text-truncate" data-i18n="Campanias">Campañas</span>
           </a>
         </li>
+        <li class="nav-item active">
+            <a class="d-flex align-items-center" href="testearCampañaSimple.html">
+              <i data-feather="shopping-bag"></i><span class="menu-title text-truncate" data-i18n="Campanias">Test Simple</span>
+            </a>
+          </li>
       </ul>
     </div>
   </div>
@@ -334,91 +343,120 @@
       </div>
       <div class="content-body">
         <section class="invoice-list-wrapper">
-          <div class="card">
-            <div class="card-datatable table-responsive">
-              <table class="datatables-basic table" id="tableData">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Nombre</th>
-                    <th>Departamento</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-              </table>
+          <div class="card p-5" style="min-height: 680px;">
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Campaña</label>
+                    <select class="form-control">
+                        <option value="0">Seleccione Una Opcion</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label>Numero Telefonico</label>
+                    <input type="tel" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label>Transacción</label>
+                    <input type="number" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <br/>
+                    <button class="btn btn-block btn-success">Testear</button>
+                </div>
+                <div class="col-md-12">
+                    <hr/>
+                </div>
+            </div>
+            <div class="row" id="PnResumen">
+                <div class="col-md-12">
+                    <h4>
+                        <span class="text-success"><i data-feather="check-circle"></i></span>
+                        <span> Fecha de Registro minima 2022-10-15 (<span>2022-10-15</span>)</span>
+                    </h4>
+                    <hr/>
+                </div>
+                <div class="col-md-12">
+                    <h4>
+                        <span class="text-success"><i data-feather="check-circle"></i></span>
+                        <span> Edad entre 1 a 100 (<span>35 años</span>)</span>
+                    </h4>
+                    <hr/>
+                </div>
+                <div class="col-md-12">
+                    <h4>
+                        <span class="text-success"><i data-feather="check-circle"></i></span>
+                        <span> Transaccion Valida (<span>35 años</span>)</span>
+                    </h4>
+                    <hr/>
+                </div>
+                <div class="col-md-12">
+                    <h4>
+                        <span class="text-success"><i data-feather="check-circle"></i></span>
+                        <span> Sexo Todos (<span>Masculino</span>)</span>
+                    </h4>
+                    <hr/>
+                </div>
+                <div class="col-md-12">
+                    <h4>
+                        <span class="text-success"><i data-feather="check-circle"></i></span>
+                        <span> Tipo de Usuarios: Todos (<span>Final</span>)</span>
+                    </h4>
+                    <hr/>
+                </div>
+                <div class="col-md-12">
+                    <h4>
+                        <span class="text-success"><i data-feather="check-circle"></i></span>
+                        <span> Tipo Global (<span>Si permitido</span>)</span>
+                    </h4>
+                    <hr/>
+                </div>
+                <div class="col-md-12">
+                    <h4>
+                        <span class="text-success"><i data-feather="check-circle"></i></span>
+                        <span> Usuario Bloqueado (<span>NO, Permitido</span>)</span>
+                    </h4>
+                    <hr/>
+                </div>
+                <div class="col-md-12">
+                    <h4>
+                        <span class="text-success"><i data-feather="check-circle"></i></span>
+                        <span>MAXIMO DE PARTICIPACIONES POR ETAPA(<span>1</span>)</span>
+                    </h4>
+                    <hr/>
+                </div>
+                <div class="col-md-12">
+                    <h4>
+                        <span class="text-success"><i data-feather="check-circle"></i></span>
+                        <span>Etapas 5 Actual 1 (<span>VALIDA</span>)</span>
+                    </h4>
+                    <hr/>
+                </div>
+                <div class="col-md-12">
+                    <h4>
+                        <span class="text-success"><i data-feather="check-circle"></i></span>
+                        <span> Transaccion Valida (<span>SI</span>)</span>
+                    </h4>
+                    <hr/>
+                </div>
+                <div class="col-md-12">
+                    <h4>
+                        <span class="text-success"><i data-feather="check-circle"></i></span>
+                        <span> Presupuesto Q3,000.00 (<span>Q 1,500.00+5.00</span>)</span>
+                    </h4>
+                    <hr/>
+                </div>
+                <div class="col-md-12">
+                    <h4>
+                        <span class="text-success"><i data-feather="check-circle"></i></span>
+                        <span> Limite de Participacion 400 (<span>15+1</span>)</span>
+                    </h4>
+                    <hr/>
+                </div>
             </div>
           </div>
         </section>
 
       </div>
-    </div>
-  </div>
-  <!-- modal de creacion or Update -->
-  <div class="modal modal-slide-in new-user-modal fade" id="modalNew">
-    <div class="modal-dialog">
-      <form id="formNew" class="add-new-user modal-content pt-0" autocomplete="off">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-        <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Agregar Nuevo Municipio</h5>
-        </div>
-        <div class="modal-body flex-grow-1">
-          <div class="form-group">
-            <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
-            <input type="text" class="form-control dt-full-name" id="nombre" placeholder="Nombre del departamento"
-              name="nombre" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="departamento">Departamento</label>
-            <select type="text" class="form-control" id="departamento" name="departamento" required></select>
-          </div>
-          <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
-          <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <div class="modal modal-slide-in new-user-modal fade" id="modalEdit">
-    <div class="modal-dialog">
-      <form id="formEdit" class="add-new-user modal-content pt-0" autocomplete="off">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-        <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Actualizar el municipio</h5>
-        </div>
-        <div class="modal-body flex-grow-1">
-          <div class="form-group">
-            <input id="id" type="hidden">
-            <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
-            <input type="text" class="form-control dt-full-name" id="nombreEdit" placeholder="Nombre del municipio"
-              name="nombreEdit" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="departamentoActualizar">Departamento</label>
-            <select type="text" class="form-control" id="departamentoActualizar" name="departamentoActualizar" required></select>
-          </div>
-          <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
-          <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <div class="modal modal-slide-in new-user-modal fade" id="modalDelete">
-    <div class="modal-dialog">
-      <form id="formDelete" class="add-new-user modal-content pt-0" autocomplete="off">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-        <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Inhabilitar el municipio</h5>
-        </div>
-        <div class="modal-body flex-grow-1">
-          <div class="form-group">
-            <input id="idDelete" type="hidden">
-            <p>¿Esta seguro que desea <b>Inhabilitar este municipio?</b></p>
-          </div>
-          <button id="BtnDelete" type="button" class="btn btn-danger mr-1 data-submit">Confirmar </button>
-          <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-        </div>
-      </form>
     </div>
   </div>
   <!-- END: Content-->
@@ -455,7 +493,7 @@
   <!-- END: Theme JS-->
 
   <!-- BEGIN: Page JS-->
-  <script src="../js/municipio.js"></script>
+  <script src="../js/columna.js"></script>
   <!-- END: Page JS-->
 
   <script>
@@ -467,4 +505,5 @@
   </script>
 </body>
 <!-- END: Body-->
+
 </html>
