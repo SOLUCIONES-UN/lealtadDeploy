@@ -1,11 +1,14 @@
 const url = 'http://localhost:3000/'
 let codigos = [];
 let premios = [];
+const inputFile = document.getElementById('formFile');
 $(function () {
   'use strict';
   ChangePanel(1)
 
   getPremios();
+  $('.autoGenerar').hide();
+  $('.cargarExcel').hide();
 
   var bsStepper = document.querySelectorAll('.bs-stepper'),
     select = $('.select2'),
@@ -19,7 +22,6 @@ $(function () {
         var index = event.detail.indexStep;
         var numberOfSteps = $(event.target).find('.step').length - 1;
         var line = $(event.target).find('.step');
-        console.log(numberOfSteps)
         // The first for loop is for increasing the steps,
         // the second is for turning them off when going back
         // and the third with the if statement because the last line
@@ -655,6 +657,57 @@ const OpenEdit = (id) => {
       .catch(error => console.log('error', error));
       loadMenuEdit();
 }
+
+function tipoConfigCodigos(){
+    var tipo = $('#tipo').val();
+
+    if(tipo == 1) {
+      
+      $('.autoGenerar').show();
+      $('.cargarExcel').hide();
+      $('#formFile').val("");
+
+    } else if( tipo == 2){
+
+      
+      $('.autoGenerar').hide();
+      $('.cargarExcel').show();
+      $('#tamanio').val("");
+      $('#cantidad').val("");
+    }
+
+}
+
+inputFile.addEventListener('change', function () {
+
+  const extPermitidas = /(.xlsx)$/;
+
+  if (!extPermitidas.exec($('#formFile').val())) {
+
+    Alert('El archivo debe ser un excel', 'error')
+
+    $('#formFile').val("");
+
+  } else {
+    readXlsxFile(inputFile.files[0]).then(function (data) {
+
+      data.map((row, index) => {
+        codigos.push({ cupon: row[0], estado: 1, esPremio: 0 });
+        var tr = `<tr id="fila${index}">
+        <td >${index + 1}</td>
+        <td>${row[0]}</td>
+        </tr>`
+
+        $('#PreviewCodigo').append(tr);
+
+      })
+      console.log(codigos)
+
+    })
+
+
+  }
+})
 
 const UpdatePromocion = (id, type) => {
   //OpenEdit(id)

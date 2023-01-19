@@ -628,15 +628,16 @@
                                         <small>Genera o Carga tus Codigos.</small>
                                     </div>
                                     <div class="row">
-                                        <div class="form-group col-md-3">
+                                        <div class="form-group col-md-6">
                                             <label class="form-label" for="tipo">Tipo Generacion</label>
-                                            <select id="tipo" class="form-control">
+                                            <select id="tipo" onchange="tipoConfigCodigos()" class="form-control w-75">
                                                 <option value="0" selected>Seleccione una opcion</option>
                                                 <option value="1">Generar Automaticamente</option>
                                                 <option value="2">Cargar Mediante excel</option>
                                             </select>
                                         </div>
                                     </div>
+<<<<<<< HEAD
                                     <div class="row" id="panelGenerar">
                                         <div class="col-md-3">
                                             <label for="tamanio">Tamaño</label>
@@ -657,8 +658,38 @@
                                         <div class="col-md-3">
                                             <button class="btn btn-outline-success mt-2 btn-block" type="button"
                                                 id="btnGenerar">Generar</button>
+=======
+                                    <div id="tipoCodigo">
+                                        <div class="row autoGenerar" id="panelGenerar">
+                                            <div class="col-md-3">
+                                                <label for="tamanio">Tamaño</label>
+                                                <input type="number" class="form-control" id="tamanio"/>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="cantidad">Cantidad</label>
+                                                <input type="number" class="form-control" id="cantidad"/>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="tipogeneracion">Tipo de Codigo</label>
+                                                <select class="form-control" id="tipogeneracion">
+                                                    <option value="1">Mumeros & Letras</option>
+                                                    <option value="2">Solo Mumeros</option>
+                                                    <option value="3">Solo Letras</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <button class="btn btn-outline-success mt-2 btn-block" type="button" id="btnGenerar">Generar</button>
+                                            </div>
+                                        </div>
+                                        <div class="cargarExcel">
+                                            <div class="mt-2 row col-md-6" id="container-tipo-participante">
+                                                <input class="form-control" type="file" id="formFile"
+                                                    style="margin-left: 15px;">
+                                            </div>
+>>>>>>> 4ecb2bd2c2f95fc3799ed0ffa95b5e698927f490
                                         </div>
                                     </div>
+                                    
                                     <div class=" mt-5">
                                         <div style="height:200px; width:auto;overflow-y: scroll;">
                                             <table class="table table-bordered table-striped">
@@ -1096,6 +1127,9 @@
     <script src="../app-assets/js/core/app.min.js"></script>
     <script src="../app-assets/js/scripts/customizer.min.js"></script>
     <!-- END: Theme JS-->
+
+    <!-- leer excel-->
+    <script src="https://unpkg.com/read-excel-file@5.x/bundle/read-excel-file.min.js"></script>
 
     <!-- BEGIN: Page JS-->
     <script src="../js/promociones.js"></script>

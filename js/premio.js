@@ -18,6 +18,8 @@ $(function() {
                 var raw = JSON.stringify({
                     "nombre": $('#nombre').val(),
                     "descripcion": $('#descripcion').val(),
+                    "link": "",
+                    "claveSecreta": "",
                     "idTransaccion": $('#transaccion').val(),
                     "tipoTransaccion" : valor,
                 });
