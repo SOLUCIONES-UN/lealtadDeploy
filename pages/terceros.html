@@ -3,7 +3,7 @@
 <!-- BEGIN: Head-->
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimal-ui">
   <meta name="description"
@@ -44,6 +44,7 @@
   <!-- END: Custom CSS-->
 
 </head>
+
 <body class="vertical-layout vertical-menu-modern  navbar-floating footer-static  " data-open="click"
   data-menu="vertical-menu-modern" data-col="">
   <nav
@@ -254,7 +255,7 @@
         <li class=" navigation-header"><span data-i18n="Apps &amp; Pages">Administración</span><i
             data-feather="more-horizontal"></i>
         </li>
-        <li class="nav-item </ul>active">
+        <li class="nav-item">
           <a class="d-flex align-items-center" href="categorias.html">
             <i data-feather="award"></i><span class="menu-title text-truncate"
               data-i18n="categorias">Categorias</span></a>
@@ -271,38 +272,54 @@
           </a>
         </li>
         <li class="nav-item">
-            <a class="d-flex align-items-center" href="departamentos.html">
-              <i data-feather="map"></i><span class="menu-title text-truncate" data-i18n="Departamentos">Departamentos</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="d-flex align-items-center" href="municipios.html">
-              <i data-feather="database"></i><span class="menu-title text-truncate" data-i18n="Municipios">Municipios</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="d-flex align-items-center" href="rols.html">
-              <i data-feather="database"></i><span class="menu-title text-truncate" data-i18n="Roles">Roles</span>
-            </a>
-          </li>
-          <li class="nav-item active">
-            <a class="d-flex align-items-center" href="terceros.html">
-              <i data-feather="database"></i><span class="menu-title text-truncate" data-i18n="Departamentos">Terceros</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="d-flex align-items-center" href="premio.html">
-              <i data-feather="dollar-sign"></i><span class="menu-title text-truncate"
-                data-i18n="Premios">Premios</span>
-            </a>
-          </li>
-        <li class=" navigation-header"><span data-i18n="Apps &amp; Pages">Configuración</span><i
+          <a class="d-flex align-items-center" href="departamentos.html">
+            <i data-feather="map"></i><span class="menu-title text-truncate"
+              data-i18n="Departamentos">Departamentos</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="d-flex align-items-center" href="municipios.html">
+            <i data-feather="database"></i><span class="menu-title text-truncate"
+              data-i18n="Municipios">Municipios</span>
+          </a>
+        </li>
+        <li class="nav-item active">
+          <a class="d-flex align-items-center" href="terceros.html">
+            <i data-feather="external-link"></i><span class="menu-title text-truncate"
+              data-i18n="Departamentos">Terceros</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="d-flex align-items-center" href="premio.html">
+            <i data-feather="star"></i><span class="menu-title text-truncate" data-i18n="Premio">Premio</span>
+          </a>
+        </li>
+        <li class=" navigation-header"><span data-i18n="Apps &amp; Pages">Seguridad</span><i
+            data-feather="more-horizontal"></i>
+        </li>
+        <li class="nav-item">
+          <a class="d-flex align-items-center" href="rols.html">
+            <i data-feather="sliders"></i>
+            <span class="menu-title text-truncate" data-i18n="Roles">Roles</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="d-flex align-items-center" href="usuarios.html">
+            <i data-feather="users"></i><span class="menu-title text-truncate" data-i18n="Usuarios">Usuarios</span>
+          </a>
+        </li>
+        <li class="navigation-header"><span data-i18n="Apps &amp; Pages">Configuración</span><i
             data-feather="more-horizontal"></i>
         </li>
         <li class="nav-item">
           <a class="d-flex align-items-center" href="promociones.html">
-            <i data-feather="gift"></i><span class="menu-title text-truncate"
-              data-i18n="Columnas">Promociones</span>
+            <i data-feather="gift"></i><span class="menu-title text-truncate" data-i18n="Promociones">Promociones</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="d-flex align-items-center" href="Camapañas.html">
+            <i data-feather="shopping-bag"></i><span class="menu-title text-truncate"
+              data-i18n="Campanias">Campañas</span>
           </a>
         </li>
       </ul>
@@ -355,13 +372,13 @@
           </div>
           <div class="form-group">
             <label class="form-label" for="basic-icon-default-fullname">Nemonico</label>
-            <input type="text" class="form-control dt-full-name" id="nemonico" placeholder="Nemonico"
-              name="nemonico" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
+            <input type="text" class="form-control dt-full-name" id="nemonico" placeholder="Nemonico" name="nemonico"
+              aria-label="" aria-describedby="basic-icon-default-fullname2" required />
           </div>
           <div class="form-group">
             <label class="form-label" for="basic-icon-default-fullname">Token</label>
-            <input type="text" class="form-control dt-full-name" id="token" placeholder="Token"
-              name="token" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
+            <input type="text" class="form-control dt-full-name" id="token" placeholder="Token" name="token"
+              aria-label="" aria-describedby="basic-icon-default-fullname2" required />
           </div>
           <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
@@ -391,8 +408,8 @@
           </div>
           <div class="form-group">
             <label class="form-label" for="basic-icon-default-fullname">Token</label>
-            <input type="text" class="form-control dt-full-name" id="tokenEdit" placeholder="Token"
-              name="tokenEdit" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
+            <input type="text" class="form-control dt-full-name" id="tokenEdit" placeholder="Token" name="tokenEdit"
+              aria-label="" aria-describedby="basic-icon-default-fullname2" required />
           </div>
           <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
@@ -465,4 +482,5 @@
   </script>
 </body>
 <!-- END: Body-->
+
 </html>

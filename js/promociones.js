@@ -99,7 +99,6 @@ $(function () {
 
         }
         saveData(data);
-        console.log(data);
         Limpiar();
       });
   }
@@ -143,9 +142,10 @@ $(function () {
     const cantidad = $('#cantidad').val();
     const tamanio = $('#tamanio').val();
     const tipo = $('#tipogeneracion').val();
+    const nemonico = $('#nemonico').val();
     codigos = [];
     for (let index = 0; index < cantidad; index++) {
-      var newCode = 'TEMP' + generaCupon(tamanio, tipo);
+      var newCode = nemonico + generaCupon(tamanio, tipo);
       codigos.push({ cupon: newCode, estado: 1, esPremio: 0 });
     }
     DrawCodigos();
@@ -156,53 +156,91 @@ $(function () {
 
   })
 
-  $('#formEdit').submit(function() {
-      var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
+  $('#formEdit').submit(function () {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
 
-        const id = $('#id').val();
+    const id = $('#id').val();
 
-        var raw = JSON.stringify({
-          "nemonico": $('#nemonicoEdit').val(),
-          "nombre": $('#nombreEdit').val(),
-          "descripcion": $('#descripcionEdit').val(),
-          "mesajeExito": $('#successaMessageEdit').val(),
-          "mesajeFail": $('#failMessageEdit').val(),
-          "fechaInicio": $('#fechaInicioEdit').val(),
-          "fechaFin": $('#fechaFinEdit').val(),
+    var raw = JSON.stringify({
+      "nemonico": $('#nemonicoEdit').val(),
+      "nombre": $('#nombreEdit').val(),
+      "descripcion": $('#descripcionEdit').val(),
+      "mesajeExito": $('#successaMessageEdit').val(),
+      "mesajeFail": $('#failMessageEdit').val(),
+      "fechaInicio": $('#fechaInicioEdit').val(),
+      "fechaFin": $('#fechaFinEdit').val(),
+    });
+
+    var requestOptions = {
+      method: 'PUT',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
+
+    fetch(`${url}Promocion/${id}`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+
+        if (result.code == "ok") {
+          getAllPromociones();
+          $('#modalEdit').modal('toggle');
+          Alert(result.message, 'success');
+        } else {
+
+          Alert(result.message, 'error')
+        }
+      })
+      .catch(error => { Alert(error.errors, 'error') });
+    return false;
+
+  })
+
+
+  $('#formTestear').submit(function () {
+
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      "cupon": $('#codigoTest').val()
+    });
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
+
+    fetch(`${url}Promocion/Testear`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        if (result.code == "01") {
+          Alert(result.messagge, 'success')
+        } else if (result.code == "02") {
+          Alert(result.messagge, 'warning')
+        }
+        else {
+          Alert(result.messagge, 'error')
+        }
+      })
+      .catch(error => {
+        console.log(error)
+        Alert(error, 'error')
       });
 
-      var requestOptions = {
-        method: 'PUT',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow'
-      };
 
-      fetch(`${url}Promocion/${id}`, requestOptions)
-            .then(response => response.json())
-            .then(result => {
-                
-                if(result.code == "ok"){
-                  getAllPromociones();
-                    $('#modalEdit').modal('toggle');
-                    Alert(result.message, 'success');
-                } else {
-                    
-                    Alert(result.message, 'error')
-                }
-            })
-            .catch(error => {Alert(error.errors, 'error')});
-        return false;
-
+    return false;
   })
 
   $('#BtnPremios').click(function () {
     var cantidad = $('#cantidaPremio').val();
-    var idPremio = $('#premio').val();
+    var premio = $('#premio').val();
     var valor = $('#valorPremio').val();
     var premioDescripcion = $('#premio option:selected').text();
-    var data = { cantidad, idPremio, valor, premioDescripcion };
+    var data = { cantidad, idPremio: premio, valor, premioDescripcion };
     premios = [...premios, data];
     DrawPremios();
 
@@ -305,7 +343,7 @@ const table = (table, data) => {
             </a><a href="#" onclick="OpenDelete(${data})" class="btn_delete dropdown-item">
                 ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
                     </a>`
-              }
+          }
 
 
           return `
@@ -514,6 +552,7 @@ const loadMenuEdit = () => {
         var index = event.detail.indexStep;
         var numberOfSteps = $(event.target).find('.step').length - 1;
         var line = $(event.target).find('.step');
+        console.log(numberOfSteps)
         // The first for loop is for increasing the steps,
         // the second is for turning them off when going back
         // and the third with the if statement because the last line
@@ -575,8 +614,8 @@ const loadMenuEdit = () => {
 
 const OpenEdit = (id) => {
   var requestOptions = {
-      method: 'GET',
-      redirect: 'follow'
+    method: 'GET',
+    redirect: 'follow'
   };
 
   fetch(`${url}Promocion/${id}`, requestOptions)
