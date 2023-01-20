@@ -2,8 +2,8 @@ const url = 'http://localhost:3000/'
 let codigos = [];
 let premios = [];
 let etapas = [];
-let dataEtapas = [];
 let parametros = [];
+let arrayPresupuesto = [];
 let idData = 1;
 let index = 1;
 var numConfigButtons = 4;
@@ -12,7 +12,8 @@ const inputFileBloqueados = document.getElementById('formFileBloqueados');
 $(function () {
   loadMenu()
   'use strict';
-  ChangePanel(2)
+  ChangePanel(1)
+  getAllCampanias()
   $('#formFile').hide();
   $('#tableParticipantes').hide();
 
@@ -32,7 +33,7 @@ $(function () {
 
 
   //getAllPromociones();
-  agregarLocalTabla()
+  //agregarLocalTabla()
 
   $('.BtnBottador').click(function () {
     var data = {
@@ -50,17 +51,50 @@ $(function () {
     Limpiar();
   });
 
+  $('#submitData').click(function (){
+
+    
+
+    var data = {
+      "nombre": $('#nombre').val(),
+      "descripcion": $('#descripcionCamania').val(),
+      "tituloNotificacion": $('#tituloNotificacion').val(),
+      "fechaRegistro": $('#fechaRegistro').val(),
+      "fechaInicio": $('#fechaInicio').val(),
+      "fechaFin": $('#fechaFin').val(),
+      "edadInicial": $('#edadIni').val(),
+      "edadFinal": $('#edadFini').val(),
+      "sexo": $('#sexo option:selected').val(),
+      "tipoUsuario": $('#tipoUsuario option:selected').val(),
+      "descripcionNotificacion": $('#descripcionNotificacion').val(),
+      "imgPush": "",
+      "imgAkisi": "",
+      "etapas": etapas,
+      "maximoParticipaciones": $('#limiteParticipacion').val()
+    }
+
+    console.log(data);
+
+    saveData(data);
+
+  })
+
   $('#btnAddEtapa').click(function () {
     var nombre = $('#nombreEtapa');
     var orden = $('#ordenEtapa');
     var descripcion = $('#descEtapa');
-    var tipoTransaccion = $('#TipoTransaccion');
+    var tipoTransaccion = $('#TipoTransaccion option:selected');
 
     etapas.push({
       nombre: nombre.val(),
       orden: orden.val(),
       descripcion: descripcion.val(),
-      tipoTransaccion: tipoTransaccion.children('option:selected').text()
+      tipoParticipacion: tipoTransaccion.val(),
+      "estado": 1,
+      premios: "",
+      parametros: "",
+      presupuestos: ""
+
     })
 
 
@@ -100,57 +134,14 @@ $(function () {
       
     });
 
-    dataEtapas= {
-      etapas
-    }
+
     nombre.val(null);
     orden.val(null);
     descripcion.val(null);
 
+    console.log(etapas)
 
   });
-
-
-
-
-
-  
-
-
-
-  /*$('#btnGenerar').click(function () {
-    const cantidad = $('#cantidad').val();
-    const tamanio = $('#tamanio').val();
-    const tipo = $('#tipogeneracion').val();
-    codigos = [];
-    for (let index = 0; index < cantidad; index++) {
-      var newCode = 'TEMP' + generaCupon(tamanio, tipo);
-      codigos.push({ cupon: newCode, estado: 1, esPremio: 0 });
-    }
-    $('#PreviewCodigo').html(null)
-
-    var i = 1;
-    codigos.forEach(element => {
-      var tr = `<tr>
-        <td>${i}</td>
-        <td>${element.cupon}</td>
-        </tr>`
-
-      $('#PreviewCodigo').append(tr);
-      i++;
-    });
-
-  })*/
-
-  /*$('#BtnPremios').click(function () {
-    var cantidad = $('#cantidaPremio').val();
-    var premio = $('#premio').val();
-    var valor = $('#valorPremio').val();
-    var premioDescripcion = $('#premio option:selected').text();
-    var data = { cantidad, premio, valor, premioDescripcion };
-    premios = [...premios, data];
-    DrawPremios();
-  })*/
 
 });
 
@@ -225,7 +216,6 @@ function loadMenu() {
       .on('click', function () {
         Alert('Campaña Creada con Exito', 'success');
         ChangePanel(1);
-        agregarLocalTabla()
       });
   }
 
@@ -255,11 +245,11 @@ function addConfig(id, nombreEtapa) {
   </div>
   <div class="row">
       <div class="form-group col-md-6">
-          <label class="form-label" for="TipoTransaccion">Tipo Transaccion</label>
-          <select class="form-control" id="TipoTransaccion">
+          <label class="form-label" for="TipoTransaccion${id}">Tipo Transaccion</label>
+          <select class="form-control" id="TipoTransaccion${id}">
             <option value="0" selected disabled>Seleccione Un Tipo De Transaccion</option>
-            <option value="1">Transaccion</option>
-            <option value="2">Categoria</option>
+            <option value="t">Transaccion</option>
+            <option value="c">Categoria</option>
           </select>
       </div>
       <div class="form-group col-md-6">
@@ -281,9 +271,13 @@ function addConfig(id, nombreEtapa) {
   </div>
   <div class="row">
       <div class="form-group col-md-6">
-          <label class="form-label" for="vertical-facebook">Limite
+          <label class="form-label" for="vAnterior${id}">Valor Anterior</label>
+          <input type="number" id="vAnterior${id}" class="form-control" />
+      </div>
+      <div class="form-group col-md-6">
+          <label class="form-label" for="limiteParticipacion${id}">Limite
               Participacion</label>
-          <input type="number" id="limiteParticipacion" class="form-control" />
+          <input type="number" id="limiteParticipacion${id}" class="form-control" />
       </div>
   </div>
   <div class="row">
@@ -438,24 +432,31 @@ function addConfig(id, nombreEtapa) {
   $('#btnAddParametro'+id).click(function () {
     var etapa = $('#Etapa'+id).children('option:selected').text()
     var Transacciones = $('#Transacciones' + id).children('option:selected').text()
-    var vMinimo = $('#vMinimo'+id).val();
-    var vMaximo = $('#vMaximo'+id).val();
+    var idTransaccion = $('#Transacciones' + id).children('option:selected').val()
+    var tipoTransaccion = $('#TipoTransaccion' + id).children('option:selected').val();
+    var ValorMinimo = $('#vMinimo'+id).val();
+    var limiteParticipacion = $('#limiteParticipacion'+id).val();
+    var ValorMaximo = $('#vMaximo'+id).val();
+    var valorAnterior = $('#vAnterior'+id).val();
 
-    console.log(id)
     var tr = `<tr>
         <th>${id}</th>
         <th>${Transacciones}</th>
-        <th>${vMinimo}</th>
-        <th>${vMaximo}</th>
+        <th>${ValorMinimo}</th>
+        <th>${ValorMaximo}</th>
         <th></th>
     </tr>`;
 
     parametros.push({
-        etapa,
-        Transacciones,
-        vMinimo,
-        vMaximo
+        idTransaccion,
+        tipoTransaccion,
+        ValorMinimo,
+        ValorMaximo,
+        valorAnterior,
+        limiteParticipacion,
+        "estado": 1
     })
+    
 
     $('#Etapa'+id).val(0);
     $('#Transacciones'+id).val(0);
@@ -468,14 +469,22 @@ function addConfig(id, nombreEtapa) {
   $('#btnAddPremio'+id).click(function () {
     var etapa = $('#EtapaPremio'+id).children('option:selected').text();
     var Premios = $('#Premios'+id).children('option:selected').text();
+    var idPremio = $('#Premios'+id).children('option:selected').val();
     var valor = $('#valorP'+id).val();
 
     var tr = `<tr>
-    <th>${etapa}</th>
-    <th>${Premios}</th>
-    <th>${valor}</th>
-    <th></th>
-</tr>`;
+      <th>${etapa}</th>
+      <th>${Premios}</th>
+      <th>${valor}</th>
+      <th></th>
+    </tr>`;
+
+    premios.push({
+      valor,
+      "estado": 1,
+      idPremio
+    })
+
     $('#tbPremio'+id).append(tr);
     $('#EtapaPremio'+id).val(0);
     $('#Premios'+id).val(0)
@@ -485,23 +494,42 @@ function addConfig(id, nombreEtapa) {
   $('#btnAddPresupuesto'+id).click(function () {
 
     var departamento = $('#departamento'+id).children('option:selected').text();
+    var idDepartamento = $('#departamento'+id).children('option:selected').val();
     var municipio = $('#municipio'+id).children('option:selected').text();
-    var limite = $('#limiteGanadores'+id).val();
+    var idMunicipio = $('#municipio'+id).children('option:selected').val();
+    var limiteGanadores = $('#limiteGanadores'+id).val();
     var presupuesto = $('#Presupuesto'+id).val();
     var tr = `<tr>
           <th>${departamento}</th>
           <th>${municipio}</th>
-          <th>${limite}</th>
+          <th>${limiteGanadores}</th>
           <th>${presupuesto}</th>
           <th></th>
-      </tr>`;
+    </tr>`;
 
+    arrayPresupuesto.push({
+      idDepartamento,
+      idMunicipio,
+      limiteGanadores,
+      "valor":presupuesto,
+      "estado": 1
+    })
 
     $('#tbPresupuesto'+id).append(tr);
     $('#limiteGanadores'+id).val(null);
     $('#Presupuesto'+id).val(null);
     $('#departamento'+id).val(0);
     $('#municipio'+id).val(0);
+
+
+    etapas[id-1].parametros = parametros
+    etapas[id-1].premios = premios
+    etapas[id-1].presupuestos = arrayPresupuesto
+
+    parametros = [];
+    premios = [];
+    arrayPresupuesto = [];
+    
   });
 
   
@@ -707,7 +735,7 @@ function agregarUsuarioBloqueado() {
   $('#numeroBloqueado').val("");
 }
 
-/*const getAllPromociones = () => {
+const getAllCampanias = () => {
 
 
   var requestOptions = {
@@ -715,7 +743,7 @@ function agregarUsuarioBloqueado() {
     redirect: 'follow'
   };
 
-  fetch(`${url}Promocion`, requestOptions)
+  fetch(`${url}Campania`, requestOptions)
     .then(response => response.json())
     .then(result => {
       table('tableTodas', result);
@@ -737,7 +765,7 @@ function agregarUsuarioBloqueado() {
     })
     .catch(error => console.log('error', error));
 
-}*/
+}
 
 const table = (table, data) => {
   $('#' + table).dataTable({
@@ -745,9 +773,9 @@ const table = (table, data) => {
     data,
     columns: [
       { data: "id" },
-      { data: "campaña" },
+      { data: "nombre" },
       {
-        data: "Estado", render: function (data) {
+        data: "estado", render: function (data) {
           switch (data) {
             case 1:
               return `Activa`
@@ -761,10 +789,10 @@ const table = (table, data) => {
         }
       },
       {
-        data: "Inicio"
+        data: "fechaInicio"
       },
       {
-        data: "Fin"
+        data: "fechaFin"
       },
       {
         data: "id", render: function (data) {
@@ -831,11 +859,6 @@ const ChangePanel = (estado) => {
   }
 }
 
-function agregarLocalTabla() {
-  const data = JSON.parse(localStorage.getItem("Camapañas"));
-  table('tableTodasCamapaña', data);
-}
-
 function saveLocal() {
 
   let campañasArray = JSON.parse(localStorage.getItem("Camapañas")) || [];
@@ -857,32 +880,6 @@ function saveLocal() {
 
 }
 
-const createData = () => {
-
-  let myConfig = [{
-    "configCampaña" : {
-      "campaña": $('#nombre').val(),
-      "descripcionCampaña": $('#descripcion').val(),
-      "tituloNotificacion": $('#successaMessage').val(),
-      "descripcionNotificacion": $('#descripcionNotificacion').val(),
-      "limiteParticipacion": $('#limiteParticipacion').val(),
-      "fechaInicio": $('#fechaInicio').val(),
-      "fechaFinal": $('#fechaFin').val(),
-      "fechaRegistro": $('#fechaRegistro').val(),
-      "edadInicial": $('#edadIni').val(),
-      "edadFinal": $('#edadFini').val(),
-      "tipoUsuario": $('#tipoUsuario').children('option:selected').text(),
-      "Sexo": $('#sexo').children('option:selected').text()
-    },
-    "configEtapas" : etapas,
-    "configParametros": parametros
-  }]
-
-
-  console.log(myConfig);
-}
-
-
 
 const saveData = (data) => {
   var myHeaders = new Headers();
@@ -897,11 +894,10 @@ const saveData = (data) => {
     redirect: 'follow'
   };
 
-  fetch(`${url}Promocion`, requestOptions)
+  fetch(`${url}Campania`, requestOptions)
     .then(response => response.json())
     .then(result => {
       if (result.code == "ok") {
-        getAllPromociones();
         Alert(result.message, 'warning')
       } else {
         Alert(result.message, 'error')
