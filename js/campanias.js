@@ -224,9 +224,6 @@ function loadMenu() {
 function addConfig(id, nombreEtapa) {
 
   
-  console.log("voy a agregar una nueva configuracion" + id);
-
-  
 
   var configbuttons = `<div id="opc${id}" class="step" data-target="#social-links-vertical-${id}">
     <button type="button" class="step-trigger">
@@ -950,6 +947,181 @@ const getPremios = (id) => {
     .catch(error => console.log('error', error));
 
 }
+
+const loadMenuEdit = (isEdit=false) => {
+
+  if(isEdit){
+    var bsStepper = document.querySelectorAll('.bs-stepper'),
+    select = $('.select2'),
+    verticalWizard = document.querySelector('.vertical-wizard-example-Etapas');
+
+  } else {
+
+    var bsStepper = document.querySelectorAll('.bs-stepper'),
+    select = $('.select2'),
+    verticalWizard = document.querySelector('.vertical-wizard-example-Edit');
+
+  }
+  
+
+
+  // Adds crossed class
+  if (typeof bsStepper !== undefined && bsStepper !== null) {
+    for (var el = 0; el < bsStepper.length; ++el) {
+      bsStepper[el].addEventListener('show.bs-stepper', function (event) {
+        var index = event.detail.indexStep;
+        var numberOfSteps = $(event.target).find('.step').length - 1;
+        var line = $(event.target).find('.step');
+        console.log(numberOfSteps)
+        // The first for loop is for increasing the steps,
+        // the second is for turning them off when going back
+        // and the third with the if statement because the last line
+        // can't seem to turn off when I press the first item. ¯\_(ツ)_/¯
+
+        for (var i = 0; i < index; i++) {
+          line[i].classList.add('crossed');
+
+          for (var j = index; j < numberOfSteps; j++) {
+            line[j].classList.remove('crossed');
+          }
+        }
+        if (event.detail.to == 0) {
+          for (var k = index; k < numberOfSteps; k++) {
+            line[k].classList.remove('crossed');
+          }
+          line[0].classList.remove('crossed');
+        }
+      });
+    }
+  }
+
+  // select2
+  select.each(function () {
+    var $this = $(this);
+    $this.wrap('<div class="position-relative"></div>');
+    $this.select2({
+      placeholder: 'Select value',
+      dropdownParent: $this.parent()
+    });
+  });
+
+
+  // Vertical Wizard
+  // --------------------------------------------------------------------
+  if (typeof verticalWizard !== undefined && verticalWizard !== null) {
+    var verticalStepper = new Stepper(verticalWizard, {
+      linear: false
+    });
+    /*$(verticalWizard)
+      .find('.btn-next')
+      .on('click', function () {
+        $('#text-nemonico').text($('#nemonico').val());
+        $('#text-nombre').text($('#nombre').val());
+        $('#text-descripcion').text($('#descripcion').val());
+        $('#text-success').text($('#successaMessage').val());
+        $('#text-fail').text($('#failMessage').val());
+        $('#text-fechaInicio').text($('#fechaInicio').val());
+        $('#text-fechaFin').text($('#fechaFin').val());
+        verticalStepper.next();
+      });
+    $(verticalWizard)
+      .find('.btn-prev')
+      .on('click', function () {
+        verticalStepper.previous();
+      });*/
+  }
+}
+
+const OpenEdit = (id, idEtapa, isEtapa=false) => {
+
+  if(isEtapa){
+    console.log("aca ira el formulario de etapas " + id)
+
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+
+    fetch(`${url}Campania/${id}`, requestOptions)
+    .then(response => response.json())
+    .then(result => {
+
+      console.log(result.etapas[idEtapa-1])
+      $('#nombreEtapaEdith').val(result.etapas[idEtapa-1].nombre);
+      $('#ordenEtapaEdith').val(result.etapas[idEtapa-1].orden);
+      $('#descEtapaEdith').val(result.etapas[idEtapa-1].descripcion);
+      $('#TipoTransaccionEdith').val(result.etapas[idEtapa-1].tipoParticipacion);
+
+      $('#modalEditEtapas').modal('toggle');
+    })
+    .catch(error => console.log('error', error));
+  
+
+    loadMenuEdit(true);
+
+  } else {
+
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+  
+    fetch(`${url}Campania/${id}`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            $('#id').val(id);
+            $('#nombreEdith').val(result.nombre);
+            $('#descripcionCamaniaEdith').val(result.descripcion); 
+            $('#tituloNotificacionEdith').val(result.tituloNotificacion);
+            $('#descripcionNotificacionEdith').val(result.descripcionNotificacion);
+            $('#limiteParticipacionEdith').val(result.maximoParticipaciones);
+            $('#fechaInicioEdit').val(result.fechaInicio);
+            $('#fechaFinEdit').val(result.fechaFin)
+            $('#fechaRegistroEdith').val(result.fechaRegistro)
+            $('#edadIniEdith').val(result.edadInicial)
+            $('#edadFiniEdith').val(result.edadFinal)
+            $('#tipoUsuarioEdith').val(result.tipoUsuario)
+            $('#sexoEdith').val(result.sexo);
+  
+            result.etapas.forEach(element => {
+              var opcTableEtapas = `<tr>
+                <td>${element.id}</td>
+                <td>${element.nombre}</td>
+                <td>${element.descripcion}</td>
+                <td>
+                  <div class="btn-group">
+                    <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
+                        ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a href="#" onclick="OpenEdit(${id}, ${element.id}, ${true})" class="borrar btn_edit dropdown-item">
+                            ${feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' })} Actualizar
+                        </a>
+                    
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a href="#" onclick="OpenDelete(${element.id})" class="btn_delete dropdown-item">
+                          ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
+                        </a>
+                    </div>
+                    </div>
+                  </div> 
+                </td>
+                </tr>`
+  
+              $('#PreviewEtapsEdit').append(opcTableEtapas); 
+            })
+  
+            $('#modalEdit').modal('toggle');
+        })
+        .catch(error => console.log('error', error));
+        loadMenuEdit();
+
+
+  }
+
+  
+}
+
 
 /*const  removePremio = (index) => {
   premios.splice(index,1);
