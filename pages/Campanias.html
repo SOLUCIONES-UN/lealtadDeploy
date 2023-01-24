@@ -348,7 +348,7 @@
                 </a>
               </li>
               <li class="nav-item active">
-                <a class="d-flex align-items-center" href="Camapañas.html">
+                <a class="d-flex align-items-center" href="Campanias.html">
                   <i data-feather="shopping-bag"></i><span class="menu-title text-truncate" data-i18n="Campanias">Campañas</span>
                 </a>
               </li>
@@ -1016,8 +1016,8 @@
                             </div>
                             <div id="edith-detalle-Parametros" class="content" style="height: 650px;">
                                 <div class="content-header">
-                                    <h5 class="mb-0">Configuración de Codigos</h5>
-                                    <small>Genera o Carga tus Codigos.</small>
+                                    <h5 class="mb-0">Etapas de la campaña</h5>
+                                    <small>Descripcion de las etapas para esta campaña</small>
                                 </div>
                                 <div class=" mt-5">
                                     <div style="height:200px; width:auto;overflow-y: scroll;">
@@ -1137,6 +1137,7 @@
                                 </div>
 
                                 <div class="row">
+                                    <input id="idEtapa" type="hidden">
                                     <div class="col-md-5">
                                         <label for="nombreEtapaEdith">Nombre</label>
                                         <input class="form-control" id="nombreEtapaEdith" />
@@ -1166,6 +1167,8 @@
                                             <option value="5">Acumular valor</option>
                                             <option value="6">Combinar Transacciones</option>
                                         </select>
+
+                                        <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit mt-2">Modificar </button>
                                     </div>
 
                                 </div>
@@ -1179,41 +1182,71 @@
                                 </div>
 
                                 <div class="row">
+                                    <input id="idParametro" type="hidden">
                                     <div class="form-group col-md-6">
-                                        <label class="form-label" for="TipoTransaccion">Tipo Transaccion</label>
-                                        <select class="form-control" id="TipoTransaccion">
+                                        <label class="form-label" for="TipoTransaccionEdit">Tipo Transaccion</label>
+                                        <select class="form-control" id="TipoTransaccionEdit">
                                           <option value="0" selected disabled>Seleccione Un Tipo De Transaccion</option>
                                           <option value="t">Transaccion</option>
                                           <option value="c">Categoria</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label class="form-label" for="Transacciones">Transacciones</label>
-                                        <select class="form-control" id="Transacciones">
-                                            <option>Seleccione Una Transaccion</option>
+                                        <label class="form-label" for="TransaccionesEdit">Transacciones</label>
+                                        <select class="form-control" id="TransaccionesEdit">
+                                            <option value="0" selected disabled>Seleccione Una Transaccion</option>
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="form-group col-md-6">
-                                        <label class="form-label" for="vMinimo">Valor Minimo</label>
-                                        <input type="number" id="vMinimo" class="form-control" />
+                                        <label class="form-label" for="vMinimoEdit">Valor Minimo</label>
+                                        <input type="number" id="vMinimoEdit" class="form-control" />
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label class="form-label" for="vMaximo">Valor Maximo</label>
-                                        <input type="number" id="vMaximo" class="form-control" />
+                                        <label class="form-label" for="vMaximoEdit">Valor Maximo</label>
+                                        <input type="number" id="vMaximoEdit" class="form-control" />
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-6">
-                                        <label class="form-label" for="vAnterior">Valor Anterior</label>
-                                        <input type="number" id="vAnterior" class="form-control" />
+                                        <label class="form-label" for="vAnteriorEdit">Valor Anterior</label>
+                                        <input type="number" id="vAnteriorEdit" class="form-control" />
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label class="form-label" for="limiteParticipacion">Limite
+                                        <label class="form-label" for="limiteParticipacionEdit">Limite
                                             Participacion</label>
-                                        <input type="number" id="limiteParticipacion" class="form-control" />
+                                        <input type="number" id="limiteParticipacionEdit" class="form-control" />
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+
+                                        <button class="btn btn-outline-success mt-2 btn-block"
+                                        type="button" onclick="updateCampaña( 1)"
+                                        id="btnActualizarParametros">Actualizar Parametros</button>
+
+                                    </div>
+                                </div>
+                                    
+                                
+
+                                <div class=" mt-5">
+                                    <div style="height:200px; width:auto;overflow-y: scroll;">
+                                        <table class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Tipo Transaccion</th>
+                                                    <th>Valor Minimo</th>
+                                                    <th>Valor Maximo</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="parametrosTable"></tbody>
+                                        </table>
                                     </div>
                                 </div>
                                 
@@ -1225,18 +1258,44 @@
                                 </div>
 
                                 <div class="row">
+                                    <input id="idPremio" type="hidden">
                                     <div class="form-group col-md-5">
-                                        <label class="form-label" for="Premios">Premios</label>
-                                        <select class="form-control" id="Premios">
-                                            <option>Seleccione Un Premio</option>
+                                        <label class="form-label" for="PremiosEdit">Premios</label>
+                                        <select class="form-control" id="PremiosEdit">
+                                            <option  value="0" selected disabled>Seleccione Un Premio</option>
                                         </select>
 
                                        
                                     </div>
 
                                     <div class="form-group col-md-5">
-                                        <label class="form-label" for="valor">Valor</label>
-                                        <input class="form-control" id="valorP">
+                                        <label class="form-label" for="valorEdit">Valor</label>
+                                        <input class="form-control" id="valorPEdit">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+
+                                        <button class="btn btn-outline-success mt-2 btn-block"
+                                        type="button" onclick="updateCampaña(2)"
+                                        id="btnActualizarPremios">Actualizar Premios</button>
+
+                                    </div>
+                                </div>
+
+                                <div class=" mt-5">
+                                    <div style="height:200px; width:auto;overflow-y: scroll;">
+                                        <table class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Valor</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="PremiosTable"></tbody>
+                                        </table>
                                     </div>
                                 </div>
 
@@ -1249,38 +1308,56 @@
                                 </div>
 
                                 <div class="row">
+                                    <input id="idPresupuesto" type="hidden">
                                     <div class="form-group col-md-6">
-                                        <label class="form-label" for="departamento">Departamento</label>
-                                        <select class="form-control" id="departamento${id}">
+                                        <label class="form-label" for="departamentoEdit">Departamento</label>
+                                        <select class="form-control" id="departamentoEdit">
                                             <option value="0">Todos los departamentos</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label class="form-label" for="municipio">Municipio</label>
-                                        <select class="form-control" id="municipio${id}">
+                                        <label class="form-label" for="municipioEdit">Municipio</label>
+                                        <select class="form-control" id="municipioEdit">
                                             <option value="0">Todos los Municipios</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-6">
-                                        <label class="form-label" for="limiteGanadores">Limite De Ganadores</label>
-                                        <input type="number" id="limiteGanadores${id}" class="form-control" />
+                                        <label class="form-label" for="limiteGanadoresEdit">Limite De Ganadores</label>
+                                        <input type="number" id="limiteGanadoresEdit" class="form-control" />
                                     </div>
 
                                     <div class="form-group col-md-6">
-                                        <label class="form-label" for="Presupuesto">Presupuesto</label>
-                                        <input type="number" id="Presupuesto${id}" class="form-control" />
+                                        <label class="form-label" for="PresupuestoEdit">Presupuesto</label>
+                                        <input type="number" id="PresupuestoEdit" class="form-control" />
                                     </div>
 
                                 </div>
 
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <button class="btn btn-primary btn-next btn-submit">
-                                            <span class="align-middle d-sm-inline-block d-none">Guardar</span>
-                                            <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
-                                        </button>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+
+                                        <button class="btn btn-outline-success mt-2 btn-block"
+                                        type="button" onclick="updateCampaña(3)"
+                                        id="btnActualizarPresupuesto">Actualizar Presupuesto</button>
+
+                                    </div>
+                                </div>
+
+                                <div class=" mt-5">
+                                    <div style="height:200px; width:auto;overflow-y: scroll;">
+                                        <table class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Presupuesto</th>
+                                                    <th>Limite De Ganadores</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="PresupuestoTable"></tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
