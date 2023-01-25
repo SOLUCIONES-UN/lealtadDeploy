@@ -9,6 +9,10 @@ let index = 1;
 var numConfigButtons = 4;
 const inputFile = document.getElementById('formFile');
 const inputFileBloqueados = document.getElementById('formFileBloqueados');
+
+//var stepper = new Stepper(document.querySelector('.bs-stepper'))
+// stepper.to(3)
+
 $(function () {
   loadMenu()
   'use strict';
@@ -20,9 +24,6 @@ $(function () {
   $('#btnActualizarPremios').hide();
   $('#btnActualizarPresupuesto').hide();
 
-  
-
-  // $().html(null)
 
 
   //Inicializacion de Navs
@@ -104,7 +105,9 @@ $(function () {
     $('#tbetapas').html(null);
     $('.etapaSelect').html(null);
     $('#descEtapa').html(null);
+
     addConfig(index++, nombre.val())
+    
     etapas.forEach((element, index) => {
 
       console.log(element.tipoParticipacion);
@@ -148,6 +151,7 @@ $(function () {
       
     });
 
+    
 
     nombre.val(null);
     orden.val(null);
@@ -157,11 +161,13 @@ $(function () {
 
 });
 
-function loadMenu() {
+function loadMenu(isEtapa) {
 
   var bsStepper = document.querySelectorAll('.bs-stepper'),
     select = $('.select2'),
     verticalWizard = document.querySelector('.vertical-wizard-example');
+
+    
 
   // Adds crossed class
   if (typeof bsStepper !== undefined && bsStepper !== null) {
@@ -193,6 +199,8 @@ function loadMenu() {
     }
   }
 
+  
+
   // select2
   select.each(function () {
     var $this = $(this);
@@ -202,9 +210,6 @@ function loadMenu() {
       dropdownParent: $this.parent()
     });
   });
-
-
-
 
   // Vertical Wizard
   // --------------------------------------------------------------------
@@ -230,6 +235,11 @@ function loadMenu() {
         ChangePanel(1);
       });
   }
+
+  if(isEtapa){
+    verticalStepper.to(3)
+  }
+  
 
 }
 
@@ -466,7 +476,8 @@ function addConfig(id, nombreEtapa) {
 
     $('#Etapa'+id).val(0); 
     $('#TipoTransaccion'+id).val(0);
-    $('#Transacciones'+id).val(0);
+    $('#Transacciones'+id).html(null);
+    $('#Transacciones'+id).append(`<option value="0" selected disabled>Seleccione Una Transaccion</option>`);
     $('#vMinimo'+id).val(null);
     $('#vMaximo'+id).val(null);
     $('#limiteParticipacion'+id).val(null);
@@ -481,7 +492,7 @@ function addConfig(id, nombreEtapa) {
     var valor = $('#valorP'+id).val();
 
     var tr = `<tr>
-      <th>${etapa}</th>
+      <th>${id}</th>
       <th>${Premios}</th>
       <th>${valor}</th>
       <th></th>
@@ -545,7 +556,8 @@ function addConfig(id, nombreEtapa) {
   getPremios(id);
   getDepartamentos(id);
   getMunicipios(id);
-  loadMenu();
+  loadMenu(true);
+  
 
 }
 
@@ -822,6 +834,8 @@ const getAllCampanias = () => {
       $('#textPausadas').text(pausadas.length);
       table('tablePausada', pausadas);
 
+      console.log(pausadas)
+
       let borrador = result.filter(x => x.estado == 3);
       $('#textBorrador').text(borrador.length);
       table('tableBorrador', borrador);
@@ -859,22 +873,40 @@ const table = (table, data) => {
         data: "fechaFin"
       },
       {
-        data: "id", render: function (data) {
+        data: "id", render: function (data, type, row) {
+
+          var opcAdd = ``;
+
+
+
+          switch (row.estado) {
+            case 1:
+              opcAdd += `<a href="#" onclick="pausarActualizarCampania(${data},2)" class="btn_pausar dropdown-item">
+              ${feather.icons['pause-circle'].toSvg({ class: 'font-small-4 mr-50' })} Pausar
+            </a>`
+              break;
+            case 2:
+              opcAdd += `<a href="#" onclick="pausarActualizarCampania(${data},1)" class="btn_activar dropdown-item">
+                ${feather.icons['play'].toSvg({ class: 'font-small-4 mr-50' })} Activar
+              </a>`
+              break;
+          }
+
+          if (row.estado != 0) {
+            opcAdd += `<a href="#" onclick="OpenEdit(${data})" class="btn_edit dropdown-item">
+            ${feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' })} Actualizar
+            </a><a href="#" onclick="OpenDelete(${data})" class="btn_delete dropdown-item">
+                ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
+                    </a>`
+          }
+
           return `
           <div class="btn-group">
             <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
                 ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-                <a href="#" onclick="OpenEdit(${data})" class="borrar btn_edit dropdown-item">
-                    ${feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' })} Actualizar
-                </a>
-            
-            <div class="dropdown-menu dropdown-menu-right">
-                <a href="#" onclick="OpenDelete(${data})" class="btn_delete dropdown-item">
-                  ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
-                </a>
-            </div>
+               ${opcAdd}
             </div>
           </div> 
         `;
@@ -983,16 +1015,17 @@ const Alert = function (message, status) // si se proceso correctamente la solic
   });
 }
 const Limpiar = () => {
-  $('#nemonico').val(null);
+  $('#descripcionCamania').val(null);
   $('#nombre').val(null);
-  $('#descripcion').val(null);
-  $('#successaMessage').val(null);
-  $('#failMessage').val(null);
+  $('#tituloNotificacion').val(null);
+  $('#descripcionNotificacion').val(null);
+  $('#limiteParticipacion').val(null);
   $('#fechaInicio').val(null);
   $('#fechaFin').val(null);
-  $('#cantidad').val(null);
-  $('#tamanio').val(null);
-  $('#tipogeneracion').val(1);
+  $('#fechaRegistro').val(null);
+  $('#edadIni').val(null);
+  $('#sexo').val(0);
+  $('#tipoUsuario').val(0);
   ChangePanel(1)
 }
 
@@ -1728,6 +1761,30 @@ $('#formEdit').submit(function () {
   return false;
 
 })
+
+const pausarActualizarCampania = (id, type) => {
+
+  var requestOptions = {
+    method: 'PUT',
+    redirect: 'follow'
+  };
+
+  fetch(`${url}Campania/${type == 1 ? 'activar' : 'pausar'}/${id}`, requestOptions)
+  .then(response => response.json())
+  .then(result => {
+    if (result.code == "ok") {
+      getAllCampanias();
+      Alert(result.message, 'success')
+    } else {
+      Alert(result.message, 'error')
+    }
+  })
+  .catch(error => {
+    console.log(error)
+    Alert(error, 'error')
+  });
+
+}
 
 
 /*const  removePremio = (index) => {
