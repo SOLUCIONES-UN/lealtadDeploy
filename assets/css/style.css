@@ -37,3 +37,34 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 	height: 5px;
 	display: none;
 }
+
+.header-info{
+
+	background-color: white;
+	
+}
+
+span{
+	font-size: 0.95rem;
+	
+}
+
+.info-camp{
+	padding-top: 25px;
+}
+
+.info-camp h5 + p {
+
+	font-size: 1.1rem;
+}
+
+.bar-info h5{
+	font-size: 0.9rem;
+	padding-top: 30px;
+}
+
+.bar-info{
+	padding-bottom: 15px;
+}
+
+

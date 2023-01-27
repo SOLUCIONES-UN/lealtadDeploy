@@ -9,6 +9,10 @@ let index = 1;
 var numConfigButtons = 4;
 const inputFile = document.getElementById('formFile');
 const inputFileBloqueados = document.getElementById('formFileBloqueados');
+
+//var stepper = new Stepper(document.querySelector('.bs-stepper'))
+// stepper.to(3)
+
 $(function () {
   loadMenu()
   'use strict';
@@ -16,10 +20,10 @@ $(function () {
   getAllCampanias()
   $('#formFile').hide();
   $('#tableParticipantes').hide();
+  $('#btnActualizarParametros').hide();
+  $('#btnActualizarPremios').hide();
+  $('#btnActualizarPresupuesto').hide();
 
-  
-
-  // $().html(null)
 
 
   //Inicializacion de Navs
@@ -73,9 +77,9 @@ $(function () {
       "maximoParticipaciones": $('#limiteParticipacion').val()
     }
 
-    console.log(data);
-
     saveData(data);
+    $('#addConfig').html(null); 
+    $('#addFormConfig').html(null);
 
   })
 
@@ -84,6 +88,7 @@ $(function () {
     var orden = $('#ordenEtapa');
     var descripcion = $('#descEtapa');
     var tipoTransaccion = $('#TipoTransaccion option:selected');
+    var nombreParticipacion;
 
     etapas.push({
       nombre: nombre.val(),
@@ -97,18 +102,30 @@ $(function () {
 
     })
 
-
     $('#tbetapas').html(null);
     $('.etapaSelect').html(null);
     $('#descEtapa').html(null);
+
     addConfig(index++, nombre.val())
+    
     etapas.forEach((element, index) => {
+
+      console.log(element.tipoParticipacion);
       var opc = `<option>${element.nombre}</option>`;
+
+      if(element.tipoParticipacion == 1) {
+        nombreParticipacion = "Por Transaccion"
+      } else if(element.tipoParticipacion == 2){
+        nombreParticipacion = "Recurrente"
+      } else if(element.tipoParticipacion == 3 ){nombreParticipacion = "Acumular Transacciones"}
+      else if(element.tipoParticipacion == 4 ){nombreParticipacion = "Acumular Recurrente"}
+      else if(element.tipoParticipacion == 5 ){nombreParticipacion = "Acumular Valor"}
+      else if(element.tipoParticipacion == 6 ){nombreParticipacion = "Combinar Transacciones"}
 
       var tr = `<tr id='fila${index+1}'>
           <th>${index + 1}</th>
           <th>${element.nombre}</th>
-          <th>${element.tipoTransaccion}</th>
+          <th>${nombreParticipacion}</th>
           <th><div class="btn-group">
           <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
               ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
@@ -134,22 +151,23 @@ $(function () {
       
     });
 
+    
 
     nombre.val(null);
     orden.val(null);
     descripcion.val(null);
 
-    console.log(etapas)
-
   });
 
 });
 
-function loadMenu() {
+function loadMenu(isEtapa) {
 
   var bsStepper = document.querySelectorAll('.bs-stepper'),
     select = $('.select2'),
     verticalWizard = document.querySelector('.vertical-wizard-example');
+
+    
 
   // Adds crossed class
   if (typeof bsStepper !== undefined && bsStepper !== null) {
@@ -181,6 +199,8 @@ function loadMenu() {
     }
   }
 
+  
+
   // select2
   select.each(function () {
     var $this = $(this);
@@ -190,9 +210,6 @@ function loadMenu() {
       dropdownParent: $this.parent()
     });
   });
-
-
-
 
   // Vertical Wizard
   // --------------------------------------------------------------------
@@ -219,6 +236,11 @@ function loadMenu() {
       });
   }
 
+  if(isEtapa){
+    verticalStepper.to(3)
+  }
+  
+
 }
 
 function addConfig(id, nombreEtapa) {
@@ -243,7 +265,7 @@ function addConfig(id, nombreEtapa) {
   <div class="row">
       <div class="form-group col-md-6">
           <label class="form-label" for="TipoTransaccion${id}">Tipo Transaccion</label>
-          <select class="form-control" id="TipoTransaccion${id}">
+          <select class="form-control" id="TipoTransaccion${id}" onchange="tipoDeTransaccion(${id})">
             <option value="0" selected disabled>Seleccione Un Tipo De Transaccion</option>
             <option value="t">Transaccion</option>
             <option value="c">Categoria</option>
@@ -252,7 +274,7 @@ function addConfig(id, nombreEtapa) {
       <div class="form-group col-md-6">
           <label class="form-label" for="Transacciones">Transacciones</label>
           <select class="form-control" id="Transacciones${id}">
-              <option>Seleccione Una Transaccion</option>
+              <option value="0" selected disabled>Seleccione Una Transaccion</option>
           </select>
       </div>
   </div>
@@ -308,32 +330,29 @@ function addConfig(id, nombreEtapa) {
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-md-6">
-                                            <label class="form-label" for="EtapaPremio">Etapa</label>
-                                            <select class="form-control etapaSelect" id="EtapaPremio${id}">
-                                                <option>Seleccione Una Etapa</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-md-6">
                                             <label class="form-label" for="Premios">Premios</label>
                                             <select class="form-control" id="Premios${id}">
                                                 <option>Seleccione Un Premio</option>
                                             </select>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-md-6">
+                                        <div class="form-group col-md-5">
                                             <label class="form-label" for="valor">Valor</label>
-                                            <input class="form-control" id="valorP${id}">
+                                            <input type="number" class="form-control" id="valorP${id}">
                                         </div>
                                     </div>
                                     <div class="row">
+                                        
                                         <div class="col-md-12">
                                             <button class="btn btn-success" type="button" id="btnAddPremio${id}"
                                             style="float: right;">
                                             <span class="align-middle d-sm-inline-block d-none">AGREGAR</span>
-                                        </button>
-                                        <br />
+                                            </button>
                                         </div>
+                                        <br />
+                                    </div>
+                                    <div class="row">
+                                        
+                                        
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
@@ -455,11 +474,14 @@ function addConfig(id, nombreEtapa) {
     })
     
 
-    $('#Etapa'+id).val(0);
-    $('#Transacciones'+id).val(0);
+    $('#Etapa'+id).val(0); 
+    $('#TipoTransaccion'+id).val(0);
+    $('#Transacciones'+id).html(null);
+    $('#Transacciones'+id).append(`<option value="0" selected disabled>Seleccione Una Transaccion</option>`);
     $('#vMinimo'+id).val(null);
     $('#vMaximo'+id).val(null);
     $('#limiteParticipacion'+id).val(null);
+    $('#vAnterior'+id).val(null);
     $('#tbParametros'+id).append(tr);
   });
 
@@ -470,7 +492,7 @@ function addConfig(id, nombreEtapa) {
     var valor = $('#valorP'+id).val();
 
     var tr = `<tr>
-      <th>${etapa}</th>
+      <th>${id}</th>
       <th>${Premios}</th>
       <th>${valor}</th>
       <th></th>
@@ -534,16 +556,32 @@ function addConfig(id, nombreEtapa) {
   getPremios(id);
   getDepartamentos(id);
   getMunicipios(id);
-  loadMenu();
+  loadMenu(true);
+  
 
 }
 
-const getDepartamentos = (id) => {
+const getDepartamentos = (id, isEdith =false) => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow'
   };
-  fetch(`${url}Departamento`, requestOptions)
+
+  if(isEdith){
+
+    fetch(`${url}Departamento`, requestOptions)
+    .then(response => response.json())
+    .then(result => {
+      result.forEach(element => {
+        var opc = `<option value="${element.id}">${element.nombre}</option>`;
+        $('#departamentoEdit').append(opc);
+      });
+    })
+    .catch(error => console.log('error', error));
+
+  }else {
+
+    fetch(`${url}Departamento`, requestOptions)
     .then(response => response.json())
     .then(result => {
       result.forEach(element => {
@@ -553,14 +591,34 @@ const getDepartamentos = (id) => {
     })
     .catch(error => console.log('error', error));
 
+  }
+
+  
+
 }
 
-const getMunicipios = (id) => {
+const getMunicipios = (id, isEdit=false) => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow'
   };
-  fetch(`${url}Municipio`, requestOptions)
+
+  if(isEdit){
+
+    fetch(`${url}Municipio`, requestOptions)
+    .then(response => response.json())
+    .then(result => {
+      result.forEach(element => {
+        var opc = `<option value="${element.id}">${element.nombre}</option>`;
+        $('#municipioEdit').append(opc);
+      });
+    })
+    .catch(error => console.log('error', error));
+
+
+  } else {
+
+    fetch(`${url}Municipio`, requestOptions)
     .then(response => response.json())
     .then(result => {
       result.forEach(element => {
@@ -570,14 +628,32 @@ const getMunicipios = (id) => {
     })
     .catch(error => console.log('error', error));
 
+  }
+ 
+
 }
 
-const getTransacciones = (id) => {
+const getTransacciones = (id, isEdit=false) => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow'
   };
-  fetch(`${url}Transaccion`, requestOptions)
+
+  if(isEdit) {
+
+    fetch(`${url}Transaccion`, requestOptions)
+    .then(response => response.json())
+    .then(result => {
+      result.forEach(element => {
+        var opc = `<option value="${element.id}">${element.nombre}</option>`;
+        $('#TransaccionesEdit').append(opc);
+      });
+    })
+    .catch(error => console.log('error', error));
+
+  } else {
+
+    fetch(`${url}Transaccion`, requestOptions)
     .then(response => response.json())
     .then(result => {
       result.forEach(element => {
@@ -586,6 +662,9 @@ const getTransacciones = (id) => {
       });
     })
     .catch(error => console.log('error', error));
+
+  }
+  
 
 }
 
@@ -755,6 +834,8 @@ const getAllCampanias = () => {
       $('#textPausadas').text(pausadas.length);
       table('tablePausada', pausadas);
 
+      console.log(pausadas)
+
       let borrador = result.filter(x => x.estado == 3);
       $('#textBorrador').text(borrador.length);
       table('tableBorrador', borrador);
@@ -792,22 +873,40 @@ const table = (table, data) => {
         data: "fechaFin"
       },
       {
-        data: "id", render: function (data) {
+        data: "id", render: function (data, type, row) {
+
+          var opcAdd = ``;
+
+
+
+          switch (row.estado) {
+            case 1:
+              opcAdd += `<a href="#" onclick="pausarActualizarCampania(${data},2)" class="btn_pausar dropdown-item">
+              ${feather.icons['pause-circle'].toSvg({ class: 'font-small-4 mr-50' })} Pausar
+            </a>`
+              break;
+            case 2:
+              opcAdd += `<a href="#" onclick="pausarActualizarCampania(${data},1)" class="btn_activar dropdown-item">
+                ${feather.icons['play'].toSvg({ class: 'font-small-4 mr-50' })} Activar
+              </a>`
+              break;
+          }
+
+          if (row.estado != 0) {
+            opcAdd += `<a href="#" onclick="OpenEdit(${data})" class="btn_edit dropdown-item">
+            ${feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' })} Actualizar
+            </a><a href="#" onclick="OpenDelete(${data})" class="btn_delete dropdown-item">
+                ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
+                    </a>`
+          }
+
           return `
           <div class="btn-group">
             <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
                 ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-                <a href="#" onclick="OpenEdit(${data})" class="borrar btn_edit dropdown-item">
-                    ${feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' })} Actualizar
-                </a>
-            
-            <div class="dropdown-menu dropdown-menu-right">
-                <a href="#" onclick="OpenDelete(${data})" class="btn_delete dropdown-item">
-                  ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
-                </a>
-            </div>
+               ${opcAdd}
             </div>
           </div> 
         `;
@@ -916,35 +1015,54 @@ const Alert = function (message, status) // si se proceso correctamente la solic
   });
 }
 const Limpiar = () => {
-  $('#nemonico').val(null);
+  $('#descripcionCamania').val(null);
   $('#nombre').val(null);
-  $('#descripcion').val(null);
-  $('#successaMessage').val(null);
-  $('#failMessage').val(null);
+  $('#tituloNotificacion').val(null);
+  $('#descripcionNotificacion').val(null);
+  $('#limiteParticipacion').val(null);
   $('#fechaInicio').val(null);
   $('#fechaFin').val(null);
-  $('#cantidad').val(null);
-  $('#tamanio').val(null);
-  $('#tipogeneracion').val(1);
+  $('#fechaRegistro').val(null);
+  $('#edadIni').val(null);
+  $('#sexo').val(0);
+  $('#tipoUsuario').val(0);
   ChangePanel(1)
 }
 
-const getPremios = (id) => {
+const getPremios = (id, isEdit=false) => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow'
   };
 
-  $('#premio').html('<option value="0" selected disabled>Selecciona una opcion</option>');
-  fetch(`${url}Premio`, requestOptions)
-    .then(response => response.json())
-    .then(result => {
-      result.forEach(element => {
-        var opc = `<option value="${element.id}">${element.nombre}</option>`;
-        $('#Premios'+id).append(opc);
-      });
-    })
-    .catch(error => console.log('error', error));
+  if(isEdit) {
+
+    fetch(`${url}Premio`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        result.forEach(element => {
+          var opc = `<option value="${element.id}">${element.nombre}</option>`;
+          $('#PremiosEdit').append(opc);
+        });
+      })
+      .catch(error => console.log('error', error));
+
+  } else {
+
+    $('#premio').html('<option value="0" selected disabled>Selecciona una opcion</option>');
+    fetch(`${url}Premio`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        result.forEach(element => {
+          var opc = `<option value="${element.id}">${element.nombre}</option>`;
+          $('#Premios'+id).append(opc);
+        });
+      })
+      .catch(error => console.log('error', error));
+
+  }
+
+ 
 
 }
 
@@ -1032,10 +1150,191 @@ const loadMenuEdit = (isEdit=false) => {
   }
 }
 
+const getParametros = (idEtapa) => {
+  
+  var requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+
+  fetch(`${url}parametros/${idEtapa}`, requestOptions)
+    .then(response => response.json())
+    .then(result => {
+
+      result.forEach(element => {
+        var tipoTran;
+
+        if(element.tipoTransaccion == "c"){
+          tipoTran = "Categoria"
+        } else if(element.tipoTransaccion == "t") {
+          tipoTran = "Transaccion"
+        }
+
+        var opcTableParametros = `<tr>
+        <td>${element.id}</td>
+        <td>${tipoTran}</td>
+        <td>${element.ValorMinimo}</td>
+        <td>${element.ValorMaximo}</td>
+        <td>
+          <div class="btn-group">
+            <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
+                ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+                <a href="#" onclick="cargarDatos(${element.id}, ${1})" class="borrar btn_edit dropdown-item">
+                    ${feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' })} Actualizar
+                </a>
+            
+            <div class="dropdown-menu dropdown-menu-right">
+                <a href="#" onclick="OpenDelete(${element.id})" class="btn_delete dropdown-item">
+                  ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
+                </a>
+            </div>
+            </div>
+          </div> 
+        </td>
+        </tr>`
+
+        $('#parametrosTable').append(opcTableParametros); 
+      })
+
+    })
+
+}
+
+
+const getPremiosEtapa = (idEtapa) => {
+
+  var requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+
+  fetch(`${url}premios/${idEtapa}`, requestOptions)
+    .then(response => response.json())
+    .then(result => {
+
+      result.forEach(element => {
+
+        var opcTablePremios = `<tr>
+        <td>${element.id}</td>
+        <td>${element.valor}</td>
+        <td>
+          <div class="btn-group">
+            <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
+                ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+                <a href="#" onclick="cargarDatos(${element.id}, ${2})" class="borrar btn_edit dropdown-item">
+                    ${feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' })} Actualizar
+                </a>
+            
+            <div class="dropdown-menu dropdown-menu-right">
+                <a href="#" onclick="OpenDelete(${element.id})" class="btn_delete dropdown-item">
+                  ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
+                </a>
+            </div>
+            </div>
+          </div> 
+        </td>
+        </tr>`
+
+        $('#PremiosTable').append(opcTablePremios); 
+      })
+
+    })
+
+}
+
+const getPresupuesto = (idEtapa) => {
+
+  var requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+
+  fetch(`${url}presupuesto/${idEtapa}`, requestOptions)
+    .then(response => response.json())
+    .then(result => {
+
+      result.forEach(element => {
+
+        var opcTablePresupuesto = `<tr>
+        <td>${element.id}</td>
+        <td>${element.valor}</td>
+        <td>${element.limiteGanadores}</td>
+        <td>
+          <div class="btn-group">
+            <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
+                ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+                <a href="#" onclick="cargarDatos(${element.id}, ${3})" class="borrar btn_edit dropdown-item">
+                    ${feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' })} Actualizar
+                </a>
+            
+            <div class="dropdown-menu dropdown-menu-right">
+                <a href="#" onclick="OpenDelete(${element.id})" class="btn_delete dropdown-item">
+                  ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
+                </a>
+            </div>
+            </div>
+          </div> 
+        </td>
+        </tr>`
+
+        $('#PresupuestoTable').append(opcTablePresupuesto); 
+      })
+
+    })
+
+}
+
+const getEtapas = (id) => {
+    
+  var requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+
+  fetch(`${url}Campania/${id}`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+          result.etapas.forEach(element => {
+            var opcTableEtapas = `<tr>
+              <td>${element.id}</td>
+              <td>${element.nombre}</td>
+              <td>${element.descripcion}</td>
+              <td>
+                <div class="btn-group">
+                  <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
+                      ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right">
+                      <a href="#" onclick="OpenEdit(${id}, ${element.id}, ${true})" class="borrar btn_edit dropdown-item">
+                          ${feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' })} Actualizar
+                      </a>
+                  
+                  <div class="dropdown-menu dropdown-menu-right">
+                      <a href="#" onclick="OpenDelete(${element.id})" class="btn_delete dropdown-item">
+                        ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
+                      </a>
+                  </div>
+                  </div>
+                </div> 
+              </td>
+              </tr>`
+
+            $('#PreviewEtapsEdit').append(opcTableEtapas); 
+          })
+      })
+      .catch(error => console.log('error', error));
+}
+
 const OpenEdit = (id, idEtapa, isEtapa=false) => {
 
   if(isEtapa){
-    console.log("aca ira el formulario de etapas " + id)
+    console.log("aca ira el formulario de etapas " + idEtapa)
 
     var requestOptions = {
       method: 'GET',
@@ -1047,10 +1346,16 @@ const OpenEdit = (id, idEtapa, isEtapa=false) => {
     .then(result => {
 
       console.log(result.etapas[idEtapa-1])
+      $('#idEtapa').val(result.etapas[idEtapa-1].id)
       $('#nombreEtapaEdith').val(result.etapas[idEtapa-1].nombre);
       $('#ordenEtapaEdith').val(result.etapas[idEtapa-1].orden);
       $('#descEtapaEdith').val(result.etapas[idEtapa-1].descripcion);
       $('#TipoTransaccionEdith').val(result.etapas[idEtapa-1].tipoParticipacion);
+
+      getParametros(idEtapa);
+      getPremiosEtapa(idEtapa);
+      getPresupuesto(idEtapa);
+
 
       $('#modalEditEtapas').modal('toggle');
     })
@@ -1075,42 +1380,16 @@ const OpenEdit = (id, idEtapa, isEtapa=false) => {
             $('#tituloNotificacionEdith').val(result.tituloNotificacion);
             $('#descripcionNotificacionEdith').val(result.descripcionNotificacion);
             $('#limiteParticipacionEdith').val(result.maximoParticipaciones);
-            $('#fechaInicioEdit').val(result.fechaInicio);
-            $('#fechaFinEdit').val(result.fechaFin)
+            $('#fechaInicioEdith').val(result.fechaInicio);
+            $('#fechaFinEdith').val(result.fechaFin)
             $('#fechaRegistroEdith').val(result.fechaRegistro)
             $('#edadIniEdith').val(result.edadInicial)
             $('#edadFiniEdith').val(result.edadFinal)
             $('#tipoUsuarioEdith').val(result.tipoUsuario)
             $('#sexoEdith').val(result.sexo);
   
-            result.etapas.forEach(element => {
-              var opcTableEtapas = `<tr>
-                <td>${element.id}</td>
-                <td>${element.nombre}</td>
-                <td>${element.descripcion}</td>
-                <td>
-                  <div class="btn-group">
-                    <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
-                        ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <a href="#" onclick="OpenEdit(${id}, ${element.id}, ${true})" class="borrar btn_edit dropdown-item">
-                            ${feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' })} Actualizar
-                        </a>
-                    
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <a href="#" onclick="OpenDelete(${element.id})" class="btn_delete dropdown-item">
-                          ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
-                        </a>
-                    </div>
-                    </div>
-                  </div> 
-                </td>
-                </tr>`
-  
-              $('#PreviewEtapsEdit').append(opcTableEtapas); 
-            })
-  
+            getEtapas(id);
+
             $('#modalEdit').modal('toggle');
         })
         .catch(error => console.log('error', error));
@@ -1120,6 +1399,391 @@ const OpenEdit = (id, idEtapa, isEtapa=false) => {
   }
 
   
+}
+
+const tipoDeTransaccion = (id) => {
+
+  var requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+
+  let tipoTrans = $('#TipoTransaccion' + id).val();
+
+  console.log(tipoTrans);
+
+    if(tipoTrans == "c"){
+
+      $('#Transacciones'+id).html(null);
+      
+      fetch(`${url}Categoria`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        result.forEach(element => {
+          var opc = `<option value="${element.id}">${element.nombre}</option>`;
+          $('#Transacciones' + id).append(opc);
+        });
+      })
+      .catch(error => console.log('error', error));
+
+    } else if( tipoTrans == "t"){
+
+      $('#Transacciones' + id).html(null);
+      getTransacciones(id)
+
+    }
+
+}
+
+$('#TipoTransaccionEdit').on('change', function(){
+
+  var requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+
+  let tipoTrans = $('#TipoTransaccionEdit').val();
+
+  console.log(tipoTrans);
+
+    if(tipoTrans == "c"){
+
+      $('#TransaccionesEdit').html(null);
+      
+      fetch(`${url}Categoria`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        result.forEach(element => {
+          var opc = `<option value="${element.id}">${element.nombre}</option>`;
+          $('#TransaccionesEdit').append(opc);
+        });
+      })
+      .catch(error => console.log('error', error));
+
+    } else if( tipoTrans == "t"){
+
+      $('#TransaccionesEdit').html(null);
+      getTransacciones(0, true)
+
+    }
+
+})
+
+const cargarDatos = (id, opc) =>{
+
+  var requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+
+  switch (opc) {
+    case 1:
+
+        getTransacciones(0, true);
+
+        fetch(`${url}parametros/edith/${id}`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          $('#idParametro').val(result.id);
+          $('#TipoTransaccionEdit').val(result.tipoTransaccion);
+          $('#TransaccionesEdit').val(result.idTransaccion);
+          $('#vMinimoEdit').val(result.ValorMinimo);
+          $('#vMaximoEdit').val(result.ValorMaximo);
+          $('#vAnteriorEdit').val(result.valorAnterior);
+          $('#limiteParticipacionEdit').val(result.limiteParticipacion);
+        })
+
+        $('#btnActualizarParametros').show();
+
+    break
+
+    case 2: 
+
+    getPremios(0, true);
+
+      fetch(`${url}premios/edith/${id}`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+
+        $('#idPremio').val(result.id);
+        $('#PremiosEdit').val(result.idPremio);
+        $('#valorPEdit').val(result.valor);
+
+      })
+
+      $('#btnActualizarPremios').show();
+
+    break
+
+    case 3: 
+
+      getDepartamentos(0, true);
+      getMunicipios(0, true);
+
+      fetch(`${url}presupuesto/edith/${id}`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+
+        $('#idPresupuesto').val(result.id);
+        $('#departamentoEdit').val(result.idDepartamento);
+        $('#municipioEdit').val(result.idMunicipio);
+        $('#limiteGanadoresEdit').val(result.limiteGanadores);
+        $('#PresupuestoEdit').val(result.valor);
+
+      })
+
+      $('#btnActualizarPresupuesto').show();
+
+    break
+  }
+}
+
+const updateCampaña = ( opc) => {
+
+  let id;
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  const idEtapa = $('#idEtapa').val();
+
+  switch (opc) {
+
+    case 1://Parametros Update
+      
+      id = $('#idParametro').val();
+
+      var raw = JSON.stringify({
+        "limiteParticipacion": $('#limiteParticipacionEdit').val(),
+        "idTransaccion": $('#TransaccionesEdit option:selected').val(),
+        "tipoTransaccion": $('#TipoTransaccionEdit option:selected').val(),
+        "ValorMinimo": $('#vMinimoEdit').val(),
+        "ValorMaximo": $('#vMaximoEdit').val(),
+        "valorAnterior": $('#vAnteriorEdit').val()
+      });
+
+      var requestOptions = {
+        method: 'PUT',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+      };
+
+      fetch(`${url}parametros/update/${id}`, requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                if(result.code == "ok"){
+                    $('#parametrosTable').html(null);
+                    getParametros(idEtapa);
+                    Alert(result.message, 'success')
+                } else{
+                   Alert(result.message, 'error');
+                }
+            })
+            .catch(error => {Alert(error, 'error')
+            });
+
+      $('#limiteParticipacionEdit').val("")
+      $('#TransaccionesEdit').val(0)
+      $('#TipoTransaccionEdit').val(0)
+      $('#vMinimoEdit').val("")
+      $('#vMaximoEdit').val("")
+      $('#vAnteriorEdit').val("")
+      $('#btnActualizarParametros').hide();
+
+    break
+
+    case 2: //Preemio Update
+
+      id = $('#idPremio').val();
+
+      var raw = JSON.stringify({
+        "valor": $('#valorPEdit').val(),
+        "idPremio": $('#PremiosEdit option:selected').val(),
+      });
+
+      var requestOptions = {
+        method: 'PUT',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+      };
+
+      fetch(`${url}premios/update/${id}`, requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                if(result.code == "ok"){
+                    $('#PremiosTable').html(null);
+                    getPremiosEtapa(idEtapa);
+                    Alert(result.message, 'success')
+                } else{
+                   Alert(result.message, 'error');
+                }
+            })
+            .catch(error => {Alert(error, 'error')
+            });
+
+      $('#valorPEdit').val("");
+      $('#PremiosEdit').val(0);
+      $('#btnActualizarPremios').hide();
+    break
+
+    case 3: //Presupuesto Update
+
+      id = $('#idPresupuesto').val();
+      
+      var raw = JSON.stringify({
+        "idDepartamento": $('#departamentoEdit option:selected').val(),
+        "idMunicipio": $('#municipioEdit option:selected').val(),
+        "limiteGanadores": $('#limiteGanadoresEdit').val(),
+        "valor": $('#PresupuestoEdit').val()
+      });
+
+      var requestOptions = {
+        method: 'PUT',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+      };
+
+      fetch(`${url}presupuesto/update/${id}`, requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                if(result.code == "ok"){
+                    $('#PresupuestoTable').html(null);
+                    getPresupuesto(idEtapa);
+                    Alert(result.message, 'success')
+                } else{
+                   Alert(result.message, 'error');
+                }
+            })
+            .catch(error => {Alert(error, 'error')
+            });
+
+      $('#departamentoEdit').val(0)
+      $('#municipioEdit').val(0)
+      $('#limiteGanadoresEdit').val("")
+      $('#PresupuestoEdit').val("")
+      $('#btnActualizarPresupuesto').hide();
+
+    break
+
+  }
+
+
+}
+
+$('#formEditEtapas').submit(function () {
+
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  const id = $('#idEtapa').val();
+  const idCamp = $('#id').val();
+
+  var raw = JSON.stringify({
+    "nombre": $('#nombreEtapaEdith').val(),
+    "descripcion": $('#descEtapaEdith').val(),
+    "orden": $('#ordenEtapaEdith').val(),
+    "tipoParticipacion": $('#TipoTransaccionEdith option:selected').val()
+  });
+
+  var requestOptions = {
+    method: 'PUT',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  };
+
+  fetch(`${url}etapa/update/${id}`, requestOptions)
+            .then(response => response.json())
+            .then(result => {
+
+                if(result.code == "ok"){
+
+                    $('#PreviewEtapsEdit').html(null);
+                    getEtapas(idCamp);
+                    $('#modalEditEtapas').modal('toggle');
+                    Alert(result.message, 'success');
+                } else {
+                    
+                    Alert(result.message, 'error')
+                }
+            })
+            .catch(error => {Alert(error.errors, 'error')});
+  return false;
+
+})
+
+$('#formEdit').submit(function () {
+
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  const idCamp = $('#id').val();
+  console.log(idCamp)
+
+  var raw = JSON.stringify({
+    "fechaRegistro": $('#fechaRegistroEdith').val(),
+    "fechaInicio": $('#fechaInicioEdith').val(),
+    "fechaFin": $('#fechaFinEdith').val(),
+    "nombre": $('#nombreEdith').val(),
+    "descripcion": $('#descripcionCamaniaEdith').val(),
+    "edadInicial": $('#edadIniEdith').val(),
+    "edadFinal": $('#edadFiniEdith').val(),
+    "sexo": $('#sexoEdith option:selected').val(),
+    "tipoUsuario": $('#tipoUsuarioEdith option:selected').val(),
+    "tituloNotificacion": $('#tituloNotificacionEdith').val(),
+    "descripcionNotificacion": $('#descripcionNotificacionEdith').val(),
+    "imgPush": "",
+    "imgAkisi": "",
+    "maximoParticipaciones": $('#limiteParticipacionEdith').val()
+  });
+
+  var requestOptions = {
+    method: 'PUT',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  };
+
+  fetch(`${url}Campania/${idCamp}`, requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                if(result.code == "ok"){
+                    getAllCampanias();
+                    $('#modalEdit').modal('toggle');
+                    Alert(result.message, 'success');
+                } else {
+                    
+                    Alert(result.message, 'error')
+                }
+            })
+            .catch(error => {Alert(error.errors, 'error')});
+  return false;
+
+})
+
+const pausarActualizarCampania = (id, type) => {
+
+  var requestOptions = {
+    method: 'PUT',
+    redirect: 'follow'
+  };
+
+  fetch(`${url}Campania/${type == 1 ? 'activar' : 'pausar'}/${id}`, requestOptions)
+  .then(response => response.json())
+  .then(result => {
+    if (result.code == "ok") {
+      getAllCampanias();
+      Alert(result.message, 'success')
+    } else {
+      Alert(result.message, 'error')
+    }
+  })
+  .catch(error => {
+    console.log(error)
+    Alert(error, 'error')
+  });
+
 }
 
 
