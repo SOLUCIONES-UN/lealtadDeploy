@@ -64,7 +64,7 @@
         <ul class="nav navbar-nav">
           <li class="nav-item">
             <a class="nav-link menu-toggle" href="javascript:void(0);">
-              <b>Administración de Transacciones</b>
+              <b>Administración de Menus</b>
             </a>
           </li>
         </ul>
@@ -258,12 +258,12 @@
         <li class=" navigation-header"><span data-i18n="Apps &amp; Pages">Administración</span><i
             data-feather="more-horizontal"></i>
         </li>
-        <li class="nav-item">
+        <li class="nav-item active">
           <a class="d-flex align-items-center" href="categorias.html">
             <i data-feather="award"></i><span class="menu-title text-truncate"
               data-i18n="categorias">Categorias</span></a>
         </li>
-        <li class="nav-item active">
+        <li class="nav-item">
           <a class="d-flex align-items-center" href="transacciones.html">
             <i data-feather="dollar-sign"></i><span class="menu-title text-truncate"
               data-i18n="Transacciones">Transacciones</span>
@@ -271,7 +271,8 @@
         </li>
         <li class="nav-item">
           <a class="d-flex align-items-center" href="columnas.html">
-            <i data-feather="database"></i><span class="menu-title text-truncate" data-i18n="Columnas">Columnas</span>
+            <i data-feather="database"></i><span class="menu-title text-truncate" 
+            data-i18n="Columnas">Columnas</span>
           </a>
         </li>
         <li class="nav-item">
@@ -282,7 +283,8 @@
         </li>
         <li class="nav-item">
           <a class="d-flex align-items-center" href="municipios.html">
-            <i data-feather="database"></i><span class="menu-title text-truncate" data-i18n="Municipios">Municipios</span>
+            <i data-feather="database"></i><span class="menu-title text-truncate" 
+            data-i18n="Municipios">Municipios</span>
           </a>
         </li>
         <li class="nav-item">
@@ -350,9 +352,7 @@
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>Nombre</th>
-                    <th>Puntos</th>
-                    <th>Action</th>
+                    <th>Descripcion</th>
                   </tr>
                 </thead>
               </table>
@@ -363,38 +363,22 @@
       </div>
     </div>
   </div>
+
   <!-- modal de creacion or Update -->
   <div class="modal modal-slide-in new-user-modal fade" id="modalNew">
     <div class="modal-dialog">
       <form id="formNew" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Agregar Nueva Transacción</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Agregar Nuevo Menu</h5>
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
-            <label class="form-label" for="nombre">Nombre</label>
-            <input type="text" class="form-control " id="nombre" placeholder="Nombre de la Transaccion" name="nombre"
-              required />
+            <label class="form-label" for="basic-icon-default-fullname">Descripcion</label>
+            <input type="text" class="form-control dt-full-name" id="nombre" placeholder="Nombre del menu"
+              name="nombre" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
           </div>
-          <div class="form-group">
-            <label class="form-label" for="botton">Boton App</label>
-            <input type="number" class="form-control " id="botton" placeholder="# de botton" name="botton" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="descripcion">Descripcion</label>
-            <textarea type="text" class="form-control " id="descripcion" placeholder="Descripcion de La Transaccion"
-              name="descripcion" required rows="3"></textarea>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="columna">Columna</label>
-            <select type="text" class="form-control" id="columna" name="columna" required></select>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="puntos">Puntos</label>
-            <input type="number" class="form-control " id="puntos" placeholder="# de puntos" name="puntos" required />
-          </div>
-          <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
+          <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar</button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
         </div>
       </form>
@@ -406,35 +390,16 @@
       <form id="formEdit" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Actualizar La Transacción</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Actualizar el Menu</h5>
         </div>
         <div class="modal-body flex-grow-1">
-          <input type="hidden" id="id">
           <div class="form-group">
-            <label class="form-label" for="nombreEdit">Nombre</label>
-            <input type="text" class="form-control " id="nombreEdit" placeholder="Nombre de la Transaccion"
-              name="nombreEdit" required />
+            <input id="id" type="hidden">
+            <label class="form-label" for="basic-icon-default-fullname">Descripcion</label>
+            <input type="text" class="form-control dt-full-name" id="nombreEdit" placeholder="Descripcion del menu"
+              name="nombreEdit" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
           </div>
-          <div class="form-group">
-            <label class="form-label" for="bottonEdit">Boton App</label>
-            <input type="number" class="form-control " id="bottonEdit" placeholder="# de botton" name="bottonEdit"
-              required />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="descripcionEdit">Descripcion</label>
-            <textarea type="text" class="form-control" id="descripcionEdit" placeholder="Descripcion de La Transaccion"
-              name="descripcion" required rows="3"></textarea>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="columnaEdit">Columna</label>
-            <select type="text" class="form-control" id="columnaEdit" name="columna" required></select>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="puntosEdit">Puntos</label>
-            <input type="number" class="form-control " id="puntosEdit" placeholder="# de puntos" name="puntos"
-              required />
-          </div>
-          <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
+          <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar</button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
         </div>
       </form>
@@ -446,14 +411,14 @@
       <form id="formDelete" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Inhabilitar La Categoria</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Inhabilitar un Menu</h5>
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
             <input id="idDelete" type="hidden">
-            <p>¿Esta seguro que desea <b>Inhabilitar esta Categoria?</b></p>
+            <p>¿Esta seguro que desea <b>¿esta seguro que desea inhabilitar este menu?</b></p>
           </div>
-          <button id="BtnDelete" type="button" class="btn btn-danger mr-1 data-submit">Confirmar </button>
+          <button id="BtnDelete" type="button" class="btn btn-danger mr-1 data-submit">Confirmar</button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
         </div>
       </form>
@@ -493,7 +458,7 @@
   <!-- END: Theme JS-->
 
   <!-- BEGIN: Page JS-->
-  <script src="../js/transaccion.js"></script>
+  <script src="../js/menu.js"></script>
   <!-- END: Page JS-->
 
   <script>
