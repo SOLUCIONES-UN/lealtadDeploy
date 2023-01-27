@@ -76,12 +76,27 @@ span{
 
 }
 
-.permisos-content{
+.permisos-content-right{
 
 	box-shadow: 0 0 15px rgba(51, 51, 51, 0.37);
 	width: 35rem;
 	height: 5rem;
+	min-height: 150px;
+	margin-right: 71px;
+}
 
-	padding-left: 2rem;
+.permisos-content-left{
+	box-shadow: 0 0 15px rgba(51, 51, 51, 0.37);
+	width: 35rem;
+	height: 5rem;
+
+	min-height: 150px;
+
+	margin-left: 67px;
+}
+
+.content-btns{
+	display: flex;
+	flex-wrap: wrap;
 }
 
