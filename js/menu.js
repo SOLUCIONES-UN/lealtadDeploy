@@ -42,7 +42,7 @@ $(function () {
         const id = $('#id').val();
 
         var raw = JSON.stringify({
-            "descrpcion": $('#descripcionEdit').val()
+            "descripcion": $('#descripcionEdit').val()
         });
 
         var requestOptions = {
@@ -63,7 +63,6 @@ $(function () {
                 } else {
                     Alert(result.message, 'error')
                 }
-
             })
             .catch(error => { Alert(error.errors, 'error') });
         return false;
@@ -173,8 +172,6 @@ const getMenus = () => {
 const limpiarForm = () => {
     $('#formNew').trigger("reset");
 }
-
-
 const Alert = function (message, status) // si se proceso correctamente la solicitud
 {
     toastr[`${status}`](message, `${status}`, {
