@@ -3,7 +3,7 @@
 <!-- BEGIN: Head-->
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimal-ui">
   <meta name="description"
@@ -44,10 +44,6 @@
   <!-- END: Custom CSS-->
 
 </head>
-<!-- END: Head-->
-
-<!-- BEGIN: Body-->
-
 <body class="vertical-layout vertical-menu-modern  navbar-floating footer-static  " data-open="click"
   data-menu="vertical-menu-modern" data-col="">
   <nav
@@ -64,7 +60,7 @@
         <ul class="nav navbar-nav">
           <li class="nav-item">
             <a class="nav-link menu-toggle" href="javascript:void(0);">
-              <b>Administración de Roles</b>
+              <b>Asignacion De Permisos</b>
             </a>
           </li>
         </ul>
@@ -300,7 +296,7 @@
         <li class=" navigation-header"><span data-i18n="Apps &amp; Pages">Seguridad</span><i
             data-feather="more-horizontal"></i>
         </li>
-        <li class="nav-item active">
+        <li class="nav-item">
           <a class="d-flex align-items-center" href="rols.html">
             <i data-feather="sliders"></i>
             <span class="menu-title text-truncate" data-i18n="Roles">Roles</span>
@@ -311,9 +307,10 @@
             <i data-feather="users"></i><span class="menu-title text-truncate" data-i18n="Usuarios">Usuarios</span>
           </a>
         </li>
-        <li class="nav-item">
+        
+        <li class="nav-item active">
           <a class="d-flex align-items-center" href="permisos.html">
-            <i data-feather="users"></i><span class="menu-title text-truncate" data-i18n="Usuarios">Permisos</span>
+            <i data-feather="users"></i><span class="menu-title text-truncate" data-i18n="Permisos">Permisos</span>
           </a>
         </li>
         <li class="navigation-header"><span data-i18n="Apps &amp; Pages">Configuración</span><i
@@ -342,20 +339,87 @@
       <div class="content-header row">
       </div>
       <div class="content-body">
+        
         <section class="invoice-list-wrapper">
-          <div class="card">
-            <div class="card-datatable table-responsive">
-              <table class="datatables-basic table" id="tableData">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Descripcion</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-              </table>
+
+            <div class="card">
+              
+              <form id="formNew" class="add-new-user modal-content pt-0" autocomplete="off">
+                
+                  <div class="row d-flex justify-content-center pt-5">
+                    <div class="form-group col-md-4">
+                      <label class="form-label" for="Rols">Rols</label>
+                      <select type="text" class="form-control" id="Rols" name="Rols" required></select>
+                    </div>
+
+                    <div class="form-group col-md-4">
+                      <label class="form-label" for="menu">Menus</label>
+                      <select type="text" class="form-control" id="menu" name="menu" required></select>
+                    </div>
+
+                  </div>
+
+                  <div class="container row pt-5 d-flex justify-content-around align-items-center">
+
+                      <div class="form-group">
+
+                        <div class="permisos-title d-flex align-items-center justify-content-center"><h5>Permisos No Asignados</h5></div>
+                        
+
+                      </div>
+
+                      <div class="form-group" hidden>
+
+                        <button class="btn btn-primary btn-next">
+                          <span class="align-middle d-sm-inline-block d-none">Agregar</span>
+                          <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                        </button>
+                        
+
+                      </div>
+
+                      <div class="form-group">
+
+                        <div class="permisos-title d-flex align-items-center justify-content-center"><h5>Permisos Asignados</h5></div>
+                        
+
+                      </div>
+
+                  </div>
+
+                  <div class="container row d-flex justify-content-around align-items-center">
+
+                    <div class="form-group">
+
+                      <div class="permisos-content d-flex align-items-center justify-content-center">
+                        
+                      </div> 
+
+                    </div>
+
+                    <div class="form-group">
+
+                      <button class="btn btn-primary btn-next">
+                        <span class="align-middle d-sm-inline-block d-none">Agregar</span>
+                        <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                      </button>
+                      
+
+                    </div>
+
+                    <div class="form-group">
+                      <div class=" d-flex align-items-center justify-content-center">
+                        
+                      </div>
+                    </div>
+
+                    
+
+                  </div>
+              </form>
+              
             </div>
-          </div>
+
         </section>
 
       </div>
@@ -367,13 +431,13 @@
       <form id="formNew" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Agregar Nuevo Rol</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Agregar Nuevo Departamento</h5>
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
-            <label class="form-label" for="descripcion">Descripcion</label>
-            <input type="text" class="form-control " id="descripcion" placeholder="Descripcion del rol"
-              name="descripcion" required />
+            <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
+            <input type="text" class="form-control dt-full-name" id="nombre" placeholder="Nombre del departamento"
+              name="nombre" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
           </div>
           <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
@@ -387,14 +451,14 @@
       <form id="formEdit" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Actualizacion del Rol</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Actualizar El Departamento</h5>
         </div>
         <div class="modal-body flex-grow-1">
-          <input type="hidden" id="id">
           <div class="form-group">
-            <label class="form-label" for="descripcionEdit">Descripcion</label>
-            <input type="text" class="form-control " id="descripcionEdit" placeholder="Descripcion del rol"
-              name="descripcionEdit" required />
+            <input id="id" type="hidden">
+            <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
+            <input type="text" class="form-control dt-full-name" id="nombreEdit" placeholder="Nombre del departamento"
+              name="nombreEdit" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
           </div>
           <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
@@ -408,12 +472,12 @@
       <form id="formDelete" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Inhabilitar el Rol</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Inhabilitar el Departamento</h5>
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
             <input id="idDelete" type="hidden">
-            <p>¿Esta seguro que desea <b>Inhabilitar este Rol?</b></p>
+            <p>¿Esta seguro que desea <b>Inhabilitar este Departamento?</b></p>
           </div>
           <button id="BtnDelete" type="button" class="btn btn-danger mr-1 data-submit">Confirmar </button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
@@ -455,7 +519,7 @@
   <!-- END: Theme JS-->
 
   <!-- BEGIN: Page JS-->
-  <script src="../js/rol.js"></script>
+  <script src="../js/departamento.js"></script>
   <!-- END: Page JS-->
 
   <script>
@@ -467,5 +531,4 @@
   </script>
 </body>
 <!-- END: Body-->
-
 </html>
