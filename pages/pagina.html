@@ -64,7 +64,7 @@
         <ul class="nav navbar-nav">
           <li class="nav-item">
             <a class="nav-link menu-toggle" href="javascript:void(0);">
-              <b>Administración de Roles</b>
+              <b>Administración de Páginas</b>
             </a>
           </li>
         </ul>
@@ -271,7 +271,8 @@
         </li>
         <li class="nav-item">
           <a class="d-flex align-items-center" href="columnas.html">
-            <i data-feather="database"></i><span class="menu-title text-truncate" data-i18n="Columnas">Columnas</span>
+            <i data-feather="database"></i><span class="menu-title text-truncate" 
+            data-i18n="Columnas">Columnas</span>
           </a>
         </li>
         <li class="nav-item">
@@ -282,7 +283,8 @@
         </li>
         <li class="nav-item">
           <a class="d-flex align-items-center" href="municipios.html">
-            <i data-feather="database"></i><span class="menu-title text-truncate" data-i18n="Municipios">Municipios</span>
+            <i data-feather="database"></i><span class="menu-title text-truncate" 
+            data-i18n="Municipios">Municipios</span>
           </a>
         </li>
         <li class="nav-item">
@@ -304,15 +306,15 @@
           </a>
         </li>
         <li class="nav-item active">
-          <a class="d-flex align-items-center" href="pagina.html">
-            <i data-feather="star"></i><span class="menu-title text-truncate" 
-            data-i18n="menus">Paginas</span>
-          </a>
-        </li>
+            <a class="d-flex align-items-center" href="pagina.html">
+              <i data-feather="star"></i><span class="menu-title text-truncate" 
+              data-i18n="menus">Paginas</span>
+            </a>
+          </li>
         <li class=" navigation-header"><span data-i18n="Apps &amp; Pages">Seguridad</span><i
             data-feather="more-horizontal"></i>
         </li>
-        <li class="nav-item active">
+        <li class="nav-item">
           <a class="d-flex align-items-center" href="rols.html">
             <i data-feather="sliders"></i>
             <span class="menu-title text-truncate" data-i18n="Roles">Roles</span>
@@ -357,7 +359,9 @@
                   <tr>
                     <th>#</th>
                     <th>Descripcion</th>
-                    <th>Action</th>
+                    <th>No. Menu</th>
+                    <th>Path</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
               </table>
@@ -368,21 +372,32 @@
       </div>
     </div>
   </div>
+
   <!-- modal de creacion or Update -->
   <div class="modal modal-slide-in new-user-modal fade" id="modalNew">
     <div class="modal-dialog">
       <form id="formNew" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Agregar Nuevo Rol</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Agregar Nueva Pagina</h5>
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
-            <label class="form-label" for="descripcion">Descripcion</label>
-            <input type="text" class="form-control " id="descripcion" placeholder="Descripcion del rol"
-              name="descripcion" required />
+            <label class="form-label" for="basic-icon-default-fullname">Descripcion</label>
+            <input type="text" class="form-control dt-full-name" id="descripcion" placeholder="Descripcion de la pagina"
+              name="descripcion" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
           </div>
-          <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
+          <div class="form-group">
+            <label class="form-label" for="basic-icon-default-fullname">idMenu</label>
+            <input type="text" class="form-control dt-full-name" id="idmenu" placeholder="Número de Menu"
+              name="idmenu" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="basic-icon-default-fullname">Path</label>
+            <input type="text" class="form-control dt-full-name" id="path" placeholder="path de la pagina"
+              name="path" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
+          </div>
+          <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar</button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
         </div>
       </form>
@@ -394,16 +409,28 @@
       <form id="formEdit" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Actualizacion del Rol</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Actualizar la pagina</h5>
         </div>
         <div class="modal-body flex-grow-1">
-          <input type="hidden" id="id">
           <div class="form-group">
-            <label class="form-label" for="descripcionEdit">Descripcion</label>
-            <input type="text" class="form-control " id="descripcionEdit" placeholder="Descripcion del rol"
-              name="descripcionEdit" required />
+            <input id="id" type="hidden">
+            <label class="form-label" for="basic-icon-default-fullname">Descripcion</label>
+            <input type="text" class="form-control dt-full-name" id="descripcionEdit" placeholder="Descripcion de la pagina"
+              name="descripcionEdit" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
           </div>
-          <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
+          <div class="form-group">
+            <input id="id" type="hidden">
+            <label class="form-label" for="basic-icon-default-fullname">idMenu</label>
+            <input type="text" class="form-control dt-full-name" id="idMenuEdit" placeholder="edicion de la pagina"
+              name="idMenuEdit" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
+          </div>
+          <div class="form-group">
+            <input id="id" type="hidden">
+            <label class="form-label" for="basic-icon-default-fullname">Path</label>
+            <input type="text" class="form-control dt-full-name" id="PathEdit" placeholder="edicion del path la pagina"
+              name="PathEdit" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
+          </div>
+          <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar</button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
         </div>
       </form>
@@ -415,14 +442,14 @@
       <form id="formDelete" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Inhabilitar el Rol</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Inhabilitar página</h5>
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
             <input id="idDelete" type="hidden">
-            <p>¿Esta seguro que desea <b>Inhabilitar este Rol?</b></p>
+            <p>¿Esta seguro que desea <b>¿esta seguro que desea inhabilitar esta página?</b></p>
           </div>
-          <button id="BtnDelete" type="button" class="btn btn-danger mr-1 data-submit">Confirmar </button>
+          <button id="BtnDelete" type="button" class="btn btn-danger mr-1 data-submit">Confirmar</button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
         </div>
       </form>
@@ -462,7 +489,7 @@
   <!-- END: Theme JS-->
 
   <!-- BEGIN: Page JS-->
-  <script src="../js/rol.js"></script>
+  <script src="../js/pagina.js"></script>
   <!-- END: Page JS-->
 
   <script>

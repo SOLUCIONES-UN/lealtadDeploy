@@ -1,7 +1,7 @@
 const url = 'http://localhost:3000/'
 
 $(function () {
-    let tabla = getMenus();
+    let tabla = getPaginas();
 
     //evento submit del formulario
     $('#formNew').submit(function () {
@@ -9,7 +9,9 @@ $(function () {
         myHeaders.append("Content-Type", "application/json");
 
         var raw = JSON.stringify({
-            "descripcion": $('#descripcion').val()
+            "descripcion": $('#descripcion').val(),
+            "idMenu": $('#idMenu').val(),
+            "path": $('#path').val()
         });
 
         var requestOptions = {
@@ -19,7 +21,7 @@ $(function () {
             redirect: 'follow'
         };
 
-        fetch(`${url}Menu`, requestOptions)
+        fetch(`${url}Pagina`, requestOptions)
             .then(response => response.json())
             .then(result => {
                 if (result.code == "ok") {
@@ -35,14 +37,16 @@ $(function () {
         return false;
     });
 
-//eventos de edicion para un menu
+    //eventos de edicion para un menu
     $('#formEdit').submit(function () {
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         const id = $('#id').val();
 
         var raw = JSON.stringify({
-            "descripcion": $('#descripcionEdit').val()
+            "descripcion": $('#descripcion').val(),
+            "idMenu": $('#idMenu').val(),
+            "path": $('#path').val()
         });
 
         var requestOptions = {
@@ -52,7 +56,7 @@ $(function () {
             redirect: 'follow'
         };
 
-        fetch(`${url}Menu/${id}`, requestOptions)
+        fetch(`${url}Pagina/${id}`, requestOptions)
             .then(response => response.json())
             .then(result => {
                 if (result.code == "ok") {
@@ -68,7 +72,7 @@ $(function () {
         return false;
     });
 
-//eventos para la inhabilitacion de un menu
+    //eventos para la inhabilitacion de un menu
     $('#BtnDelete').click(function () {
 
         var myHeaders = new Headers();
@@ -82,7 +86,7 @@ $(function () {
             redirect: 'follow'
         };
 
-        fetch(`${url}Menu/${id}`, requestOptions)
+        fetch(`${url}Pagina/${id}`, requestOptions)
             .then(response => response.json())
             .then(result => {
                 if (result.code == "ok") {
@@ -99,12 +103,11 @@ $(function () {
     })
 });
 
-
 //obtiene la lista de menus
-const getMenus = () => {
+const getPaginas = () => {
     return $('#tableData').dataTable({
         ajax: {
-            url: `${url}Menu`,
+            url: `${url}Pagina`,
             type: "GET",
             datatype: "json",
             dataSrc: ""
@@ -112,6 +115,8 @@ const getMenus = () => {
         columns: [
             { data: "id" },
             { data: "descripcion" },
+            { data: "idMenu" },
+            { data: "path" },
             {
                 data: "id", render: function (data) {
                     return `
@@ -168,7 +173,6 @@ const getMenus = () => {
     });
 }
 
-
 const limpiarForm = () => {
     $('#formNew').trigger("reset");
 }
@@ -182,7 +186,6 @@ const Alert = function (message, status) // si se proceso correctamente la solic
     });
 }
 
-
 const OpenEdit = (id) => {
     var requestOptions = {
         method: 'GET',
@@ -195,6 +198,8 @@ const OpenEdit = (id) => {
             console.log(result)
             $('#id').val(id);
             $('#descripcionEdit').val(result.descripcion);
+            $('#idMenuEdit').val(result.idMenu);
+            $('#PathEdit').val(result.path);
             $('#modalEdit').modal('toggle');
         })
         .catch(error => console.log('error', error));
