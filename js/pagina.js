@@ -192,7 +192,7 @@ const OpenEdit = (id) => {
         redirect: 'follow'
     };
 
-    fetch(`${url}Menu/${id}`, requestOptions)
+    fetch(`${url}Pagina/${id}`, requestOptions)
         .then(response => response.json())
         .then(result => {
             console.log(result)
@@ -203,9 +203,7 @@ const OpenEdit = (id) => {
             $('#modalEdit').modal('toggle');
         })
         .catch(error => console.log('error', error));
-
 }
-
 
 const OpenDelete = (id) => {
     $('#idDelete').val(id);
