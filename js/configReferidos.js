@@ -21,6 +21,25 @@ $(function (){
     $('#swPantalla').change(function () {
         chechPantalla()
     })
+
+    //guardar texto
+    $('#btnFacebook').click(function () {
+        alert($(textFacebook).val())
+    })
+    $('#btnInstagram').click(function () {
+        alert($(textInstagram).val())
+    })
+    $('#btnWhatsapp').click(function () {
+        alert($(textWhatsapp).val())
+    })
+    $('#btnMensaje').click(function () {
+        alert($(textMensaje).val())
+    })
+    $('#btnPantalla').click(function () {
+        alert($(textPantalla).val())
+    })
+
+
 });
 
 const chechFacebook = () => {
@@ -114,3 +133,8 @@ const chechPantalla = () => {
     }
 }
 
+
+
+const clickBtnFacbook = () => {
+    if($('#textFacebook').val('checked') ) {}
+}
