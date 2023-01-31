@@ -119,6 +119,7 @@ const getPaginas = () => {
             { data: "path" },
             {
                 data: "id", render: function (data) {
+                    console.log(data)
                     return `
               <div class="btn-group">
                 <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">

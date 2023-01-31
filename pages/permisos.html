@@ -17,6 +17,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500;1,600"
     rel="stylesheet">
 
+
   <!-- BEGIN: Vendor CSS-->
   <link rel="stylesheet" type="text/css" href="../app-assets/vendors/css/vendors.min.css">
   <link rel="stylesheet" type="text/css"
@@ -33,8 +34,6 @@
   <link rel="stylesheet" type="text/css" href="../app-assets/css/themes/bordered-layout.min.css">
   <link rel="stylesheet" type="text/css" href="../app-assets/css/themes/semi-dark-layout.min.css">
   <link rel="stylesheet" type="text/css" href="../app-assets/vendors/css/extensions/toastr.min.css">
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 
   <!-- BEGIN: Page CSS-->
   <link rel="stylesheet" type="text/css" href="../app-assets/css/core/menu/menu-types/vertical-menu.min.css">
@@ -340,15 +339,15 @@
     <div class="content-wrapper container-xxl p-0">
       <div class="content-header row">
       </div>
-      <div class="content-body">
+      <div class="content-body" >
         
         <section class="invoice-list-wrapper">
 
-            <div class="card">
+            <div class="card" >
               
-              <form id="formNew" class="add-new-user modal-content pt-0" autocomplete="off">
+              <form id="formNew" class="add-new-user modal-content pt-0" autocomplete="off" style="height: 760px;">
                 
-                  <div class="row d-flex justify-content-center pt-5">
+                  <div class="row d-flex justify-content-center pt-5 bg-primary bg-gradient container-select">
                     <div class="form-group col-md-4">
                       <label class="form-label" for="Rols">Rols</label>
                       <select type="text" class="form-control" id="Rols" name="Rols" required>
@@ -365,11 +364,11 @@
 
                   </div>
 
-                  <div class="container row pt-5 d-flex justify-content-around align-items-center">
+                  <div class="container row pt-5 d-flex justify-content-around align-items-center pl-3" style="font-size: 1.2rem;">
 
-                      <div class="form-group col-md-4 ">
+                      <div class="form-group col-md-5 ">
 
-                        <div class="permisos-title d-flex align-items-center justify-content-center"><h5>Permisos No Asignados</h5></div>
+                        <div class="permisos-title d-flex align-items-center justify-content-center title-izquierdo"><h5>Permisos No Asignados</h5></div>
                         
                         <div class="form-group ">
 
@@ -381,21 +380,21 @@
 
                       </div>
 
-                      <div class="form-group col-md-3">
+                      <div class="form-group col-md-1">
 
                         <div class="form-group content-btns d-flex flex-column align-items-center">
 
                           <div class="row pb-2">
-                            <button class="btn btn-primary btn-next">
-                              <span class="align-middle d-sm-inline-block d-none">Agregar</span>
+                            <button class="btn btn-primary btn-next" type="button" id="btnAdd">
+                              <span class="align-middle d-sm-inline-block d-none">AGREGAR</span>
                               <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
                             </button>
                           </div>
     
                           <div class="row">
-                            <button class="btn btn-danger btn-next">
+                            <button class="btn btn-danger btn-next"  type="button" id="btnDelete">
                               <i data-feather="arrow-left" class="align-middle ml-sm-25 ml-0"></i>
-                              <span class="align-middle d-sm-inline-block d-none">Eliminar</span>
+                              <span class="align-middle d-sm-inline-block d-none">ELIMINAR</span>
                             </button>
                           </div>
     
@@ -404,12 +403,12 @@
 
                       </div>
 
-                      <div class="form-group col-md-4">
+                      <div class="form-group col-md-5">
 
-                        <div class="permisos-title d-flex align-items-center justify-content-center"><h5>Permisos Asignados</h5></div>
+                        <div class="permisos-title d-flex align-items-center justify-content-center title-derecho"><h5>Permisos Asignados</h5></div>
                         
                         <div class="form-group">
-                          <div class="permisos-content-right">
+                          <div class="permisos-content-right" id="contenedor-derecho">
                             
                           </div>
                         </div>
