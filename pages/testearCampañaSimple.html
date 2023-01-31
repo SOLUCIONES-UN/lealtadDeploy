@@ -41,11 +41,20 @@
 
   <!-- BEGIN: Page CSS-->
   <link rel="stylesheet" type="text/css" href="../app-assets/css/core/menu/menu-types/vertical-menu.min.css">
-  <link rel="stylesheet" type="text/css" href="../app-assets/css/pages/app-invoice-list.min.css">
+  <link rel="stylesheet" type="text/css" href="../app-assets/vendors/css/extensions/nouislider.min.css">
   <!-- END: Page CSS-->
 
   <!-- BEGIN: Custom CSS-->
   <link rel="stylesheet" type="text/css" href="../../../assets/css/style.css">
+  <link rel="stylesheet" type="text/css" href="../app-assets/vendors/">
+  <link rel="stylesheet" type="text/css" href="../css/circleProgress.css">
+
+  <style>
+    .feather-35{
+      width: 35px;
+      height: 35px;
+    }
+  </style>
   <!-- END: Custom CSS-->
 
 </head>
@@ -348,7 +357,7 @@
       </div>
       <div class="content-body">
         <section class="invoice-list-wrapper">
-          <div class="card p-5" style="min-height: 680px;">
+          <div class="card p-1">
             <div class="row">
                 <div class="col-md-3">
                     <label>Campaña</label>
@@ -375,13 +384,9 @@
             <div class="row h-25 "  id="container-card">
               
             </div>
-            <div class="container-consult container pt-0 pl-3" style="padding-right: 80px;">
-                <ul class="list-group list-group-flush" id="PnResumen">
-
-                </ul>
-            </div>
-
-            
+          </div>
+          <div  id="PnResumen">
+           
           </div>
         </section>
 
@@ -419,6 +424,7 @@
   <script src="../app-assets/js/core/app-menu.min.js"></script>
   <script src="../app-assets/js/core/app.min.js"></script>
   <script src="../app-assets/js/scripts/customizer.min.js"></script>
+  <script src="../app-assets/vendors/js/extensions/nouislider.min.js"></script>
   <!-- END: Theme JS-->
   
   <!-- BEGIN BOOSTRAP-->
@@ -432,7 +438,7 @@
   <script>
     $(window).on('load', function () {
       if (feather) {
-        feather.replace({ width: 14, height: 14 });
+        feather.replace({ width: 25, height: 25 });
       }
     });
   </script>
