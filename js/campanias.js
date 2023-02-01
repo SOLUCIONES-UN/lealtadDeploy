@@ -3,9 +3,16 @@ let codigos = [];
 let premios = [];
 let etapas = [];
 let parametros = [];
+let participantes = [];
+let bloqueados = [];
 let arrayPresupuesto = [];
 let idData = 1;
 let index = 1;
+let indexB = 1;
+var bsStepper = document.querySelectorAll('.bs-stepper'),
+select = $('.select2'),
+    verticalWizard = document.querySelector('.vertical-wizard-example');
+
 var numConfigButtons = 4;
 const inputFile = document.getElementById('formFile');
 const inputFileBloqueados = document.getElementById('formFileBloqueados');
@@ -74,9 +81,13 @@ $(function () {
       "imgPush": "",
       "imgAkisi": "",
       "etapas": etapas,
+      "Participacion" : participantes,
+      "Bloqueados" : bloqueados,
       "maximoParticipaciones": $('#limiteParticipacion').val()
-    }
 
+      
+    }
+    console.log(data);
     saveData(data);
     $('#addConfig').html(null); 
     $('#addFormConfig').html(null);
@@ -163,9 +174,8 @@ $(function () {
 
 function loadMenu(isEtapa) {
 
-  var bsStepper = document.querySelectorAll('.bs-stepper'),
-    select = $('.select2'),
-    verticalWizard = document.querySelector('.vertical-wizard-example');
+ 
+    
 
     
 
@@ -237,6 +247,7 @@ function loadMenu(isEtapa) {
   }
 
   if(isEtapa){
+    verticalStepper.reset();
     verticalStepper.to(3)
   }
   
@@ -696,9 +707,9 @@ inputFile.addEventListener('change', function () {
   } else {
     readXlsxFile(inputFile.files[0]).then(function (data) {
 
-      data.map((row, index) => {
-        var tr = `<tr id="fila${index}">
-        <td >${index + 1}</td>
+      data.map((row, indexP) => {
+        var tr = `<tr id="fila${indexP}">
+        <td >${indexP + 1}</td>
         <td>${row[0]}</td>
         <td >
             <div class="btn-group">
@@ -706,7 +717,7 @@ inputFile.addEventListener('change', function () {
                   ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
               </a>
               <div class="dropdown-menu dropdown-menu-right">
-                  <a href="#" onclick="eliminarFila(${index})" id="delete" class="btn_delete dropdown-item">
+                  <a href="#" onclick="eliminarFila(${indexP})" id="delete" class="btn_delete dropdown-item">
                     ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
                   </a>
               </div>
@@ -715,11 +726,12 @@ inputFile.addEventListener('change', function () {
         </tr>`
 
         $('#detalleParticipantes').append(tr);
-        console.log($('#detalleParticipantes'))
+        participantes.push({numero: row[0], estado:1})
+        
 
       })
 
-
+      console.log(participantes)
 
     })
 
@@ -751,10 +763,10 @@ inputFileBloqueados.addEventListener('change', function () {
 
   } else {
     readXlsxFile(inputFileBloqueados.files[0]).then(function (data) {
-
+      
       data.map((row) => {
-        var tr = `<tr id="fila${index}">
-        <td>${index++}</td>
+        var tr = `<tr id="fila${indexB}">
+        <td>${indexB++}</td>
         <td>${row[0]}</td>
         <td>
             <div class="btn-group">
@@ -762,12 +774,12 @@ inputFileBloqueados.addEventListener('change', function () {
                   ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
               </a>
               <div class="dropdown-menu dropdown-menu-right">
-                  <a href="#" onclick="eliminarFila(${index})" class="btn_edit dropdown-item">
+                  <a href="#" onclick="eliminarFila(${indexB})" class="btn_edit dropdown-item">
                       ${feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' })} Actualizar
                   </a>
               
               <div class="dropdown-menu dropdown-menu-right">
-                  <a href="#" onclick="eliminarFila(${index})" class="btn_delete dropdown-item">
+                  <a href="#" onclick="eliminarFila(${indexB})" class="btn_delete dropdown-item">
                     ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
                   </a>
               </div>
@@ -776,8 +788,9 @@ inputFileBloqueados.addEventListener('change', function () {
         </td>
         </tr>`
 
-        console.log($('#detalleParticipantesBloqueados'))
         $('#detalleParticipantesBloqueados').append(tr);
+
+        bloqueados.push({numero: row[0], estado:1});
 
       })
 
@@ -790,7 +803,7 @@ function agregarUsuarioBloqueado() {
   let usuario = $('#numeroBloqueado').val();
 
   var tr = `<tr>
-  <td>${index++}</td>
+  <td>${indexB++}</td>
   <td>${usuario}</td>
   <td>
             <div class="btn-group">
@@ -799,7 +812,7 @@ function agregarUsuarioBloqueado() {
               </a>
               
               <div class="dropdown-menu dropdown-menu-right">
-                  <a href="#" onclick="eliminarFila(${index})" class="btn_delete dropdown-item">
+                  <a href="#" onclick="eliminarFila(${indexB})" class="btn_delete dropdown-item">
                     ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
                   </a>
               </div>
@@ -809,6 +822,9 @@ function agregarUsuarioBloqueado() {
 
   $('#detalleParticipantesBloqueados').append(tr);
   $('#numeroBloqueado').val("");
+
+  bloqueados.push({numero: parseInt(usuario), estado:1});
+  console.log(bloqueados);
 }
 
 const getAllCampanias = () => {
@@ -1014,19 +1030,28 @@ const Alert = function (message, status) // si se proceso correctamente la solic
     rtl: false
   });
 }
-const Limpiar = () => {
-  $('#descripcionCamania').val(null);
-  $('#nombre').val(null);
-  $('#tituloNotificacion').val(null);
-  $('#descripcionNotificacion').val(null);
-  $('#limiteParticipacion').val(null);
-  $('#fechaInicio').val(null);
-  $('#fechaFin').val(null);
-  $('#fechaRegistro').val(null);
-  $('#edadIni').val(null);
-  $('#sexo').val(0);
-  $('#tipoUsuario').val(0);
-  ChangePanel(1)
+const Limpiar = (isEdith) => {
+
+  if(isEdith){
+
+    $('#PreviewEtapsEdit').html(null);
+
+  } else {
+    $('#descripcionCamania').val(null);
+    $('#nombre').val(null);
+    $('#tituloNotificacion').val(null);
+    $('#descripcionNotificacion').val(null);
+    $('#limiteParticipacion').val(null);
+    $('#fechaInicio').val(null);
+    $('#fechaFin').val(null);
+    $('#fechaRegistro').val(null);
+    $('#edadIni').val(null);
+    $('#sexo').val(0);
+    $('#tipoUsuario').val(0);
+    ChangePanel(1)
+  }
+
+  
 }
 
 const getPremios = (id, isEdit=false) => {
@@ -1290,19 +1315,23 @@ const getPresupuesto = (idEtapa) => {
 
 }
 
+
+
 const getEtapas = (id) => {
     
   var requestOptions = {
     method: 'GET',
     redirect: 'follow'
   };
-
+  console.log("ID de la camapaña"+id)
   fetch(`${url}Campania/${id}`, requestOptions)
       .then(response => response.json())
       .then(result => {
-          result.etapas.forEach(element => {
+        
+          result.etapas.forEach((element,index) => {
+            console.log(index)
             var opcTableEtapas = `<tr>
-              <td>${element.id}</td>
+              <td>${index+1}</td>
               <td>${element.nombre}</td>
               <td>${element.descripcion}</td>
               <td>
@@ -1311,12 +1340,12 @@ const getEtapas = (id) => {
                       ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
                   </a>
                   <div class="dropdown-menu dropdown-menu-right">
-                      <a href="#" onclick="OpenEdit(${id}, ${element.id}, ${true})" class="borrar btn_edit dropdown-item">
+                      <a href="#" onclick="OpenEdit(${id}, ${index}, ${element.id} , ${true})" class="borrar btn_edit dropdown-item">
                           ${feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' })} Actualizar
                       </a>
                   
                   <div class="dropdown-menu dropdown-menu-right">
-                      <a href="#" onclick="OpenDelete(${element.id})" class="btn_delete dropdown-item">
+                      <a href="#" onclick="OpenDelete(${index})" class="btn_delete dropdown-item">
                         ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
                       </a>
                   </div>
@@ -1331,30 +1360,34 @@ const getEtapas = (id) => {
       .catch(error => console.log('error', error));
 }
 
-const OpenEdit = (id, idEtapa, isEtapa=false) => {
+const OpenEdit = (id,index, idEtapa, isEtapa=false) => {
+
+  
 
   if(isEtapa){
-    console.log("aca ira el formulario de etapas " + idEtapa)
+    console.log("aca ira el formulario de etapas " + id, idEtapa)
 
     var requestOptions = {
       method: 'GET',
       redirect: 'follow'
     };
-
+    console.log(id)
     fetch(`${url}Campania/${id}`, requestOptions)
     .then(response => response.json())
     .then(result => {
-
-      console.log(result.etapas[idEtapa-1])
-      $('#idEtapa').val(result.etapas[idEtapa-1].id)
-      $('#nombreEtapaEdith').val(result.etapas[idEtapa-1].nombre);
-      $('#ordenEtapaEdith').val(result.etapas[idEtapa-1].orden);
-      $('#descEtapaEdith').val(result.etapas[idEtapa-1].descripcion);
-      $('#TipoTransaccionEdith').val(result.etapas[idEtapa-1].tipoParticipacion);
+      console.log(result.index)
+      $('#idEtapa').val(result.etapas[index].id)
+      $('#nombreEtapaEdith').val(result.etapas[index].nombre);
+      $('#ordenEtapaEdith').val(result.etapas[index].orden);
+      $('#descEtapaEdith').val(result.etapas[index].descripcion);
+      $('#TipoTransaccionEdith').val(result.etapas[index].tipoParticipacion);
 
       getParametros(idEtapa);
       getPremiosEtapa(idEtapa);
       getPresupuesto(idEtapa);
+      getPremios(0, true);
+      getDepartamentos(0, true);
+      getMunicipios(0, true);
 
 
       $('#modalEditEtapas').modal('toggle');
@@ -1389,6 +1422,8 @@ const OpenEdit = (id, idEtapa, isEtapa=false) => {
             $('#sexoEdith').val(result.sexo);
   
             getEtapas(id);
+            getParticipantes(id);
+            getBloqueados(id);
 
             $('#modalEdit').modal('toggle');
         })
@@ -1479,6 +1514,7 @@ const cargarDatos = (id, opc) =>{
   switch (opc) {
     case 1:
 
+        $('#btnAgregarParametros').hide();
         getTransacciones(0, true);
 
         fetch(`${url}parametros/edith/${id}`, requestOptions)
@@ -1499,7 +1535,8 @@ const cargarDatos = (id, opc) =>{
 
     case 2: 
 
-    getPremios(0, true);
+    $('#btnAgregarPremios').hide();
+      getPremios(0, true);
 
       fetch(`${url}premios/edith/${id}`, requestOptions)
       .then(response => response.json())
@@ -1516,7 +1553,9 @@ const cargarDatos = (id, opc) =>{
     break
 
     case 3: 
-
+      
+      
+      $('#btnAgregarPresupuesto').hide();
       getDepartamentos(0, true);
       getMunicipios(0, true);
 
@@ -1537,6 +1576,8 @@ const cargarDatos = (id, opc) =>{
     break
   }
 }
+
+
 
 const updateCampaña = ( opc) => {
 
@@ -1589,6 +1630,7 @@ const updateCampaña = ( opc) => {
       $('#vMaximoEdit').val("")
       $('#vAnteriorEdit').val("")
       $('#btnActualizarParametros').hide();
+      $('#btnAgregarParametros').show();
 
     break
 
@@ -1625,6 +1667,7 @@ const updateCampaña = ( opc) => {
       $('#valorPEdit').val("");
       $('#PremiosEdit').val(0);
       $('#btnActualizarPremios').hide();
+      $('#btnAgregarPremios').show();
     break
 
     case 3: //Presupuesto Update
@@ -1664,6 +1707,7 @@ const updateCampaña = ( opc) => {
       $('#limiteGanadoresEdit').val("")
       $('#PresupuestoEdit').val("")
       $('#btnActualizarPresupuesto').hide();
+      $('#btnAgregarPresupuesto').show();
 
     break
 
@@ -1785,6 +1829,236 @@ const pausarActualizarCampania = (id, type) => {
   });
 
 }
+
+const getParticipantes = (idCampania) => {
+
+  var requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+
+  fetch(`${url}participantes/${idCampania}`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        
+          result.forEach((element,index) => {
+            var opcTableEtapas = `<tr>
+              <td>${index+1}</td>
+              <td>${element.numero}</td>
+              <td>
+                <div class="btn-group">
+                  <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
+                      ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right">
+                      <a href="#" onclick="" class="borrar btn_edit dropdown-item">
+                          ${feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' })} Actualizar
+                      </a>
+                  
+                  <div class="dropdown-menu dropdown-menu-right">
+                      <a href="#" onclick="OpenDelete(${index})" class="btn_delete dropdown-item">
+                        ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
+                      </a>
+                  </div>
+                  </div>
+                </div> 
+              </td>
+              </tr>`
+
+            $('#PreviewParticipantesEdit').append(opcTableEtapas); 
+          })
+      })
+      .catch(error => console.log('error', error));
+
+}
+
+const getBloqueados = (idCampania) => {
+
+  var requestOptions = {
+    method: 'GET',
+    redirect: 'follow'
+  };
+
+  fetch(`${url}Bloqueados/${idCampania}`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        
+          result.forEach((element,index) => {
+            var opcTableEtapas = `<tr>
+              <td>${index+1}</td>
+              <td>${element.numero}</td>
+              <td>
+                <div class="btn-group">
+                  <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
+                      ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right">
+                      <a href="#" onclick="" class="borrar btn_edit dropdown-item">
+                          ${feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' })} Actualizar
+                      </a>
+                  
+                  <div class="dropdown-menu dropdown-menu-right">
+                      <a href="#" onclick="OpenDelete(${index})" class="btn_delete dropdown-item">
+                        ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
+                      </a>
+                  </div>
+                  </div>
+                </div> 
+              </td>
+              </tr>`
+
+            $('#PreviewBloqueadosEdit').append(opcTableEtapas); 
+          })
+      })
+      .catch(error => console.log('error', error));
+
+}
+
+const limpiarTablas = () => {
+
+  $('#parametrosTable').html(null);
+  $('#PremiosTable').html(null);
+  $('#PresupuestoTable').html(null);
+
+}
+
+$('#btnAgregarParametros').on('click', function(){
+
+    
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    let idEtapa = $('#idEtapa').val();
+    console.log(id);
+
+    var raw = JSON.stringify({
+      "limiteParticipacion": $('#limiteParticipacionEdit').val(),
+      "idTransaccion": $('#TransaccionesEdit option:selected').val(),
+      "tipoTransaccion": $('#TipoTransaccionEdit option:selected').val(),
+      "ValorMinimo": $('#vMinimoEdit').val(),
+      "ValorMaximo": $('#vMaximoEdit').val(),
+      "valorAnterior": $('#vAnteriorEdit').val(),
+      "idEtapa": idEtapa
+    });
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
+
+    fetch(`${url}parametros`, requestOptions)
+          .then(response => response.json())
+          .then(result => {
+              if(result.code == "ok"){
+                  $('#parametrosTable').html(null);
+                  getParametros(idEtapa);
+                  Alert(result.message, 'success')
+              } else{
+                  Alert(result.message, 'error');
+              }
+          })
+          .catch(error => {Alert(error, 'error')
+          });
+
+    $('#limiteParticipacionEdit').val("")
+    $('#TransaccionesEdit').val(0)
+    $('#TipoTransaccionEdit').val(0)
+    $('#vMinimoEdit').val("")
+    $('#vMaximoEdit').val("")
+    $('#vAnteriorEdit').val("")
+    $('#btnActualizarParametros').hide();
+
+
+})
+
+$('#btnAgregarPremios').on('click', function(){
+
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  let idEtapa = $('#idEtapa').val();
+
+  var raw = JSON.stringify({
+    "valor": $('#valorPEdit').val(),
+    "idPremio": $('#PremiosEdit option:selected').val(),
+    "idEtapa": idEtapa
+  });
+
+  var requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  };
+
+  fetch(`${url}premios`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            if(result.code == "ok"){
+                $('#PremiosTable').html(null);
+                getPremiosEtapa(idEtapa);
+                Alert(result.message, 'success')
+            } else{
+               Alert(result.message, 'error');
+            }
+        })
+        .catch(error => {Alert(error, 'error')
+        });
+
+  $('#valorPEdit').val("");
+  $('#PremiosEdit').val(0);
+  $('#btnActualizarPremios').hide();
+  $('#btnAgregarPremios').show();
+
+})
+
+$('#btnAgregarPresupuesto').on('click', function(){
+
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  let idEtapa = $('#idEtapa').val();
+
+  var raw = JSON.stringify({
+    "idDepartamento": $('#departamentoEdit option:selected').val(),
+    "idMunicipio": $('#municipioEdit option:selected').val(),
+    "limiteGanadores": $('#limiteGanadoresEdit').val(),
+    "valor": $('#PresupuestoEdit').val(),
+    "idEtapa": idEtapa
+  });
+
+  var requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  };
+
+  fetch(`${url}presupuesto`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            if(result.code == "ok"){
+                $('#PresupuestoTable').html(null);
+                getPresupuesto(idEtapa);
+                Alert(result.message, 'success')
+            } else{
+               Alert(result.message, 'error');
+            }
+        })
+        .catch(error => {Alert(error, 'error')
+        });
+
+  $('#departamentoEdit').val(0)
+  $('#municipioEdit').val(0)
+  $('#limiteGanadoresEdit').val("")
+  $('#PresupuestoEdit').val("")
+  $('#btnActualizarPresupuesto').hide();
+  $('#btnAgregarPresupuesto').show();
+
+})
+
 
 
 /*const  removePremio = (index) => {

@@ -193,10 +193,18 @@ span{
 	border-radius: 5px;
 }
 
-.form-group .form-label{
+.title-permiso{
 	color: white;
 	font-size: 1.1rem;
 	font-weight: bold;
+}
+
+.title-participantes{
+
+	margin-bottom: 2px;
+	font-weight: bold;
+	
+
 }
 
 
