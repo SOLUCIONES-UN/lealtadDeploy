@@ -1,13 +1,11 @@
 const url = 'http://localhost:3000/'
 
 
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
 $(function () {
     getCampaniasActivas();
-
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new Tooltip(tooltipTriggerEl);
-    });
 
 
     $('#btnTestear').click(function () {
@@ -25,63 +23,8 @@ $(function () {
 
         fetch(`${url}Campania/TestearSimple`, requestOptions)
             .then(response => response.json())
-            .then(data => {
-                // const { result, RegistroValidacion, edadValidacion, sexoValidacion, etapasValidacion, tipoUsuarioValidacion, validacionParametros, validacionPresupuesto, premios, campania } = data;
-
-
-                // const porPresupuesto = (parseFloat(validacionPresupuesto.presupuestoUtilizado) * 100) / parseFloat(validacionPresupuesto.presupuesto);
-                // const porNewPresupuesto = (parseFloat(validacionPresupuesto.presupuestoNew) * 100) / parseFloat(validacionPresupuesto.presupuesto);
-
-                // const porLimite = (parseInt(validacionPresupuesto.cantParticipaciones) * 100) / parseInt(validacionPresupuesto.limiteGanadores);
-                // const porNewLimite = ((parseInt(validacionPresupuesto.cantParticipaciones) + 1) * 100) / parseInt(validacionPresupuesto.presupuesto);
-
-
-                // const porEtapas = ((parseInt(etapasValidacion.etapaActual)) * 100) / parseInt(etapasValidacion.etapasTotales);
-                // const porNewEtapas = ((parseInt(etapasValidacion.etapaActual) + 1) * 100) / parseInt(etapasValidacion.etapasTotales);
-
-                // var html = `
-                // <div class="container row">
-                //         <div class="info-camp  col-md-12">
-                //             <h5>${campania.nombre}</h5>
-                //             <p class='justify-text'> <h5>${campania.descripcion}</h5></p>
-                //         </div>
-
-                //         <div class="bar-info col-md-4">
-                //             <h5>Presupuesto Q. ${validacionPresupuesto.presupuesto.toFixed(2)} / Q. ${validacionPresupuesto.presupuestoNew.toFixed(2)} + ${premios[0].valor}</h5>
-                //             <div class="progress p-0" style="width: 100%; height: 15%">
-                //                 <div class="progress-bar" role="progressbar" style="width: ${porPresupuesto.toFixed(2)}%;"></div>
-                //                 <div class="progress-bar" role="progressbar" style="width: ${porNewPresupuesto.toFixed(2)}%; background-color: chartreuse;" aria-valuemax="+15"></div>
-                //             </div>
-                //         </div>
-
-                //         <div class="bar-info  col-md-4">
-                //             <h5>Limite Participantes ${validacionPresupuesto.limiteGanadores} /  ${validacionPresupuesto.cantParticipaciones} + 1</h5>
-                //             <div class="progress p-0" style="width: 90%; height: 15%">
-                //                 <div class="progress-bar" role="progressbar" style="width: ${porLimite}%;"></div>
-                //                 <div class="progress-bar" role="progressbar" style="width: ${porNewLimite}%; background-color:chartreuse;"></div>
-                //             </div>
-                //         </div>
-                //         <div class="bar-info  col-md-4">
-                //             <h5>Etapas ${etapasValidacion.etapasTotales} /  ${etapasValidacion.etapaActual}  + 1</h5>
-                //             <div class="progress p-0" style="width: 100%; height: 15%">
-                //                 <div class="progress-bar" role="progressbar" style="width: ${porEtapas}%;"></div>
-                //                 <div class="progress-bar" role="progressbar" style="width: ${porNewEtapas}%; background-color:chartreuse;"></div>
-                //             </div>
-                //         </div>
-                //         <div class="col-md-4">
-                //             <h5><i data-feather="user"></i> Usuario Bloqueado (<span class="text-sucess">NO, Permintido</span>)</b></h5>
-                //         </div>
-
-                // </div>`;
-
-
-                // if (result) {
-                //     html += ` <button class="btn btn-success" type="button" id="btnTestear">ENVIAR PREMIO</button></div>`
-                // }
-
-
-
-
+            .then(async data => {
+               
                 data.forEach((element, index) => {
 
 
@@ -157,8 +100,9 @@ $(function () {
 
                     cumplidas.forEach(item => {
                         html += `
-                                    <div class='col-md-4'>
-                                        <span class='text-success' data-bs-toggle="tooltip" data-bs-placement="bottom" title="${item.nombre}"><i class='feather-35' data-feather="${item.icono}"></i></span>
+                                    <div class='col-md-4 text-center'>
+                                        <span class='text-success' data-bs-toggle="tooltip" data-bs-html="true" title="${item.nombre}"><i class='feather-35' data-feather="${item.icono}"></i></span><br/>
+                                        <span class='text-success'>${item.nombre}</span>
                                     </div>`;
                     });
 
@@ -175,8 +119,9 @@ $(function () {
 
                     noCumplidas.forEach(item => {
                         html += `
-                                <div class='col-md-4'>
-                                    <span class='text-danger'><i class='feather-35' data-feather="${item.icono}"  data-bs-toggle="tooltip" data-bs-placement="bottom" title="${item.nombre}"></i></span>
+                                <div class='col-md-4 text-center'>
+                                    <span class='text-danger'><i class='feather-35' data-feather="${item.icono}"  data-bs-toggle="tooltip" data-bs-placement="bottom" title="${item.nombre}"></i></span><br/>
+                                    <span class='text-danger'>${item.nombre}</span>
                                 </div>`;
                     });
 
@@ -192,7 +137,7 @@ $(function () {
 
 
 
-
+               
 
                 if (feather) {
                     feather.replace({ width: 50, height: 50 });
