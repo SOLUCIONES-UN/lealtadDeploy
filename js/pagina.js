@@ -11,7 +11,8 @@ $(function () {
         var raw = JSON.stringify({
             "descripcion": $('#descripcion').val(),
             "idMenu": $('#idMenu').val(),
-            "path": $('#path').val()
+            "path": $('#path').val(),
+            "icono": $('#Icono').val()
         });
 
         var requestOptions = {
