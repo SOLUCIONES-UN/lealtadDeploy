@@ -185,7 +185,7 @@ const updateReferido = (id,descripcion) => {
         body: raw,
         redirect: 'follow'
     };
-
+    
     fetch("http://localhost:3000/ConfigReferidos/"+id, requestOptions)
         .then(response => response.json())
         .then(result => {
@@ -195,10 +195,7 @@ const updateReferido = (id,descripcion) => {
                 console.log('error', error)
             }
         })
-
-
-        .catch(error => console.log('error', error));
-
+        .catch(error => console.log('error', error))
 }
 
 const Alert = function (message, status) // si se proceso correctamente la solicitud
