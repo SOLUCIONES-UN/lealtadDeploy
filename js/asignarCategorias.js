@@ -1,34 +1,12 @@
 const url = 'http://localhost:3000/'
 
+
 $(function () {
-    getRols()
-    getMenus()
-    //getPaginas()
+    getCategorias();
 
 })
 
-
-const getRols = () =>{
-
-    var requestOptions = {
-        method: 'GET',
-        redirect: 'follow'
-      
-    };
-
-    fetch(`${url}Rol`, requestOptions)
-    .then(response => response.json())
-    .then(result => {
-      result.forEach(element => {
-        var opc = `<option value="${element.id}">${element.descripcion}</option>`;
-        $('#Rols').append(opc);
-      });
-    })
-    .catch(error => console.log('error', error));
-
-}
-
-const getMenus = () =>{
+const getCategorias = () =>{
 
     var requestOptions = {
         method: 'GET',
@@ -36,32 +14,29 @@ const getMenus = () =>{
       
     };
 
-    fetch(`${url}Menu`, requestOptions)
+    fetch(`${url}Categoria`, requestOptions)
     .then(response => response.json())
     .then(result => {
-        console.log(result)
       result.forEach(element => {
-        var opc = `<option value="${element.id}">${element.descripcion}</option>`;
-        $('#menu').append(opc);
+        var opc = `<option value="${element.id}">${element.nombre}</option>`;
+        $('#categorias').append(opc);
       });
     })
     .catch(error => console.log('error', error));
 
 }
 
-const obtenerPermisos = () => {
+const getTransaccionesAsignadas = () => {
 
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    $('#contenedor-izquierdo').html(null)
+    $('#contenedor-derecho').html(null)
 
-    const idMenu = $('#menu').val();
-    const idRol = $('#Rols').val();
+    const idCategoria = $('#categorias').val();
 
     var raw = JSON.stringify({
-        "idRol": idRol,
-        "idMenu": idMenu
+        "idCategoria": idCategoria
     });
 
     var requestOptions = {
@@ -69,49 +44,81 @@ const obtenerPermisos = () => {
         headers: myHeaders,
         body: raw,
         redirect: 'follow'
-      
     };
 
-    fetch(`${url}permisosUsuario/NoAsignados`, requestOptions)
+    fetch(`${url}asignarCategoria/Asignados`, requestOptions)
     .then(response => response.json())
     .then(result => {
       result.forEach(element => {
+        console.log(result)
         var opc = `<div class="form-check form-switch pl-2 pt-1">
             <input class="form-check-input permiso" type="checkbox" role="switch" id="checkpermisos${element.id}" value="${element.id}">
-            <label class="form-check-label label-no-Asignado" for="checkpermisos${element.id}" style="font-size: 1rem;">${element.descripcion}</label>
+            <label class="form-check-label label-Asignado" for="checkpermisos${element.id}" style="font-size: 1rem;">${element.transaccion.nombre}</label>
+            </div>`;
+        $('#contenedor-derecho').append(opc);
+      });
+    })
+    .catch(error => console.log('error', error));
+}
+
+const getTransaccionesNoAsignadas = () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    $('#contenedor-izquierdo').html(null)
+
+    const idCategoria = $('#categorias').val();
+
+    var raw = JSON.stringify({
+        "idCategoria": idCategoria
+    });
+
+    var requestOptions = {
+        method: 'PATCH',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+    };
+
+    fetch(`${url}asignarCategoria/NoAsignados`, requestOptions)
+    .then(response => response.json())
+    .then(result => {
+      result.forEach(element => {
+        console.log(result)
+        var opc = `<div class="form-check form-switch pl-2 pt-1">
+            <input class="form-check-input permiso" type="checkbox" role="switch" id="checkpermisos${element.id}" value="${element.id}">
+            <label class="form-check-label label-no-Asignado" for="checkpermisos${element.id}" style="font-size: 1rem;">${element.nombre}</label>
             </div>`;
         $('#contenedor-izquierdo').append(opc);
       });
     })
     .catch(error => console.log('error', error));
 
-    getAsignados()
-
+    getTransaccionesAsignadas();
 }
 
-$('#menu').on('change', function(){
+$('#categorias').on('change', function(){
 
-    const idMenu = $('#menu').val();
-    const idRol = $('#Rols').val();
-    console.log(idMenu, idRol)
+    const idCategoria = $('#categorias').val();
+    console.log('id categoria ' + idCategoria)
 
-    if( idMenu != null && idRol != null ){
-        obtenerPermisos()
+    if(idCategoria != null){
+        getTransaccionesNoAsignadas();
     }
+
+    
 })
 
+$('#btnAdd').click(function() {
 
-$('#btnAdd').click(function () {
-    var data  = [];
+    var data = [];
+
     $('.permiso:checked').each(function() {
-       data.push({ idPagina: $(this).val(), idRol : $('#Rols').val(), username: 'JEstivenA'})
+        data.push({idTransaccion: $(this).val(), idCategoria:$('#categorias').val()})
     });
-
 
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-
-    console.log(data)
 
     var raw = JSON.stringify({
         "data": data
@@ -124,11 +131,12 @@ $('#btnAdd').click(function () {
         redirect: 'follow'
     };
 
-    fetch(`${url}permisosUsuario`, requestOptions)
+    fetch(`${url}asignarCategoria`, requestOptions)
             .then(response => response.json())
             .then(result => {
+                console.log(result)
                 if(result.code == "ok"){
-                    obtenerPermisos()
+                    getTransaccionesNoAsignadas();
                     Alert(result.message, 'success')
                 } else{
                    Alert(result.message, 'error');
@@ -137,9 +145,11 @@ $('#btnAdd').click(function () {
             .catch(error => {Alert(error, 'error')
             });
     return false;
+
 })
 
 $('#btnDelete').click(function(){
+
     let id = []
 
     $('.permiso:checked').each(function() {
@@ -154,8 +164,6 @@ $('#btnDelete').click(function(){
         "id": id
     });
 
-    console.log(raw);
-
     var requestOptions = {
         method: 'DELETE',
         headers: myHeaders,
@@ -163,12 +171,12 @@ $('#btnDelete').click(function(){
         redirect: 'follow'
     };
 
-    fetch(`${url}permisosUsuario`, requestOptions)
+    fetch(`${url}asignarCategoria`, requestOptions)
             .then(response => response.json())
             .then(result => {
                 console.log(result)
                 if(result.code == "ok"){
-                    obtenerPermisos()
+                    getTransaccionesNoAsignadas();
                     Alert(result.message, 'success')
                 } else{
                    Alert(result.message, 'error');
@@ -177,47 +185,7 @@ $('#btnDelete').click(function(){
             .catch(error => {Alert(error, 'error')
             });
     return false;
-
-     
 })
-
-const getAsignados = () => {
-
-     var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    $('#contenedor-derecho').html(null)
-    
-    const idMenu = $('#menu').val();
-    const idRol = $('#Rols').val();
-
-    var raw = JSON.stringify({
-        "idRol": idRol,
-        "idMenu": idMenu
-    });
-
-    var requestOptions = {
-        method: 'PATCH',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow'
-      
-    };
-
-    fetch(`${url}permisosUsuario/Asignados`, requestOptions)
-    .then(response => response.json())
-    .then(result => {
-      result.forEach(element => {
-        console.log(result)
-        var opc = `<div class="form-check form-switch pl-2 pt-1">
-            <input class="form-check-input permiso" type="checkbox" role="switch" id="checkpermisos${element.id}" value="${element.id}">
-            <label class="form-check-label label-Asignado" for="checkpermisos${element.id}" style="font-size: 1rem;">${element.pagina.descripcion}</label>
-            </div>`;
-        $('#contenedor-derecho').append(opc);
-      });
-    })
-    .catch(error => console.log('error', error));
-}
 
 const Alert = function(message, status){
     toastr[`${status}`](message, `${status}`, {
@@ -227,4 +195,3 @@ const Alert = function(message, status){
         rtl: false
       });
 }
-
