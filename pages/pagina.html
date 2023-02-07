@@ -294,9 +294,10 @@
               name="descripcion" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
           </div>
           <div class="form-group">
-            <label class="form-label" for="basic-icon-default-fullname">Menu al que Pertenece:</label>
-            <input type="text" class="form-control dt-full-name" id="idMenu" placeholder="Número de Menu"
-              name="idMenu" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
+            <label class="form-label" for="Menu">Menu</label>
+            <select type="text" class="form-control" id="Menu" name="Menu" required>
+              <option value="0" default selected disabled>Selecciona una opcion</option>
+            </select>
           </div>
           <div class="form-group">
             <label class="form-label" for="basic-icon-default-fullname">Path</label>
@@ -330,16 +331,20 @@
               name="descripcionEdit" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
           </div>
           <div class="form-group">
-            <input id="id" type="hidden">
-            <label class="form-label" for="basic-icon-default-fullname">No. Menu</label>
-            <input type="text" class="form-control dt-full-name" id="idMenuEdit" placeholder="Nuevo Menu al que Pertenece"
-              name="idMenuEdit" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
+            <label class="form-label" for="MenuEdith">Menu</label>
+            <select type="text" class="form-control" id="MenuEdith" name="MenuEdith" required>
+              <option value="0" default selected disabled>Selecciona una opcion</option>
+            </select>
           </div>
           <div class="form-group">
-            <input id="id" type="hidden">
             <label class="form-label" for="basic-icon-default-fullname">Path</label>
             <input type="text" class="form-control dt-full-name" id="PathEdit" placeholder="Nuevo path de la pagina"
               name="PathEdit" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="IconoEdith">Icono</label>
+            <input type="text" class="form-control dt-full-name" id="IconoEdith" placeholder="Icono de la pagina"
+              name="Icono" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
           </div>
           <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar</button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
