@@ -41,11 +41,19 @@
 
   <!-- BEGIN: Page CSS-->
   <link rel="stylesheet" type="text/css" href="../app-assets/css/core/menu/menu-types/vertical-menu.min.css">
-  <link rel="stylesheet" type="text/css" href="../app-assets/css/pages/app-invoice-list.min.css">
+  <link rel="stylesheet" type="text/css" href="../app-assets/vendors/css/extensions/nouislider.min.css">
   <!-- END: Page CSS-->
 
   <!-- BEGIN: Custom CSS-->
   <link rel="stylesheet" type="text/css" href="../../../assets/css/style.css">
+  <!-- <link rel="stylesheet" type="text/css" href="../app-assets/vendors/css"> -->
+  <link rel="stylesheet" type="text/css" href="../css/circleProgress.css">
+  <style>
+    .feather-35{
+      width: 35px;
+      height: 35px;
+    }
+  </style>
   <!-- END: Custom CSS-->
 
 </head>
@@ -248,114 +256,11 @@
     <div class="shadow-bottom"></div>
     <div class="main-menu-content">
       <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-        <li class=" nav-item"><a class="d-flex align-items-center" href="index.html"><i data-feather="home"></i><span
-              class="menu-title text-truncate" data-i18n="Dashboards">Dashboards</span><span
-              class="badge badge-light-warning badge-pill ml-auto mr-1">2</span></a>
-          <ul class="menu-content">
-            <li><a class="d-flex align-items-center" href="dashboard-analytics.html"><i data-feather="circle"></i><span
-                  class="menu-item text-truncate" data-i18n="Analytics">Analytics</span></a>
-            </li>
-            <li><a class="d-flex align-items-center" href="dashboard-ecommerce.html"><i data-feather="circle"></i><span
-                  class="menu-item text-truncate" data-i18n="eCommerce">eCommerce</span></a>
-            </li>
-          </ul>
-        </li>
-        <li class=" navigation-header"><span data-i18n="Apps &amp; Pages">Administración</span><i
-            data-feather="more-horizontal"></i>
-        </li>
-        <li class="nav-item">
-          <a class="d-flex align-items-center" href="categorias.html">
-            <i data-feather="award"></i><span class="menu-title text-truncate"
-              data-i18n="categorias">Categorias</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="d-flex align-items-center" href="transacciones.html">
-            <i data-feather="dollar-sign"></i><span class="menu-title text-truncate"
-              data-i18n="Transacciones">Transacciones</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="d-flex align-items-center" href="columnas.html">
-            <i data-feather="database"></i><span class="menu-title text-truncate" data-i18n="Columnas">Columnas</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="d-flex align-items-center" href="departamentos.html">
-            <i data-feather="map"></i><span class="menu-title text-truncate"
-              data-i18n="Departamentos">Departamentos</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="d-flex align-items-center" href="municipios.html">
-            <i data-feather="database"></i><span class="menu-title text-truncate" data-i18n="Municipios">Municipios</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="d-flex align-items-center" href="terceros.html">
-            <i data-feather="external-link"></i><span class="menu-title text-truncate"
-              data-i18n="Departamentos">Terceros</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="d-flex align-items-center" href="premio.html">
-            <i data-feather="star"></i><span class="menu-title text-truncate" 
-            data-i18n="Premio">Premio</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="d-flex align-items-center" href="menus.html">
-            <i data-feather="star"></i><span class="menu-title text-truncate" 
-            data-i18n="menus">Menus</span>
-          </a>
-        </li>
-        <li class="nav-item active">
-          <a class="d-flex align-items-center" href="pagina.html">
-            <i data-feather="star"></i><span class="menu-title text-truncate" 
-            data-i18n="menus">Paginas</span>
-          </a>
-        </li>
-        <li class=" navigation-header"><span data-i18n="Apps &amp; Pages">Seguridad</span><i
-            data-feather="more-horizontal"></i>
-        </li>
-        <li class="nav-item">
-          <a class="d-flex align-items-center" href="rols.html">
-            <i data-feather="sliders"></i>
-            <span class="menu-title text-truncate" data-i18n="Roles">Roles</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="d-flex align-items-center" href="usuarios.html">
-            <i data-feather="users"></i><span class="menu-title text-truncate" data-i18n="Usuarios">Usuarios</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="d-flex align-items-center" href="permisos.html">
-            <i data-feather="users"></i><span class="menu-title text-truncate" data-i18n="Usuarios">Permisos</span>
-          </a>
-        </li>
-        <li class="navigation-header"><span data-i18n="Apps &amp; Pages">Configuración</span><i
-            data-feather="more-horizontal"></i>
-        </li> 
-        <li class="nav-item">
-          <a class="d-flex align-items-center" href="promociones.html">
-            <i data-feather="gift"></i><span class="menu-title text-truncate" data-i18n="Promociones">Promociones</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="d-flex align-items-center" href="Camapañas.html">
-            <i data-feather="shopping-bag"></i><span class="menu-title text-truncate" data-i18n="Campanias">Campañas</span>
-          </a>
-        </li>
-        <li class="nav-item active">
-            <a class="d-flex align-items-center" href="testearCampañaSimple.html">
-              <i data-feather="shopping-bag"></i><span class="menu-title text-truncate" data-i18n="Campanias">Test Simple</span>
-            </a>
-          </li>
+        
       </ul>
     </div>
   </div>
   <!-- END: Main Menu-->
-
   <!-- BEGIN: Content-->
   <div class="app-content content ">
     <div class="content-overlay"></div>
@@ -365,7 +270,7 @@
       </div>
       <div class="content-body">
         <section class="invoice-list-wrapper">
-          <div class="card p-5" style="min-height: 680px;">
+          <div class="card p-1">
             <div class="row">
                 <div class="col-md-3">
                     <label>Campaña</label>
@@ -392,13 +297,9 @@
             <div class="row h-25 "  id="container-card">
               
             </div>
-            <div class="container-consult container pt-0 pl-3" style="padding-right: 80px;">
-                <ul class="list-group list-group-flush" id="PnResumen">
-
-                </ul>
-            </div>
-
-            
+          </div>
+          <div  id="PnResumen">
+           
           </div>
         </section>
 
@@ -436,6 +337,8 @@
   <script src="../app-assets/js/core/app-menu.min.js"></script>
   <script src="../app-assets/js/core/app.min.js"></script>
   <script src="../app-assets/js/scripts/customizer.min.js"></script>
+  <script src="../app-assets/vendors/js/extensions/nouislider.min.js"></script>
+  <script src="../app-assets/vendors/js/"></script>
   <!-- END: Theme JS-->
   
   <!-- BEGIN BOOSTRAP-->
@@ -444,12 +347,13 @@
 
   <!-- BEGIN: Page JS-->
   <script src="../js/testeoSimple.js"></script>
+  <script src="../js/menuDinamico.js"></script>
   <!-- END: Page JS-->
 
   <script>
     $(window).on('load', function () {
       if (feather) {
-        feather.replace({ width: 14, height: 14 });
+        feather.replace({ width: 25, height: 25 });
       }
     });
   </script>

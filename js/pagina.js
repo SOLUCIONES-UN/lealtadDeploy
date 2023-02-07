@@ -2,6 +2,7 @@ const url = 'http://localhost:3000/'
 
 $(function () {
     let tabla = getPaginas();
+    getMenu();
 
     //evento submit del formulario
     $('#formNew').submit(function () {
@@ -11,7 +12,8 @@ $(function () {
         var raw = JSON.stringify({
             "descripcion": $('#descripcion').val(),
             "idMenu": $('#idMenu').val(),
-            "path": $('#path').val()
+            "path": $('#path').val(),
+            "icono": $('#Icono').val()
         });
 
         var requestOptions = {
@@ -44,10 +46,13 @@ $(function () {
         const id = $('#id').val();
 
         var raw = JSON.stringify({
-            "descripcion": $('#descripcion').val(),
-            "idMenu": $('#idMenu').val(),
-            "path": $('#path').val()
+            "descripcion": $('#descripcionEdit').val(),
+            "path": $('#PathEdit').val(),
+            "icono": $('#IconoEdith').val(),
+            "idMenu": $('#MenuEdith').val()
         });
+
+        console.log(raw);
 
         var requestOptions = {
             method: 'PUT',
@@ -174,6 +179,25 @@ const getPaginas = () => {
     });
 }
 
+const getMenu = () => {
+
+    var requestOptions = {
+        method: 'GET',
+        redirect: 'follow'
+    };
+
+    fetch(`${url}Menu`, requestOptions)
+    .then(response => response.json())
+    .then(result => {
+      result.forEach(element => {
+        var opc = `<option value="${element.id}">${element.descripcion}</option>`;
+        $('#Menu').append(opc);
+        $('#MenuEdith').append(opc);
+      });
+    })
+    .catch(error => console.log('error', error))
+}
+
 const limpiarForm = () => {
     $('#formNew').trigger("reset");
 }
@@ -199,8 +223,9 @@ const OpenEdit = (id) => {
             console.log(result)
             $('#id').val(id);
             $('#descripcionEdit').val(result.descripcion);
-            $('#idMenuEdit').val(result.idMenu);
+            $('#MenuEdith').val(result.idMenu)
             $('#PathEdit').val(result.path);
+            $('#IconoEdith').val(result.icono);
             $('#modalEdit').modal('toggle');
         })
         .catch(error => console.log('error', error));
