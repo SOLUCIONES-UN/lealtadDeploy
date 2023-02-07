@@ -5,9 +5,17 @@ $(function () {
     let tabla = getUsuarios();
 
     //evento submit del formulario
-    $('#formNew').submit(function () {
+    $('#formNew').submit(function (e) {
+        e.preventDefault();
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+
+        if($('#password').val().trim() != $('#password2').val().trim())
+        {
+            Alert('Las contraseñas no coinciden', 'error');
+            return;
+     
+         }
 
         var raw = JSON.stringify({
             "username": $('#username').val(),
@@ -44,13 +52,27 @@ $(function () {
         return false;
     });
 
+
+
+
 // para actualizar usuarios
-    $('#formEdit').submit(function () {
+    $('#formEdit').submit(function (e) {
+        e.preventDefault();
         var myHeaders = new Headers();
+        
         myHeaders.append("Content-Type", "application/json");
 
 
         const username = $('#usernameEdit').val();
+
+
+        if($('#passwordEdit').val().trim() != $('#passwordEdit2').val().trim())
+        {
+            Alert('Las contraseñas no coinciden', 'error');
+            return;
+     
+         }
+         console.log('Contraseñas correctas');
 
         var raw = JSON.stringify({
             "username": $('#usernameEdit').val(),
@@ -262,3 +284,5 @@ const getRoles = () => {
         .catch(error => console.log('error', error));
 
 }
+
+
