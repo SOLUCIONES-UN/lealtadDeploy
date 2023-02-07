@@ -420,7 +420,7 @@
                                     </div>
                                     <div class="col-md-2">
                                         <button class="btn btn-outline-primary btn-block"
-                                            id="BtnTestearPromocion">Participar</button>
+                                            id="btnParticipar" data-toggle="modal" data-target="#ModalParticipar">Participar</button>
                                     </div>
                                     <div class="col-md-2">
                                         <button class="btn btn-outline-success btn-block" id="BtnTestearPromocion"
@@ -1079,8 +1079,44 @@
 
                         </div>
                     </div>
-                    <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+                    <button id="btnCancelarTest" type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+                    <button id="btnConfirmarTest" type="submit" class="btn btn-success mr-1 data-submit">Confirmar </button>
+                </div>
+                    <div id ="Response-Test" class=" p-2"> 
+                    </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal modal-slide-in new-user-modal fade" id="ModalParticipar">
+        <div class="modal-dialog">
+            <form id="formParticipar" class="add-new-user modal-content pt-0" autocomplete="off">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                <div class="modal-header mb-1">
+                    <h5 class="modal-title" id="exampleModalLabel"><b>Participar en la Promocion</b></h5>
+                </div>
+                <div class="modal-body flex-grow-1">
+                    <div class="form-group">
+                        <p>El código solo se puede canjear una vez.
+                           Si solo desea validar puede ir al apartado de testear. 
+                        </p>
+                        <br/>
+                    </div>
+                    <div class="form-group">
+                        <label for="participarTelefono">Telefono:</label>
+                        <input type="tel" id="participarTelefono" class="form-control" required>
+                    <div class="form-group">
+                        <label for="participarCodigo">Codigo:</label>
+                        <input type="tel" id="participarCodigo" class="form-control" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" id="PanelTest">
+
+                        </div>
+                    </div>
+                    <button id="btnCancelarPromo" type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
                     <button id="btnConfirmar" type="submit" class="btn btn-success mr-1 data-submit">Confirmar </button>
+                </div>
+                <div id ="Response-Promo" class=" p-2"> 
                 </div>
             </form>
         </div>
