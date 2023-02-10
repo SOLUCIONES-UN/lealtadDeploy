@@ -2,6 +2,18 @@ const url = "http://localhost:3000/";
 
 $(function () {
   getPromociones();
+
+  $("#ConsultarPromo").on("click", function () {
+    if (
+      $("#selectpromo").val() !== 0 &&
+      $("#FechaInicio").val() !== "" &&
+      $("#FechaFin").val() !== ""
+    ) {
+      GetReport();
+    } else {
+      Alert("Debe de llenar todos los campos", "error");
+    }
+  });
 });
 
 //funcion para llenar las promociones
@@ -15,7 +27,7 @@ const getPromociones = () => {
     .then((response) => response.json())
     .then((result) => {
       $("#selectpromo").html(
-        "<option disabled selected>Elige una promocion</option>"
+        "<option disabled selected value='0'>Elige una promocion</option>"
       );
 
       result.forEach((element) => {
@@ -24,12 +36,10 @@ const getPromociones = () => {
         );
       });
     })
-    .catch((error) => console.log("error", error));
+    .catch((error) => Alert(error, "error"));
 };
 
-
-
-$("#ConsultarPromo").on("click", function () {
+const GetReport = () => {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
 
@@ -45,18 +55,18 @@ $("#ConsultarPromo").on("click", function () {
     body: raw,
     redirect: "follow",
   };
-  $("#TablaReportePromo").html(null)
+  $("#TablaReportePromo").html(null);
   fetch(url + "reportePromocion", requestOptions)
     .then((response) => response.json())
     .then((result) => {
       console.log(result);
-      
+
       result.forEach((element) => {
         let fecha = element.fecha.split("T");
         let fecha2 = fecha[0].split("-");
         let hora = fecha[1].split(":");
         const { cupon, esPremio } = element.detallePromocion;
-        const {descripcion} = element.detallePromocion.premioPromocion.premio;
+        const { descripcion } = element.detallePromocion.premioPromocion.premio;
         var listado = `
         <tr> 
           <th> 
@@ -72,7 +82,7 @@ $("#ConsultarPromo").on("click", function () {
           ${element.numeroTelefono}
           </th>
           <th>
-          ${esPremio === 1 ? 'SI': 'NO'}
+          ${esPremio === 1 ? "SI" : "NO"}
           </th>
           <th>
           ${descripcion}
@@ -83,5 +93,18 @@ $("#ConsultarPromo").on("click", function () {
       });
     })
 
-    .catch((error) => console.log("error", error));
-});
+    .catch((error) => Alert(error, "error"));
+};
+
+
+const Alert = function (
+  message,
+  status // si se proceso correctamente la solicitud
+) {
+  toastr[`${status}`](message, `${status}`, {
+    closeButton: true,
+    tapToDismiss: false,
+    positionClass: "toast-top-right",
+    rtl: false,
+  });
+};
