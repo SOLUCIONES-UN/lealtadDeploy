@@ -92,7 +92,6 @@ const GetReport = () => {
         $("#TablaReportePromo").append(listado);
       });
     })
-
     .catch((error) => Alert(error, "error"));
 };
 
