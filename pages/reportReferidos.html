@@ -259,21 +259,17 @@
       <div class="content-body p-1">
         <section class="card">
             <div class="row p-2">
+                
                 <div class="col-md-4">
-                    <label for="selectpromo">Promoción</label>
-                    <select id="selectpromo" class="form-control" >
-                    </select>
-                </div>
-                <div class="col-md-2">
                     <label for="FechaInicio">Fecha Inicio</label>
                     <input  id="FechaInicio" class="form-control"  type="date" >
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-4">
                     <label for="FechaFin">Fecha Final</label>
                     <input  id="FechaFin" class="form-control"  type="date" >
                 </div>
                 <div class="col-md-2">
-                    <button id="ConsultarPromo" class="btn btn-info mt-2 btn-block" > Consultar </button>  
+                    <button id="ConsultarReferido" class="btn btn-info mt-2 btn-block" > Consultar </button>  
                 </div>
                 <div class="col-md-2">
                     <button class="btn btn-success mt-2 btn-block" > Excel </button>  
@@ -284,14 +280,14 @@
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>CODIGO</th>
-                    <th>FECHA</th>
-                    <th>USUARIO</th>
-                    <th>APLICA PREMIO</th>
-                    <th>PREMIO</th>
+                    <th>FECHA Y HORA</th>
+                    <th>CÓDIGO REFERIDO</th>
+                    <th>PLATAFORMA</th>
+                    <th>NUMERO DE TELÉFONO REFIRIENTE</th>
+                    <th>NUMERO DE TELÉFONO REFERIDO</th>
                   </tr>
                 </thead>
-                <tbody  id="TablaReportePromo" >
+                <tbody  id="TablaReporteReferidos" >
                 
                 </tbody>
               </table>
@@ -335,7 +331,7 @@
   <script src="../app-assets/js/core/app.min.js"></script>
   <script src="../app-assets/js/scripts/customizer.min.js"></script>
   <!-- END: Theme JS-->
-  <script src="../js/ReportPromociones.js"></script>
+  <script src="../js/reportReferidos.js"></script>
   <!-- BEGIN: Page JS-->
   <script src="../js/menuDinamico.js"></script>
   <!-- END: Page JS-->
