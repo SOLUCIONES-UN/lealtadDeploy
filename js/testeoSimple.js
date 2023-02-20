@@ -7,6 +7,8 @@ const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstra
 $(function () {
     getCampaniasActivas();
 
+    Usuario();
+
 
     $('#btnTestear').click(function () {
 
@@ -151,6 +153,13 @@ $(function () {
 
     })
 });
+const Usuario = () => {
+
+    let usuario = JSON.parse(sessionStorage.getItem('infoUsuario'));
+    console.log(usuario.nombre)
+    $('.user-name').text(usuario.nombre);
+    $('.user-status').text(usuario.rol.descripcion);
+}
 
 
 

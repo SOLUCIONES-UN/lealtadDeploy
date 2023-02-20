@@ -2,6 +2,7 @@ const url = 'http://localhost:3000/'
 
 $(function () {
     let tabla = getColumnas();
+    Usuario();
 
     //evento submit del formulario
     $('#formNew').submit(function () {
@@ -108,6 +109,14 @@ $(function () {
             .catch(error => { Alert(error.errors, 'error') });
     })
 });
+
+const Usuario = () => {
+
+    let usuario = JSON.parse(sessionStorage.getItem('infoUsuario'));
+    console.log(usuario.nombre)
+    $('.user-name').text(usuario.nombre);
+    $('.user-status').text(usuario.rol.descripcion);
+}
 
 
 //obtiene las Columnas

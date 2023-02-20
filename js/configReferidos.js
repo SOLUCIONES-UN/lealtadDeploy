@@ -1,6 +1,7 @@
 
 $(function () {
     obtenerData();
+    Usuario();
 
     $('#swFacebook').change(function () {
         chechFacebook()
@@ -35,6 +36,14 @@ $(function () {
         updateReferido(5,$(textPantalla).val())
     })
 });
+
+const Usuario = () => {
+
+    let usuario = JSON.parse(sessionStorage.getItem('infoUsuario'));
+    console.log(usuario.nombre)
+    $('.user-name').text(usuario.nombre);
+    $('.user-status').text(usuario.rol.descripcion);
+}
 
 const chechFacebook = () => {
     if ($('#swFacebook').prop('checked')) {

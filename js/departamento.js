@@ -2,6 +2,7 @@ const url = 'http://localhost:3000/';
 
 $(function () {
     let tabla = getDepartamentos();
+    Usuario()
 
     //evento submit del formulairo
     $('#formNew').submit(function () {
@@ -103,6 +104,14 @@ $(function () {
         });
     });
 });
+
+const Usuario = () => {
+
+    let usuario = JSON.parse(sessionStorage.getItem('infoUsuario'));
+    console.log(usuario.nombre)
+    $('.user-name').text(usuario.nombre);
+    $('.user-status').text(usuario.rol.descripcion);
+}
 
 const getDepartamentos = () => {
 
