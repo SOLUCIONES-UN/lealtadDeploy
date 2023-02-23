@@ -9,6 +9,7 @@ let arrayPresupuesto = [];
 let idData = 1;
 let index = 1;
 let indexB = 1;
+var isAddLimited = true;
 var bsStepper = document.querySelectorAll('.bs-stepper'),
 select = $('.select2'),
     verticalWizard = document.querySelector('.vertical-wizard-example');
@@ -30,6 +31,7 @@ $(function () {
   $('#btnActualizarParametros').hide();
   $('#btnActualizarPremios').hide();
   $('#btnActualizarPresupuesto').hide();
+  
   Usuario();
 
 
@@ -43,9 +45,7 @@ $(function () {
     $(data).addClass('show active')
   })
 
-
-  //getAllPromociones();
-  //agregarLocalTabla()
+  
 
   $('.BtnBottador').click(function () {
     var data = {
@@ -100,6 +100,13 @@ $(function () {
     var orden = $('#ordenEtapa');
     var descripcion = $('#descEtapa');
     var tipoTransaccion = $('#TipoTransaccion option:selected');
+    var intervalo  
+    $('#intervalo')? intervalo = $('#intervalo').val():intervalo = ""; 
+    var periodo;
+    $('#periodo')? periodo = $('#periodo').val():periodo = "";
+    var valor;
+    $('#valor')? valor = $('#valor').val():valor = "";
+    
     var nombreParticipacion;
 
     etapas.push({
@@ -107,12 +114,18 @@ $(function () {
       orden: orden.val(),
       descripcion: descripcion.val(),
       tipoParticipacion: tipoTransaccion.val(),
+      "intervalo": typeof intervalo != 'undefined'? intervalo : "" ,
+      "periodo": typeof periodo != 'undefined'? periodo : "",
+      "valorAcumulado": typeof valor != 'undefined'? valor : "",
+
       "estado": 1,
       premios: "",
       parametros: "",
       presupuestos: ""
 
     })
+
+    console.log(etapas);
 
     $('#tbetapas').html(null);
     $('.etapaSelect').html(null);
@@ -168,10 +181,75 @@ $(function () {
     nombre.val(null);
     orden.val(null);
     descripcion.val(null);
+    $('#TipoTransaccion').val(0);
+    $('#intervalo').val(0);
 
   });
 
 });
+
+$('#TipoTransaccion').on('change', function() {
+  
+  var addConfig
+  let val = $('#TipoTransaccion').val();
+  console.log(val);
+
+  if(val == 3 || val == 4)
+  {
+    addConfig = `
+      <label class="form-label" for="intervalo">Intervalo</label>
+      <select class="form-control" id="intervalo">
+      <option value="0" default selected disabled>Seleccione Un Intervalo</option>
+      <option value="1">Diario</option>
+      <option value="2">Semanal</option>
+      <option value="3">Mensual</option>
+      <option value="4">Anual</option>
+      </select>
+    `
+
+    addPeriodo = `
+      <label for="periodo">Periodo</label>
+      <input class="form-control" id="periodo"/>
+    `
+
+    $('#transaccionesDinamicas').html(addConfig);
+    $('#Periodo').html(addPeriodo);
+
+    isAddLimited=false
+  } else if( val == 5)
+  {
+
+    addConfig = `
+      <label class="form-label" for="valor">Valor</label>
+      <input class="form-control" id="valor" />
+    
+    `
+
+    $('#transaccionesDinamicas').html(addConfig);
+    isAddLimited=false;
+
+  } else if(val == 2)
+  {
+
+    addConfig = `
+      <label class="form-label" for="valor">Valor</label>
+      <input class="form-control" id="valor" />
+      
+    `
+    $('#transaccionesDinamicas').html(addConfig);
+    isAddLimited=true;
+
+  } else 
+  {
+    $('#transaccionesDinamicas').html(null);
+    $('#Periodo').html(null);
+    isAddLimited=true;
+    
+  }
+
+
+});
+
 
 const Usuario = () => {
 
@@ -265,7 +343,7 @@ function loadMenu(isEtapa) {
 
 function addConfig(id, nombreEtapa) {
 
-  
+  console.log(isAddLimited)
 
   var configbuttons = `<div id="opc${id}" class="step" data-target="#social-links-vertical-${id}">
     <button type="button" class="step-trigger">
@@ -313,11 +391,13 @@ function addConfig(id, nombreEtapa) {
           <label class="form-label" for="vAnterior${id}">Valor Anterior</label>
           <input type="number" id="vAnterior${id}" class="form-control" />
       </div>
-      <div class="form-group col-md-6">
-          <label class="form-label" for="limiteParticipacion${id}">Limite
-              Participacion</label>
-          <input type="number" id="limiteParticipacion${id}" class="form-control" />
-      </div>
+      ${isAddLimited? `<div class="form-group col-md-6">
+                          <label class="form-label" for="limiteParticipacion${id}">Limite
+                              Participacion</label>
+                          <input type="number" id="limiteParticipacion${id}" class="form-control" />
+                       </div>` 
+  : ""}
+      
   </div>
   <div class="row">
       <div class="col-md-12">

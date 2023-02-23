@@ -676,17 +676,24 @@
                                             <textarea type="password" id="descEtapa" class="form-control"
                                                 placeholder="Ingrese la descripcion de la etapa" rows="2"></textarea>
                                         </div>
-                                        <div class="form-group col-md-8">
+                                        <div class="form-group col-md-6">
                                             <label class="form-label" for="TipoTransaccion">Tipo Transaccion</label>
                                             <!-- <input type="number" id="TipoTransaccion" class="form-control" /> -->
                                             <select class="form-control" id="TipoTransaccion">
+                                                <option value="0" default selected disabled>Seleccione Una Transaccion</option>
                                                 <option value="1">Por Transaccion</option>
-                                                <option value="2">Recurrente</option>
-                                                <option value="3">Acumular Transacciones</option>
+                                                <option value="2">Acumular Transacciones </option>
+                                                <option value="3">Recurrente</option>
                                                 <option value="4">Acumular Recurentes</option>
                                                 <option value="5">Acumular valor</option>
                                                 <option value="6">Combinar Transacciones</option>
                                             </select>
+                                        </div>
+                                        <div class="form-group col-md-6" id="transaccionesDinamicas">
+                                            
+                                        </div>
+                                        <div class="form-group col-md-6" id="Periodo">
+                                            
                                         </div>
                                         <div class="col-md-12 mt-2">
                                             <button class="btn btn-success" type="button" id="btnAddEtapa"
