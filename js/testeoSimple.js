@@ -14,19 +14,32 @@ $(function () {
 
         var id = $('#campania option:selected').val();
 
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
 
+
+        var raw = JSON.stringify({
+            "transaccionData": {
+                "descripcion": "Recarga de Saldo",
+                "valor": 10
+            },
+            "customer_id": 13838
+        });
 
         var requestOptions = {
-            method: 'GET',
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
             redirect: 'follow'
         };
 
 
 
-        fetch(`${url}Campania/TestearSimple`, requestOptions)
+
+        fetch(`${url}trxCampanias/Testear`, requestOptions)
             .then(response => response.json())
             .then(async data => {
-               
+
                 data.forEach((element, index) => {
 
 
@@ -52,7 +65,7 @@ $(function () {
                         <h5><b>${datosCampania.nombre}</b></h5>
                       </div>
                       <div class="col-md-3">
-                        <h5><small>Presupuesto Q. ${validacionPresupuesto.presupuesto.toFixed(2)} / Q. ${validacionPresupuesto.presupuestoNew.toFixed(2)} + ${premios[0].valor}</small></h5>
+                        <h5><small>Presupuesto Q. ${validacionPresupuesto.presupuesto.toFixed(2)} / Q. ${validacionPresupuesto.presupuestoUtilizado.toFixed(2)} + ${premios[0].valor}</small></h5>
                             <div class="progress p-0" style="width: 100%; height: 15%">
                                 <div class="progress-bar" role="progressbar" style="width: ${porPresupuesto.toFixed(2)}%;"></div>
                                 <div class="progress-bar" role="progressbar" style="width: ${porNewPresupuesto.toFixed(2)}%; background-color: chartreuse;" aria-valuemax="+15"></div>
@@ -139,7 +152,7 @@ $(function () {
 
 
 
-               
+
 
                 if (feather) {
                     feather.replace({ width: 50, height: 50 });
