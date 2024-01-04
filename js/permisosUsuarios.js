@@ -1,12 +1,14 @@
 const url = 'http://localhost:3000/'
+var infoUsuario;
 
 $(function () {
     getRols()
     getMenus()
     Usuario()
     //getPaginas()
-
+    infoUsuario = JSON.parse(sessionStorage.getItem('infoUsuario'));
 })
+
 
 const Usuario = () => {
 
@@ -110,10 +112,11 @@ $('#menu').on('change', function(){
 })
 
 
+
 $('#btnAdd').click(function () {
     var data  = [];
     $('.permiso:checked').each(function() {
-       data.push({ idPagina: $(this).val(), idRol : $('#Rols').val(), username: 'JEstivenA'})
+       data.push({ idPagina: $(this).val(), idRol : $('#Rols').val(), username: infoUsuario.username})
     });
 
 

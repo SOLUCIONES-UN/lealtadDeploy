@@ -82,7 +82,7 @@ $(function () {
     var requestOptions = {
       method: "DELETE",
       headers: myHeaders,
-      redirect: "follow",
+      redirect: "follow"
     };
 
     fetch(`${url}Departamento/${id}`, requestOptions)
