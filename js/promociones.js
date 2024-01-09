@@ -332,7 +332,40 @@ $(function () {
     $("#premio").val(0);
     $("#valorPremio").val(null);
   });
+
+  //Para eliminar una promocion
+  $("#BtnDelete").click(function () {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const id = $("#idDelete").val();
+    var requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      redirect: "follow"
+    };
+
+    fetch(`${url}Promocion/${id}`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.code == "ok") {
+          getAllPromociones();
+          $("#modalDelete").modal("toggle");
+          Alert(result.message, "success");
+        } else {
+          Alert(result.message, "error");
+        }
+      })
+      .catch((error) => {
+        Alert(error.errors, "error");
+      });
+    return false;
+  });
 });
+
+const limpiarForm = () => {
+  $("#formNew").trigger("reset");
+};
 
 const Usuario = () => {
 
@@ -433,7 +466,8 @@ const table = (table, data) => {
             ${feather.icons["archive"].toSvg({
               class: "font-small-4 mr-50",
             })} Actualizar
-            </a><a href="#" onclick="OpenDelete(${data})" class="btn_delete dropdown-item">
+            </a>
+            <a href="#" onclick="OpenDelete(${data})" class="btn_delete dropdown-item">
                 ${feather.icons["trash-2"].toSvg({
                   class: "font-small-4 mr-50",
                 })} Inhabilitar
@@ -485,6 +519,11 @@ const table = (table, data) => {
       },
     ],
   });
+};
+
+const OpenDelete = (id) => {
+  $("#idDelete").val(id);
+  $("#modalDelete").modal("toggle");
 };
 
 const ChangePanel = (estado) => {
