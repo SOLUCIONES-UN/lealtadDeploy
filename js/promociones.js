@@ -1,7 +1,21 @@
 const url = "http://localhost:3000/";
 let codigos = [];
 let premios = [];
+let imgSuccess = "";
+let imagen1 = "";
 const inputFile = document.getElementById("formFile");
+
+// funcion para cargar imagenes
+function Uploaded(input) {
+  var file = document.getElementById(input)['files'][0];
+  var reader = new FileReader();
+  reader.onload = function () {
+    imgSuccess =  reader.result.replace("data:", "").replace(/^.+,/, "");
+     // imageBase64Stringsep = logo;
+  }
+  reader.readAsDataURL(file);
+}
+
 $(function () {
   "use strict";
   ChangePanel(1);
@@ -88,8 +102,8 @@ $(function () {
           descripcion: $("#descripcion").val(),
           mesajeExito: $("#successaMessage").val(),
           mesajeFail: $("#failMessage").val(),
-          imgSuccess: "test.png",
-          imgFail: "test.png",
+          imgSuccess: $("#newImagen").val(),
+          imgFail: $("#newImagen1").val(),
           fechaInicio: $("#fechaInicio").val(),
           fechaFin: $("#fechaFin").val(),
           PremioXcampania: 0,
@@ -97,9 +111,21 @@ $(function () {
           codigos: codigos,
           premios: premios,
         };
+
+      $('#newImagen').change(function () {
+          Uploaded('newLogo');
+      })
+  
+      $('#edit').change(function () {
+          Uploaded('editLogo');
+      })
+        
+        console.log(data);
         saveData(data);
         Limpiar();
       });
+
+      
   }
 
   //Inicializacion de Navs
@@ -852,3 +878,5 @@ const UpdatePromocion = (id, type) => {
       Alert(error, "error");
     });
 };
+
+
