@@ -64,7 +64,12 @@ const getMenuAccesible = (username) => {
   fetch(`${url}permisosUsuario/${username}`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
-      pagina = result[0].paginas[0].path;
+      if (Array.isArray(result) && result.length > 0 && result[0].paginas && result[0].paginas.length > 0) {
+        pagina = result[0].paginas[0].path;
+      } else {
+        console.error("La estructura de la respuesta no es la esperada o está vacía.");
+      }
     })
     .catch((error) => console.log("error", error));
 };
+

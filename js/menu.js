@@ -119,10 +119,17 @@ const getMenus = () => {
             dataSrc: ""
         },
         columns: [
-            { data: "id" },
+            { data: null, render: function (data, type, row, meta) {
+                // Usa el índice del bucle map para mostrar el número de fila
+                if (type === 'display') {
+                    return meta.row + 1;
+                }
+                return meta.row + 1; // Usa el índice de la fila si no es un renderizado de pantalla
+            }},
             { data: "descripcion" },
             {
                 data: "id", render: function (data) {
+   
                     return `
               <div class="btn-group">
                 <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">

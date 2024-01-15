@@ -118,8 +118,6 @@ const Usuario = () => {
     $('.user-status').text(usuario.rol.descripcion);
 }
 
-
-//obtiene las categorias
 const getCategorias = () => {
     return $('#tableData').dataTable({
         ajax: {
@@ -129,8 +127,15 @@ const getCategorias = () => {
             dataSrc: ""
         },
         columns: [
-            { data: "id" },
+            { data: null, render: function (data, type, row, meta) {
+            
+                if (type === 'display') {
+                    return meta.row + 1;
+                }
+                return meta.row + 1; 
+            }},
             { data: "nombre" },
+
             {
                 data: "id", render: function (data) {
                     return `
