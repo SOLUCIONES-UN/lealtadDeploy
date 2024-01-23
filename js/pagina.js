@@ -1,4 +1,5 @@
 const url = 'http://localhost:3000/'
+let token = sessionStorage.getItem("token");
 
 $(function () {
     let tabla = getPaginas();
@@ -9,6 +10,7 @@ $(function () {
     $('#formNew').submit(function () {
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", token);
 
         var raw = JSON.stringify({
             "descripcion": $('#descripcion').val(),
@@ -44,6 +46,8 @@ $(function () {
     $('#formEdit').submit(function () {
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", token); 
+
         const id = $('#id').val();
 
         var raw = JSON.stringify({
@@ -83,7 +87,7 @@ $(function () {
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
-
+        myHeaders.append("Authorization", token);
 
         const id = $('#idDelete').val();
         var requestOptions = {
@@ -124,7 +128,8 @@ const getPaginas = () => {
             url: `${url}Pagina`,
             type: "GET",
             datatype: "json",
-            dataSrc: ""
+            dataSrc: "",
+            headers: {"Authorization": token}
         },
         columns: [
             { data: "id" },
@@ -192,7 +197,8 @@ const getMenu = () => {
 
     var requestOptions = {
         method: 'GET',
-        redirect: 'follow'
+        redirect: 'follow',
+        headers: {"Authorization": token}
     };
 
     fetch(`${url}Menu`, requestOptions)
@@ -223,7 +229,8 @@ const Alert = function (message, status) // si se proceso correctamente la solic
 const OpenEdit = (id) => {
     var requestOptions = {
         method: 'GET',
-        redirect: 'follow'
+        redirect: 'follow',
+        headers: {"Authorization": token}
     };
 
     fetch(`${url}Pagina/${id}`, requestOptions)

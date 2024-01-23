@@ -1,4 +1,5 @@
 const url = 'http://localhost:3000/'
+let token = sessionStorage.getItem("token");
 
 $(function () {
     getDepartamentos();
@@ -9,6 +10,7 @@ $(function () {
     $('#formNew').submit(function () {
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", token);
 
         var raw = JSON.stringify({
             "nombre": $('#nombre').val(),
@@ -45,7 +47,7 @@ $(function () {
     $('#formEdit').submit(function () {
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
-
+        myHeaders.append("Authorization", token);
 
         const id = $('#id').val();
 
@@ -86,13 +88,13 @@ $(function () {
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
-
-
+        myHeaders.append("Authorization", token);
         const id = $('#idDelete').val();
         var requestOptions = {
             method: 'DELETE',
             headers: myHeaders,
-            redirect: 'follow'
+            redirect: 'follow',
+            headers: {"Authorization": token}
         };
 
         fetch(`${url}Municipio/${id}`, requestOptions)
@@ -130,7 +132,8 @@ const getMunicipios = () => {
             url: `${url}Municipio`,
             type: "GET",
             datatype: "json",
-            dataSrc: ""
+            dataSrc: "",
+            headers: {"Authorization": token}
         },
         columns: [
             { data: "id" },
@@ -243,7 +246,8 @@ const OpenDelete = (id) => {
 const getDepartamentos = () => {
     var requestOptions = {
         method: 'GET',
-        redirect: 'follow'
+        redirect: 'follow',
+        headers: {"Authorization": token}
     };
 
     $('#departamento').html('<option value="0" selected disabled>Selecciona una Opcion</option>');

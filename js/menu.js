@@ -1,4 +1,5 @@
 const url = 'http://localhost:3000/'
+let token = sessionStorage.getItem("token");
 
 $(function () {
     let tabla = getMenus();
@@ -116,7 +117,8 @@ const getMenus = () => {
             url: `${url}Menu`,
             type: "GET",
             datatype: "json",
-            dataSrc: ""
+            dataSrc: "",
+            headers: {"Authorization": token}
         },
         columns: [
             { data: "id" },

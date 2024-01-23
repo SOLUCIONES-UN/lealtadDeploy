@@ -1,4 +1,5 @@
 const url = 'http://localhost:3000/';
+let token = sessionStorage.getItem("token");
 
 $(function() {
     let tabla = getTerceros();
@@ -121,7 +122,8 @@ const getTerceros = () => {
             url: `${url}Tercero`,
             type: "GET",
             datatype: "json",
-            dataSrc:""
+            dataSrc:"",
+            headers: {"Authorization": token}
         },
         columns: [
             {data: "id"},

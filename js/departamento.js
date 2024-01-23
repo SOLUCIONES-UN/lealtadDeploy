@@ -1,4 +1,5 @@
 const url = "http://localhost:3000/";
+let token = sessionStorage.getItem("token");
 
 $(function () {
   let tabla = getDepartamentos();
@@ -8,6 +9,8 @@ $(function () {
   $("#formNew").submit(function () {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", token);
+    
 
     var raw = JSON.stringify({
       nombre: $("#nombre").val(),
@@ -42,6 +45,7 @@ $(function () {
   $("#formEdit").submit(function () {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", token);
 
     const id = $("#id").val();
 
@@ -77,6 +81,7 @@ $(function () {
   $("#BtnDelete").click(function () {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", token);
 
     const id = $("#idDelete").val();
     var requestOptions = {
@@ -117,6 +122,7 @@ const getDepartamentos = () => {
       type: "GET",
       datatype: "json",
       dataSrc: "",
+      headers: {"Authorization": token}
     },
     columns: [
       { data: "id" },

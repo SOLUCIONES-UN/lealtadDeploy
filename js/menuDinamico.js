@@ -3,12 +3,15 @@ $(function () {
   getMenuAccesible();
 });
 
+
 const getMenuAccesible = () => {
   let menu;
   let pagina;
+  let token = sessionStorage.getItem("token");
   var requestOptions = {
     method: "GET",
     redirect: "follow",
+    headers: {"Authorization": token}
   };
 
   fetch(`${url}permisosUsuario/${usuario.username}`, requestOptions)

@@ -1,5 +1,5 @@
 const url = 'http://localhost:3000/'
-
+let token = sessionStorage.getItem("token");
 
 $(function () {
     getCategorias();

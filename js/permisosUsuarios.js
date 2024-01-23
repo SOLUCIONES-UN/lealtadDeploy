@@ -1,5 +1,6 @@
 const url = 'http://localhost:3000/'
 var infoUsuario;
+let token = sessionStorage.getItem("token");
 
 $(function () {
     getRols()
@@ -23,7 +24,8 @@ const getRols = () =>{
 
     var requestOptions = {
         method: 'GET',
-        redirect: 'follow'
+        redirect: 'follow',
+        headers: {"Authorization": token}
       
     };
 
@@ -43,8 +45,8 @@ const getMenus = () =>{
 
     var requestOptions = {
         method: 'GET',
-        redirect: 'follow'
-      
+        redirect: 'follow',
+        headers: {"Authorization": token}
     };
 
     fetch(`${url}Menu`, requestOptions)
@@ -64,6 +66,7 @@ const obtenerPermisos = () => {
 
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", token);
 
     $('#contenedor-izquierdo').html(null)
 
@@ -123,6 +126,7 @@ $('#btnAdd').click(function () {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
+
     console.log(data)
 
     var raw = JSON.stringify({
@@ -133,7 +137,7 @@ $('#btnAdd').click(function () {
         method: 'POST',
         headers: myHeaders,
         body: raw,
-        redirect: 'follow'
+        redirect: 'follow',
     };
 
     fetch(`${url}permisosUsuario`, requestOptions)
@@ -161,6 +165,7 @@ $('#btnDelete').click(function(){
 
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", token);
 
     var raw = JSON.stringify({
         "id": id
@@ -172,7 +177,8 @@ $('#btnDelete').click(function(){
         method: 'DELETE',
         headers: myHeaders,
         body: raw,
-        redirect: 'follow'
+        redirect: 'follow',
+        headers: {"Authorization": token}
     };
 
     fetch(`${url}permisosUsuario`, requestOptions)
@@ -220,7 +226,7 @@ const getAsignados = () => {
     .then(response => response.json())
     .then(result => {
       result.forEach(element => {
-        console.log(result)
+        console.log(result, "por acaaa")
         var opc = `<div class="form-check form-switch pl-2 pt-1">
             <input class="form-check-input permiso" type="checkbox" role="switch" id="checkpermisos${element.id}" value="${element.id}">
             <label class="form-check-label label-Asignado" for="checkpermisos${element.id}" style="font-size: 1rem;">${element.pagina.descripcion}</label>

@@ -1,4 +1,5 @@
 const url = 'http://localhost:3000/'
+let token = sessionStorage.getItem("token");
 
 $(function () {
     getRoles();
@@ -10,6 +11,7 @@ $(function () {
         e.preventDefault();
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", token);
 
         if($('#password').val().trim() != $('#password2').val().trim())
         {
@@ -62,6 +64,7 @@ $(function () {
         var myHeaders = new Headers();
         
         myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", token);
 
 
         const username = $('#usernameEdit').val();
@@ -116,6 +119,7 @@ $(function () {
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", token);
 
 
         const username = $('#usernameDelete').val();
@@ -160,7 +164,8 @@ const getUsuarios = () => {
             url: `${url}Usuario`,
             type: "GET",
             datatype: "json",
-            dataSrc: ""
+            dataSrc: "",
+            headers: {"Authorization": token}
         },
         
         columns: [
@@ -246,7 +251,8 @@ const Alert = function (message, status) // si se proceso correctamente la solic
 const OpenEdit = (username) => {
     var requestOptions = {
         method: 'GET',
-        redirect: 'follow'
+        redirect: 'follow',
+        headers: {"Authorization": token}
     };
 
     fetch(`${url}Usuario/${username}`, requestOptions)
@@ -276,7 +282,8 @@ const OpenDelete = (username) => {
 const getRoles = () => {
     var requestOptions = {
         method: 'GET',
-        redirect: 'follow'
+        redirect: 'follow',
+        headers: {"Authorization": token}
     };
 
     $('#rol').html('<option value="0" selected disabled>Selecciona una Opcion</option>');

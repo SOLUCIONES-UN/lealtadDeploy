@@ -17,6 +17,7 @@ select = $('.select2'),
 var numConfigButtons = 4;
 const inputFile = document.getElementById('formFile');
 const inputFileBloqueados = document.getElementById('formFileBloqueados');
+let token = sessionStorage.getItem("token");
 
 //var stepper = new Stepper(document.querySelector('.bs-stepper'))
 // stepper.to(3)
@@ -664,7 +665,8 @@ function addConfig(id, nombreEtapa) {
 const getDepartamentos = (id, isEdith =false) => {
   var requestOptions = {
     method: 'GET',
-    redirect: 'follow'
+    redirect: 'follow',
+    headers: {"Authorization": token}
   };
 
   if(isEdith){
@@ -700,7 +702,8 @@ const getDepartamentos = (id, isEdith =false) => {
 const getMunicipios = (id, isEdit=false) => {
   var requestOptions = {
     method: 'GET',
-    redirect: 'follow'
+    redirect: 'follow',
+    headers: {"Authorization": token}
   };
 
   if(isEdit){
@@ -736,7 +739,8 @@ const getMunicipios = (id, isEdit=false) => {
 const getTransacciones = (id, isEdit=false) => {
   var requestOptions = {
     method: 'GET',
-    redirect: 'follow'
+    redirect: 'follow',
+    headers: {"Authorization": token}
   };
 
   if(isEdit) {
@@ -921,7 +925,8 @@ const getAllCampanias = () => {
 
   var requestOptions = {
     method: 'GET',
-    redirect: 'follow'
+    redirect: 'follow',
+    headers: {"Authorization": token}
   };
 
   fetch(`${url}Campania`, requestOptions)
@@ -1085,6 +1090,7 @@ function saveLocal() {
 const saveData = (data) => {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", token);
 
   var raw = JSON.stringify(data);
 
@@ -1092,7 +1098,8 @@ const saveData = (data) => {
     method: 'POST',
     headers: myHeaders,
     body: raw,
-    redirect: 'follow'
+    redirect: 'follow',
+    headers: {"Authorization": token}
   };
 
   fetch(`${url}Campania`, requestOptions)
@@ -1146,7 +1153,8 @@ const Limpiar = (isEdith) => {
 const getPremios = (id, isEdit=false) => {
   var requestOptions = {
     method: 'GET',
-    redirect: 'follow'
+    redirect: 'follow',
+    headers: {"Authorization": token}
   };
 
   if(isEdit) {
@@ -1268,7 +1276,8 @@ const getParametros = (idEtapa) => {
   
   var requestOptions = {
     method: 'GET',
-    redirect: 'follow'
+    redirect: 'follow',
+    headers: {"Authorization": token}
   };
 
   fetch(`${url}parametros/${idEtapa}`, requestOptions)
@@ -1321,7 +1330,8 @@ const getPremiosEtapa = (idEtapa) => {
 
   var requestOptions = {
     method: 'GET',
-    redirect: 'follow'
+    redirect: 'follow',
+    headers: {"Authorization": token}
   };
 
   fetch(`${url}premios/${idEtapa}`, requestOptions)
@@ -1364,7 +1374,8 @@ const getPresupuesto = (idEtapa) => {
 
   var requestOptions = {
     method: 'GET',
-    redirect: 'follow'
+    redirect: 'follow',
+    headers: {"Authorization": token}
   };
 
   fetch(`${url}presupuesto/${idEtapa}`, requestOptions)

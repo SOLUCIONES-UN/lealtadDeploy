@@ -1,4 +1,5 @@
 const url = "http://localhost:3000/";
+let token = sessionStorage.getItem("token");
 
 $(function () {
   getPromociones();
@@ -21,6 +22,7 @@ const getPromociones = () => {
   var requestOptions = {
     method: "GET",
     redirect: "follow",
+    headers: {"Authorization": token}
   };
 
   fetch(url + "Promocion", requestOptions)
