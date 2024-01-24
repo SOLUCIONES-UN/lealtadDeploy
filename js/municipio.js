@@ -136,7 +136,13 @@ const getMunicipios = () => {
             headers: {"Authorization": token}
         },
         columns: [
-            { data: "id" },
+            { data: null, render: function (data, type, row, meta) {
+            
+                if (type === 'display') {
+                    return meta.row + 1;
+                }
+                return meta.row + 1; 
+            }},
             { data: "nombre" },
             { data: "departamento.nombre" },
             {

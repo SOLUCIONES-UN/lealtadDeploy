@@ -132,7 +132,13 @@ const getPaginas = () => {
             headers: {"Authorization": token}
         },
         columns: [
-            { data: "id" },
+            { data: null, render: function (data, type, row, meta) {
+            
+                if (type === 'display') {
+                    return meta.row + 1;
+                }
+                return meta.row + 1; 
+            }},
             { data: "descripcion" },
             { data: "idMenu" },
             { data: "path" },
