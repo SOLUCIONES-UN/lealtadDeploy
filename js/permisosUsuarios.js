@@ -1,19 +1,19 @@
 const url = 'http://localhost:3000/'
 var infoUsuario;
-let token = sessionStorage.getItem("token");
+let token = localStorage.getItem("token");
 
 $(function () {
     getRols()
     getMenus()
     Usuario()
     //getPaginas()
-    infoUsuario = JSON.parse(sessionStorage.getItem('infoUsuario'));
+    infoUsuario = JSON.parse(localStorage.getItem('infoUsuario'));
 })
 
 
 const Usuario = () => {
 
-    let usuario = JSON.parse(sessionStorage.getItem('infoUsuario'));
+    let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
     console.log(usuario.nombre)
     $('.user-name').text(usuario.nombre);
     $('.user-status').text(usuario.rol.descripcion);

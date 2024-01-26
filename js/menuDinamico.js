@@ -1,4 +1,4 @@
-let usuario = JSON.parse(sessionStorage.getItem("infoUsuario"));
+let usuario = JSON.parse(localStorage.getItem("infoUsuario"));
 $(function () {
   getMenuAccesible();
 });
@@ -7,7 +7,7 @@ $(function () {
 const getMenuAccesible = () => {
   let menu;
   let pagina;
-  let token = sessionStorage.getItem("token");
+  let token = localStorage.getItem("token");
   var requestOptions = {
     method: "GET",
     redirect: "follow",

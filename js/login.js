@@ -1,7 +1,7 @@
 const url = "http://localhost:3000/";
 let dataUsuario;
 let pagina;
-let token = sessionStorage.getItem("token");
+let token = localStorage.getItem("token");
 
 $(function () {
   $("#formLogin").on("submit", function () {
@@ -32,8 +32,8 @@ $(function () {
 
           getMenuAccesible(username);
 
-          sessionStorage.setItem("token", result.token);
-          sessionStorage.setItem("infoUsuario", JSON.stringify(result.data));
+          localStorage.setItem("token", result.token);
+          localStorage.setItem("infoUsuario", JSON.stringify(result.data));
           setTimeout(function () {
             $(location).attr("href", pagina);
           }, 1500);

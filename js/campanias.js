@@ -17,7 +17,7 @@ select = $('.select2'),
 var numConfigButtons = 4;
 const inputFile = document.getElementById('formFile');
 const inputFileBloqueados = document.getElementById('formFileBloqueados');
-let token = sessionStorage.getItem("token");
+let token = localStorage.getItem("token");
 
 //var stepper = new Stepper(document.querySelector('.bs-stepper'))
 // stepper.to(3)
@@ -254,7 +254,7 @@ $('#TipoTransaccion').on('change', function() {
 
 const Usuario = () => {
 
-  let usuario = JSON.parse(sessionStorage.getItem('infoUsuario'));
+  let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
   console.log(usuario.nombre)
   $('.user-name').text(usuario.nombre);
   $('.user-status').text(usuario.rol.descripcion);

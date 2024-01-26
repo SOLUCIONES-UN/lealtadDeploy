@@ -1,5 +1,5 @@
 const url = 'http://localhost:3000/'
-let token = sessionStorage.getItem("token");
+let token = localStorage.getItem("token");
 
 $(function () {
     let tabla = getColumnas();
@@ -114,7 +114,7 @@ $(function () {
 
 const Usuario = () => {
 
-    let usuario = JSON.parse(sessionStorage.getItem('infoUsuario'));
+    let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
     console.log(usuario.nombre)
     $('.user-name').text(usuario.nombre);
     $('.user-status').text(usuario.rol.descripcion);
