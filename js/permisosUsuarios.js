@@ -25,45 +25,44 @@ const Usuario = () => {
 }
 
 
-const getRols = () =>{
+const getRols = () => {
 
     var requestOptions = {
         method: 'GET',
         redirect: 'follow',
-        headers: {"Authorization": token}
-      
+        headers: headers
     };
 
     fetch(`${url}Rol`, requestOptions)
-    .then(response => response.json())
-    .then(result => {
-      result.forEach(element => {
-        var opc = `<option value="${element.id}">${element.descripcion}</option>`;
-        $('#Rols').append(opc);
-      });
-    })
-    .catch(error => console.log('error', error));
+        .then(response => response.json())
+        .then(result => {
+            result.forEach(element => {
+                var opc = `<option value="${element.id}">${element.descripcion}</option>`;
+                $('#Rols').append(opc);
+            });
+        })
+        .catch(error => console.log('error', error));
 
 }
 
-const getMenus = () =>{
+const getMenus = () => {
 
     var requestOptions = {
         method: 'GET',
         redirect: 'follow',
-        headers: {"Authorization": token}
+        headers: headers
     };
 
     fetch(`${url}Menu`, requestOptions)
-    .then(response => response.json())
-    .then(result => {
-        console.log(result)
-      result.forEach(element => {
-        var opc = `<option value="${element.id}">${element.descripcion}</option>`;
-        $('#menu').append(opc);
-      });
-    })
-    .catch(error => console.log('error', error));
+        .then(response => response.json())
+        .then(result => {
+            console.log(result)
+            result.forEach(element => {
+                var opc = `<option value="${element.id}">${element.descripcion}</option>`;
+                $('#menu').append(opc);
+            });
+        })
+        .catch(error => console.log('error', error));
 
 }
 
@@ -81,36 +80,35 @@ const obtenerPermisos = () => {
 
     var requestOptions = {
         method: 'PATCH',
-        headers: headers,
         body: raw,
-        redirect: 'follow'
-      
+        redirect: 'follow',
+        headers: headers,
     };
 
     fetch(`${url}permisosUsuario/NoAsignados`, requestOptions)
-    .then(response => response.json())
-    .then(result => {
-      result.forEach(element => {
-        var opc = `<div class="form-check form-switch pl-2 pt-1">
+        .then(response => response.json())
+        .then(result => {
+            result.forEach(element => {
+                var opc = `<div class="form-check form-switch pl-2 pt-1">
             <input class="form-check-input permiso" type="checkbox" role="switch" id="checkpermisos${element.id}" value="${element.id}">
             <label class="form-check-label label-no-Asignado" for="checkpermisos${element.id}" style="font-size: 1rem;">${element.descripcion}</label>
             </div>`;
-        $('#contenedor-izquierdo').append(opc);
-      });
-    })
-    .catch(error => console.log('error', error));
+                $('#contenedor-izquierdo').append(opc);
+            });
+        })
+        .catch(error => console.log('error', error));
 
     getAsignados()
 
 }
 
-$('#menu').on('change', function(){
+$('#menu').on('change', function () {
 
     const idMenu = $('#menu').val();
     const idRol = $('#Rols').val();
     console.log(idMenu, idRol)
 
-    if( idMenu != null && idRol != null ){
+    if (idMenu != null && idRol != null) {
         obtenerPermisos()
     }
 })
@@ -118,9 +116,9 @@ $('#menu').on('change', function(){
 
 
 $('#btnAdd').click(function () {
-    var data  = [];
-    $('.permiso:checked').each(function() {
-       data.push({ idPagina: $(this).val(), idRol : $('#Rols').val(), username: infoUsuario.username})
+    var data = [];
+    $('.permiso:checked').each(function () {
+        data.push({ idPagina: $(this).val(), idRol: $('#Rols').val(), username: infoUsuario.username })
     });
 
 
@@ -132,31 +130,32 @@ $('#btnAdd').click(function () {
 
     var requestOptions = {
         method: 'POST',
-        headers: headers,
         body: raw,
         redirect: 'follow',
+        headers: headers,
     };
 
     fetch(`${url}permisosUsuario`, requestOptions)
-            .then(response => response.json())
-            .then(result => {
-                if(result.code == "ok"){
-                    obtenerPermisos()
-                    Alert(result.message, 'success')
-                } else{
-                   Alert(result.message, 'error');
-                }
-            })
-            .catch(error => {Alert(error, 'error')
-            });
+        .then(response => response.json())
+        .then(result => {
+            if (result.code == "ok") {
+                obtenerPermisos()
+                Alert(result.message, 'success')
+            } else {
+                Alert(result.message, 'error');
+            }
+        })
+        .catch(error => {
+            Alert(error, 'error')
+        });
     return false;
 })
 
-$('#btnDelete').click(function(){
+$('#btnDelete').click(function () {
     let id = []
 
-    $('.permiso:checked').each(function() {
-        
+    $('.permiso:checked').each(function () {
+
         id.push($(this).val())
     });
 
@@ -172,34 +171,34 @@ $('#btnDelete').click(function(){
 
     var requestOptions = {
         method: 'DELETE',
-        headers: headers,
         body: raw,
         redirect: 'follow',
         headers: headers
     };
 
     fetch(`${url}permisosUsuario`, requestOptions)
-            .then(response => response.json())
-            .then(result => {
-                console.log(result)
-                if(result.code == "ok"){
-                    obtenerPermisos()
-                    Alert(result.message, 'success')
-                } else{
-                   Alert(result.message, 'error');
-                }
-            })
-            .catch(error => {Alert(error, 'error')
-            });
+        .then(response => response.json())
+        .then(result => {
+            console.log(result)
+            if (result.code == "ok") {
+                obtenerPermisos()
+                Alert(result.message, 'success')
+            } else {
+                Alert(result.message, 'error');
+            }
+        })
+        .catch(error => {
+            Alert(error, 'error')
+        });
     return false;
 
-     
+
 })
 
 const getAsignados = () => {
 
     $('#contenedor-derecho').html(null)
-    
+
     const idMenu = $('#menu').val();
     const idRol = $('#Rols').val();
 
@@ -210,33 +209,32 @@ const getAsignados = () => {
 
     var requestOptions = {
         method: 'PATCH',
-        headers: headers,
         body: raw,
-        redirect: 'follow'
-      
+        redirect: 'follow',
+        headers: headers
     };
 
     fetch(`${url}permisosUsuario/Asignados`, requestOptions)
-    .then(response => response.json())
-    .then(result => {
-      result.forEach(element => {
-        console.log(result, "por acaaa")
-        var opc = `<div class="form-check form-switch pl-2 pt-1">
+        .then(response => response.json())
+        .then(result => {
+            result.forEach(element => {
+                console.log(result, "por acaaa")
+                var opc = `<div class="form-check form-switch pl-2 pt-1">
             <input class="form-check-input permiso" type="checkbox" role="switch" id="checkpermisos${element.id}" value="${element.id}">
             <label class="form-check-label label-Asignado" for="checkpermisos${element.id}" style="font-size: 1rem;">${element.pagina.descripcion}</label>
             </div>`;
-        $('#contenedor-derecho').append(opc);
-      });
-    })
-    .catch(error => console.log('error', error));
+                $('#contenedor-derecho').append(opc);
+            });
+        })
+        .catch(error => console.log('error', error));
 }
 
-const Alert = function(message, status){
+const Alert = function (message, status) {
     toastr[`${status}`](message, `${status}`, {
         closeButton: true,
         tapToDismiss: false,
         positionClass: 'toast-top-right',
         rtl: false
-      });
+    });
 }
 
