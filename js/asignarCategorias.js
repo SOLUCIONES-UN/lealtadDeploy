@@ -1,6 +1,11 @@
 const url = 'http://localhost:3000/'
 let token = localStorage.getItem("token");
 
+const headers = {
+    'Authorization': token,
+    'Content-Type': 'application/json'
+};
+
 $(function () {
     getCategorias();
     Usuario();
@@ -12,10 +17,7 @@ const getCategorias = () => {
     var requestOptions = {
         method: 'GET',
         redirect: 'follow',
-        headers: {
-            'Authorization': token,
-            'Content-Type': 'application/json'
-        }
+        headers: headers
 
     };
 
@@ -33,9 +35,6 @@ const getCategorias = () => {
 
 const getTransaccionesAsignadas = () => {
 
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
     $('#contenedor-derecho').html(null)
 
     const idCategoria = $('#categorias').val();
@@ -46,7 +45,7 @@ const getTransaccionesAsignadas = () => {
 
     var requestOptions = {
         method: 'PATCH',
-        headers: myHeaders,
+        headers: headers,
         body: raw,
         redirect: 'follow'
     };
@@ -67,8 +66,6 @@ const getTransaccionesAsignadas = () => {
 }
 
 const getTransaccionesNoAsignadas = () => {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
 
     $('#contenedor-izquierdo').html(null)
 
@@ -80,7 +77,7 @@ const getTransaccionesNoAsignadas = () => {
 
     var requestOptions = {
         method: 'PATCH',
-        headers: myHeaders,
+        headers: headers,
         body: raw,
         redirect: 'follow'
     };
@@ -130,16 +127,13 @@ $('#btnAdd').click(function () {
         data.push({ idTransaccion: $(this).val(), idCategoria: $('#categorias').val() })
     });
 
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
     var raw = JSON.stringify({
         "data": data
     });
 
     var requestOptions = {
         method: 'POST',
-        headers: myHeaders,
+        headers: headers,
         body: raw,
         redirect: 'follow'
     };
@@ -171,8 +165,9 @@ $('#btnDelete').click(function () {
         id.push($(this).val())
     });
 
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+    if (id.length == 0) {
+        return Alert('Por favor seleccione al menos una categoría.', 'error')
+    }
 
     var raw = JSON.stringify({
         "id": id
@@ -180,7 +175,7 @@ $('#btnDelete').click(function () {
 
     var requestOptions = {
         method: 'DELETE',
-        headers: myHeaders,
+        headers: headers,
         body: raw,
         redirect: 'follow'
     };

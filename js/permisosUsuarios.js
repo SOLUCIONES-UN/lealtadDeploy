@@ -2,6 +2,11 @@ const url = 'http://localhost:3000/'
 var infoUsuario;
 let token = localStorage.getItem("token");
 
+const headers = {
+    'Authorization': token,
+    'Content-Type': 'application/json'
+};
+
 $(function () {
     getRols()
     getMenus()
@@ -64,10 +69,6 @@ const getMenus = () =>{
 
 const obtenerPermisos = () => {
 
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Authorization", token);
-
     $('#contenedor-izquierdo').html(null)
 
     const idMenu = $('#menu').val();
@@ -80,7 +81,7 @@ const obtenerPermisos = () => {
 
     var requestOptions = {
         method: 'PATCH',
-        headers: myHeaders,
+        headers: headers,
         body: raw,
         redirect: 'follow'
       
@@ -123,10 +124,6 @@ $('#btnAdd').click(function () {
     });
 
 
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-
     console.log(data)
 
     var raw = JSON.stringify({
@@ -135,7 +132,7 @@ $('#btnAdd').click(function () {
 
     var requestOptions = {
         method: 'POST',
-        headers: myHeaders,
+        headers: headers,
         body: raw,
         redirect: 'follow',
     };
@@ -163,9 +160,9 @@ $('#btnDelete').click(function(){
         id.push($(this).val())
     });
 
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Authorization", token);
+    if (id.length == 0) {
+        return Alert('Por favor seleccione al menos un permiso.', 'error')
+    }
 
     var raw = JSON.stringify({
         "id": id
@@ -175,7 +172,7 @@ $('#btnDelete').click(function(){
 
     var requestOptions = {
         method: 'DELETE',
-        headers: myHeaders,
+        headers: headers,
         body: raw,
         redirect: 'follow',
         headers: {"Authorization": token}
@@ -201,9 +198,6 @@ $('#btnDelete').click(function(){
 
 const getAsignados = () => {
 
-     var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
     $('#contenedor-derecho').html(null)
     
     const idMenu = $('#menu').val();
@@ -216,7 +210,7 @@ const getAsignados = () => {
 
     var requestOptions = {
         method: 'PATCH',
-        headers: myHeaders,
+        headers: headers,
         body: raw,
         redirect: 'follow'
       
