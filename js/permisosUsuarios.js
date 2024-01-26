@@ -175,7 +175,7 @@ $('#btnDelete').click(function(){
         headers: headers,
         body: raw,
         redirect: 'follow',
-        headers: {"Authorization": token}
+        headers: headers
     };
 
     fetch(`${url}permisosUsuario`, requestOptions)
