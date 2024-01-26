@@ -47,7 +47,7 @@ const getTransaccionesAsignadas = () => {
         redirect: 'follow'
     };
 
-    fetch(`${url}asignarCategoria/Asignados`, requestOptions)
+    fetch(`${url}asignarCategoria/asignados`, requestOptions)
         .then(response => response.json())
         .then(result => {
             result.forEach(element => {
@@ -81,7 +81,7 @@ const getTransaccionesNoAsignadas = () => {
         redirect: 'follow'
     };
 
-    fetch(`${url}asignarCategoria/NoAsignados`, requestOptions)
+    fetch(`${url}asignarCategoria/noAsignados`, requestOptions)
         .then(response => response.json())
         .then(result => {
             result.forEach(element => {
