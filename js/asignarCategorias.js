@@ -7,23 +7,23 @@ $(function () {
 
 })
 
-const getCategorias = () =>{
+const getCategorias = () => {
 
     var requestOptions = {
         method: 'GET',
         redirect: 'follow'
-      
+
     };
 
     fetch(`${url}Categoria`, requestOptions)
-    .then(response => response.json())
-    .then(result => {
-      result.forEach(element => {
-        var opc = `<option value="${element.id}">${element.nombre}</option>`;
-        $('#categorias').append(opc);
-      });
-    })
-    .catch(error => console.log('error', error));
+        .then(response => response.json())
+        .then(result => {
+            result.forEach(element => {
+                var opc = `<option value="${element.id}">${element.nombre}</option>`;
+                $('#categorias').append(opc);
+            });
+        })
+        .catch(error => console.log('error', error));
 
 }
 
@@ -48,18 +48,18 @@ const getTransaccionesAsignadas = () => {
     };
 
     fetch(`${url}asignarCategoria/Asignados`, requestOptions)
-    .then(response => response.json())
-    .then(result => {
-      result.forEach(element => {
-        console.log(result)
-        var opc = `<div class="form-check form-switch pl-2 pt-1">
+        .then(response => response.json())
+        .then(result => {
+            result.forEach(element => {
+                console.log(result)
+                var opc = `<div class="form-check form-switch pl-2 pt-1">
             <input class="form-check-input permiso" type="checkbox" role="switch" id="checkpermisos${element.id}" value="${element.id}">
             <label class="form-check-label label-Asignado" for="checkpermisos${element.id}" style="font-size: 1rem;">${element.transaccion.nombre}</label>
             </div>`;
-        $('#contenedor-derecho').append(opc);
-      });
-    })
-    .catch(error => console.log('error', error));
+                $('#contenedor-derecho').append(opc);
+            });
+        })
+        .catch(error => console.log('error', error));
 }
 
 const getTransaccionesNoAsignadas = () => {
@@ -82,32 +82,32 @@ const getTransaccionesNoAsignadas = () => {
     };
 
     fetch(`${url}asignarCategoria/NoAsignados`, requestOptions)
-    .then(response => response.json())
-    .then(result => {
-      result.forEach(element => {
-        console.log(result)
-        var opc = `<div class="form-check form-switch pl-2 pt-1">
+        .then(response => response.json())
+        .then(result => {
+            result.forEach(element => {
+                console.log(result)
+                var opc = `<div class="form-check form-switch pl-2 pt-1">
             <input class="form-check-input permiso" type="checkbox" role="switch" id="checkpermisos${element.id}" value="${element.id}">
             <label class="form-check-label label-no-Asignado" for="checkpermisos${element.id}" style="font-size: 1rem;">${element.nombre}</label>
             </div>`;
-        $('#contenedor-izquierdo').append(opc);
-      });
-    })
-    .catch(error => console.log('error', error));
+                $('#contenedor-izquierdo').append(opc);
+            });
+        })
+        .catch(error => console.log('error', error));
 
     getTransaccionesAsignadas();
 }
 
-$('#categorias').on('change', function(){
+$('#categorias').on('change', function () {
 
     const idCategoria = $('#categorias').val();
     console.log('id categoria ' + idCategoria)
 
-    if(idCategoria != null){
+    if (idCategoria != null) {
         getTransaccionesNoAsignadas();
     }
 
-    
+
 })
 
 const Usuario = () => {
@@ -118,12 +118,12 @@ const Usuario = () => {
     $('.user-status').text(usuario.rol.descripcion);
 }
 
-$('#btnAdd').click(function() {
+$('#btnAdd').click(function () {
 
     var data = [];
 
-    $('.permiso:checked').each(function() {
-        data.push({idTransaccion: $(this).val(), idCategoria:$('#categorias').val()})
+    $('.permiso:checked').each(function () {
+        data.push({ idTransaccion: $(this).val(), idCategoria: $('#categorias').val() })
     });
 
     var myHeaders = new Headers();
@@ -141,28 +141,29 @@ $('#btnAdd').click(function() {
     };
 
     fetch(`${url}asignarCategoria`, requestOptions)
-            .then(response => response.json())
-            .then(result => {
-                console.log(result)
-                if(result.code == "ok"){
-                    getTransaccionesNoAsignadas();
-                    Alert(result.message, 'success')
-                } else{
-                   Alert(result.message, 'error');
-                }
-            })
-            .catch(error => {Alert(error, 'error')
-            });
+        .then(response => response.json())
+        .then(result => {
+            console.log(result)
+            if (result.code == "ok") {
+                getTransaccionesNoAsignadas();
+                Alert(result.message, 'success')
+            } else {
+                Alert(result.message, 'error');
+            }
+        })
+        .catch(error => {
+            Alert(error, 'error')
+        });
     return false;
 
 })
 
-$('#btnDelete').click(function(){
+$('#btnDelete').click(function () {
 
     let id = []
 
-    $('.permiso:checked').each(function() {
-        
+    $('.permiso:checked').each(function () {
+
         id.push($(this).val())
     });
 
@@ -181,26 +182,27 @@ $('#btnDelete').click(function(){
     };
 
     fetch(`${url}asignarCategoria`, requestOptions)
-            .then(response => response.json())
-            .then(result => {
-                console.log(result)
-                if(result.code == "ok"){
-                    getTransaccionesNoAsignadas();
-                    Alert(result.message, 'success')
-                } else{
-                   Alert(result.message, 'error');
-                }
-            })
-            .catch(error => {Alert(error, 'error')
-            });
+        .then(response => response.json())
+        .then(result => {
+            console.log(result)
+            if (result.code == "ok") {
+                getTransaccionesNoAsignadas();
+                Alert(result.message, 'success')
+            } else {
+                Alert(result.message, 'error');
+            }
+        })
+        .catch(error => {
+            Alert(error, 'error')
+        });
     return false;
 })
 
-const Alert = function(message, status){
+const Alert = function (message, status) {
     toastr[`${status}`](message, `${status}`, {
         closeButton: true,
         tapToDismiss: false,
         positionClass: 'toast-top-right',
         rtl: false
-      });
+    });
 }
