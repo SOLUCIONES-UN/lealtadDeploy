@@ -15,7 +15,7 @@ const getCategorias = () => {
 
     };
 
-    fetch(`${url}Categoria`, requestOptions)
+    fetch(`${url}categoria`, requestOptions)
         .then(response => response.json())
         .then(result => {
             result.forEach(element => {

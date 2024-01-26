@@ -1551,7 +1551,7 @@ const tipoDeTransaccion = (id) => {
 
       $('#Transacciones'+id).html(null);
       
-      fetch(`${url}Categoria`, requestOptions)
+      fetch(`${url}categoria`, requestOptions)
       .then(response => response.json())
       .then(result => {
         result.forEach(element => {
@@ -1585,7 +1585,7 @@ $('#TipoTransaccionEdit').on('change', function(){
 
       $('#TransaccionesEdit').html(null);
       
-      fetch(`${url}Categoria`, requestOptions)
+      fetch(`${url}categoria`, requestOptions)
       .then(response => response.json())
       .then(result => {
         result.forEach(element => {
