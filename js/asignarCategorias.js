@@ -16,9 +16,8 @@ const getCategorias = () => {
 
     var requestOptions = {
         method: 'GET',
-        redirect: 'follow',
-        headers: headers
-
+        headers: headers,
+        redirect: 'follow'
     };
 
     fetch(`${url}categoria`, requestOptions)

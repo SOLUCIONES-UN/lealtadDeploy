@@ -29,8 +29,8 @@ const getRols = () => {
 
     var requestOptions = {
         method: 'GET',
-        redirect: 'follow',
-        headers: headers
+        headers: headers,
+        redirect: 'follow'
     };
 
     fetch(`${url}Rol`, requestOptions)
@@ -49,8 +49,8 @@ const getMenus = () => {
 
     var requestOptions = {
         method: 'GET',
-        redirect: 'follow',
-        headers: headers
+        headers: headers,
+        redirect: 'follow'
     };
 
     fetch(`${url}Menu`, requestOptions)
@@ -80,9 +80,9 @@ const obtenerPermisos = () => {
 
     var requestOptions = {
         method: 'PATCH',
+        headers: headers,
         body: raw,
         redirect: 'follow',
-        headers: headers,
     };
 
     fetch(`${url}permisosUsuario/NoAsignados`, requestOptions)
@@ -130,9 +130,9 @@ $('#btnAdd').click(function () {
 
     var requestOptions = {
         method: 'POST',
+        headers: headers,
         body: raw,
         redirect: 'follow',
-        headers: headers,
     };
 
     fetch(`${url}permisosUsuario`, requestOptions)
@@ -171,9 +171,9 @@ $('#btnDelete').click(function () {
 
     var requestOptions = {
         method: 'DELETE',
+        headers: headers,
         body: raw,
-        redirect: 'follow',
-        headers: headers
+        redirect: 'follow'
     };
 
     fetch(`${url}permisosUsuario`, requestOptions)
@@ -209,9 +209,9 @@ const getAsignados = () => {
 
     var requestOptions = {
         method: 'PATCH',
+        headers: headers,
         body: raw,
-        redirect: 'follow',
-        headers: headers
+        redirect: 'follow'
     };
 
     fetch(`${url}permisosUsuario/Asignados`, requestOptions)
