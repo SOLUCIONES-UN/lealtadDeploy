@@ -117,3 +117,5 @@ var gridOptions = {
 
     }
 }
+
+export { gridOptions };
