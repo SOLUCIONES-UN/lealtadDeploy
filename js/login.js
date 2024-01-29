@@ -34,7 +34,8 @@ $(function () {
 
           localStorage.setItem("token", result.token);
           localStorage.setItem("infoUsuario", JSON.stringify(result.data));
-          setTimeout(() => location.href = pagina, 1500);
+          //setTimeout(() => location.href = pagina, 1500);
+          location.href = pagina;
           
         } else {
           Alert(result.message, "error");
