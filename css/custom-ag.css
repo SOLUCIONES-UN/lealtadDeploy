@@ -1,0 +1,6 @@
+.ag-theme-quartz-dark .ag-header-viewport {background-color: #343D55;}
+.ag-theme-quartz-dark .ag-row, .ag-theme-quartz-dark .ag-center-cols-viewport, .ag-theme-quartz-dark .ag-paging-panel {
+    background-color: #283046;
+}
+.ag-theme-quartz-dark .ag-paging-page-summary-panel {background-color: #242b3d; height: 2em;}
+/* .ag-theme-quartz-dark .ag-paging-row-summary-panel-number:nth-child(1) {background-color: #7367f0; width: 1em;} */
