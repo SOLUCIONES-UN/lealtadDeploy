@@ -30,12 +30,12 @@ $(function () {
         if (result.code == "ok") {
           Alert(result.message, "success");
 
-          getMenuAccesible(username);
+          //getMenuAccesible(username);
 
           localStorage.setItem("token", result.token);
           localStorage.setItem("infoUsuario", JSON.stringify(result.data));
-          //setTimeout(() => location.href = pagina, 1500);
-          location.href = pagina;
+          setTimeout(() => location.href = pagina, 1500);
+          //location.href = pagina;
           
         } else {
           Alert(result.message, "error");
