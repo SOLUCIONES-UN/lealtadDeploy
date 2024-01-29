@@ -1,4 +1,5 @@
 const url = 'http://localhost:3000/'
+let token = localStorage.getItem("token");
 
 $(function () {
     let tabla = getColumnas();
@@ -8,6 +9,7 @@ $(function () {
     $('#formNew').submit(function () {
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", token);
 
         var raw = JSON.stringify({
             "nombre": $('#nombre').val()
@@ -43,7 +45,7 @@ $(function () {
     $('#formEdit').submit(function () {
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
-
+        myHeaders.append("Authorization", token);
 
         const id = $('#id').val();
 
@@ -82,7 +84,7 @@ $(function () {
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
-
+        myHeaders.append("Authorization", token);
 
         const id = $('#idDelete').val();
         var requestOptions = {
@@ -112,7 +114,7 @@ $(function () {
 
 const Usuario = () => {
 
-    let usuario = JSON.parse(sessionStorage.getItem('infoUsuario'));
+    let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
     console.log(usuario.nombre)
     $('.user-name').text(usuario.nombre);
     $('.user-status').text(usuario.rol.descripcion);
@@ -126,10 +128,17 @@ const getColumnas = () => {
             url: `${url}Columna`,
             type: "GET",
             datatype: "json",
-            dataSrc: ""
+            dataSrc: "",
+            headers: {"Authorization": token}
         },
         columns: [
-            { data: "id" },
+            { data: null, render: function (data, type, row, meta) {
+            
+                if (type === 'display') {
+                    return meta.row + 1;
+                }
+                return meta.row + 1; 
+            }},
             { data: "nombre" },
             {
                 data: "id", render: function (data) {
@@ -207,7 +216,8 @@ const Alert = function (message, status) // si se proceso correctamente la solic
 const OpenEdit = (id) => {
     var requestOptions = {
         method: 'GET',
-        redirect: 'follow'
+        redirect: 'follow',
+        headers: {"Authorization": token}
     };
 
     fetch(`${url}Columna/${id}`, requestOptions)

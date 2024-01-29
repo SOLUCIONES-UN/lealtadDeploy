@@ -1,4 +1,5 @@
 const url = 'http://localhost:3000/'
+let token = localStorage.getItem("token");
 
 $(function () {
     let tabla = getMenus();
@@ -102,7 +103,7 @@ $(function () {
 
 const Usuario = () => {
 
-    let usuario = JSON.parse(sessionStorage.getItem('infoUsuario'));
+    let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
     console.log(usuario.nombre)
     $('.user-name').text(usuario.nombre);
     $('.user-status').text(usuario.rol.descripcion);
@@ -116,15 +117,16 @@ const getMenus = () => {
             url: `${url}Menu`,
             type: "GET",
             datatype: "json",
-            dataSrc: ""
+            dataSrc: "",
+            headers: {"Authorization": token}
         },
         columns: [
             { data: null, render: function (data, type, row, meta) {
-                // Usa el índice del bucle map para mostrar el número de fila
+            
                 if (type === 'display') {
                     return meta.row + 1;
                 }
-                return meta.row + 1; // Usa el índice de la fila si no es un renderizado de pantalla
+                return meta.row + 1; 
             }},
             { data: "descripcion" },
             {

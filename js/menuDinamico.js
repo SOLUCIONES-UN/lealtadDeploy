@@ -1,14 +1,17 @@
-let usuario = JSON.parse(sessionStorage.getItem("infoUsuario"));
+let usuario = JSON.parse(localStorage.getItem("infoUsuario"));
 $(function () {
   getMenuAccesible();
 });
 
+
 const getMenuAccesible = () => {
   let menu;
   let pagina;
+  let token = localStorage.getItem("token");
   var requestOptions = {
     method: "GET",
     redirect: "follow",
+    headers: {"Authorization": token}
   };
 
   fetch(`${url}permisosUsuario/${usuario.username}`, requestOptions)

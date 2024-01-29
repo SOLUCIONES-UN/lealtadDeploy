@@ -1,4 +1,5 @@
 const url = 'http://localhost:3000/';
+let token = localStorage.getItem("token");
 
 $(function () {
     let tabla = getRoles();
@@ -8,6 +9,7 @@ $(function () {
     $('#formNew').submit(function () {
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", token);
 
         var raw = JSON.stringify({
             "descripcion": $('#descripcion').val()
@@ -44,6 +46,7 @@ $(function () {
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", token);
 
         const id = $('#id').val();
 
@@ -55,7 +58,7 @@ $(function () {
             method: 'PUT',
             headers: myHeaders,
             body: raw,
-            redirect: 'follow'
+            redirect: 'follow',
         };
 
         fetch(`${url}Rol/${id}`, requestOptions)
@@ -80,12 +83,14 @@ $(function () {
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", token);
 
         const id = $('#idDelete').val();
         var requestOptions = {
             method: 'DELETE',
             headers: myHeaders,
-            redirect: 'follow'
+            redirect: 'follow',
+            headers: {"Authorization": token}
         };
 
         fetch(`${url}Rol/${id}`, requestOptions)
@@ -109,7 +114,7 @@ $(function () {
 
 const Usuario = () => {
 
-    let usuario = JSON.parse(sessionStorage.getItem('infoUsuario'));
+    let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
     console.log(usuario.nombre)
     $('.user-name').text(usuario.nombre);
     $('.user-status').text(usuario.rol.descripcion);
@@ -123,10 +128,17 @@ const getRoles = () => {
             url: `${url}Rol`,
             type: "GET",
             datatype: "json",
-            dataSrc:""
+            dataSrc:"",
+            headers: {"Authorization": token}
         },
         columns: [
-            {data: "id"},
+            { data: null, render: function (data, type, row, meta) {
+            
+                if (type === 'display') {
+                    return meta.row + 1;
+                }
+                return meta.row + 1; 
+            }},
             {data: "descripcion"},
             {
                 data: "id", render: function (data) {
@@ -201,7 +213,8 @@ const Alert = function(message, status){
 const OpenEdit = (id) => {
     var requestOptions = {
         method: 'GET',
-        redirect: 'follow'
+        redirect: 'follow',
+        headers: {"Authorization": token}
     };
 
     fetch(`${url}Rol/${id}`, requestOptions)

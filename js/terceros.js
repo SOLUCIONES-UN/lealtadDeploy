@@ -1,4 +1,5 @@
 const url = 'http://localhost:3000/';
+let token = localStorage.getItem("token");
 
 $(function() {
     let tabla = getTerceros();
@@ -108,7 +109,7 @@ $(function() {
 
 const Usuario = () => {
 
-    let usuario = JSON.parse(sessionStorage.getItem('infoUsuario'));
+    let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
     console.log(usuario.nombre)
     $('.user-name').text(usuario.nombre);
     $('.user-status').text(usuario.rol.descripcion);
@@ -121,7 +122,8 @@ const getTerceros = () => {
             url: `${url}Tercero`,
             type: "GET",
             datatype: "json",
-            dataSrc:""
+            dataSrc:"",
+            headers: {"Authorization": token}
         },
         columns: [
             { data: null, render: function (data, type, row, meta) {

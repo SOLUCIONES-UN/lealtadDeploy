@@ -1,6 +1,7 @@
 const url = "http://localhost:3000/";
 let dataUsuario;
 let pagina;
+let token = localStorage.getItem("token");
 
 $(function () {
   $("#formLogin").on("submit", function () {
@@ -31,10 +32,12 @@ $(function () {
 
           getMenuAccesible(username);
 
+          localStorage.setItem("token", result.token);
+          localStorage.setItem("infoUsuario", JSON.stringify(result.data));
           setTimeout(function () {
             $(location).attr("href", pagina);
-            sessionStorage.setItem("infoUsuario", JSON.stringify(result.info));
           }, 1500);
+          
         } else {
           Alert(result.message, "error");
         }
@@ -59,6 +62,7 @@ const getMenuAccesible = (username) => {
   var requestOptions = {
     method: "GET",
     redirect: "follow",
+    headers: {"Authorization": token}
   };
 
   fetch(`${url}permisosUsuario/${username}`, requestOptions)

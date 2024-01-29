@@ -1,4 +1,5 @@
 const url = 'http://localhost:3000/'
+let token = localStorage.getItem("token");
 
 $(function () {
     getColumnas();
@@ -9,6 +10,7 @@ $(function () {
     $('#formNew').submit(function () {
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", token);
 
         var raw = JSON.stringify({
             "nombre": $('#nombre').val(),
@@ -48,7 +50,7 @@ $(function () {
     $('#formEdit').submit(function () {
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
-
+        myHeaders.append("Authorization", token);
 
         const id = $('#id').val();
 
@@ -92,13 +94,14 @@ $(function () {
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
-
+        myHeaders.append("Authorization", token);
 
         const id = $('#idDelete').val();
         var requestOptions = {
             method: 'DELETE',
             headers: myHeaders,
-            redirect: 'follow'
+            redirect: 'follow',
+            headers: {"Authorization": token}
         };
 
         fetch(`${url}Transaccion/${id}`, requestOptions)
@@ -122,7 +125,7 @@ $(function () {
 
 const Usuario = () => {
 
-    let usuario = JSON.parse(sessionStorage.getItem('infoUsuario'));
+    let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
     console.log(usuario.nombre)
     $('.user-name').text(usuario.nombre);
     $('.user-status').text(usuario.rol.descripcion);
@@ -136,7 +139,8 @@ const getTransaccions = () => {
             url: `${url}Transaccion`,
             type: "GET",
             datatype: "json",
-            dataSrc: ""
+            dataSrc: "",
+            headers: {"Authorization": token}
         },
         columns: [
             { data: null, render: function (data, type, row, meta) {
@@ -224,7 +228,8 @@ const Alert = function (message, status) // si se proceso correctamente la solic
 const OpenEdit = (id) => {
     var requestOptions = {
         method: 'GET',
-        redirect: 'follow'
+        redirect: 'follow',
+        headers: {"Authorization": token}
     };
 
     fetch(`${url}Transaccion/${id}`, requestOptions)
@@ -255,7 +260,8 @@ const OpenDelete = (id) => {
 const getColumnas = () => {
     var requestOptions = {
         method: 'GET',
-        redirect: 'follow'
+        redirect: 'follow',
+        headers: {"Authorization": token}
     };
 
     $('#columna').html('<option value="0" selected disabled>Selecciona una Opcion</option>');

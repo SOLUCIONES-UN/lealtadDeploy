@@ -4,6 +4,8 @@ let premios = [];
 let imgSuccess = "";
 let imagen1 = "";
 const inputFile = document.getElementById("formFile");
+let token = localStorage.getItem("token");
+
 
 // funcion para cargar imagenes
 function Uploaded(input) {
@@ -395,7 +397,7 @@ const limpiarForm = () => {
 
 const Usuario = () => {
 
-  let usuario = JSON.parse(sessionStorage.getItem('infoUsuario'));
+  let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
   console.log(usuario.nombre)
   $('.user-name').text(usuario.nombre);
   $('.user-status').text(usuario.rol.descripcion);
@@ -405,6 +407,7 @@ const getAllPromociones = () => {
   var requestOptions = {
     method: "GET",
     redirect: "follow",
+    headers: {"Authorization": token}
   };
 
   fetch(`${url}Promocion`, requestOptions)
@@ -686,6 +689,7 @@ const getPremios = () => {
   var requestOptions = {
     method: "GET",
     redirect: "follow",
+    headers: {"Authorization": token}
   };
 
   $("#premio").html(

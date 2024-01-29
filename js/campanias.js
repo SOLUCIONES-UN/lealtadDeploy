@@ -15,8 +15,14 @@ var bsStepper = document.querySelectorAll(".bs-stepper"),
   verticalWizard = document.querySelector(".vertical-wizard-example");
 
 var numConfigButtons = 4;
+<<<<<<< HEAD
 const inputFile = document.getElementById("formFile");
 const inputFileBloqueados = document.getElementById("formFileBloqueados");
+=======
+const inputFile = document.getElementById('formFile');
+const inputFileBloqueados = document.getElementById('formFileBloqueados');
+let token = localStorage.getItem("token");
+>>>>>>> staging
 
 //var stepper = new Stepper(document.querySelector('.bs-stepper'))
 // stepper.to(3)
@@ -232,11 +238,20 @@ $("#TipoTransaccion").on("change", function () {
 });
 
 const Usuario = () => {
+<<<<<<< HEAD
   let usuario = JSON.parse(sessionStorage.getItem("infoUsuario"));
   console.log(usuario.nombre);
   $(".user-name").text(usuario.nombre);
   $(".user-status").text(usuario.rol.descripcion);
 };
+=======
+
+  let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
+  console.log(usuario.nombre)
+  $('.user-name').text(usuario.nombre);
+  $('.user-status').text(usuario.rol.descripcion);
+}
+>>>>>>> staging
 
 function loadMenu(isEtapa) {
   // Adds crossed class
@@ -651,8 +666,9 @@ function addConfig(id, nombreEtapa) {
 
 const getDepartamentos = (id, isEdith = false) => {
   var requestOptions = {
-    method: "GET",
-    redirect: "follow",
+    method: 'GET',
+    redirect: 'follow',
+    headers: {"Authorization": token}
   };
 
   if (isEdith) {
@@ -680,8 +696,9 @@ const getDepartamentos = (id, isEdith = false) => {
 
 const getMunicipios = (id, isEdit = false) => {
   var requestOptions = {
-    method: "GET",
-    redirect: "follow",
+    method: 'GET',
+    redirect: 'follow',
+    headers: {"Authorization": token}
   };
 
   if (isEdit) {
@@ -709,8 +726,9 @@ const getMunicipios = (id, isEdit = false) => {
 
 const getTransacciones = (id, isEdit = false) => {
   var requestOptions = {
-    method: "GET",
-    redirect: "follow",
+    method: 'GET',
+    redirect: 'follow',
+    headers: {"Authorization": token}
   };
 
   if (isEdit) {
@@ -883,8 +901,9 @@ function agregarUsuarioBloqueado() {
 
 const getAllCampanias = () => {
   var requestOptions = {
-    method: "GET",
-    redirect: "follow",
+    method: 'GET',
+    redirect: 'follow',
+    headers: {"Authorization": token}
   };
 
   fetch(`${url}Campania`, requestOptions)
@@ -1058,6 +1077,7 @@ function saveLocal() {
 const saveData = (data) => {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", token);
 
   var raw = JSON.stringify(data);
 
@@ -1065,7 +1085,8 @@ const saveData = (data) => {
     method: "POST",
     headers: myHeaders,
     body: raw,
-    redirect: "follow",
+    redirect: 'follow',
+    headers: {"Authorization": token}
   };
 
   fetch(`${url}Campania`, requestOptions)
@@ -1115,8 +1136,9 @@ const Limpiar = (isEdith) => {
 
 const getPremios = (id, isEdit = false) => {
   var requestOptions = {
-    method: "GET",
-    redirect: "follow",
+    method: 'GET',
+    redirect: 'follow',
+    headers: {"Authorization": token}
   };
 
   if (isEdit) {
@@ -1226,8 +1248,9 @@ const loadMenuEdit = (isEdit = false) => {
 
 const getParametros = (idEtapa) => {
   var requestOptions = {
-    method: "GET",
-    redirect: "follow",
+    method: 'GET',
+    redirect: 'follow',
+    headers: {"Authorization": token}
   };
 
   fetch(`${url}parametros/${idEtapa}`, requestOptions)
@@ -1284,8 +1307,9 @@ const getParametros = (idEtapa) => {
 
 const getPremiosEtapa = (idEtapa) => {
   var requestOptions = {
-    method: "GET",
-    redirect: "follow",
+    method: 'GET',
+    redirect: 'follow',
+    headers: {"Authorization": token}
   };
 
   fetch(`${url}premios/${idEtapa}`, requestOptions)
@@ -1332,8 +1356,9 @@ const getPremiosEtapa = (idEtapa) => {
 
 const getPresupuesto = (idEtapa) => {
   var requestOptions = {
-    method: "GET",
-    redirect: "follow",
+    method: 'GET',
+    redirect: 'follow',
+    headers: {"Authorization": token}
   };
 
   fetch(`${url}presupuesto/${idEtapa}`, requestOptions)
@@ -1506,10 +1531,12 @@ const tipoDeTransaccion = (id) => {
   if (tipoTrans == "c") {
     $("#Transacciones" + id).html(null);
 
-    fetch(`${url}Categoria`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        result.forEach((element) => {
+      $('#Transacciones'+id).html(null);
+      
+      fetch(`${url}categoria`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        result.forEach(element => {
           var opc = `<option value="${element.id}">${element.nombre}</option>`;
           $("#Transacciones" + id).append(opc);
         });
@@ -1534,10 +1561,12 @@ $("#TipoTransaccionEdit").on("change", function () {
   if (tipoTrans == "c") {
     $("#TransaccionesEdit").html(null);
 
-    fetch(`${url}Categoria`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        result.forEach((element) => {
+      $('#TransaccionesEdit').html(null);
+      
+      fetch(`${url}categoria`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        result.forEach(element => {
           var opc = `<option value="${element.id}">${element.nombre}</option>`;
           $("#TransaccionesEdit").append(opc);
         });

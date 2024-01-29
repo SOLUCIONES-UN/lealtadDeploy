@@ -1,4 +1,6 @@
+let token = localStorage.getItem("token");
 const url = 'http://localhost:3000/'
+
 
 $(function () {
     let tabla = getCategorias();
@@ -8,6 +10,7 @@ $(function () {
     $('#formNew').submit(function () {
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", token);
 
         var raw = JSON.stringify({
             "nombre": $('#nombre').val()
@@ -20,7 +23,7 @@ $(function () {
             redirect: 'follow'
         };
 
-        fetch(`${url}Categoria`, requestOptions)
+        fetch(`${url}categoria`, requestOptions)
             .then(response => response.json())
             .then(result => {
 
@@ -43,7 +46,7 @@ $(function () {
     $('#formEdit').submit(function () {
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
-
+        myHeaders.append("Authorization", token);
 
         const id = $('#id').val();
 
@@ -82,7 +85,7 @@ $(function () {
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
-
+        myHeaders.append("Authorization", token);
 
         const id = $('#idDelete').val();
         var requestOptions = {
@@ -112,7 +115,7 @@ $(function () {
 
 const Usuario = () => {
 
-    let usuario = JSON.parse(sessionStorage.getItem('infoUsuario'));
+    let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
     console.log(usuario.nombre)
     $('.user-name').text(usuario.nombre);
     $('.user-status').text(usuario.rol.descripcion);
@@ -124,7 +127,8 @@ const getCategorias = () => {
             url: `${url}Categoria`,
             type: "GET",
             datatype: "json",
-            dataSrc: ""
+            dataSrc: "",
+            headers: {"Authorization": token}
         },
         columns: [
             { data: null, render: function (data, type, row, meta) {
