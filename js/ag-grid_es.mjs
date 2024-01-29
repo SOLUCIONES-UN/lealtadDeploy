@@ -1,4 +1,4 @@
-var gridOptions = {
+const customGridOptions = {
     headerClass: 'text-center',
     cellStyle: {
         textAlign: 'center',
@@ -118,4 +118,4 @@ var gridOptions = {
     }
 }
 
-export { gridOptions };
+export { customGridOptions };
