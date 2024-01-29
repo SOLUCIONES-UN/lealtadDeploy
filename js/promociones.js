@@ -1,18 +1,28 @@
 const url = "http://localhost:3000/";
 let codigos = [];
 let premios = [];
-let imgSuccess = "";
-let imagen1 = "";
+
+let token = sessionStorage.getItem("token");
+let imagen = "";
+let newImagen = "";
+let newImagen1 = "";
 const inputFile = document.getElementById("formFile");
-let token = localStorage.getItem("token");
 
 
 // funcion para cargar imagenes
 function Uploaded(input) {
-  var file = document.getElementById(input)['files'][0];
+  var file = document.getElementById(input).files[0];
   var reader = new FileReader();
   reader.onload = function () {
-    imgSuccess =  reader.result.replace("data:", "").replace(/^.+,/, "");
+    if(input == "newImagen")
+    {
+      newImagen =  reader.result.replace("data:", "").replace(/^.+,/, "");
+    }
+    else 
+    {
+      newImagen1 =  reader.result.replace("data:", "").replace(/^.+,/, "");
+    }
+    console.log(reader.result, "acaaaaaaaaaaaa")
      // imageBase64Stringsep = logo;
   }
   reader.readAsDataURL(file);
@@ -104,8 +114,8 @@ $(function () {
           descripcion: $("#descripcion").val(),
           mesajeExito: $("#successaMessage").val(),
           mesajeFail: $("#failMessage").val(),
-          imgSuccess: $("#newImagen").val(),
-          imgFail: $("#newImagen1").val(),
+          imgSuccess: newImagen,
+          imgFail: newImagen1,
           fechaInicio: $("#fechaInicio").val(),
           fechaFin: $("#fechaFin").val(),
           PremioXcampania: 0,
@@ -113,21 +123,11 @@ $(function () {
           codigos: codigos,
           premios: premios,
         };
-
-      $('#newImagen').change(function () {
-          Uploaded('newLogo');
-      })
-  
-      $('#edit').change(function () {
-          Uploaded('editLogo');
-      })
         
         console.log(data);
         saveData(data);
         Limpiar();
       });
-
-      
   }
 
   //Inicializacion de Navs
@@ -141,6 +141,20 @@ $(function () {
 
   getAllPromociones();
 
+  $('#newImagen').change(function () {
+      Uploaded('newImagen');
+      console.log("HOlaaaa")
+  })
+
+  $('#newImagen1').change(function () {
+    Uploaded('newImagen1');
+    console.log("HOlaaaa")
+})
+
+  $('#edit').change(function () {
+      Uploaded('editLogo');
+  })
+
   $(".BtnBottador").click(function () {
     var data = {
       nemonico: $("#nemonico").val(),
@@ -148,8 +162,8 @@ $(function () {
       descripcion: $("#descripcion").val(),
       mesajeExito: $("#successaMessage").val(),
       mesajeFail: $("#failMessage").val(),
-      imgSuccess: "test.png",
-      imgFail: "test.png",
+      imgSuccess: newImage,
+      imgFail: newImagen1,
       fechaInicio: $("#fechaInicio").val(),
       fechaFin: $("#fechaFin").val(),
       PremioXcampania: 0,
@@ -397,7 +411,7 @@ const limpiarForm = () => {
 
 const Usuario = () => {
 
-  let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
+  let usuario = JSON.parse(sessionStorage.getItem('infoUsuario'));
   console.log(usuario.nombre)
   $('.user-name').text(usuario.nombre);
   $('.user-status').text(usuario.rol.descripcion);
@@ -436,13 +450,7 @@ const table = (table, data) => {
     destroy: true,
     data,
     columns: [
-      { data: null, render: function (data, type, row, meta) {
-            
-        if (type === 'display') {
-            return meta.row + 1;
-        }
-        return meta.row + 1; 
-    }},
+      { data: "id" },
       { data: "nombre" },
       { data: "nemonico" },
       {
@@ -888,5 +896,3 @@ const UpdatePromocion = (id, type) => {
       Alert(error, "error");
     });
 };
-
-
