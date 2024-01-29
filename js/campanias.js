@@ -15,14 +15,9 @@ var bsStepper = document.querySelectorAll(".bs-stepper"),
   verticalWizard = document.querySelector(".vertical-wizard-example");
 
 var numConfigButtons = 4;
-<<<<<<< HEAD
-const inputFile = document.getElementById("formFile");
-const inputFileBloqueados = document.getElementById("formFileBloqueados");
-=======
 const inputFile = document.getElementById('formFile');
 const inputFileBloqueados = document.getElementById('formFileBloqueados');
 let token = localStorage.getItem("token");
->>>>>>> staging
 
 //var stepper = new Stepper(document.querySelector('.bs-stepper'))
 // stepper.to(3)
@@ -238,20 +233,12 @@ $("#TipoTransaccion").on("change", function () {
 });
 
 const Usuario = () => {
-<<<<<<< HEAD
-  let usuario = JSON.parse(sessionStorage.getItem("infoUsuario"));
-  console.log(usuario.nombre);
-  $(".user-name").text(usuario.nombre);
-  $(".user-status").text(usuario.rol.descripcion);
-};
-=======
 
   let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
   console.log(usuario.nombre)
   $('.user-name').text(usuario.nombre);
   $('.user-status').text(usuario.rol.descripcion);
 }
->>>>>>> staging
 
 function loadMenu(isEtapa) {
   // Adds crossed class
