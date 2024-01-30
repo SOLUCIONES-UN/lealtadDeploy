@@ -11,7 +11,7 @@ const getMenuAccesible = () => {
   var requestOptions = {
     method: "GET",
     redirect: "follow",
-    headers: {"Authorization": token}
+    headers: { "Authorization": token }
   };
 
   fetch(`${url}permisosUsuario/${usuario.username}`, requestOptions)
