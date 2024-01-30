@@ -1,6 +1,6 @@
 const url = "http://localhost:3000/";
 let dataUsuario;
-let pagina = './pages/categorias.html';
+let pagina = 'localhost/pages/categorias.html';
 let token = localStorage.getItem("token");
 
 $(function () {
@@ -34,7 +34,7 @@ $(function () {
 
           localStorage.setItem("token", result.token);
           localStorage.setItem("infoUsuario", JSON.stringify(result.data));
-          setTimeout(() => location.href = pagina, 1500);
+          setTimeout(() => window.location = pagina, 250);
           //location.href = pagina;
           
         } else {
