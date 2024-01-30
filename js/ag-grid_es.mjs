@@ -1,12 +1,28 @@
 const customGridOptions = {
+    enableSearch: true,
+    searchBar: true,
     headerClass: 'text-center',
     cellStyle: {
-        textAlign: 'center',
+        'textAlign': 'center',
+        'height': '100%',
+        'display': 'flex ',
+        //'justify-content': 'flex-start',
+        'justify-content': 'center',
+        //'justify-content': 'flex-end',
+        'align-items': 'center '
     },
+    cellClass: 'cell-wrap-text',
     defaultColDef: {
+        width: 500,
+        //editable: true,
         sortable: true,
         resizable: true,
-        filter: true
+        filter: true,
+        filter: 'agTextColumnFilter',
+        getQuickFilterText: params => params.colDef.hide ? '' : params.value
+    },
+    defaultColGroupDef: {
+        marryChildren: true,
     },
     rowGroupPanelShow: 'always',
     rowSelection: 'multiple',
@@ -17,11 +33,15 @@ const customGridOptions = {
     },
     sideBar: true,
     pagination: true,
+    //rowModelType: 'infinite',
     enableSorting: true,
     enableFilter: true,
+    enableColResize: true,
     floatingFilter: true,
-    paginationPageSize: 20,
-    paginationAutoPageSize: true,
+    cacheBlockSize: 100,
+    paginationPageSize: 100,
+    paginateChildRows: true,
+    paginationAutoPageSize: false,
     paginationPageSizeOptions: [5, 10, 20, 50, 100, 500, 1000],
     enableRangeSelection: true,
     suppressCellSelection: false,
@@ -31,8 +51,25 @@ const customGridOptions = {
     animateRows: true,
     deltaRowDataMode: true,
     groupDefaultExpanded: 1,
-    getRowNodeId: (data) => data.id,
-    onGridReady: (event) => console.log('Grid is ready'),
+    getRowNodeId: data => data.id,
+    onGridReady: event => console.log('Grid is ready.'),
+    onFirstDataRendered: event => console.log('Data got rendered.'),
+    onColumnResized: columnNode => console.log(`Column resized: ${columnNode.rowIndex}`),
+    onRowDataChanged: event => console.log(`Data got changed. ${rowNode.rowIndex}`),
+    onRowAdded: rowNode => console.log(`Row got added. ${rowNode.rowIndex}`),
+    onRowRemoved: rowNode => console.log(`Row got removed. ${rowNode.rowIndex}`),
+    onRowSelected: rowNode => console.log(`Row selected: ${rowNode.rowIndex}`),
+    onRowDeselected: rowNode => console.log(`Row deselected: ${rowNode.rowIndex}`),
+    onRowClicked: rowNode => console.log(`Row clicked: ${rowNode.rowIndex}`),
+    onRowExpand: rowNode => console.log(`Row expand: ${rowNode.rowIndex}`),
+    onRowCollapse: rowNode => console.log(`Row collapse: ${rowNode.rowIndex}`),
+    onCellClick: cellNode => console.log(`Cell clicked: ${cellNode.rowIndex}`),
+    onCellContextMenu: cellNode => console.log(`Cell context menu: ${cellNode.rowIndex}`),
+    //onFilterTextBoxChanged: filterValue => agGrid.setQuickFilter(filterValue),
+    api: {
+        quickFilterText: 'new filter text',
+        onFilterTextBoxChanged: (text) => myGrid.setQuickFilter(text)
+    },
     components: {
         rowNodeIdRenderer: function (params) {
             return params.node.id + 1;
@@ -40,7 +77,19 @@ const customGridOptions = {
     },
     localeText: {
 
-        page: 'Pagina',
+        page: 'Página',
+        pageLastRowUnknown: '?',
+        nextPage: 'Siguiente Página',
+        lastPage: 'Última Página',
+        firstPage: 'Primera Página',
+        previousPage: 'Página Anterior',
+        pageSizeSelectorLabel: 'Número de Página:',
+        footerTotal: 'Total',
+        pivotColumnGroupTotals: 'Total',
+        pivotChartAndPivotMode: 'Gráfica Dinámica y Modo Dinámico',
+        pivotChart: 'Gŕafica Dinámica',
+        chartRange: 'Gráfica de Rango',
+
         more: 'Más',
         to: 'a',
         of: 'de',
@@ -113,7 +162,7 @@ const customGridOptions = {
 
         copy: 'Copiar',
         copyWithHeaders: 'Copiar con cabeceras',
-        paste: 'Pegar'
+        paste: 'Pegar',
 
     }
 }
