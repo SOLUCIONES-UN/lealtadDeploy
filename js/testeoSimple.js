@@ -1,8 +1,26 @@
 const url = 'http://localhost:3000/'
 
+let token = localStorage.getItem("token");
+
+const headers = {
+    'Authorization': token,
+    'Content-Type': 'application/json'
+};
+
 
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
+
+const Alert = function (message, status)
+{
+    toastr[`${status}`](message, `${status}`, {
+        closeButton: true,
+        tapToDismiss: false,
+        positionClass: 'toast-top-right',
+        rtl: false
+    });
+}
 
 $(function () {
     getCampaniasActivas();
@@ -14,10 +32,6 @@ $(function () {
 
         var id = $('#campania option:selected').val();
 
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-
-
         var raw = JSON.stringify({
             "transaccionData": {
                 "descripcion": "Recarga de Saldo",
@@ -28,16 +42,24 @@ $(function () {
 
         var requestOptions = {
             method: 'POST',
-            headers: myHeaders,
+            headers: headers,
             body: raw,
             redirect: 'follow'
         };
 
 
-
+        let statusCode = 0;
 
         fetch(`${url}trxCampanias/Testear`, requestOptions)
-            .then(response => response.json())
+            .then((response) => {
+                statusCode = response.status;
+                if (statusCode == 200) {
+                    return Alert('Testeo efectuado.', 'success');
+                }else if (statusCode == 500) {
+                    return Alert(response.body.errors ?? 'Error al testear.', 'error');
+                }
+                response.json()
+            })
             .then(async data => {
 
                 data.forEach((element, index) => {
@@ -179,6 +201,7 @@ const Usuario = () => {
 const getCampaniasActivas = () => {
     var requestOptions = {
         method: 'GET',
+        headers: headers,
         redirect: 'follow'
     };
 
