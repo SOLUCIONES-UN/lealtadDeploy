@@ -1,6 +1,6 @@
 const url = "http://localhost:3000/";
 let dataUsuario;
-let pagina = 'localhost/pages/categorias.html';
+let pagina = './categorias.html';
 let token = localStorage.getItem("token");
 
 $(function () {
