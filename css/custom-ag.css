@@ -4,12 +4,35 @@
     align-items: center !important;
 }
 
+.ag-checkbox-input-wrapper.ag-checked::after {
+    color: #7367F0 !important;
+}
+
 .ag-cell-wrapper {
     height: 100%;
 }
 
 .cell-wrap-text {
     white-space: normal !important;
+}
+
+.ag-cell-focus {
+    outline: none !important;
+}
+
+.ag-cell-focus .ag-cell-focus-outline {
+    outline: none !important;
+}
+
+.ag-cell-inline-editing {
+    border: none !important;
+    color: #7367F0 !important;
+    outline: none !important;
+}
+
+.ag-cell-not-inline-editing {
+    border: none !important;
+    outline: none !important;
 }
 
 .ag-theme-quartz,

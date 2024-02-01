@@ -12,6 +12,10 @@ const customGridOptions = {
         'align-items': 'center '
     },
     cellClass: 'cell-wrap-text',
+    cellClassRules: 'no-border-cell',
+    rowStyle: { outline: 'none' },
+    suppressCellFlash: true,
+    enableCellChangeFlash: true,
     defaultColDef: {
         width: 500,
         //editable: true,
@@ -51,6 +55,7 @@ const customGridOptions = {
     animateRows: true,
     deltaRowDataMode: true,
     groupDefaultExpanded: 1,
+    getRowId: params => params.data.id,
     getRowNodeId: data => data.id,
     onGridReady: event => console.log('Grid is ready.'),
     onFirstDataRendered: event => console.log('Data got rendered.'),
