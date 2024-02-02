@@ -1,4 +1,13 @@
 const url = "http://localhost:3000/";
+
+let token = localStorage.getItem("token");
+
+const headers = {
+  'Authorization': token,
+  'Content-Type': 'application/json'
+};
+
+
 let codigos = [];
 let premios = [];
 let etapas = [];
@@ -17,10 +26,45 @@ var bsStepper = document.querySelectorAll(".bs-stepper"),
 var numConfigButtons = 4;
 const inputFile = document.getElementById('formFile');
 const inputFileBloqueados = document.getElementById('formFileBloqueados');
-let token = localStorage.getItem("token");
+
 
 //var stepper = new Stepper(document.querySelector('.bs-stepper'))
 // stepper.to(3)
+
+imgAkisi;
+imgPush;
+
+const getBlob = file => file.slice(0, file.size, file.type)
+
+document.addEventListener('DOMContentLoaded', () => {
+  const img1 = document.querySelector('#imgAkisi');
+  img1.onchange = () => {
+    const file = img1.files[0];
+    const fileName = file.name;
+    const fileExtension = fileName.split('.').pop().toLowerCase();
+    //imgAkisi = getBlob(file);
+    const reader = new FileReader();
+    reader.onload = event => {
+      imgAkisi = `data:image/${fileExtension};base64,${btoa(event.target.result)}`;
+      console.log(imgAkisi)
+    };
+    reader.readAsBinaryString(file);
+  }
+
+  const img2 = document.querySelector('#imgPush');
+  img2.onchange = () => {
+    const file = img2.files[0];
+    const fileName = file.name;
+    const fileExtension = fileName.split('.').pop().toLowerCase();
+    //imgPush = getBlob(file);
+    const reader = new FileReader();
+    reader.onload = event => {
+      imgPush = `data:image/${fileExtension};base64,${btoa(event.target.result)}`;
+      console.log(imgPush)
+    };
+    reader.readAsBinaryString(file);
+  }
+})
 
 $(function () {
   loadMenu();
@@ -55,6 +99,7 @@ $(function () {
       fechaCreacion: $("#fechaRegistro").val(),
       estado: 3,
     };
+    console.log(data);
     saveData(data);
     Limpiar();
   });
@@ -72,8 +117,8 @@ $(function () {
       sexo: $("#sexo option:selected").val(),
       tipoUsuario: $("#tipoUsuario option:selected").val(),
       descripcionNotificacion: $("#descripcionNotificacion").val(),
-      imgPush: "",
-      imgAkisi: "",
+      imgPush: imgPush,
+      imgAkisi: imgAkisi,
       etapas: etapas,
       Participacion: participantes,
       Bloqueados: bloqueados,
@@ -151,17 +196,16 @@ $(function () {
           <div class="dropdown-menu dropdown-menu-right">
               <a href="#" class="btn_edit dropdown-item">
                   ${feather.icons["archive"].toSvg({
-                    class: "font-small-4 mr-50",
-                  })} Actualizar
+        class: "font-small-4 mr-50",
+      })} Actualizar
               </a>
           
           <div class="dropdown-menu dropdown-menu-right">
-              <a href="#" onclick="eliminarEtapa(${
-                index + 1
-              })" class="btn_delete dropdown-item">
+              <a href="#" onclick="eliminarEtapa(${index + 1
+        })" class="btn_delete dropdown-item">
                 ${feather.icons["trash-2"].toSvg({
-                  class: "font-small-4 mr-50",
-                })} Inhabilitar
+          class: "font-small-4 mr-50",
+        })} Inhabilitar
               </a>
           </div>
           </div>
@@ -361,15 +405,14 @@ function addConfig(id, nombreEtapa) {
           <label class="form-label" for="vAnterior${id}">Valor Anterior</label>
           <input type="number" id="vAnterior${id}" class="form-control" />
       </div>
-      ${
-        isAddLimited
-          ? `<div class="form-group col-md-6">
+      ${isAddLimited
+      ? `<div class="form-group col-md-6">
                           <label class="form-label" for="limiteParticipacion${id}">Limite
                               Participacion</label>
                           <input type="number" id="limiteParticipacion${id}" class="form-control" />
                        </div>`
-          : ""
-      }
+      : ""
+    }
       
   </div>
   <div class="row">
@@ -500,12 +543,12 @@ function addConfig(id, nombreEtapa) {
                                     </div>
                                     <div class="d-flex justify-content-between mt-5">
                                         <button class="btn btn-primary btn-prev">
-                                            <i data-feather="arrow-left" class="align-middle mr-sm-25 mr-0"></i>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left align-middle ml-sm-25 ml-0"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                                             <span class="align-middle d-sm-inline-block d-none">Atras</span>
                                         </button>
-                                        <button class="btn btn-primary btn-next">
-                                            <span class="align-middle d-sm-inline-block d-none">Siguiente</span>
-                                            <i data-feather="arrow-right" class="align-middle ml-sm-25 ml-0"></i>
+                                        <button class="btn btn-primary btn-next waves-effect waves-float waves-light">
+                                          <span class="align-middle d-sm-inline-block d-none">Siguiente</span>
+                                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right align-middle ml-sm-25 ml-0"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                                         </button>
                                     </div>
   </div>
@@ -655,7 +698,7 @@ const getDepartamentos = (id, isEdith = false) => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow',
-    headers: {"Authorization": token}
+    headers: { "Authorization": token }
   };
 
   if (isEdith) {
@@ -685,7 +728,7 @@ const getMunicipios = (id, isEdit = false) => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow',
-    headers: {"Authorization": token}
+    headers: { "Authorization": token }
   };
 
   if (isEdit) {
@@ -715,7 +758,7 @@ const getTransacciones = (id, isEdit = false) => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow',
-    headers: {"Authorization": token}
+    headers: { "Authorization": token }
   };
 
   if (isEdit) {
@@ -772,14 +815,14 @@ inputFile.addEventListener("change", function () {
             <div class="btn-group">
               <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
                   ${feather.icons["more-vertical"].toSvg({
-                    class: "font-small-4",
-                  })}
+          class: "font-small-4",
+        })}
               </a>
               <div class="dropdown-menu dropdown-menu-right">
                   <a href="#" onclick="eliminarFila(${indexP})" id="delete" class="btn_delete dropdown-item">
                     ${feather.icons["trash-2"].toSvg({
-                      class: "font-small-4 mr-50",
-                    })} Inhabilitar
+          class: "font-small-4 mr-50",
+        })} Inhabilitar
                   </a>
               </div>
             </div>
@@ -824,21 +867,21 @@ inputFileBloqueados.addEventListener("change", function () {
             <div class="btn-group">
               <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
                   ${feather.icons["more-vertical"].toSvg({
-                    class: "font-small-4",
-                  })}
+          class: "font-small-4",
+        })}
               </a>
               <div class="dropdown-menu dropdown-menu-right">
                   <a href="#" onclick="eliminarFila(${indexB})" class="btn_edit dropdown-item">
                       ${feather.icons["archive"].toSvg({
-                        class: "font-small-4 mr-50",
-                      })} Actualizar
+          class: "font-small-4 mr-50",
+        })} Actualizar
                   </a>
               
               <div class="dropdown-menu dropdown-menu-right">
                   <a href="#" onclick="eliminarFila(${indexB})" class="btn_delete dropdown-item">
                     ${feather.icons["trash-2"].toSvg({
-                      class: "font-small-4 mr-50",
-                    })} Inhabilitar
+          class: "font-small-4 mr-50",
+        })} Inhabilitar
                   </a>
               </div>
               </div>
@@ -864,15 +907,15 @@ function agregarUsuarioBloqueado() {
             <div class="btn-group">
               <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
                   ${feather.icons["more-vertical"].toSvg({
-                    class: "font-small-4",
-                  })}
+    class: "font-small-4",
+  })}
               </a>
               
               <div class="dropdown-menu dropdown-menu-right">
                   <a href="#" onclick="eliminarFila(${indexB})" class="btn_delete dropdown-item">
                     ${feather.icons["trash-2"].toSvg({
-                      class: "font-small-4 mr-50",
-                    })} Inhabilitar
+    class: "font-small-4 mr-50",
+  })} Inhabilitar
                   </a>
               </div>
             </div>
@@ -890,7 +933,7 @@ const getAllCampanias = () => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow',
-    headers: {"Authorization": token}
+    headers: { "Authorization": token }
   };
 
   fetch(`${url}Campania`, requestOptions)
@@ -916,20 +959,22 @@ const getAllCampanias = () => {
     .catch((error) => console.log("error", error));
 };
 const table = (table, data) => {
-  
+
 
   $("#" + table).dataTable({
     destroy: true,
     data,
     columns: [
-      { data: null, render: function (data, type, row, meta) {
+      {
+        data: null, render: function (data, type, row, meta) {
 
-        if (type === 'display') {
+          if (type === 'display') {
             return meta.row + 1;
+          }
+          return meta.row + 1;
         }
-        return meta.row + 1; 
-    }},
-    
+      },
+
       { data: "nombre" },
       {
         data: "estado",
@@ -968,8 +1013,8 @@ const table = (table, data) => {
             case 2:
               opcAdd += `<a href="#" onclick="pausarActualizarCampania(${data},1)" class="btn_activar dropdown-item">
                 ${feather.icons["play"].toSvg({
-                  class: "font-small-4 mr-50",
-                })} Activar
+                class: "font-small-4 mr-50",
+              })} Activar
               </a>`;
               break;
           }
@@ -981,8 +1026,8 @@ const table = (table, data) => {
             })} Actualizar
             </a><a href="#" onclick="OpenDelete(${data})" class="btn_delete dropdown-item">
                 ${feather.icons["trash-2"].toSvg({
-                  class: "font-small-4 mr-50",
-                })} Inhabilitar
+              class: "font-small-4 mr-50",
+            })} Inhabilitar
                     </a>`;
           }
 
@@ -990,8 +1035,8 @@ const table = (table, data) => {
           <div class="btn-group">
             <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
                 ${feather.icons["more-vertical"].toSvg({
-                  class: "font-small-4",
-                })}
+            class: "font-small-4",
+          })}
             </a>
             <div class="dropdown-menu dropdown-menu-right">
                ${opcAdd}
@@ -1044,7 +1089,7 @@ const ChangePanel = (estado) => {
 };
 
 function saveLocal() {
-  let campañasArray = JSON.parse(localStorage.getItem("Camapañas")) || [];
+  let campaignsArray = JSON.parse(localStorage.getItem('campaigns')) || [];
   const data = {
     id: idData,
     campaña: $("#nombre").val(),
@@ -1053,34 +1098,28 @@ function saveLocal() {
     Estado: 1,
   };
 
-  campañasArray.push(data);
-  console.log(campañasArray);
+  campaignsArray.push(data);
+  console.log(campaignsArray);
 
-  localStorage.setItem("Camapañas", JSON.stringify(campañasArray));
+  localStorage.setItem('campaigns', JSON.stringify(campaignsArray));
 
   idData + 1;
 }
 
 const saveData = (data) => {
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  myHeaders.append("Authorization", token);
-
-  var raw = JSON.stringify(data);
 
   var requestOptions = {
-    method: "POST",
-    headers: myHeaders,
-    body: raw,
-    redirect: 'follow',
-    headers: {"Authorization": token}
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(data),
+    redirect: 'follow'
   };
 
   fetch(`${url}Campania`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
       if (result.code == "ok") {
-        Alert(result.message, "warning");
+        Alert(result.message, "success");
       } else {
         Alert(result.message, "error");
       }
@@ -1125,7 +1164,7 @@ const getPremios = (id, isEdit = false) => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow',
-    headers: {"Authorization": token}
+    headers: { "Authorization": token }
   };
 
   if (isEdit) {
@@ -1237,7 +1276,7 @@ const getParametros = (idEtapa) => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow',
-    headers: {"Authorization": token}
+    headers: { "Authorization": token }
   };
 
   fetch(`${url}parametros/${idEtapa}`, requestOptions)
@@ -1261,25 +1300,23 @@ const getParametros = (idEtapa) => {
           <div class="btn-group">
             <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
                 ${feather.icons["more-vertical"].toSvg({
-                  class: "font-small-4",
-                })}
+          class: "font-small-4",
+        })}
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-                <a href="#" onclick="cargarDatos(${
-                  element.id
-                }, ${1})" class="borrar btn_edit dropdown-item">
+                <a href="#" onclick="cargarDatos(${element.id
+          }, ${1})" class="borrar btn_edit dropdown-item">
                     ${feather.icons["archive"].toSvg({
-                      class: "font-small-4 mr-50",
-                    })} Actualizar
+            class: "font-small-4 mr-50",
+          })} Actualizar
                 </a>
             
             <div class="dropdown-menu dropdown-menu-right">
-                <a href="#" onclick="OpenDelete(${
-                  element.id
-                })" class="btn_delete dropdown-item">
+                <a href="#" onclick="OpenDelete(${element.id
+          })" class="btn_delete dropdown-item">
                   ${feather.icons["trash-2"].toSvg({
-                    class: "font-small-4 mr-50",
-                  })} Inhabilitar
+            class: "font-small-4 mr-50",
+          })} Inhabilitar
                 </a>
             </div>
             </div>
@@ -1296,7 +1333,7 @@ const getPremiosEtapa = (idEtapa) => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow',
-    headers: {"Authorization": token}
+    headers: { "Authorization": token }
   };
 
   fetch(`${url}premios/${idEtapa}`, requestOptions)
@@ -1310,25 +1347,23 @@ const getPremiosEtapa = (idEtapa) => {
           <div class="btn-group">
             <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
                 ${feather.icons["more-vertical"].toSvg({
-                  class: "font-small-4",
-                })}
+          class: "font-small-4",
+        })}
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-                <a href="#" onclick="cargarDatos(${
-                  element.id
-                }, ${2})" class="borrar btn_edit dropdown-item">
+                <a href="#" onclick="cargarDatos(${element.id
+          }, ${2})" class="borrar btn_edit dropdown-item">
                     ${feather.icons["archive"].toSvg({
-                      class: "font-small-4 mr-50",
-                    })} Actualizar
+            class: "font-small-4 mr-50",
+          })} Actualizar
                 </a>
             
             <div class="dropdown-menu dropdown-menu-right">
-                <a href="#" onclick="OpenDelete(${
-                  element.id
-                })" class="btn_delete dropdown-item">
+                <a href="#" onclick="OpenDelete(${element.id
+          })" class="btn_delete dropdown-item">
                   ${feather.icons["trash-2"].toSvg({
-                    class: "font-small-4 mr-50",
-                  })} Inhabilitar
+            class: "font-small-4 mr-50",
+          })} Inhabilitar
                 </a>
             </div>
             </div>
@@ -1345,7 +1380,7 @@ const getPresupuesto = (idEtapa) => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow',
-    headers: {"Authorization": token}
+    headers: { "Authorization": token }
   };
 
   fetch(`${url}presupuesto/${idEtapa}`, requestOptions)
@@ -1360,25 +1395,23 @@ const getPresupuesto = (idEtapa) => {
           <div class="btn-group">
             <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
                 ${feather.icons["more-vertical"].toSvg({
-                  class: "font-small-4",
-                })}
+          class: "font-small-4",
+        })}
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-                <a href="#" onclick="cargarDatos(${
-                  element.id
-                }, ${3})" class="borrar btn_edit dropdown-item">
+                <a href="#" onclick="cargarDatos(${element.id
+          }, ${3})" class="borrar btn_edit dropdown-item">
                     ${feather.icons["archive"].toSvg({
-                      class: "font-small-4 mr-50",
-                    })} Actualizar
+            class: "font-small-4 mr-50",
+          })} Actualizar
                 </a>
             
             <div class="dropdown-menu dropdown-menu-right">
-                <a href="#" onclick="OpenDelete(${
-                  element.id
-                })" class="btn_delete dropdown-item">
+                <a href="#" onclick="OpenDelete(${element.id
+          })" class="btn_delete dropdown-item">
                   ${feather.icons["trash-2"].toSvg({
-                    class: "font-small-4 mr-50",
-                  })} Inhabilitar
+            class: "font-small-4 mr-50",
+          })} Inhabilitar
                 </a>
             </div>
             </div>
@@ -1394,7 +1427,7 @@ const getPresupuesto = (idEtapa) => {
 const getEtapas = (id) => {
   var requestOptions = {
     method: "GET",
-    redirect: "follow",
+    redirect: 'follow',
   };
   console.log("ID de la camapaña" + id);
   fetch(`${url}Campania/${id}`, requestOptions)
@@ -1410,23 +1443,22 @@ const getEtapas = (id) => {
                 <div class="btn-group">
                   <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
                       ${feather.icons["more-vertical"].toSvg({
-                        class: "font-small-4",
-                      })}
+          class: "font-small-4",
+        })}
                   </a>
                   <div class="dropdown-menu dropdown-menu-right">
-                      <a href="#" onclick="OpenEdit(${id}, ${index}, ${
-          element.id
-        } , ${true})" class="borrar btn_edit dropdown-item">
+                      <a href="#" onclick="OpenEdit(${id}, ${index}, ${element.id
+          } , ${true})" class="borrar btn_edit dropdown-item">
                           ${feather.icons["archive"].toSvg({
-                            class: "font-small-4 mr-50",
-                          })} Actualizar
+            class: "font-small-4 mr-50",
+          })} Actualizar
                       </a>
                   
                   <div class="dropdown-menu dropdown-menu-right">
                       <a href="#" onclick="OpenDelete(${index})" class="btn_delete dropdown-item">
                         ${feather.icons["trash-2"].toSvg({
-                          class: "font-small-4 mr-50",
-                        })} Inhabilitar
+            class: "font-small-4 mr-50",
+          })} Inhabilitar
                       </a>
                   </div>
                   </div>
@@ -1446,7 +1478,7 @@ const OpenEdit = (id, index, idEtapa, isEtapa = false) => {
 
     var requestOptions = {
       method: "GET",
-      redirect: "follow",
+      redirect: 'follow',
     };
     console.log(id);
     fetch(`${url}Campania/${id}`, requestOptions)
@@ -1474,7 +1506,7 @@ const OpenEdit = (id, index, idEtapa, isEtapa = false) => {
   } else {
     var requestOptions = {
       method: "GET",
-      redirect: "follow",
+      redirect: 'follow',
     };
 
     fetch(`${url}Campania/${id}`, requestOptions)
@@ -1508,7 +1540,7 @@ const OpenEdit = (id, index, idEtapa, isEtapa = false) => {
 const tipoDeTransaccion = (id) => {
   var requestOptions = {
     method: "GET",
-    redirect: "follow",
+    redirect: 'follow',
   };
 
   let tipoTrans = $("#TipoTransaccion" + id).val();
@@ -1518,9 +1550,9 @@ const tipoDeTransaccion = (id) => {
   if (tipoTrans == "c") {
     $("#Transacciones" + id).html(null);
 
-      $('#Transacciones'+id).html(null);
-      
-      fetch(`${url}categoria`, requestOptions)
+    $('#Transacciones' + id).html(null);
+
+    fetch(`${url}categoria`, requestOptions)
       .then(response => response.json())
       .then(result => {
         result.forEach(element => {
@@ -1538,7 +1570,7 @@ const tipoDeTransaccion = (id) => {
 $("#TipoTransaccionEdit").on("change", function () {
   var requestOptions = {
     method: "GET",
-    redirect: "follow",
+    redirect: 'follow',
   };
 
   let tipoTrans = $("#TipoTransaccionEdit").val();
@@ -1548,9 +1580,9 @@ $("#TipoTransaccionEdit").on("change", function () {
   if (tipoTrans == "c") {
     $("#TransaccionesEdit").html(null);
 
-      $('#TransaccionesEdit').html(null);
-      
-      fetch(`${url}categoria`, requestOptions)
+    $('#TransaccionesEdit').html(null);
+
+    fetch(`${url}categoria`, requestOptions)
       .then(response => response.json())
       .then(result => {
         result.forEach(element => {
@@ -1568,7 +1600,7 @@ $("#TipoTransaccionEdit").on("change", function () {
 const cargarDatos = (id, opc) => {
   var requestOptions = {
     method: "GET",
-    redirect: "follow",
+    redirect: 'follow',
   };
 
   switch (opc) {
@@ -1631,8 +1663,6 @@ const cargarDatos = (id, opc) => {
 
 const updateCampaña = (opc) => {
   let id;
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
 
   const idEtapa = $("#idEtapa").val();
 
@@ -1651,9 +1681,9 @@ const updateCampaña = (opc) => {
 
       var requestOptions = {
         method: "PUT",
-        headers: myHeaders,
+        headers: headers,
         body: raw,
-        redirect: "follow",
+        redirect: 'follow',
       };
 
       fetch(`${url}parametros/update/${id}`, requestOptions)
@@ -1692,9 +1722,9 @@ const updateCampaña = (opc) => {
 
       var requestOptions = {
         method: "PUT",
-        headers: myHeaders,
+        headers: headers,
         body: raw,
-        redirect: "follow",
+        redirect: 'follow',
       };
 
       fetch(`${url}premios/update/${id}`, requestOptions)
@@ -1730,9 +1760,9 @@ const updateCampaña = (opc) => {
 
       var requestOptions = {
         method: "PUT",
-        headers: myHeaders,
+        headers: headers,
         body: raw,
-        redirect: "follow",
+        redirect: 'follow',
       };
 
       fetch(`${url}presupuesto/update/${id}`, requestOptions)
@@ -1762,8 +1792,6 @@ const updateCampaña = (opc) => {
 };
 
 $("#formEditEtapas").submit(function () {
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
 
   const id = $("#idEtapa").val();
   const idCamp = $("#id").val();
@@ -1777,9 +1805,9 @@ $("#formEditEtapas").submit(function () {
 
   var requestOptions = {
     method: "PUT",
-    headers: myHeaders,
+    headers: headers,
     body: raw,
-    redirect: "follow",
+    redirect: 'follow',
   };
 
   fetch(`${url}etapa/update/${id}`, requestOptions)
@@ -1801,8 +1829,7 @@ $("#formEditEtapas").submit(function () {
 });
 
 $("#formEdit").submit(function () {
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
+
   const idCamp = $("#id").val();
   console.log(idCamp);
 
@@ -1818,16 +1845,16 @@ $("#formEdit").submit(function () {
     tipoUsuario: $("#tipoUsuarioEdith option:selected").val(),
     tituloNotificacion: $("#tituloNotificacionEdith").val(),
     descripcionNotificacion: $("#descripcionNotificacionEdith").val(),
-    imgPush: "",
-    imgAkisi: "",
+    imgPush: imgPush,
+    imgAkisi: imgAkisi,
     maximoParticipaciones: $("#limiteParticipacionEdith").val(),
   });
 
   var requestOptions = {
     method: "PUT",
-    headers: myHeaders,
+    headers: headers,
     body: raw,
-    redirect: "follow",
+    redirect: 'follow',
   };
 
   fetch(`${url}Campania/${idCamp}`, requestOptions)
@@ -1850,7 +1877,7 @@ $("#formEdit").submit(function () {
 const pausarActualizarCampania = (id, type) => {
   var requestOptions = {
     method: "PUT",
-    redirect: "follow",
+    redirect: 'follow',
   };
 
   fetch(
@@ -1875,7 +1902,7 @@ const pausarActualizarCampania = (id, type) => {
 const getParticipantes = (idCampania) => {
   var requestOptions = {
     method: "GET",
-    redirect: "follow",
+    redirect: 'follow',
   };
 
   fetch(`${url}participantes/${idCampania}`, requestOptions)
@@ -1889,21 +1916,21 @@ const getParticipantes = (idCampania) => {
                 <div class="btn-group">
                   <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
                       ${feather.icons["more-vertical"].toSvg({
-                        class: "font-small-4",
-                      })}
+          class: "font-small-4",
+        })}
                   </a>
                   <div class="dropdown-menu dropdown-menu-right">
                       <a href="#" onclick="" class="borrar btn_edit dropdown-item">
                           ${feather.icons["archive"].toSvg({
-                            class: "font-small-4 mr-50",
-                          })} Actualizar
+          class: "font-small-4 mr-50",
+        })} Actualizar
                       </a>
                   
                   <div class="dropdown-menu dropdown-menu-right">
                       <a href="#" onclick="OpenDelete(${index})" class="btn_delete dropdown-item">
                         ${feather.icons["trash-2"].toSvg({
-                          class: "font-small-4 mr-50",
-                        })} Inhabilitar
+          class: "font-small-4 mr-50",
+        })} Inhabilitar
                       </a>
                   </div>
                   </div>
@@ -1920,7 +1947,7 @@ const getParticipantes = (idCampania) => {
 const getBloqueados = (idCampania) => {
   var requestOptions = {
     method: "GET",
-    redirect: "follow",
+    redirect: 'follow',
   };
 
   fetch(`${url}Bloqueados/${idCampania}`, requestOptions)
@@ -1934,21 +1961,21 @@ const getBloqueados = (idCampania) => {
                 <div class="btn-group">
                   <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
                       ${feather.icons["more-vertical"].toSvg({
-                        class: "font-small-4",
-                      })}
+          class: "font-small-4",
+        })}
                   </a>
                   <div class="dropdown-menu dropdown-menu-right">
                       <a href="#" onclick="" class="borrar btn_edit dropdown-item">
                           ${feather.icons["archive"].toSvg({
-                            class: "font-small-4 mr-50",
-                          })} Actualizar
+          class: "font-small-4 mr-50",
+        })} Actualizar
                       </a>
                   
                   <div class="dropdown-menu dropdown-menu-right">
                       <a href="#" onclick="OpenDelete(${index})" class="btn_delete dropdown-item">
                         ${feather.icons["trash-2"].toSvg({
-                          class: "font-small-4 mr-50",
-                        })} Inhabilitar
+          class: "font-small-4 mr-50",
+        })} Inhabilitar
                       </a>
                   </div>
                   </div>
@@ -1969,27 +1996,23 @@ const limpiarTablas = () => {
 };
 
 $("#btnAgregarParametros").on("click", function () {
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
 
   let idEtapa = $("#idEtapa").val();
   console.log(id);
 
-  var raw = JSON.stringify({
-    limiteParticipacion: $("#limiteParticipacionEdit").val(),
-    idTransaccion: $("#TransaccionesEdit option:selected").val(),
-    tipoTransaccion: $("#TipoTransaccionEdit option:selected").val(),
-    ValorMinimo: $("#vMinimoEdit").val(),
-    ValorMaximo: $("#vMaximoEdit").val(),
-    valorAnterior: $("#vAnteriorEdit").val(),
-    idEtapa: idEtapa,
-  });
-
   var requestOptions = {
-    method: "POST",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow",
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify({
+      limiteParticipacion: $("#limiteParticipacionEdit").val(),
+      idTransaccion: $("#TransaccionesEdit option:selected").val(),
+      tipoTransaccion: $("#TipoTransaccionEdit option:selected").val(),
+      ValorMinimo: $("#vMinimoEdit").val(),
+      ValorMaximo: $("#vMaximoEdit").val(),
+      valorAnterior: $("#vAnteriorEdit").val(),
+      idEtapa: idEtapa,
+    }),
+    redirect: 'follow'
   };
 
   fetch(`${url}parametros`, requestOptions)
@@ -2017,22 +2040,18 @@ $("#btnAgregarParametros").on("click", function () {
 });
 
 $("#btnAgregarPremios").on("click", function () {
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
 
   let idEtapa = $("#idEtapa").val();
 
-  var raw = JSON.stringify({
-    valor: $("#valorPEdit").val(),
-    idPremio: $("#PremiosEdit option:selected").val(),
-    idEtapa: idEtapa,
-  });
-
   var requestOptions = {
-    method: "POST",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow",
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify({
+      valor: $("#valorPEdit").val(),
+      idPremio: $("#PremiosEdit option:selected").val(),
+      idEtapa: idEtapa,
+    }),
+    redirect: 'follow'
   };
 
   fetch(`${url}premios`, requestOptions)
@@ -2057,24 +2076,20 @@ $("#btnAgregarPremios").on("click", function () {
 });
 
 $("#btnAgregarPresupuesto").on("click", function () {
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
 
   let idEtapa = $("#idEtapa").val();
 
-  var raw = JSON.stringify({
-    idDepartamento: $("#departamentoEdit option:selected").val(),
-    idMunicipio: $("#municipioEdit option:selected").val(),
-    limiteGanadores: $("#limiteGanadoresEdit").val(),
-    valor: $("#PresupuestoEdit").val(),
-    idEtapa: idEtapa,
-  });
-
   var requestOptions = {
-    method: "POST",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow",
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify({
+      idDepartamento: $("#departamentoEdit option:selected").val(),
+      idMunicipio: $("#municipioEdit option:selected").val(),
+      limiteGanadores: $("#limiteGanadoresEdit").val(),
+      valor: $("#PresupuestoEdit").val(),
+      idEtapa: idEtapa,
+    }),
+    redirect: 'follow'
   };
 
   fetch(`${url}presupuesto`, requestOptions)
