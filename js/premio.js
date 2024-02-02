@@ -9,6 +9,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         'Content-Type': 'application/json'
     };
 
+    let gridOptions;
+    let myGrid;
+    let data = [{}];
+
+    const myGridElement = document.querySelector('#myGrid');
+
     $(function () {
         let tabla = getPremios();
 
@@ -154,11 +160,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         $('.user-status').text(usuario.rol.descripcion);
     }
 
-    const getPremios = () => {
+    const getPremios = async () => {
 
         var tipoTransaccion;
 
-        return $('#tableData').dataTable({
+        /* return $('#tableData').dataTable({
             ajax: {
                 url: `${url}Premio`,
                 type: "GET",
@@ -239,8 +245,109 @@ document.addEventListener('DOMContentLoaded', async () => {
                 },
             ],
 
-        });
+        }); */
 
+
+        await fetch(`${url}Premio`, {
+            method: 'GET',
+            headers: headers,
+            redirect: 'follow',
+        })
+            .then(response => {
+                if (!response.ok) {
+                    Alert('Error al obtener los premios.', 'error');
+                    throw new Error('Failed to fetch data');
+                }
+                if (response.status === 200) {
+                    return response.json();
+                } else {
+                    Alert('Error al obtener los premios.', 'error');
+                    throw new Error('Unexpected status code: ' + response.status);
+                }
+            })
+            .then(result => {
+                data = result.map(item => ({
+                    ...item,
+                    estado: item.estado === 1 ? true : false
+                }));
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Alert('Error al obtener los premios.', 'error');
+            });
+
+            gridOptions = {
+                columnDefs: [
+                    { headerName: "No.", field: "id", /* type: 'numericColumn', */ filter: 'agNumberColumnFilter', autoHeight: true, width: .10 * myGridElement.clientWidth },
+                    {
+                        headerName: "Descripción", field: "descripcion", autoHeight: true, editable: true, width: .395 * myGridElement.clientWidth
+                    },
+                    {
+                        headerName: "Nombre", field: "nombre", autoHeight: true, editable: true, width: .10 * myGridElement.clientWidth
+                    },
+                    {
+                        headerName: "Tipo", field: "tipo", autoHeight: true, editable: true, width: .10 * myGridElement.clientWidth
+                    },
+                    {
+                        headerName: "Link", field: "link", autoHeight: true, editable: true, width: .10 * myGridElement.clientWidth, hide: true
+                    },
+                    {
+                        headerName: "Clave Secreta", field: "claveSecreta", autoHeight: true, editable: true, width: .10 * myGridElement.clientWidth, hide: true
+                    },
+                    {
+                        headerName: "Estado", field: "estado", autoHeight: true, editable: true, width: .10 * myGridElement.clientWidth
+                    },
+                    {
+                        headerName: "Acciones", field: "actions", autoHeight: true, cellRenderer: params => {
+                            const button = document.createElement('button');
+                            button.classList = 'btn-sm btn-primary mt-50 waves-effect waves-float waves-light';
+                            button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>';
+                            button.style = 'margin: .5rem 0 .35rem 0;';
+                            button.addEventListener('click', async () => await fetch(`${url}Premio/${params.data.id}`, {
+                                method: 'PUT',
+                                headers: headers,
+                                body: JSON.stringify({ "descripcion": params.data.descripcion, "nombre": params.data.nombre, "tipo": params.data.tipo, "link": params.data.link, "claveSecreta": params.data.claveSecreta, "estado": params.data.estado === true ? 1 : 0 }),
+                                redirect: 'follow',
+                            })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        Alert('Error al actualizar el premio.', 'error');
+                                        throw new Error('Failed to fetch data');
+                                    }
+                                    if (response.status === 200) {
+                                        return response.json();
+                                    } else {
+                                        Alert('Error al actualizar el premio.', 'error');
+                                        throw new Error('Unexpected status code: ' + response.status);
+                                    }
+                                })
+                                .then(result => {
+                                    Alert('Premio actualizado exitosamente.', 'success');
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    Alert('Error al actualizar el premio.', 'error');
+                                }));
+                            return button;
+                        }, width: .20 * myGridElement.clientWidth
+                    },
+                    //{ headerName: "Ruta", field: "route", /* type: 'rightAligned', */ autoHeight: true, width: 500 },
+                    //{ headerName: "Estado", field: "status", enableRowGroup: true, enablePivot: true, enableValue: true, pivot: true, autoHeight: true, width: 100 }
+                ],
+                rowData: data,
+        
+                //rowHeight: 30,
+                //headerHeight: 40,
+        
+            }
+
+            for (let key in customGridOptions) {
+                if (customGridOptions.hasOwnProperty(key)) {
+                    gridOptions[key] = customGridOptions[key]
+                }
+            }
+        
+            myGrid = agGrid.createGrid(myGridElement, gridOptions);
 
     }
 
