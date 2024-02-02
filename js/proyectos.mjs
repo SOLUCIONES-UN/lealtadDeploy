@@ -1,28 +1,67 @@
 const url = 'http://localhost:3000/'
 
+let token = localStorage.getItem("token");
+
+const headers = {
+    'Authorization': token,
+    'Content-Type': 'application/json'
+};
+
+const Alert = function (message, status) {
+    toastr[`${status}`](message, `${status}`, {
+        closeButton: true,
+        tapToDismiss: false,
+        positionClass: 'toast-top-right',
+        rtl: false
+    });
+}
+
+const createProject = async () => {
+    const projectName = document.querySelector('#project-name');
+
+        if (projectName.value != '') {
+
+            await fetch(`${url}projects/`, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify({ "descripcion": projectName.value }),
+                redirect: 'follow',
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        Alert('Error al crear el proyecto.', 'error');
+                        throw new Error('Failed to fetch data');
+                    }
+                    if (response.status === 200) {
+                        return response.json();
+                    } else {
+                        Alert('Error al crear el proyecto.', 'error');
+                        throw new Error('Unexpected status code: ' + response.status);
+                    }
+                })
+                .then(result => {
+                    Alert('Proyecto creado exitosamente.', 'success');
+                    Swal.close();
+                    setTimeout(() => window.location.reload(), 350);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Alert('Error al crear el proyecto.', 'error');
+                })
+        } else {
+
+            Alert('Nombre incorrecto', 'error');
+
+        }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
-
-    let token = localStorage.getItem("token");
-
-    const headers = {
-        'Authorization': token,
-        'Content-Type': 'application/json'
-    };
 
     let gridOptions;
     let myGrid;
     let data = [{}];
 
     const myGridElement = document.querySelector('#myGrid');
-
-    const Alert = function (message, status) {
-        toastr[`${status}`](message, `${status}`, {
-            closeButton: true,
-            tapToDismiss: false,
-            positionClass: 'toast-top-right',
-            rtl: false
-        });
-    }
 
     const searchBar = document.querySelector('#ag-search-bar');
     searchBar.addEventListener('input', () => myGrid.setGridOption('quickFilterText', searchBar.value))
@@ -151,5 +190,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         }
     }
+
+    
+
+    document.querySelector('#new-project').addEventListener('click', async () => {
+        await Swal.fire({
+            title: "Nuevo Proyecto",
+            showCancelButton: false,
+            showConfirmButton: false,
+            html: `<div class="modal-body flex-grow-1">
+            <div class="form-group">
+              <label class="form-label" for="project">Nombre del Proyecto</label>
+              <input type="text" id="project-name" class="form-control" placeholder="Ingrese nombre del proyecto" name="project" required="">
+            </div>
+            <button type="button" id="create-project" onclick="createProject()" class="btn btn-primary mr-1 data-submit waves-effect waves-float waves-light">Crear </button>
+            <button type="button" id="cancel-new-project" onclick="Swal.close()" class="btn btn-outline-secondary waves-effect" data-dismiss="modal">Cancelar</button>
+          </div>`
+        });
+
+        //document.querySelector('#create-project').addEventListener('click', async () => {})
+        //document.querySelector('#cancel-new-project').addEventListener('click', async () => Swal.close());
+    })
 
 });

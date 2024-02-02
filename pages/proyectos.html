@@ -19,6 +19,7 @@
     <link rel="stylesheet" type="text/css" href="../app-assets/vendors/css/vendors.min.css">
     <link rel="stylesheet" href="../app-assets/vendors/js/tables/ag-grid/styles/ag-grid.css">
     <link rel="stylesheet" href="../app-assets/vendors/js/tables/ag-grid/styles/ag-theme-quartz.css">
+    <link rel="stylesheet" href="../app-assets/vendors/js/sweetalert2/sweetalert2.all.min.js">
 
     <!-- END: Vendor CSS-->
 
@@ -166,9 +167,11 @@
                 <li class="nav-item dropdown dropdown-user"><a class="nav-link dropdown-toggle dropdown-user-link"
                         id="dropdown-user" href="javascript:void(0);" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false">
-                        <div class="user-nav d-sm-flex d-none"><span class="user-name font-weight-bolder">Admin</span><span class="user-status">Admin</span></div><span class="avatar"><img
-                                class="round" src="../../../app-assets/images/portrait/small/avatar-s-11.jpg"
-                                alt="avatar" height="40" width="40"><span class="avatar-status-online"></span></span>
+                        <div class="user-nav d-sm-flex d-none"><span
+                                class="user-name font-weight-bolder">Admin</span><span class="user-status">Admin</span>
+                        </div><span class="avatar"><img class="round"
+                                src="../../../app-assets/images/portrait/small/avatar-s-11.jpg" alt="avatar" height="40"
+                                width="40"><span class="avatar-status-online"></span></span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-user"><a
                             class="dropdown-item" href="page-profile.html"><i class="mr-50" data-feather="user"></i>
@@ -289,9 +292,9 @@
                                                 </div>
                                             </div>
                                             <div class="dt-buttons"><button
-                                                    class="dt-button add-new btn btn-primary mt-50" tabindex="0"
-                                                    aria-controls="tableData" type="button" data-toggle="modal"
-                                                    data-target="#modalNew"><span>Nuevo</span></button> </div>
+                                                    id="new-project" class="dt-button add-new btn btn-primary mt-50" tabindex="0"
+                                                    aria-controls="tableData" type="button"><span>Nuevo</span></button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -307,123 +310,7 @@
         </div>
     </div>
     <!-- modal de creacion or Update -->
-    <div class="modal modal-slide-in new-user-modal fade" id="modalNew">
-        <div class="modal-dialog">
-            <form id="formNew" class="add-new-user modal-content pt-0" autocomplete="off">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-                <div class="modal-header mb-1">
-                    <h5 class="modal-title" id="exampleModalLabel">Agregar Nuevo Usuario</h5>
-                </div>
-                <div class="modal-body flex-grow-1">
-                    <div class="form-group">
-                        <label class="form-label" for="username">Nombre Usuario</label>
-                        <input type="text" class="form-control " id="username" placeholder="Nombre del usuario"
-                            name="username" required />
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="nombre">Nombre</label>
-                        <input type="text" class="form-control " id="nombre" placeholder="Nombre" name="nombre"
-                            required />
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="password">Contraseña</label>
-                        <input type="password" alt="strongPass" class="form-control " id="password"
-                            placeholder="Contraseña" name="password" required />
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="password2">Confirmar Contraseña</label>
-                        <input type="password" alt="strongPass" class="form-control " id="password2"
-                            placeholder="Contraseña" name="password2" required />
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="telefono">Telefono</label>
-                        <input type="text" class="form-control " id="telefono" placeholder="# de telefono"
-                            name="telefono" required />
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="emailNotification">E-mail</label>
-                        <input type="text" class="form-control " id="emailNotification" placeholder="E-mail"
-                            name="emailNotification" required />
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="rol">Roles</label>
-                        <select type="text" class="form-control" id="rol" name="rol" required></select>
-                    </div>
-                    <button id="btnSubmitAdd" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
-                    <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-                </div>
-            </form>
-        </div>
-    </div>
 
-    <div class="modal modal-slide-in new-user-modal fade" id="modalEdit">
-        <div class="modal-dialog">
-            <form id="formEdit" class="add-new-user modal-content pt-0" autocomplete="off">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-                <div class="modal-header mb-1">
-                    <h5 class="modal-title" id="exampleModalLabel">Actualizar el ususario</h5>
-                </div>
-                <div class="modal-body flex-grow-1">
-                    <div class="form-group">
-                        <label class="form-label" for="usernameEdit">Nombre Usuario</label>
-                        <input type="text" class="form-control " id="usernameEdit" placeholder="Nombre del usuario"
-                            name="usernameEdit" required />
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="nombreEdit">Nombre</label>
-                        <input type="text" class="form-control " id="nombreEdit" placeholder="Nombre" name="nombreEdit"
-                            required />
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="passwordEdit">Contraseña</label>
-                        <input type="password" alt="strongPass" class="form-control " id="passwordEdit"
-                            placeholder="Contraseña" name="passwordEdit" required />
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="passwordEdit2">Confirmar Contraseña</label>
-                        <input type="password" alt="strongPass" class="form-control " id="passwordEdit2"
-                            placeholder="Contraseña" name="passwordEdit2" required />
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="telefonoEdit">Telefono</label>
-                        <input type="text" class="form-control " id="telefonoEdit" placeholder="# de telefono"
-                            name="telefonoEdit" required />
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="emailEdit">E-mail</label>
-                        <input type="text" class="form-control " id="emailEdit" placeholder="E-mail" name="emailEdit"
-                            required />
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="rolActualizar">Rol</label>
-                        <select type="text" class="form-control" id="rolActualizar" name="rolActualizar"
-                            required></select>
-                    </div>
-                    <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
-                    <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div class="modal modal-slide-in new-user-modal fade" id="modalDelete">
-        <div class="modal-dialog">
-            <form id="formDelete" class="add-new-user modal-content pt-0" autocomplete="off">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-                <div class="modal-header mb-1">
-                    <h5 class="modal-title" id="exampleModalLabel">Inhabilitar el usuario</h5>
-                </div>
-                <div class="modal-body flex-grow-1">
-                    <div class="form-group">
-                        <input id="usernameDelete" type="hidden">
-                        <p>¿Esta seguro que desea <b>Inhabilitar este usuario?</b></p>
-                    </div>
-                    <button id="BtnDelete" type="button" class="btn btn-danger mr-1 data-submit">Confirmar </button>
-                    <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-                </div>
-            </form>
-        </div>
-    </div>
     <!-- END: Content-->
     </div>
     <!-- End: Customizer-->
@@ -445,6 +332,7 @@
     <!-- BEGIN: Page Vendor JS-->
     <script src="../app-assets/vendors/js/extensions/moment.min.js"></script>
     <script src="../app-assets/vendors/js/tables/ag-grid/ag-grid-community.min.noStyle.js"></script>
+    <script src="../app-assets/vendors/js/sweetalert2/sweetalert2.all.min.js"></script>
     <!-- END: Page Vendor JS-->
     <script src="../app-assets/vendors/js/extensions/toastr.min.js"></script>
     <!-- BEGIN: Theme JS-->
