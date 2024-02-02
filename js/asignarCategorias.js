@@ -1,5 +1,4 @@
 const url = 'http://localhost:3000/';
-
 let token = localStorage.getItem("token");
 
 const headers = {
@@ -8,15 +7,9 @@ const headers = {
 };
 
 $(function () {
-  getCategorias();
-  Usuario();
+    getCategorias();
+    Usuario();
 });
-
-const getCategorias = () => {
-  var requestOptions = {
-    method: "GET",
-    redirect: "follow",
-  };
 
 const getCategorias = () => {
 
@@ -39,21 +32,14 @@ const getCategorias = () => {
 }
 
 const getTransaccionesAsignadas = () => {
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
 
     $('#contenedor-derecho').html(null)
 
-  var raw = JSON.stringify({
-    idCategoria: idCategoria,
-  });
+    const idCategoria = $('#categorias').val();
 
-  var requestOptions = {
-    method: "PATCH",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow",
-  };
+    var raw = JSON.stringify({
+        "idCategoria": idCategoria
+    });
 
     var requestOptions = {
         method: 'PATCH',
@@ -79,13 +65,13 @@ const getTransaccionesAsignadas = () => {
 
 const getTransaccionesNoAsignadas = () => {
 
-  $("#contenedor-izquierdo").html(null);
+    $('#contenedor-izquierdo').html(null)
 
-  const idCategoria = $("#categorias").val();
+    const idCategoria = $('#categorias').val();
 
-  var raw = JSON.stringify({
-    idCategoria: idCategoria,
-  });
+    var raw = JSON.stringify({
+        "idCategoria": idCategoria
+    });
 
     var requestOptions = {
         method: 'PATCH',
@@ -108,8 +94,8 @@ const getTransaccionesNoAsignadas = () => {
         })
         .catch(error => console.log('error', error));
 
-  getTransaccionesAsignadas();
-};
+    getTransaccionesAsignadas();
+}
 
 $('#categorias').on('change', function () {
 
@@ -124,14 +110,11 @@ $('#categorias').on('change', function () {
 })
 
 const Usuario = () => {
+
     let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
     console.log(usuario.nombre)
     $('.user-name').text(usuario.nombre);
     $('.user-status').text(usuario.rol.descripcion);
-};
-
-Usuario();
-
 }
 
 $('#btnAdd').click(function () {
@@ -141,12 +124,10 @@ $('#btnAdd').click(function () {
     $('.permiso:checked').each(function () {
         data.push({ idTransaccion: $(this).val(), idCategoria: $('#categorias').val() })
     });
-  });
 
     var raw = JSON.stringify({
         "data": data
     });
-  return false;
 
     var requestOptions = {
         method: 'POST',
@@ -171,24 +152,16 @@ $('#btnAdd').click(function () {
         });
     return false;
 
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
+})
 
 $('#btnDelete').click(function () {
 
-  var requestOptions = {
-    method: "DELETE",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow",
-  };
+    let id = []
 
     $('.permiso:checked').each(function () {
 
         id.push($(this).val())
     });
-  return false;
-});
 
     if (id.length == 0) {
         return Alert('Por favor seleccione al menos una categoría.', 'error')
@@ -220,6 +193,7 @@ $('#btnDelete').click(function () {
             Alert(error, 'error')
         });
     return false;
+})
 
 const Alert = function (message, status) {
     toastr[`${status}`](message, `${status}`, {
