@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 ...item,
                 estado: item.estado === 1 ? true : false
             }));
+            Alert('Proyectos obtenidos.', 'success');
         })
         .catch(error => {
             console.error('Error:', error);
