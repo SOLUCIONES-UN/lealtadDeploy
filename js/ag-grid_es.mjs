@@ -16,6 +16,7 @@ const customGridOptions = {
     rowStyle: { outline: 'none' },
     suppressCellFlash: true,
     enableCellChangeFlash: true,
+    cacheQuickFilter: true,
     defaultColDef: {
         width: 500,
         //editable: true,
@@ -72,13 +73,11 @@ const customGridOptions = {
     onCellContextMenu: cellNode => console.log(`Cell context menu: ${cellNode.rowIndex}`),
     //onFilterTextBoxChanged: filterValue => agGrid.setQuickFilter(filterValue),
     api: {
-        quickFilterText: 'new filter text',
-        onFilterTextBoxChanged: (text) => myGrid.setQuickFilter(text)
+        quickFilterText: '',
+        //onFilterTextBoxChanged: text => myGrid.setQuickFilter(text)
     },
     components: {
-        rowNodeIdRenderer: function (params) {
-            return params.node.id + 1;
-        }
+        rowNodeIdRenderer: params => params.node.id + 1
     },
     localeText: {
 

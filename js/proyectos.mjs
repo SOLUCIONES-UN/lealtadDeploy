@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     const searchBar = document.querySelector('#ag-search-bar');
-    searchBar.addEventListener('input', () => customGridOptions.api.onFilterTextBoxChanged(searchBar.value))
+    searchBar.addEventListener('input', () => myGrid.setGridOption('quickFilterText', searchBar.value))
 
     await fetch(`${url}projects`, {
         method: 'GET',
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         columnDefs: [
             { headerName: "No.", field: "id", /* type: 'numericColumn', */ filter: 'agNumberColumnFilter', autoHeight: true, width: .10 * myGridElement.clientWidth },
             {
-                headerName: "Descripción", field: "descripcion", filter: 'agTextColumnFilter', autoHeight: true, getQuickFilterText: params => params.colDef.hide ? '' : params.value.name, editable: true, width: .595 * myGridElement.clientWidth
+                headerName: "Descripción", field: "descripcion", filter: 'agTextColumnFilter', autoHeight: true, editable: true, width: .595 * myGridElement.clientWidth
             },
             {
                 headerName: "Estado", field: "estado", autoHeight: true, editable: true, /* cellEditor: 'booleanEditor', cellRenderer: params => {
