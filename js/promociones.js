@@ -2,7 +2,7 @@ const url = "http://localhost:3000/";
 let codigos = [];
 let premios = [];
 
-let token = sessionStorage.getItem("token");
+let token = localStorage.getItem("token");
 let imagen = "";
 let newImagen = "";
 let newImagen1 = "";
@@ -411,8 +411,7 @@ const limpiarForm = () => {
 
 const Usuario = () => {
 
-  let usuario = JSON.parse(sessionStorage.getItem('infoUsuario'));
-  console.log(usuario.nombre)
+  let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
   $('.user-name').text(usuario.nombre);
   $('.user-status').text(usuario.rol.descripcion);
 }
