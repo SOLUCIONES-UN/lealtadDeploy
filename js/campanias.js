@@ -698,7 +698,7 @@ const getDepartamentos = (id, isEdith = false) => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow',
-    headers: { "Authorization": token }
+    headers: headers,
   };
 
   if (isEdith) {
@@ -728,7 +728,7 @@ const getMunicipios = (id, isEdit = false) => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow',
-    headers: { "Authorization": token }
+    headers: headers
   };
 
   if (isEdit) {
@@ -758,7 +758,7 @@ const getTransacciones = (id, isEdit = false) => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow',
-    headers: { "Authorization": token }
+    headers: headers
   };
 
   if (isEdit) {
@@ -838,9 +838,37 @@ inputFile.addEventListener("change", function () {
   }
 });
 
-function eliminarFila(id) {
-  $("#fila" + id).remove();
+const eliminarFila = async (id) => {
+  //$("#fila" + id).remove();
+  //table.row().remove();
   console.log(id);
+
+  await fetch(`${url}Campania/${id}`, {
+    method: 'DELETE',
+    headers: headers,
+    redirect: 'follow',
+  })
+    .then(response => {
+      if (!response.ok) {
+        Alert('Error al eliminar la campaña.', 'error');
+        throw new Error('Failed to fetch data');
+      }
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        Alert('Error al eliminar la campaña.', 'error');
+        throw new Error('Unexpected status code: ' + response.status);
+      }
+    })
+    .then(result => {
+      getAllCampanias();
+      Alert('Campaña eliminada exitosamente.', 'success');
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      Alert('Error al eliminar la campaña.', 'error');
+    })
+
 }
 
 function eliminarEtapa(id) {
@@ -933,7 +961,7 @@ const getAllCampanias = () => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow',
-    headers: { "Authorization": token }
+    headers: headers
   };
 
   fetch(`${url}Campania`, requestOptions)
@@ -1019,12 +1047,14 @@ const table = (table, data) => {
               break;
           }
 
+          //console.log(`row_id: ${data} estado: ${row.estado}`)
+
           if (row.estado != 0) {
             opcAdd += `<a href="#" onclick="OpenEdit(${data})" class="btn_edit dropdown-item">
             ${feather.icons["archive"].toSvg({
               class: "font-small-4 mr-50",
             })} Actualizar
-            </a><a href="#" onclick="OpenDelete(${data})" class="btn_delete dropdown-item">
+            </a><a href="#" onclick="eliminarFila(${data})" class="btn_delete dropdown-item">
                 ${feather.icons["trash-2"].toSvg({
               class: "font-small-4 mr-50",
             })} Inhabilitar
@@ -1164,7 +1194,7 @@ const getPremios = (id, isEdit = false) => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow',
-    headers: { "Authorization": token }
+    headers: headers,
   };
 
   if (isEdit) {
@@ -1276,7 +1306,7 @@ const getParametros = (idEtapa) => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow',
-    headers: { "Authorization": token }
+    headers: headers,
   };
 
   fetch(`${url}parametros/${idEtapa}`, requestOptions)
@@ -1312,7 +1342,7 @@ const getParametros = (idEtapa) => {
                 </a>
             
             <div class="dropdown-menu dropdown-menu-right">
-                <a href="#" onclick="OpenDelete(${element.id
+                <a href="#" onclick="eliminarFila(${element.id
           })" class="btn_delete dropdown-item">
                   ${feather.icons["trash-2"].toSvg({
             class: "font-small-4 mr-50",
@@ -1333,7 +1363,7 @@ const getPremiosEtapa = (idEtapa) => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow',
-    headers: { "Authorization": token }
+    headers: headers,
   };
 
   fetch(`${url}premios/${idEtapa}`, requestOptions)
@@ -1359,7 +1389,7 @@ const getPremiosEtapa = (idEtapa) => {
                 </a>
             
             <div class="dropdown-menu dropdown-menu-right">
-                <a href="#" onclick="OpenDelete(${element.id
+                <a href="#" onclick="eliminarFila(${element.id
           })" class="btn_delete dropdown-item">
                   ${feather.icons["trash-2"].toSvg({
             class: "font-small-4 mr-50",
@@ -1380,7 +1410,7 @@ const getPresupuesto = (idEtapa) => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow',
-    headers: { "Authorization": token }
+    headers: headers,
   };
 
   fetch(`${url}presupuesto/${idEtapa}`, requestOptions)
@@ -1407,7 +1437,7 @@ const getPresupuesto = (idEtapa) => {
                 </a>
             
             <div class="dropdown-menu dropdown-menu-right">
-                <a href="#" onclick="OpenDelete(${element.id
+                <a href="#" onclick="eliminarFila(${element.id
           })" class="btn_delete dropdown-item">
                   ${feather.icons["trash-2"].toSvg({
             class: "font-small-4 mr-50",
@@ -1428,6 +1458,7 @@ const getEtapas = (id) => {
   var requestOptions = {
     method: "GET",
     redirect: 'follow',
+    headers: headers,
   };
   console.log("ID de la camapaña" + id);
   fetch(`${url}Campania/${id}`, requestOptions)
@@ -1455,7 +1486,7 @@ const getEtapas = (id) => {
                       </a>
                   
                   <div class="dropdown-menu dropdown-menu-right">
-                      <a href="#" onclick="OpenDelete(${index})" class="btn_delete dropdown-item">
+                      <a href="#" onclick="eliminarFila(${index})" class="btn_delete dropdown-item">
                         ${feather.icons["trash-2"].toSvg({
             class: "font-small-4 mr-50",
           })} Inhabilitar
@@ -1479,6 +1510,7 @@ const OpenEdit = (id, index, idEtapa, isEtapa = false) => {
     var requestOptions = {
       method: "GET",
       redirect: 'follow',
+      headers: headers
     };
     console.log(id);
     fetch(`${url}Campania/${id}`, requestOptions)
@@ -1507,6 +1539,7 @@ const OpenEdit = (id, index, idEtapa, isEtapa = false) => {
     var requestOptions = {
       method: "GET",
       redirect: 'follow',
+      headers: headers
     };
 
     fetch(`${url}Campania/${id}`, requestOptions)
@@ -1541,6 +1574,7 @@ const tipoDeTransaccion = (id) => {
   var requestOptions = {
     method: "GET",
     redirect: 'follow',
+    headers: headers
   };
 
   let tipoTrans = $("#TipoTransaccion" + id).val();
@@ -1571,6 +1605,7 @@ $("#TipoTransaccionEdit").on("change", function () {
   var requestOptions = {
     method: "GET",
     redirect: 'follow',
+    headers: headers
   };
 
   let tipoTrans = $("#TipoTransaccionEdit").val();
@@ -1601,6 +1636,7 @@ const cargarDatos = (id, opc) => {
   var requestOptions = {
     method: "GET",
     redirect: 'follow',
+    headers: headers
   };
 
   switch (opc) {
@@ -1683,7 +1719,7 @@ const updateCampaña = (opc) => {
         method: "PUT",
         headers: headers,
         body: raw,
-        redirect: 'follow',
+        redirect: 'follow'
       };
 
       fetch(`${url}parametros/update/${id}`, requestOptions)
@@ -1724,7 +1760,7 @@ const updateCampaña = (opc) => {
         method: "PUT",
         headers: headers,
         body: raw,
-        redirect: 'follow',
+        redirect: 'follow'
       };
 
       fetch(`${url}premios/update/${id}`, requestOptions)
@@ -1762,7 +1798,7 @@ const updateCampaña = (opc) => {
         method: "PUT",
         headers: headers,
         body: raw,
-        redirect: 'follow',
+        redirect: 'follow'
       };
 
       fetch(`${url}presupuesto/update/${id}`, requestOptions)
@@ -1807,7 +1843,7 @@ $("#formEditEtapas").submit(function () {
     method: "PUT",
     headers: headers,
     body: raw,
-    redirect: 'follow',
+    redirect: 'follow'
   };
 
   fetch(`${url}etapa/update/${id}`, requestOptions)
@@ -1854,7 +1890,7 @@ $("#formEdit").submit(function () {
     method: "PUT",
     headers: headers,
     body: raw,
-    redirect: 'follow',
+    redirect: 'follow'
   };
 
   fetch(`${url}Campania/${idCamp}`, requestOptions)
@@ -1877,7 +1913,8 @@ $("#formEdit").submit(function () {
 const pausarActualizarCampania = (id, type) => {
   var requestOptions = {
     method: "PUT",
-    redirect: 'follow',
+    headers: headers,
+    redirect: 'follow'
   };
 
   fetch(
@@ -1902,7 +1939,8 @@ const pausarActualizarCampania = (id, type) => {
 const getParticipantes = (idCampania) => {
   var requestOptions = {
     method: "GET",
-    redirect: 'follow',
+    headers: headers,
+    redirect: 'follow'
   };
 
   fetch(`${url}participantes/${idCampania}`, requestOptions)
@@ -1927,7 +1965,7 @@ const getParticipantes = (idCampania) => {
                       </a>
                   
                   <div class="dropdown-menu dropdown-menu-right">
-                      <a href="#" onclick="OpenDelete(${index})" class="btn_delete dropdown-item">
+                      <a href="#" onclick="eliminarFila(${index})" class="btn_delete dropdown-item">
                         ${feather.icons["trash-2"].toSvg({
           class: "font-small-4 mr-50",
         })} Inhabilitar
@@ -1947,6 +1985,7 @@ const getParticipantes = (idCampania) => {
 const getBloqueados = (idCampania) => {
   var requestOptions = {
     method: "GET",
+    headers: headers,
     redirect: 'follow',
   };
 
@@ -1972,7 +2011,7 @@ const getBloqueados = (idCampania) => {
                       </a>
                   
                   <div class="dropdown-menu dropdown-menu-right">
-                      <a href="#" onclick="OpenDelete(${index})" class="btn_delete dropdown-item">
+                      <a href="#" onclick="eliminarFila(${index})" class="btn_delete dropdown-item">
                         ${feather.icons["trash-2"].toSvg({
           class: "font-small-4 mr-50",
         })} Inhabilitar
