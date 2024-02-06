@@ -3,6 +3,12 @@ let codigos = [];
 let premios = [];
 
 let token = localStorage.getItem("token");
+
+const headers = {
+  'Authorization': token,
+  'Content-Type': 'application/json'
+};
+
 let imagen = "";
 let newImagen = "";
 let newImagen1 = "";
@@ -193,8 +199,6 @@ $(function () {
   });
 
   $("#formEdit").submit(function () {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
 
     const id = $("#id").val();
 
@@ -210,9 +214,9 @@ $(function () {
 
     var requestOptions = {
       method: "PUT",
-      headers: myHeaders,
+      headers: headers,
       body: raw,
-      redirect: "follow",
+      redirect: "follow"
     };
 
     fetch(`${url}Promocion/${id}`, requestOptions)
@@ -233,8 +237,6 @@ $(function () {
   });
 
   $("#formTestear").submit(function () {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({
       cupon: $("#codigoTest").val(),
@@ -242,9 +244,9 @@ $(function () {
 
     var requestOptions = {
       method: "POST",
-      headers: myHeaders,
+      headers: headers,
       body: raw,
-      redirect: "follow",
+      redirect: "follow"
     };
 
     fetch(`${url}cangePromocion/Test`, requestOptions)
@@ -307,9 +309,6 @@ $(function () {
     const telefono = $("#participarTelefono").val();
     const codigo = $("#participarCodigo").val();
 
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
     var raw = JSON.stringify({
       cupon: codigo,
       numero: telefono,
@@ -317,9 +316,9 @@ $(function () {
 
     var requestOptions = {
       method: "POST",
-      headers: myHeaders,
+      headers: headers,
       body: raw,
-      redirect: "follow",
+      redirect: "follow"
     };
 
     fetch(`${url}cangePromocion`, requestOptions)
@@ -377,13 +376,11 @@ $(function () {
 
   //Para eliminar una promocion
   $("#BtnDelete").click(function () {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
 
     const id = $("#idDelete").val();
     var requestOptions = {
       method: "DELETE",
-      headers: myHeaders,
+      headers: headers,
       redirect: "follow"
     };
 
@@ -419,8 +416,8 @@ const Usuario = () => {
 const getAllPromociones = () => {
   var requestOptions = {
     method: "GET",
-    redirect: "follow",
-    headers: {"Authorization": token}
+    headers: headers,
+    redirect: "follow"
   };
 
   fetch(`${url}Promocion`, requestOptions)
@@ -580,16 +577,14 @@ const ChangePanel = (estado) => {
 
 const saveData = (data) => {
   console.log(data);
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
 
   var raw = JSON.stringify(data);
 
   var requestOptions = {
     method: "POST",
-    headers: myHeaders,
+    headers: headers,
     body: raw,
-    redirect: "follow",
+    redirect: "follow"
   };
 
   fetch(`${url}Promocion`, requestOptions)
@@ -696,7 +691,7 @@ const getPremios = () => {
   var requestOptions = {
     method: "GET",
     redirect: "follow",
-    headers: {"Authorization": token}
+    headers: headers
   };
 
   $("#premio").html(
@@ -792,6 +787,7 @@ const loadMenuEdit = () => {
 const OpenEdit = (id) => {
   var requestOptions = {
     method: "GET",
+    headers: headers,
     redirect: "follow",
   };
 
@@ -877,7 +873,8 @@ const UpdatePromocion = (id, type) => {
   //OpenEdit(id)
   var requestOptions = {
     method: "PUT",
-    redirect: "follow",
+    headers: headers,
+    redirect: "follow"
   };
 
   fetch(`${url}Promocion/${type == 1 ? "Act" : "Pau"}/${id}`, requestOptions)
