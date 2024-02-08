@@ -37,6 +37,10 @@ let imgPush = '';
 const getBlob = file => file.slice(0, file.size, file.type)
 
 document.addEventListener('DOMContentLoaded', () => {
+
+  const dateInputs = document.querySelectorAll('input[type="date"]');
+  dateInputs.forEach(input => input.value = new Date().toISOString().substring(0,10));
+
   const img1 = document.querySelector('#imgAkisi');
   img1.onchange = () => {
     const file = img1.files[0];
@@ -429,7 +433,7 @@ function addConfig(id, nombreEtapa) {
           <thead>
               <tr>
                   <td>Etapa</td>
-                  <td>Transaccion</td>
+                  <td>Transacción</td>
                   <td>valor Minimo</td>
                   <td>valor Maximo</td>
                   <td>&nbsp;</td>
