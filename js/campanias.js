@@ -31,8 +31,8 @@ const inputFileBloqueados = document.getElementById('formFileBloqueados');
 //var stepper = new Stepper(document.querySelector('.bs-stepper'))
 // stepper.to(3)
 
-imgAkisi;
-imgPush;
+let imgAkisi = '';
+let imgPush = '';
 
 const getBlob = file => file.slice(0, file.size, file.type)
 
