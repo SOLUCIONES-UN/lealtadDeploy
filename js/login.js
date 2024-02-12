@@ -1,6 +1,6 @@
 const url = "http://localhost:3000/";
 let dataUsuario;
-let pagina = './dashboard.html';
+let pagina = 'dashboard.html';
 let token = localStorage.getItem("token");
 
 $(function () {
@@ -14,7 +14,7 @@ $(function () {
       password: $("#login-password").val(),
     });
 
-    console.log(raw);
+    //console.log(raw);
 
     var requestOptions = {
       method: "POST",
@@ -34,7 +34,7 @@ $(function () {
 
           localStorage.setItem("token", result.token);
           localStorage.setItem("infoUsuario", JSON.stringify(result.data));
-          setTimeout(() => window.location = pagina, 250);
+          setTimeout(() => window.location.href = pagina, 250);
           //location.href = pagina;
           
         } else {
