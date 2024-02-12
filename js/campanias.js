@@ -39,7 +39,7 @@ const getBlob = file => file.slice(0, file.size, file.type)
 document.addEventListener('DOMContentLoaded', () => {
 
   const dateInputs = document.querySelectorAll('input[type="date"]');
-  dateInputs.forEach(input => input.value = new Date().toISOString().substring(0,10));
+  dateInputs.forEach(input => input.value = new Date().toISOString().substring(0, 10));
 
   const img1 = document.querySelector('#imgAkisi');
   img1.onchange = () => {
@@ -411,7 +411,7 @@ function addConfig(id, nombreEtapa) {
       </div>
       ${isAddLimited
       ? `<div class="form-group col-md-6">
-                          <label class="form-label" for="limiteParticipacion${id}">Limite
+                          <label class="form-label" for="limiteParticipacion${id}">Límite
                               Participacion</label>
                           <input type="number" id="limiteParticipacion${id}" class="form-control" />
                        </div>`
@@ -512,7 +512,7 @@ function addConfig(id, nombreEtapa) {
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-md-6">
-                                            <label class="form-label" for="limiteGanadores">Limite De Ganadores</label>
+                                            <label class="form-label" for="limiteGanadores">Límite De Ganadores</label>
                                             <input type="number" id="limiteGanadores${id}" class="form-control" />
                                         </div>
 
@@ -535,7 +535,7 @@ function addConfig(id, nombreEtapa) {
                                                 <tr>
                                                     <td>Departamento</td>
                                                     <td>Municipio</td>
-                                                    <td>Limite</td>
+                                                    <td>Límite</td>
                                                     <td>Presupuesto</td>
                                                     <td>&nbsp;</td>
                                                 </tr>
@@ -605,7 +605,7 @@ function addConfig(id, nombreEtapa) {
     $("#TipoTransaccion" + id).val(0);
     $("#Transacciones" + id).html(null);
     $("#Transacciones" + id).append(
-      `<option value="0" selected disabled>Seleccione Una Transaccion</option>`
+      `<option value="0" selected disabled>Seleccione Una Transacción</option>`
     );
     $("#vMinimo" + id).val(null);
     $("#vMaximo" + id).val(null);
@@ -702,7 +702,7 @@ const getDepartamentos = (id, isEdith = false) => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow',
-    headers: headers,
+    headers: headers
   };
 
   if (isEdith) {
@@ -729,34 +729,36 @@ const getDepartamentos = (id, isEdith = false) => {
 };
 
 const getMunicipios = (id, isEdit = false) => {
-  var requestOptions = {
+
+  const departamento = document.querySelector(`#departamento${id}`);
+  const departamentoActualizar = document.querySelector('#departamentoActualizar');
+
+  fetch(`${url}Municipio/by/${isEdit ? departamentoActualizar.value : 1}`, {
     method: 'GET',
     redirect: 'follow',
     headers: headers
-  };
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      if (isEdit) {
+        result.forEach((element) => {
+          const option = document.createElement('option');
+          option.value = element.id;
+          option.textContent = element.nombre;
+          document.querySelector('#municipioEdit').append(option);
+        });
+      } else {
+        result.forEach((element) => {
+          const option = document.createElement('option');
+          option.value = element.id;
+          option.textContent = element.nombre;
+          document.querySelector(`#municipio${id}`).append(option);
+        });
+      }
+    })
+    .catch((error) => console.log("error", error));
 
-  if (isEdit) {
-    fetch(`${url}Municipio`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        result.forEach((element) => {
-          var opc = `<option value="${element.id}">${element.nombre}</option>`;
-          $("#municipioEdit").append(opc);
-        });
-      })
-      .catch((error) => console.log("error", error));
-  } else {
-    fetch(`${url}Municipio`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        result.forEach((element) => {
-          var opc = `<option value="${element.id}">${element.nombre}</option>`;
-          $("#municipio" + id).append(opc);
-        });
-      })
-      .catch((error) => console.log("error", error));
-  }
-};
+}
 
 const getTransacciones = (id, isEdit = false) => {
   var requestOptions = {
