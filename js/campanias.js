@@ -38,8 +38,9 @@ const getBlob = file => file.slice(0, file.size, file.type)
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  const dateInputs = document.querySelectorAll('input[type="date"]');
-  dateInputs.forEach(input => input.value = new Date().toISOString().substring(0, 10));
+  initDateInputs();
+  removeLettersAndSC();
+  removeSpecialCharacters();
 
   const img1 = document.querySelector('#imgAkisi');
   img1.onchange = () => {
