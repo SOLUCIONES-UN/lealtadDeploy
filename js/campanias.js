@@ -42,6 +42,62 @@ document.addEventListener('DOMContentLoaded', () => {
   removeLettersAndSC();
   removeSpecialCharacters();
 
+  const nombre = document.querySelector('#nombre');
+  validateText(nombre, 'Campaña');
+
+  const tituloNotificacion = document.querySelector('#tituloNotificacion');
+  validateText(tituloNotificacion, 'Campaña');
+
+  const limiteParticipacion = document.querySelector('#limiteParticipacion');
+  validateNumber(limiteParticipacion, 'Límite de Participación');
+
+  const imgAkisi = document.querySelector('#imgAkisi');
+  validateFile(imgAkisi, 'Ícono de la campaña');
+
+  const fechaInicio = document.querySelector('#fechaInicio');
+  validateDate(fechaInicio, 'Fecha Inicio');
+
+  const fechaRegistro = document.querySelector('#fechaRegistro');
+  validateDate(fechaRegistro, 'Fecha Inicio');
+
+  const edadIni = document.querySelector('#edadIni');
+  validateAge(edadIni, 'Edad Inicial');
+
+  const tipoUsuario = document.querySelector('#tipoUsuario');
+  validateSelect(tipoUsuario, 'Tipo De Usuario');
+
+  const descripcionCampania = document.querySelector('#descripcionCampania');
+  validateText(descripcionCampania, 'Descripción');
+
+  const descripcionNotificacion = document.querySelector('#descripcionNotificacion');
+  validateText(descripcionNotificacion, 'Descripción De La Notificación');
+
+  const imgPush = document.querySelector('#imgPush');
+  validateFile(imgPush, 'Imagen de Notificación');
+
+  const fechaFin = document.querySelector('#fechaFin');
+  validateDate(fechaFin, 'Fecha Fin');
+
+  const edadFini = document.querySelector('#edadFini');
+  validateDate(edadFini, 'Edad Final');
+
+  const sexo = document.querySelector('#sexo');
+  validateSelect(sexo, 'Sexo');
+
+
+  /* allFormVal['nombre'] = false;
+  allFormVal['tituloNotificacion'] = false;
+  allFormVal['limiteParticipacion'] = false;
+  allFormVal['imgAkisi'] = false; */
+
+  const inputs = document.querySelectorAll('input');
+  inputs.forEach(input => {
+    if (input.id != '' && input.type != 'hidden') {
+      allFormVal[input.id] = false;
+    }
+  });
+
+
   const img1 = document.querySelector('#imgAkisi');
   img1.onchange = () => {
     const file = img1.files[0];
@@ -110,9 +166,14 @@ $(function () {
   });
 
   $("#submitData").click(function () {
+
+    checkFormVals();
+
+    if (!allFormIsOK) return invalidFormData()
+
     var data = {
       nombre: $("#nombre").val(),
-      descripcion: $("#descripcionCamania").val(),
+      descripcion: $("#descripcionCampania").val(),
       tituloNotificacion: $("#tituloNotificacion").val(),
       fechaRegistro: $("#fechaRegistro").val(),
       fechaInicio: $("#fechaInicio").val(),
@@ -350,7 +411,7 @@ function loadMenu(isEtapa) {
     $(verticalWizard)
       .find(".btn-submit")
       .on("click", function () {
-        Alert("Campaña Creada con Exito", "success");
+        //Alert("Campaña Creada con Exito", "success");
         ChangePanel(1);
       });
   }
@@ -1167,22 +1228,11 @@ const saveData = (data) => {
     });
 };
 
-const Alert = function (
-  message,
-  status // si se proceso correctamente la solicitud
-) {
-  toastr[`${status}`](message, `${status}`, {
-    closeButton: true,
-    tapToDismiss: false,
-    positionClass: "toast-top-right",
-    rtl: false,
-  });
-};
 const Limpiar = (isEdith) => {
   if (isEdith) {
     $("#PreviewEtapsEdit").html(null);
   } else {
-    $("#descripcionCamania").val(null);
+    $("#descripcionCampania").val(null);
     $("#nombre").val(null);
     $("#tituloNotificacion").val(null);
     $("#descripcionNotificacion").val(null);
@@ -1554,7 +1604,7 @@ const OpenEdit = (id, index, idEtapa, isEtapa = false) => {
       .then((result) => {
         $("#id").val(id);
         $("#nombreEdith").val(result.nombre);
-        $("#descripcionCamaniaEdith").val(result.descripcion);
+        $("#descripcionCampaniaEdith").val(result.descripcion);
         $("#tituloNotificacionEdith").val(result.tituloNotificacion);
         $("#descripcionNotificacionEdith").val(result.descripcionNotificacion);
         $("#limiteParticipacionEdith").val(result.maximoParticipaciones);
@@ -1881,7 +1931,7 @@ $("#formEdit").submit(function () {
     fechaInicio: $("#fechaInicioEdith").val(),
     fechaFin: $("#fechaFinEdith").val(),
     nombre: $("#nombreEdith").val(),
-    descripcion: $("#descripcionCamaniaEdith").val(),
+    descripcion: $("#descripcionCampaniaEdith").val(),
     edadInicial: $("#edadIniEdith").val(),
     edadFinal: $("#edadFiniEdith").val(),
     sexo: $("#sexoEdith option:selected").val(),
