@@ -4,7 +4,7 @@ let allFormIsOK = false;
 
 const initDateInputs = () => {
     const dateInputs = document.querySelectorAll('input[type="date"]');
-    dateInputs.forEach(input => input.value = new Date().toISOString().substring(0, 10));
+    dateInputs.forEach(input => input.value = new Date(0).toISOString().substring(0, 10));
 }
 
 //Utils
@@ -43,21 +43,21 @@ const checkFormVals = action => {
 
     for (let key in allFormVal) {
         if (allFormVal.hasOwnProperty(key)) {
-            if (allFormVal[key]) {
+            if (allFormVal[key] == true) {
                 trueVals++;
             }
         }
     }
 
-    (allFormVal.size + 1) == trueVals ? allFormIsOK = true : allFormIsOK = false;
+    (Object.entries(allFormVal).length) == trueVals ? allFormIsOK = true : allFormIsOK = false;
 
-    //console.log(allFormVal.size)
-    //console.log(trueVals)
+    console.log(Object.entries(allFormVal).length)
+    console.log(trueVals)
 
     action;
 
-    //console.log(JSON.stringify(allFormVal))
-    //console.log(`allFormIsOK: ${allFormIsOK}`)
+    console.log(JSON.stringify(allFormVal))
+    console.log(`allFormIsOK: ${allFormIsOK}`)
 
 }
 
@@ -86,8 +86,8 @@ const validateText = (input, message) =>
         setTimeout(() => (isEmpty(input.value) ? setValidFormData([input.id, false], Alert(`${message} no puede estar vacío.`, 'error')) : setValidFormData([input.id, true])), 100));
 
 const validateDate = (input, message) =>
-    input.addEventListener('change', () =>
-        setTimeout(() => (input.value.length == 0 ? setValidFormData([input.id, false], Alert(`${message} no tiene una fecha válida.`, 'error')) : setValidFormData([input.id, true])), 100));
+    input.addEventListener('input', () =>
+        setTimeout(() => (input.value.length == 0 || input.value == '1970-01-01' ? setValidFormData([input.id, false], Alert(`${message} no tiene una fecha válida.`, 'error')) : setValidFormData([input.id, true])), 100));
 
 const validateSelect = (input, message) =>
     input.addEventListener('change', () =>
