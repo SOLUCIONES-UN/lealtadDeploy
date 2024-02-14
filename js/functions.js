@@ -70,7 +70,45 @@ const setValidFormData = (inputStatus, action = () => { }) => {
 
 const invalidFormData = () => Alert('Por favor completar los datos correctamente.', 'error');
 const isEmpty = value => (value == '' ? true : false);
-const isNan = value => value == '' ? 0 : Number(value);
+const isNan = value => value == '' ? 0 : parseFloat(value);
+
+const validate = input => {
+
+    if (input.getAttribute('subtype')) {
+
+        validateAge(input)
+
+    } else {
+
+        switch (input.type) {
+
+            case 'date':
+                validateDate(input)
+                break;
+    
+            case 'file':
+                validateFile(input)
+                break;
+    
+            case 'number':
+                validateNumber(input)
+                break;
+    
+            case 'select':
+                validateSelect(input)
+                break;
+    
+            case 'text':
+                validateText(input)
+                break;
+        
+            default:
+                break;
+        }
+
+    }
+
+};
 
 const validateNumber = (input, message) =>
     input.addEventListener('change', () =>
