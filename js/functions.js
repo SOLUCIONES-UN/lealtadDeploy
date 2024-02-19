@@ -72,34 +72,34 @@ const invalidFormData = () => Alert('Por favor completar los datos correctamente
 const isEmpty = value => (value == '' ? true : false);
 const isNan = value => value == '' ? 0 : parseFloat(value);
 
-const validate = input => {
+const validate = (input, message) => {
 
     if (input.getAttribute('subtype')) {
 
-        validateAge(input)
+        validateAge(input, message)
 
     } else {
 
         switch (input.type) {
 
             case 'date':
-                validateDate(input)
+                validateDate(input, message)
                 break;
     
             case 'file':
-                validateFile(input)
+                validateFile(input, message)
                 break;
     
             case 'number':
-                validateNumber(input)
+                validateNumber(input, message)
                 break;
     
             case 'select':
-                validateSelect(input)
+                validateSelect(input, message)
                 break;
     
             case 'text':
-                validateText(input)
+                validateText(input, message)
                 break;
         
             default:
