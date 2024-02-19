@@ -167,9 +167,9 @@ $(function () {
 
   $("#submitData").click(function () {
 
-    checkFormVals();
+    //checkFormVals();
 
-    if (!allFormIsOK) return invalidFormData()
+    //if (!allFormIsOK) return invalidFormData()
 
     var data = {
       nombre: $("#nombre").val(),
