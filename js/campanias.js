@@ -43,46 +43,46 @@ document.addEventListener('DOMContentLoaded', () => {
   removeSpecialCharacters();
 
   const nombre = document.querySelector('#nombre');
-  validateText(nombre, 'Campaña');
+  validate(nombre, 'Campaña');
 
   const tituloNotificacion = document.querySelector('#tituloNotificacion');
-  validateText(tituloNotificacion, 'Campaña');
+  validate(tituloNotificacion, 'Campaña');
 
   const limiteParticipacion = document.querySelector('#limiteParticipacion');
-  validateNumber(limiteParticipacion, 'Límite de Participación');
+  validate(limiteParticipacion, 'Límite de Participación');
 
   const imgAkisi = document.querySelector('#imgAkisi');
-  validateFile(imgAkisi, 'Ícono de la campaña');
+  validate(imgAkisi, 'Ícono de la campaña');
 
   const fechaInicio = document.querySelector('#fechaInicio');
-  validateDate(fechaInicio, 'Fecha Inicio');
+  validate(fechaInicio, 'Fecha Inicio');
 
   const fechaRegistro = document.querySelector('#fechaRegistro');
-  validateDate(fechaRegistro, 'Fecha Inicio');
+  validate(fechaRegistro, 'Fecha Inicio');
 
   const edadIni = document.querySelector('#edadIni');
-  validateAge(edadIni, 'Edad Inicial');
+  validate(edadIni, 'Edad Inicial');
 
   const tipoUsuario = document.querySelector('#tipoUsuario');
-  validateSelect(tipoUsuario, 'Tipo De Usuario');
+  validate(tipoUsuario, 'Tipo De Usuario');
 
   const descripcionCampania = document.querySelector('#descripcionCampania');
-  validateText(descripcionCampania, 'Descripción');
+  validate(descripcionCampania, 'Descripción');
 
   const descripcionNotificacion = document.querySelector('#descripcionNotificacion');
-  validateText(descripcionNotificacion, 'Descripción De La Notificación');
+  validate(descripcionNotificacion, 'Descripción De La Notificación');
 
   const imgPush = document.querySelector('#imgPush');
-  validateFile(imgPush, 'Imagen de Notificación');
+  validate(imgPush, 'Imagen de Notificación');
 
   const fechaFin = document.querySelector('#fechaFin');
-  validateDate(fechaFin, 'Fecha Fin');
+  validate(fechaFin, 'Fecha Fin');
 
   const edadFini = document.querySelector('#edadFini');
-  validateDate(edadFini, 'Edad Final');
+  validate(edadFini, 'Edad Final');
 
   const sexo = document.querySelector('#sexo');
-  validateSelect(sexo, 'Sexo');
+  validate(sexo, 'Sexo');
 
 
   /* allFormVal['nombre'] = false;
