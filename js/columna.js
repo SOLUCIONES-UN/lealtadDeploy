@@ -4,9 +4,42 @@ let token = localStorage.getItem("token");
 $(function () {
     let tabla = getColumnas();
     Usuario();
+    // funcion para validar el nombre
+    function validarNombre(nombre) {
+        const nombreValido = /^[a-zA-Z0-9]+$/.test(nombre.trim());
 
+        if (!nombreValido) {
+            $('#nombre').addClass('is-invalid');
+            $('#nombreError').text('El nombre no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
+            return false;
+        }
+        return true;
+    }
+
+
+    $('#modalNew').on('show.bs.modal', function () {
+        $('#nombre').removeClass('is-invalid');
+        $('#nombreError').empty().removeClass('text-danger');
+    });
+
+
+    $('#modalNew').on('hidden.bs.modal', function () {
+        validarNombre($('#nombre').val());
+    });
+
+    $('#modalNew').find('[data-dismiss="modal"]').click(function () {
+        validarNombre($('#nombre').val());
+    });
     //evento submit del formulario
     $('#formNew').submit(function () {
+        const nombre = $('#nombre').val();
+
+        // Validar el nombre
+        if (!validarNombre(nombre)) {
+            return false;
+        }
+
+
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", token);
@@ -129,16 +162,18 @@ const getColumnas = () => {
             type: "GET",
             datatype: "json",
             dataSrc: "",
-            headers: {"Authorization": token}
+            headers: { "Authorization": token }
         },
         columns: [
-            { data: null, render: function (data, type, row, meta) {
-            
-                if (type === 'display') {
+            {
+                data: null, render: function (data, type, row, meta) {
+
+                    if (type === 'display') {
+                        return meta.row + 1;
+                    }
                     return meta.row + 1;
                 }
-                return meta.row + 1; 
-            }},
+            },
             { data: "nombre" },
             {
                 data: "id", render: function (data) {
@@ -217,7 +252,7 @@ const OpenEdit = (id) => {
     var requestOptions = {
         method: 'GET',
         redirect: 'follow',
-        headers: {"Authorization": token}
+        headers: { "Authorization": token }
     };
 
     fetch(`${url}Columna/${id}`, requestOptions)

@@ -4,9 +4,39 @@ let token = localStorage.getItem("token");
 $(function () {
     let tabla = getMenus();
     Usuario();
+    function validarDescripcion(descripcion) {
+        const descripcionValida = descripcion.trim().length > 0;
 
+        if (!descripcionValida) {
+            $('#descripcion').addClass('is-invalid');
+            $('#descripcionError').text('La descripción no puede estar vacía').addClass('text-danger');
+            return false;
+        }
+        return true;
+    }
+
+ 
+    $('#modalNew').on('show.bs.modal', function () {
+        $('#descripcion').removeClass('is-invalid');
+        $('#descripcionError').empty().removeClass('text-danger');
+    });
+
+    $('#modalNew').on('hidden.bs.modal', function () {
+        validarDescripcion($('#descripcion').val());
+    });
+
+    $('#modalNew').find('[data-dismiss="modal"]').click(function () {
+        validarDescripcion($('#descripcion').val());
+    });
+    
     //evento submit del formulario
     $('#formNew').submit(function () {
+        const descripcion = $('#descripcion').val();
+
+      
+        if (!validarDescripcion(descripcion)) {
+            return false;
+        }
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 

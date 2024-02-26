@@ -4,9 +4,41 @@ let token = localStorage.getItem("token");
 $(function () {
   let tabla = getDepartamentos();
   Usuario();
+  function validarNombre(nombre) {
+    const nombreValido = /^[a-zA-Z0-9]+$/.test(nombre.trim());
 
+    if (!nombreValido) {
+        $('#nombre').addClass('is-invalid');
+        $('#nombreError').text('El nombre no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
+        return false;
+    }
+    return true;
+}
+
+$('#modalNew').on('show.bs.modal', function () {
+    $('#nombre').removeClass('is-invalid');
+    $('#nombreError').empty().removeClass('text-danger');
+});
+
+
+$('#modalNew').on('hidden.bs.modal', function () {
+    validarNombre($('#nombre').val());
+    limpiarFormulario();
+});
+
+$('#modalNew').find('[data-dismiss="modal"]').click(function () {
+    validarNombre($('#nombre').val());
+    limpiarFormulario();
+});
   //evento submit del formulairo
   $("#formNew").submit(function () {
+    const nombre = $('#nombre').val();
+
+    // Validar el nombre
+    if (!validarNombre(nombre)) {
+        return false;
+    }
+
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Authorization", token);
@@ -229,4 +261,7 @@ const OpenEdit = (id) => {
 const OpenDelete = (id) => {
   $("#idDelete").val(id);
   $("#modalDelete").modal("toggle");
+};
+const limpiarFormulario = () => {
+  $('#nombre').val('');
 };

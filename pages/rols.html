@@ -286,10 +286,12 @@
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
-            <label class="form-label" for="descripcion">Descripcion</label>
-            <input type="text" class="form-control " id="descripcion" placeholder="Descripcion del rol"
-              name="descripcion" required />
-          </div>
+            <label class="form-label" for="descripcion">Descripción</label>
+            <input type="text" class="form-control" id="descripcion" placeholder="Descripción del rol"
+                   name="descripcion" required />
+            <div id="descripcionError" class="invalid-feedback"></div>
+        </div>
+        
           <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
         </div>

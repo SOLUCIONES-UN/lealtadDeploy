@@ -6,8 +6,42 @@ $(function () {
     let tabla = getCategorias();
     Usuario();
 
-    //evento submit del formulario
+     // funcion para validar el nombre
+     function validarNombre(nombre) {
+        const nombreValido = /^[a-zA-Z0-9]+$/.test(nombre.trim());
+
+        if (!nombreValido) {
+            $('#nombre').addClass('is-invalid');
+            $('#nombreError').text('El nombre no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
+            return false;
+        }
+        return true;
+    }
+
+
+    $('#modalNew').on('show.bs.modal', function () {
+        $('#nombre').removeClass('is-invalid');
+        $('#nombreError').empty().removeClass('text-danger');
+    });
+
+    //validar el nombre al cerrar la modal o hacer clic en Cancelar
+    $('#modalNew').on('hidden.bs.modal', function () {
+        validarNombre($('#nombre').val());
+    });
+
+    $('#modalNew').find('[data-dismiss="modal"]').click(function () {
+        validarNombre($('#nombre').val());
+    });
+
     $('#formNew').submit(function () {
+
+      
+        const nombre = $('#nombre').val();
+
+        // Validar el nombre
+        if (!validarNombre(nombre)) {
+            return false; 
+        }
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", token);
@@ -128,16 +162,18 @@ const getCategorias = () => {
             type: "GET",
             datatype: "json",
             dataSrc: "",
-            headers: {"Authorization": token}
+            headers: { "Authorization": token }
         },
         columns: [
-            { data: null, render: function (data, type, row, meta) {
-            
-                if (type === 'display') {
+            {
+                data: null, render: function (data, type, row, meta) {
+
+                    if (type === 'display') {
+                        return meta.row + 1;
+                    }
                     return meta.row + 1;
                 }
-                return meta.row + 1; 
-            }},
+            },
             { data: "nombre" },
 
             {
