@@ -5,35 +5,45 @@ $(function () {
     let tabla = getMenus();
     Usuario();
     function validarDescripcion(descripcion) {
-        const descripcionValida = descripcion.trim().length > 0;
+        const descripcionValida = /^[a-zA-Z0-9\s]+$/.test(descripcion.trim());
 
         if (!descripcionValida) {
-            $('#descripcion').addClass('is-invalid');
-            $('#descripcionError').text('La descripción no puede estar vacía').addClass('text-danger');
+            $('.descripcion').addClass('is-invalid');
+            $('.descripcion-error').text('La descripción no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
             return false;
         }
         return true;
     }
 
- 
     $('#modalNew').on('show.bs.modal', function () {
-        $('#descripcion').removeClass('is-invalid');
-        $('#descripcionError').empty().removeClass('text-danger');
+        limpiarFormulario();
+    });
+
+    $('#modalEdit').on('show.bs.modal', function () {
+        limpiarFormulario();
     });
 
     $('#modalNew').on('hidden.bs.modal', function () {
-        validarDescripcion($('#descripcion').val());
+        limpiarFormulario();
+    });
+
+    $('#modalEdit').on('hidden.bs.modal', function () {
+        limpiarFormulario();
     });
 
     $('#modalNew').find('[data-dismiss="modal"]').click(function () {
-        validarDescripcion($('#descripcion').val());
+        limpiarFormulario();
     });
-    
+
+    $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
+        limpiarFormulario();
+    });
+
     //evento submit del formulario
     $('#formNew').submit(function () {
+
         const descripcion = $('#descripcion').val();
 
-      
         if (!validarDescripcion(descripcion)) {
             return false;
         }
@@ -55,7 +65,7 @@ $(function () {
             .then(response => response.json())
             .then(result => {
                 if (result.code == "ok") {
-                    limpiarForm();
+                    limpiarFormulario();
                     tabla._fnAjaxUpdate();
                     $('#modalNew').modal('toggle');
                     Alert(result.message, 'success')
@@ -67,8 +77,14 @@ $(function () {
         return false;
     });
 
-//eventos de edicion para un menu
+    //eventos de edicion para un menu
     $('#formEdit').submit(function () {
+
+        const descripcion = $('#descripcionEdit').val();
+
+        if (!validarDescripcion(descripcion)) {
+            return false;
+        }
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         const id = $('#id').val();
@@ -88,7 +104,7 @@ $(function () {
             .then(response => response.json())
             .then(result => {
                 if (result.code == "ok") {
-                    limpiarForm();
+                    limpiarFormulario();
                     tabla._fnAjaxUpdate();
                     $('#modalEdit').modal('toggle');
                     Alert(result.message, 'success')
@@ -100,7 +116,7 @@ $(function () {
         return false;
     });
 
-//eventos para la inhabilitacion de un menu
+    //eventos para la inhabilitacion de un menu
     $('#BtnDelete').click(function () {
 
         var myHeaders = new Headers();
@@ -148,20 +164,22 @@ const getMenus = () => {
             type: "GET",
             datatype: "json",
             dataSrc: "",
-            headers: {"Authorization": token}
+            headers: { "Authorization": token }
         },
         columns: [
-            { data: null, render: function (data, type, row, meta) {
-            
-                if (type === 'display') {
+            {
+                data: null, render: function (data, type, row, meta) {
+
+                    if (type === 'display') {
+                        return meta.row + 1;
+                    }
                     return meta.row + 1;
                 }
-                return meta.row + 1; 
-            }},
+            },
             { data: "descripcion" },
             {
                 data: "id", render: function (data) {
-   
+
                     return `
               <div class="btn-group">
                 <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
@@ -216,10 +234,16 @@ const getMenus = () => {
     });
 }
 
-
-const limpiarForm = () => {
-    $('#formNew').trigger("reset");
+function limpiarFormulario(formNew = false) {
+    if (formNew) {
+        $('#descripcion, #descripcionEdit').val('');
+    }
+    $('.descripcion').removeClass('is-invalid');
+    $('.descripcion-error').empty().removeClass('text-danger');
 }
+
+
+
 const Alert = function (message, status) // si se proceso correctamente la solicitud
 {
     toastr[`${status}`](message, `${status}`, {

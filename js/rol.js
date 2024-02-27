@@ -5,38 +5,48 @@ $(function () {
     let tabla = getRoles();
     Usuario();
     function validarDescripcion(descripcion) {
-        const descripcionValida = descripcion.trim().length > 0;
+        const descripcionValida = /^[a-zA-Z0-9\s]+$/.test(descripcion.trim());
 
         if (!descripcionValida) {
-            $('#descripcion').addClass('is-invalid');
-            $('#descripcionError').text('La descripción no puede estar vacía').addClass('text-danger');
+            $('.descripcion').addClass('is-invalid');
+            $('.descripcion-error').text('La descripción no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
             return false;
         }
         return true;
     }
 
- 
     $('#modalNew').on('show.bs.modal', function () {
-        $('#descripcion').removeClass('is-invalid');
-        $('#descripcionError').empty().removeClass('text-danger');
+        limpiarFormulario();
+    });
+
+    $('#modalEdit').on('show.bs.modal', function () {
+        limpiarFormulario();
     });
 
     $('#modalNew').on('hidden.bs.modal', function () {
-        validarDescripcion($('#descripcion').val());
+        limpiarFormulario();
+    });
+
+    $('#modalEdit').on('hidden.bs.modal', function () {
+        limpiarFormulario();
     });
 
     $('#modalNew').find('[data-dismiss="modal"]').click(function () {
-        validarDescripcion($('#descripcion').val());
+        limpiarFormulario();
     });
-    
+
+    $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
+        limpiarFormulario();
+    });
+
     //evento submit del formulairo
     $('#formNew').submit(function () {
         const descripcion = $('#descripcion').val();
 
-      
         if (!validarDescripcion(descripcion)) {
             return false;
         }
+
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", token);
@@ -56,24 +66,29 @@ $(function () {
             .then(response => response.json())
             .then(result => {
                 console.log(result)
-                if(result.code == "ok"){
+                if (result.code == "ok") {
                     limpiarForm();
                     tabla._fnAjaxUpdate();
                     $('#modalNew').modal('toggle');
                     Alert(result.message, 'success')
-                } else{
-                   Alert(result.message, 'error');
+                } else {
+                    Alert(result.message, 'error');
                 }
             })
-            .catch(error => {Alert(error, 'error')
+            .catch(error => {
+                Alert(error, 'error')
             });
         return false;
     });
 
-    
+
 
     $('#formEdit').submit(function () {
+        const descripcion = $('#descripcionEdit').val();
 
+        if (!validarDescripcion(descripcion)) {
+            return false;
+        }
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", token);
@@ -95,17 +110,17 @@ $(function () {
             .then(response => response.json())
             .then(result => {
 
-                if(result.code == "ok"){
-                    limpiarForm();
+                if (result.code == "ok") {
+                    limpiarFormulario();
                     tabla._fnAjaxUpdate();
                     $('#modalEdit').modal('toggle');
                     Alert(result.message, 'success');
                 } else {
-                    
+
                     Alert(result.message, 'error')
                 }
             })
-            .catch(error => {Alert(error.errors, 'error')});
+            .catch(error => { Alert(error.errors, 'error') });
         return false;
     });
 
@@ -120,25 +135,25 @@ $(function () {
             method: 'DELETE',
             headers: myHeaders,
             redirect: 'follow',
-            headers: {"Authorization": token}
+            headers: { "Authorization": token }
         };
 
         fetch(`${url}Rol/${id}`, requestOptions)
             .then(response => response.json())
             .then(result => {
 
-                if(result.code == "ok"){
-                    limpiarForm();
+                if (result.code == "ok") {
+                    limpiarFormulario();
                     tabla._fnAjaxUpdate();
                     $('#modalDelete').modal('toggle');
                     Alert(result.message, 'success')
-                } else{
+                } else {
                     Alert(result.message, 'error')
                 }
             })
-        .catch(error => {
-            Alert(error, 'error');
-        });
+            .catch(error => {
+                Alert(error, 'error');
+            });
     });
 });
 
@@ -158,18 +173,20 @@ const getRoles = () => {
             url: `${url}Rol`,
             type: "GET",
             datatype: "json",
-            dataSrc:"",
-            headers: {"Authorization": token}
+            dataSrc: "",
+            headers: { "Authorization": token }
         },
         columns: [
-            { data: null, render: function (data, type, row, meta) {
-            
-                if (type === 'display') {
+            {
+                data: null, render: function (data, type, row, meta) {
+
+                    if (type === 'display') {
+                        return meta.row + 1;
+                    }
                     return meta.row + 1;
                 }
-                return meta.row + 1; 
-            }},
-            {data: "descripcion"},
+            },
+            { data: "descripcion" },
             {
                 data: "id", render: function (data) {
                     return `
@@ -193,7 +210,7 @@ const getRoles = () => {
                 }
             }
         ],
-        dom: 
+        dom:
             '<"d-flex justify-content-between align-items-center header-actions mx-1 row mt-75"' +
             '<"col-lg-12 col-xl-6" l>' +
             '<"col-lg-12 col-xl-6 pl-xl-75 pl-0"<"dt-action-buttons text-xl-right text-lg-left text-md-right text-left d-flex align-items-center justify-content-lg-end align-items-center flex-sm-nowrap flex-wrap mr-1"<"mr-1"f>B>>' +
@@ -223,28 +240,29 @@ const getRoles = () => {
                 },
             },
         ],
-    
+
     });
 }
-
-const limpiarForm = () => {
-    $('#formNew').trigger("reset");
+function limpiarFormulario() {
+    $('.descripcion').removeClass('is-invalid');
+    $('.descripcion-error').empty().removeClass('text-danger');
 }
 
-const Alert = function(message, status){
+
+const Alert = function (message, status) {
     toastr[`${status}`](message, `${status}`, {
         closeButton: true,
         tapToDismiss: false,
         positionClass: 'toast-top-right',
         rtl: false
-      });
+    });
 }
 
 const OpenEdit = (id) => {
     var requestOptions = {
         method: 'GET',
         redirect: 'follow',
-        headers: {"Authorization": token}
+        headers: { "Authorization": token }
     };
 
     fetch(`${url}Rol/${id}`, requestOptions)

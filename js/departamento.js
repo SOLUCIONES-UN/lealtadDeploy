@@ -5,44 +5,54 @@ $(function () {
   let tabla = getDepartamentos();
   Usuario();
   function validarNombre(nombre) {
-    const nombreValido = /^[a-zA-Z0-9]+$/.test(nombre.trim());
+    const nombreValido = /^[a-zA-Z0-9\s]+$/.test(nombre.trim());
 
     if (!nombreValido) {
-        $('#nombre').addClass('is-invalid');
-        $('#nombreError').text('El nombre no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
-        return false;
+      $('.nombre').addClass('is-invalid');
+      $('.nombre-error').text('El nombre no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
+      return false;
     }
     return true;
-}
+  }
 
-$('#modalNew').on('show.bs.modal', function () {
-    $('#nombre').removeClass('is-invalid');
-    $('#nombreError').empty().removeClass('text-danger');
-});
-
-
-$('#modalNew').on('hidden.bs.modal', function () {
-    validarNombre($('#nombre').val());
+  $('#modalNew').on('show.bs.modal', function () {
     limpiarFormulario();
-});
+  });
 
-$('#modalNew').find('[data-dismiss="modal"]').click(function () {
-    validarNombre($('#nombre').val());
+  $('#modalEdit').on('show.bs.modal', function () {
+
+  });
+
+  $('#modalNew').on('hidden.bs.modal', function () {
     limpiarFormulario();
-});
+  });
+  $('#modalEdit').on('hidden.bs.modal', function () {
+    limpiarFormulario();
+  });
+
+
+
+  $('#modalNew').find('[data-dismiss="modal"]').click(function () {
+    limpiarFormulario();
+  });
+
+
+  $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
+    limpiarFormulario();
+  });
+
   //evento submit del formulairo
   $("#formNew").submit(function () {
     const nombre = $('#nombre').val();
 
-    // Validar el nombre
     if (!validarNombre(nombre)) {
-        return false;
+      return false;
     }
 
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Authorization", token);
-    
+
 
     var raw = JSON.stringify({
       nombre: $("#nombre").val(),
@@ -60,7 +70,7 @@ $('#modalNew').find('[data-dismiss="modal"]').click(function () {
       .then((result) => {
         console.log(result);
         if (result.code == "ok") {
-          limpiarForm();
+          limpiarFormulario();
           tabla._fnAjaxUpdate();
           $("#modalNew").modal("toggle");
           Alert(result.message, "success");
@@ -75,6 +85,11 @@ $('#modalNew').find('[data-dismiss="modal"]').click(function () {
   });
 
   $("#formEdit").submit(function () {
+    const nombre = $('#nombreEdit').val();
+
+    if (!validarNombre(nombre)) {
+      return false;
+    }
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Authorization", token);
@@ -82,8 +97,9 @@ $('#modalNew').find('[data-dismiss="modal"]').click(function () {
     const id = $("#id").val();
 
     var raw = JSON.stringify({
-      nombre: $("#nombreEdit").val(),
+      "nombre": $('#nombreEdit').val()
     });
+
 
     var requestOptions = {
       method: "PUT",
@@ -96,7 +112,7 @@ $('#modalNew').find('[data-dismiss="modal"]').click(function () {
       .then((response) => response.json())
       .then((result) => {
         if (result.code == "ok") {
-          limpiarForm();
+          limpiarFormulario();
           tabla._fnAjaxUpdate();
           $("#modalEdit").modal("toggle");
           Alert(result.message, "success");
@@ -154,39 +170,41 @@ const getDepartamentos = () => {
       type: "GET",
       datatype: "json",
       dataSrc: "",
-      headers: {"Authorization": token}
+      headers: { "Authorization": token }
     },
     columns: [
-      { data: null, render: function (data, type, row, meta) {
-            
-        if (type === 'display') {
+      {
+        data: null, render: function (data, type, row, meta) {
+
+          if (type === 'display') {
             return meta.row + 1;
+          }
+          return meta.row + 1;
         }
-        return meta.row + 1; 
-    }},
+      },
       { data: "nombre" },
       {
         data: "id", render: function (data) {
-   
+
           return `
               <div class="btn-group">
                 <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
                     ${feather.icons["more-vertical"].toSvg({
-                      class: "font-small-4",
-                    })}
+            class: "font-small-4",
+          })}
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
                     <a href="#" onclick="OpenEdit(${data})" class="btn_edit dropdown-item">
                         ${feather.icons["archive"].toSvg({
-                          class: "font-small-4 mr-50",
-                        })} Actualizar
+            class: "font-small-4 mr-50",
+          })} Actualizar
                     </a>
                 
                 <div class="dropdown-menu dropdown-menu-right">
                     <a href="#" onclick="OpenDelete(${data})" class="btn_delete dropdown-item">
                       ${feather.icons["trash-2"].toSvg({
-                        class: "font-small-4 mr-50",
-                      })} Inhabilitar
+            class: "font-small-4 mr-50",
+          })} Inhabilitar
                     </a>
                 </div>
                 </div>
@@ -227,10 +245,12 @@ const getDepartamentos = () => {
     ],
   });
 };
+function limpiarFormulario() {
+  $('#nombre').val('');
+  $('.nombre').removeClass('is-invalid');
+  $('.nombre-error').empty().removeClass('text-danger');
+}
 
-const limpiarForm = () => {
-  $("#formNew").trigger("reset");
-};
 
 const Alert = function (message, status) {
   toastr[`${status}`](message, `${status}`, {
@@ -261,7 +281,4 @@ const OpenEdit = (id) => {
 const OpenDelete = (id) => {
   $("#idDelete").val(id);
   $("#modalDelete").modal("toggle");
-};
-const limpiarFormulario = () => {
-  $('#nombre').val('');
 };

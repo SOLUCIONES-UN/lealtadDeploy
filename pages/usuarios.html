@@ -6,10 +6,8 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimal-ui">
-  <meta name="description"
-    content="Plataforma de lealtad a usuarios.">
-  <meta name="keywords"
-    content="Lealtad, fidelidad, préstamos.">
+  <meta name="description" content="Plataforma de lealtad a usuarios.">
+  <meta name="keywords" content="Lealtad, fidelidad, préstamos.">
   <meta name="author" content="SOLUCIONES-UN">
   <title>Invoice List - Lealtad V2</title>
   <link rel="apple-touch-icon" href="../app-assets/images/ico/apple-icon-120.png">
@@ -243,7 +241,7 @@
     <div class="shadow-bottom"></div>
     <div class="main-menu-content">
       <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-        
+
       </ul>
     </div>
   </div>
@@ -286,27 +284,34 @@
         <div class="modal-body flex-grow-1">
           <div class="form-group">
             <label class="form-label" for="username">Nombre Usuario</label>
-            <input type="text" class="form-control " id="username" placeholder="Nombre del usuario" name="username" required />
+            <input type="text" class="form-control " id="username" placeholder="Nombre del usuario" name="username"
+              required />
+            <div id="usernameEditError" class="invalid-feedback"></div>
           </div>
           <div class="form-group">
             <label class="form-label" for="nombre">Nombre</label>
             <input type="text" class="form-control " id="nombre" placeholder="Nombre" name="nombre" required />
+            <div id="nombreError" class="invalid-feedback nombre-error"></div>
           </div>
           <div class="form-group">
             <label class="form-label" for="password">Contraseña</label>
-            <input type="password" alt="strongPass" class="form-control " id="password" placeholder="Contraseña" name="password" required />
+            <input type="password" alt="strongPass" class="form-control " id="password" placeholder="Contraseña"
+              name="password" required />
           </div>
           <div class="form-group">
             <label class="form-label" for="password2">Confirmar Contraseña</label>
-            <input type="password" alt="strongPass" class="form-control " id="password2" placeholder="Contraseña" name="password2" required />
+            <input type="password" alt="strongPass" class="form-control " id="password2" placeholder="Contraseña"
+              name="password2" required />
           </div>
           <div class="form-group">
             <label class="form-label" for="telefono">Telefono</label>
-            <input type="text" class="form-control " id="telefono" placeholder="# de telefono" name="telefono" required />
+            <input type="text" class="form-control " id="telefono" placeholder="# de telefono" name="telefono"
+              required />
           </div>
           <div class="form-group">
             <label class="form-label" for="emailNotification">E-mail</label>
-            <input type="text" class="form-control " id="emailNotification" placeholder="E-mail" name="emailNotification" required />
+            <input type="text" class="form-control " id="emailNotification" placeholder="E-mail"
+              name="emailNotification" required />
           </div>
           <div class="form-group">
             <label class="form-label" for="rol">Roles</label>
@@ -327,37 +332,45 @@
           <h5 class="modal-title" id="exampleModalLabel">Actualizar el ususario</h5>
         </div>
         <div class="modal-body flex-grow-1">
-            <div class="form-group">
-              <label class="form-label" for="usernameEdit">Nombre Usuario</label>
-              <input type="text" class="form-control " id="usernameEdit" placeholder="Nombre del usuario" name="usernameEdit" required />
-            </div>
-            <div class="form-group">
-                <label class="form-label" for="nombreEdit">Nombre</label>
-                <input type="text" class="form-control " id="nombreEdit" placeholder="Nombre" name="nombreEdit" required />
-              </div>
-            <div class="form-group">
-              <label class="form-label" for="passwordEdit">Contraseña</label>
-              <input type="password" alt="strongPass" class="form-control " id="passwordEdit" placeholder="Contraseña" name="passwordEdit" required />
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="passwordEdit2">Confirmar Contraseña</label>
-              <input type="password" alt="strongPass" class="form-control " id="passwordEdit2" placeholder="Contraseña" name="passwordEdit2" required />
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="telefonoEdit">Telefono</label>
-              <input type="text" class="form-control " id="telefonoEdit" placeholder="# de telefono" name="telefonoEdit" required />
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="emailEdit">E-mail</label>
-              <input type="text" class="form-control " id="emailEdit" placeholder="E-mail" name="emailEdit" required />
-            </div>
-            <div class="form-group">
-                <label class="form-label" for="rolActualizar">Rol</label>
-                <select type="text" class="form-control" id="rolActualizar" name="rolActualizar" required></select>
-              </div>
-            <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
-            <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+          <div class="form-group">
+            <label class="form-label" for="usernameEdit">Nombre Usuario</label>
+            <input type="text" class="form-control" id="usernameEdit" placeholder="Nombre del usuario"
+              name="usernameEdit" required />
+            <div id="usernameEditError" class="invalid-feedback"></div>
           </div>
+          <div class="form-group">
+            <label class="form-label" for="nombreEdit">Nombre</label>
+            <input type="text" class="form-control" id="nombreEdit" placeholder="Nombre" name="nombreEdit" required />
+            <div id="nombreEditError" class="invalid-feedback"></div>
+          </div>
+
+
+          <div class="form-group">
+            <label class="form-label" for="passwordEdit">Contraseña</label>
+            <input type="password" alt="strongPass" class="form-control " id="passwordEdit" placeholder="Contraseña"
+              name="passwordEdit" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="passwordEdit2">Confirmar Contraseña</label>
+            <input type="password" alt="strongPass" class="form-control " id="passwordEdit2" placeholder="Contraseña"
+              name="passwordEdit2" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="telefonoEdit">Telefono</label>
+            <input type="text" class="form-control " id="telefonoEdit" placeholder="# de telefono" name="telefonoEdit"
+              required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="emailEdit">E-mail</label>
+            <input type="text" class="form-control " id="emailEdit" placeholder="E-mail" name="emailEdit" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="rolActualizar">Rol</label>
+            <select type="text" class="form-control" id="rolActualizar" name="rolActualizar" required></select>
+          </div>
+          <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
+          <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+        </div>
       </form>
     </div>
   </div>
@@ -385,10 +398,10 @@
   <!-- End: Customizer-->
   <!-- BEGIN: Footer-->
   <footer class="footer footer-static footer-light">
-    <p class="clearfix mb-0"><span class="float-md-left d-block d-md-inline-block mt-25">&copy; 2024<a
-          class="ml-25" href="#" target="_blank">LEALTAD</a><span
-          class="d-none d-sm-inline-block">, Reservados todos los derechos.</span></span><span
-        class="float-md-right d-none d-md-block">Desarrollado por: SOLUCIONES-UN<i data-feather="code"></i></span></p>
+    <p class="clearfix mb-0"><span class="float-md-left d-block d-md-inline-block mt-25">&copy; 2024<a class="ml-25"
+          href="#" target="_blank">LEALTAD</a><span class="d-none d-sm-inline-block">, Reservados todos los
+          derechos.</span></span><span class="float-md-right d-none d-md-block">Desarrollado por: SOLUCIONES-UN<i
+          data-feather="code"></i></span></p>
   </footer>
   <button class="btn btn-primary btn-icon scroll-top" type="button"><i data-feather="arrow-up"></i></button>
   <!-- END: Footer-->

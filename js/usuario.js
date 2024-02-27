@@ -6,8 +6,58 @@ $(function () {
     let tabla = getUsuarios();
     Usuario()
 
+    function validarNombreYusername(nombre, username) {
+        const nombreValido = /^[a-zA-Z0-9\s]+$/.test(nombre.trim());
+        const usernameValida = /^[a-zA-Z0-9\s]+$/.test(username.trim());
+    
+        if (!nombreValido) {
+            $('#nombreEdit').addClass('is-invalid'); 
+            $('#nombreEditError').text('El nombre no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
+            return false;
+        } else {
+            $('#nombreEdit').removeClass('is-invalid'); 
+            $('#nombreEditError').empty().removeClass('text-danger');
+        }
+    
+        if (!usernameValida) {
+            $('#usernameEdit').addClass('is-invalid');
+            $('#usernameEditError').text('El nombre de usuario no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
+            return false;
+        } else {
+            $('#usernameEdit').removeClass('is-invalid');
+            $('#usernameEditError').empty().removeClass('text-danger');
+        }
+    
+        return true;
+    }
+    
+    
+
+
+    $('#modalNew, #modalEdit').on('show.bs.modal', function () {
+        limpiarForm();
+    });
+
+    $('#modalNew, #modalEdit').on('hidden.bs.modal', function () {
+        limpiarForm();
+    });
+
+    $('#modalNew, #modalEdit').find('[data-dismiss="modal"]').click(function () {
+        limpiarForm();
+    });
+
+
     //evento submit del formulario
     $('#formNew').submit(function (e) {
+
+        const nombre = $('#nombre').val();
+        const username = $('#username').val();
+
+        if (!validarNombreYusername(nombre, username)) {
+            return false;
+        }
+
+
         e.preventDefault();
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -59,60 +109,62 @@ $(function () {
 
 
 // para actualizar usuarios
-    $('#formEdit').submit(function (e) {
-        e.preventDefault();
-        var myHeaders = new Headers();
-        
-        myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("Authorization", token);
-
-
-        const username = $('#usernameEdit').val();
-
-
-        if($('#passwordEdit').val().trim() != $('#passwordEdit2').val().trim())
-        {
-            Alert('Las contraseñas no coinciden', 'error');
-            return;
-     
-         }
-         console.log('Contraseñas correctas');
-
-        var raw = JSON.stringify({
-            "username": $('#usernameEdit').val(),
-            "password": $('#passwordEdit').val(),
-            "nombre": $('#nombreEdit').val(),
-            "telefono": $('#telefonoEdit').val(),
-            "emailNotificacion": $('#emailEdit').val(),
-            "idRol": $('#rolActualizar').val(),
-        });
-        console.log()
-
-        var requestOptions = {
-            method: 'PUT',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-        };
-
-        fetch(`${url}Usuario/${username}`, requestOptions)
-            .then(response => response.json())
-            .then(result => {
-
-
-                if (result.code == "ok") {
-                    limpiarForm();
-                    tabla._fnAjaxUpdate();
-                    $('#modalEdit').modal('toggle');
-                    Alert(result.message, 'success')
-                } else {
-                    Alert(result.message, 'error')
-                }
-
-            })
-            .catch(error => { Alert(error.errors, 'error') });
+  // para actualizar usuarios
+$('#formEdit').submit(function (e) {
+    const nombre = $('#nombreEdit').val();
+    const username = $('#usernameEdit').val(); // Aquí defines username correctamente
+    
+    if (!validarNombreYusername(nombre, username)) { 
         return false;
+    }
+
+    e.preventDefault();
+    var myHeaders = new Headers();
+    
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", token);
+
+    // Aquí también estás usando correctamente la variable username
+    if($('#passwordEdit').val().trim() != $('#passwordEdit2').val().trim())
+    {
+        Alert('Las contraseñas no coinciden', 'error');
+        return;
+ 
+     }
+     console.log('Contraseñas correctas');
+
+    var raw = JSON.stringify({
+        "username": username, // Aquí también utilizas la variable username
+        "password": $('#passwordEdit').val(),
+        "nombre": $('#nombreEdit').val(),
+        "telefono": $('#telefonoEdit').val(),
+        "emailNotificacion": $('#emailEdit').val(),
+        "idRol": $('#rolActualizar').val(),
     });
+
+    var requestOptions = {
+        method: 'PUT',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+    };
+
+    fetch(`${url}Usuario/${username}`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            if (result.code == "ok") {
+                limpiarForm();
+                tabla._fnAjaxUpdate();
+                $('#modalEdit').modal('toggle');
+                Alert(result.message, 'success')
+            } else {
+                Alert(result.message, 'error')
+            }
+        })
+        .catch(error => { Alert(error.errors, 'error') });
+    return false;
+});
+
 
 // para borrar usuarios
     $('#BtnDelete').click(function () {
@@ -233,7 +285,13 @@ const getUsuarios = () => {
 
 
 const limpiarForm = () => {
-    $('#formNew').trigger("reset");
+
+    $('.nombre-error').empty().removeClass('text-danger');
+    $('.username-error').empty().removeClass('text-danger');
+
+
+    $('#nombreEdit').removeClass('is-invalid');
+    $('#usernameEdit').removeClass('is-invalid');
 }
 
 

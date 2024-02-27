@@ -5,38 +5,36 @@ $(function () {
     let tabla = getPaginas();
     getMenu();
     Usuario();
-
     function validarDescripcion(descripcion) {
-        const descripcionValida = descripcion.trim().length > 0;
+        const descripcionValida = /^[a-zA-Z\s]+$/.test(descripcion.trim());
 
         if (!descripcionValida) {
-            $('#descripcion').addClass('is-invalid');
-            $('#descripcionError').text('La descripción no puede estar vacía').addClass('text-danger');
+            $('.descripcion').addClass('is-invalid');
+            $('.descripcion-error').text('La descripción no debe contener caracteres especiales, números ni espacios en blanco').addClass('text-danger');
             return false;
         }
         return true;
     }
 
- 
-    $('#modalNew').on('show.bs.modal', function () {
-        $('#descripcion').removeClass('is-invalid');
-        $('#descripcionError').empty().removeClass('text-danger');
+
+    $('#modalNew, #modalEdit').on('show.bs.modal', function () {
+        $('.descripcion').removeClass('is-invalid');
+        $('.descripcion-error').empty().removeClass('text-danger');
     });
 
-    $('#modalNew').on('hidden.bs.modal', function () {
-        validarDescripcion($('#descripcion').val());
+    $('#modalNew, #modalEdit').on('hidden.bs.modal', function () {
+        limpiarForm();
     });
 
-    $('#modalNew').find('[data-dismiss="modal"]').click(function () {
-        validarDescripcion($('#descripcion').val());
+    $('#modalNew, #modalEdit').find('[data-dismiss="modal"]').click(function () {
+        limpiarForm();
     });
-    
+
 
     //evento submit del formulario
     $('#formNew').submit(function () {
         const descripcion = $('#descripcion').val();
 
-      
         if (!validarDescripcion(descripcion)) {
             return false;
         }
@@ -76,9 +74,14 @@ $(function () {
 
     //eventos de edicion para un menu
     $('#formEdit').submit(function () {
+        const descripcion = $('#descripcionEdit').val();
+
+        if (!validarDescripcion(descripcion)) {
+            return false;
+        }
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("Authorization", token); 
+        myHeaders.append("Authorization", token);
 
         const id = $('#id').val();
 
@@ -161,16 +164,18 @@ const getPaginas = () => {
             type: "GET",
             datatype: "json",
             dataSrc: "",
-            headers: {"Authorization": token}
+            headers: { "Authorization": token }
         },
         columns: [
-            { data: null, render: function (data, type, row, meta) {
-            
-                if (type === 'display') {
+            {
+                data: null, render: function (data, type, row, meta) {
+
+                    if (type === 'display') {
+                        return meta.row + 1;
+                    }
                     return meta.row + 1;
                 }
-                return meta.row + 1; 
-            }},
+            },
             { data: "descripcion" },
             { data: "idMenu" },
             { data: "path" },
@@ -236,23 +241,26 @@ const getMenu = () => {
     var requestOptions = {
         method: 'GET',
         redirect: 'follow',
-        headers: {"Authorization": token}
+        headers: { "Authorization": token }
     };
 
     fetch(`${url}Menu`, requestOptions)
-    .then(response => response.json())
-    .then(result => {
-      result.forEach(element => {
-        var opc = `<option value="${element.id}">${element.descripcion}</option>`;
-        $('#Menu').append(opc);
-        $('#MenuEdith').append(opc);
-      });
-    })
-    .catch(error => console.log('error', error))
+        .then(response => response.json())
+        .then(result => {
+            result.forEach(element => {
+                var opc = `<option value="${element.id}">${element.descripcion}</option>`;
+                $('#Menu').append(opc);
+                $('#MenuEdith').append(opc);
+            });
+        })
+        .catch(error => console.log('error', error))
 }
+
 
 const limpiarForm = () => {
     $('#formNew').trigger("reset");
+    $('#descripcion').removeClass('is-invalid');
+    $('#descripcionError').empty().removeClass('text-danger');
 }
 const Alert = function (message, status) // si se proceso correctamente la solicitud
 {
@@ -268,7 +276,7 @@ const OpenEdit = (id) => {
     var requestOptions = {
         method: 'GET',
         redirect: 'follow',
-        headers: {"Authorization": token}
+        headers: { "Authorization": token }
     };
 
     fetch(`${url}Pagina/${id}`, requestOptions)

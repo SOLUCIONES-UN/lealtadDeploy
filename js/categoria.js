@@ -5,42 +5,50 @@ const url = 'http://localhost:3000/'
 $(function () {
     let tabla = getCategorias();
     Usuario();
-
-     // funcion para validar el nombre
-     function validarNombre(nombre) {
-        const nombreValido = /^[a-zA-Z0-9]+$/.test(nombre.trim());
+    function validarNombre(nombre) {
+        const nombreValido = /^[a-zA-Z0-9\s]+$/.test(nombre.trim());
 
         if (!nombreValido) {
-            $('#nombre').addClass('is-invalid');
-            $('#nombreError').text('El nombre no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
+            $('.nombre').addClass('is-invalid');
+            $('.nombre-error').text('El nombre no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
             return false;
         }
         return true;
     }
 
-
     $('#modalNew').on('show.bs.modal', function () {
-        $('#nombre').removeClass('is-invalid');
-        $('#nombreError').empty().removeClass('text-danger');
+        limpiarFormulario();
     });
 
-    //validar el nombre al cerrar la modal o hacer clic en Cancelar
-    $('#modalNew').on('hidden.bs.modal', function () {
-        validarNombre($('#nombre').val());
-    });
+$('#modalEdit').on('show.bs.modal', function () {
+ 
+});
 
-    $('#modalNew').find('[data-dismiss="modal"]').click(function () {
-        validarNombre($('#nombre').val());
-    });
+$('#modalNew').on('hidden.bs.modal', function () {
+    limpiarFormulario();
+});
+
+
+$('#modalEdit').on('hidden.bs.modal', function () {
+    limpiarFormulario();
+});
+
+
+$('#modalNew').find('[data-dismiss="modal"]').click(function () {
+    limpiarFormulario();
+});
+
+
+$('#modalEdit').find('[data-dismiss="modal"]').click(function () {
+    limpiarFormulario();
+});
 
     $('#formNew').submit(function () {
 
-      
         const nombre = $('#nombre').val();
 
-        // Validar el nombre
         if (!validarNombre(nombre)) {
-            return false; 
+            return false;
         }
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -63,7 +71,7 @@ $(function () {
 
 
                 if (result.code == "ok") {
-                    limpiarForm();
+                    limpiarFormulario();
                     tabla._fnAjaxUpdate();
                     $('#modalNew').modal('toggle');
                     Alert(result.message, 'success')
@@ -78,6 +86,11 @@ $(function () {
 
 
     $('#formEdit').submit(function () {
+        const nombre = $('#nombreEdit').val();
+
+        if (!validarNombre(nombre)) {
+            return false;
+        }
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", token);
@@ -232,10 +245,13 @@ const getCategorias = () => {
     });
 }
 
-
-const limpiarForm = () => {
-    $('#formNew').trigger("reset");
+function limpiarFormulario() {
+    $('#nombre').val(''); 
+    $('.nombre').removeClass('is-invalid');
+    $('.nombre-error').empty().removeClass('text-danger');
 }
+
+
 
 
 const Alert = function (message, status) // si se proceso correctamente la solicitud

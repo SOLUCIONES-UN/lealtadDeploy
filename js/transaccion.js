@@ -6,15 +6,65 @@ $(function () {
     let tabla = getTransaccions();
     Usuario()
 
+    function validarNombreYDescripcion(nombre, descripcion) {
+        const nombreValido = /^[a-zA-Z0-9\s]+$/.test(nombre.trim());
+        const descripcionValida = /^[a-zA-Z0-9\s]+$/.test(descripcion.trim());
+
+        if (!nombreValido) {
+            $('.nombre').addClass('is-invalid');
+            $('.nombre-error').text('El nombre no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
+            return false;
+        } else {
+            $('.nombre').removeClass('is-invalid');
+            $('.nombre-error').empty().removeClass('text-danger');
+        }
+
+        if (!descripcionValida) {
+            $('.descripcion').addClass('is-invalid');
+            $('.descripcion-error').text('La descripción no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
+            return false;
+        } else {
+            $('.descripcion').removeClass('is-invalid');
+            $('.descripcion-error').empty().removeClass('text-danger');
+        }
+
+        return true;
+    }
+
+
+
+    // Eventos para limpiar el formulario
+    $('#modalNew, #modalEdit').on('show.bs.modal', function () {
+        limpiarForm();
+    });
+
+    $('#modalNew, #modalEdit').on('hidden.bs.modal', function () {
+        limpiarForm();
+    });
+
+    $('#modalNew, #modalEdit').find('[data-dismiss="modal"]').click(function () {
+        limpiarForm();
+    });
+
     //evento submit del formulario
     $('#formNew').submit(function () {
+
+        const nombre = $('#nombre').val();
+        const descripcion = $('#descripcion').val();
+
+        if (!validarNombreYDescripcion(nombre, descripcion)) {
+            return false;
+        }
+
+
+
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", token);
 
         var raw = JSON.stringify({
-            "nombre": $('#nombre').val(),
-            "descripcion": $('#nombre').val(),
+            "nombre": nombre,
+            "descripcion": descripcion,
             "puntos": $('#puntos').val(),
             "columna": $('#columna').val(),
             "botton": $('#botton').val()
@@ -48,6 +98,14 @@ $(function () {
 
 
     $('#formEdit').submit(function () {
+        const nombre = $('#nombreEdit').val();
+        const descripcion = $('#descripcionEdit').val();
+
+        if (!validarNombreYDescripcion(nombre, descripcion)) {
+            return false;
+        }
+
+
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", token);
@@ -56,7 +114,7 @@ $(function () {
 
         var raw = JSON.stringify({
             "nombre": $('#nombreEdit').val(),
-            "descripcion": $('#nombreEdit').val(),
+            "descripcion": $('#descripcionEdit').val(),
             "puntos": $('#puntosEdit').val(),
             "columna": $('#columnaEdit').val(),
             "botton": $('#bottonEdit').val()
@@ -101,7 +159,7 @@ $(function () {
             method: 'DELETE',
             headers: myHeaders,
             redirect: 'follow',
-            headers: {"Authorization": token}
+            headers: { "Authorization": token }
         };
 
         fetch(`${url}Transaccion/${id}`, requestOptions)
@@ -140,16 +198,18 @@ const getTransaccions = () => {
             type: "GET",
             datatype: "json",
             dataSrc: "",
-            headers: {"Authorization": token}
+            headers: { "Authorization": token }
         },
         columns: [
-            { data: null, render: function (data, type, row, meta) {
-            
-                if (type === 'display') {
+            {
+                data: null, render: function (data, type, row, meta) {
+
+                    if (type === 'display') {
+                        return meta.row + 1;
+                    }
                     return meta.row + 1;
                 }
-                return meta.row + 1; 
-            }},
+            },
             { data: "nombre" },
             { data: "puntos" },
             {
@@ -207,10 +267,14 @@ const getTransaccions = () => {
         ],
     });
 }
-
-
 const limpiarForm = () => {
     $('#formNew').trigger("reset");
+    $('.nombre-error').empty().removeClass('text-danger');
+    $('.descripcion-error').empty().removeClass('text-danger');
+
+
+    $('#nombreEdit').removeClass('is-invalid');
+    $('#descripcionEdit').removeClass('is-invalid');
 }
 
 
@@ -229,7 +293,7 @@ const OpenEdit = (id) => {
     var requestOptions = {
         method: 'GET',
         redirect: 'follow',
-        headers: {"Authorization": token}
+        headers: { "Authorization": token }
     };
 
     fetch(`${url}Transaccion/${id}`, requestOptions)
@@ -261,7 +325,7 @@ const getColumnas = () => {
     var requestOptions = {
         method: 'GET',
         redirect: 'follow',
-        headers: {"Authorization": token}
+        headers: { "Authorization": token }
     };
 
     $('#columna').html('<option value="0" selected disabled>Selecciona una Opcion</option>');
@@ -270,9 +334,9 @@ const getColumnas = () => {
         .then(response => response.json())
         .then(result => {
             result.forEach(element => {
-               var opc  = `<option value="${element.id}">${element.nombre}</option>`;
-               $('#columna').append(opc);
-               $('#columnaEdit').append(opc);
+                var opc = `<option value="${element.id}">${element.nombre}</option>`;
+                $('#columna').append(opc);
+                $('#columnaEdit').append(opc);
             });
         })
         .catch(error => console.log('error', error));

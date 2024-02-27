@@ -6,39 +6,51 @@ $(function () {
     Usuario();
     // funcion para validar el nombre
     function validarNombre(nombre) {
-        const nombreValido = /^[a-zA-Z0-9]+$/.test(nombre.trim());
+        const nombreValido = /^[a-zA-Z0-9\s]+$/.test(nombre.trim());
 
         if (!nombreValido) {
-            $('#nombre').addClass('is-invalid');
-            $('#nombreError').text('El nombre no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
+            $('.nombre').addClass('is-invalid');
+            $('.nombre-error').text('El nombre no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
             return false;
         }
         return true;
     }
 
+$('#modalNew').on('show.bs.modal', function () {
+    limpiarFormulario();
+});
 
-    $('#modalNew').on('show.bs.modal', function () {
-        $('#nombre').removeClass('is-invalid');
-        $('#nombreError').empty().removeClass('text-danger');
-    });
+$('#modalEdit').on('show.bs.modal', function () {
+ 
+});
+
+$('#modalNew').on('hidden.bs.modal', function () {
+    limpiarFormulario();
+});
 
 
-    $('#modalNew').on('hidden.bs.modal', function () {
-        validarNombre($('#nombre').val());
-    });
+$('#modalEdit').on('hidden.bs.modal', function () {
+    limpiarFormulario();
+});
 
-    $('#modalNew').find('[data-dismiss="modal"]').click(function () {
-        validarNombre($('#nombre').val());
-    });
+
+$('#modalNew').find('[data-dismiss="modal"]').click(function () {
+    limpiarFormulario();
+});
+
+
+$('#modalEdit').find('[data-dismiss="modal"]').click(function () {
+    limpiarFormulario();
+});
+
+
     //evento submit del formulario
     $('#formNew').submit(function () {
         const nombre = $('#nombre').val();
 
-        // Validar el nombre
         if (!validarNombre(nombre)) {
             return false;
         }
-
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -76,6 +88,11 @@ $(function () {
 
 
     $('#formEdit').submit(function () {
+        const nombre = $('#nombreEdit').val();
+
+        if (!validarNombre(nombre)) {
+            return false;
+        }
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", token);
@@ -99,7 +116,7 @@ $(function () {
 
 
                 if (result.code == "ok") {
-                    limpiarForm();
+                    limpiarFormulario();
                     tabla._fnAjaxUpdate();
                     $('#modalEdit').modal('toggle');
                     Alert(result.message, 'success')
@@ -231,9 +248,10 @@ const getColumnas = () => {
     });
 }
 
-
-const limpiarForm = () => {
-    $('#formNew').trigger("reset");
+function limpiarFormulario() {
+    $('#nombre').val(''); 
+    $('.nombre').removeClass('is-invalid');
+    $('.nombre-error').empty().removeClass('text-danger');
 }
 
 
@@ -246,6 +264,7 @@ const Alert = function (message, status) // si se proceso correctamente la solic
         rtl: false
     });
 }
+
 
 
 const OpenEdit = (id) => {

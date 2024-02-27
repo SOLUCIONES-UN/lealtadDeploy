@@ -4,9 +4,50 @@ let token = localStorage.getItem("token");
 $(function() {
     let tabla = getTerceros();
     Usuario();
+    function validarNombre(nombre) {
+        const nombreValido = /^[a-zA-Z0-9\s]+$/.test(nombre.trim());
 
+        if (!nombreValido) {
+            $('.nombre').addClass('is-invalid');
+            $('.nombre-error').text('El nombre no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
+            return false;
+        }
+        return true;
+    }
+
+    $('#modalNew').on('show.bs.modal', function () {
+        limpiarFormulario();
+    });
+
+$('#modalEdit').on('show.bs.modal', function () {
+ 
+});
+
+$('#modalNew').on('hidden.bs.modal', function () {
+    limpiarFormulario();
+});
+
+
+$('#modalEdit').on('hidden.bs.modal', function () {
+    limpiarFormulario();
+});
+
+
+$('#modalNew').find('[data-dismiss="modal"]').click(function () {
+    limpiarFormulario();
+});
+
+
+$('#modalEdit').find('[data-dismiss="modal"]').click(function () {
+    limpiarFormulario();
+});
     //evento submit del formulario
     $('#formNew').submit(function(){
+        const nombre = $('#nombre').val();
+
+        if (!validarNombre(nombre)) {
+            return false;
+        }
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
@@ -28,7 +69,7 @@ $(function() {
             .then(result => {
                 console.log(result)
                 if(result.code == "ok"){
-                    limpiarForm();
+                    limpiarFormulario();
                     tabla._fnAjaxUpdate();
                     $('#modalNew').modal('toggle');
                     Alert(result.message, 'success')
@@ -66,7 +107,7 @@ $(function() {
             .then(result => {
 
                 if(result.code == "ok"){
-                    limpiarForm();
+                    limpiarFormulario();
                     tabla._fnAjaxUpdate();
                     $('#modalEdit').modal('toggle');
                     Alert(result.message, 'success');
@@ -194,9 +235,13 @@ const getTerceros = () => {
 
 }
 
-const limpiarForm = () => {
+
+function limpiarFormulario() {
     $('#formNew').trigger("reset");
+    $('.nombre').removeClass('is-invalid');
+    $('.nombre-error').empty().removeClass('text-danger');
 }
+
 
 const Alert = function(message, status){
     toastr[`${status}`](message, `${status}`, {
