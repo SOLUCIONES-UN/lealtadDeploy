@@ -67,7 +67,7 @@ $(function () {
             .then(result => {
                 console.log(result)
                 if (result.code == "ok") {
-                    limpiarForm();
+                    limpiarFormulario();
                     tabla._fnAjaxUpdate();
                     $('#modalNew').modal('toggle');
                     Alert(result.message, 'success')
@@ -244,6 +244,7 @@ const getRoles = () => {
     });
 }
 function limpiarFormulario() {
+    $('#formNew').trigger("reset");
     $('.descripcion').removeClass('is-invalid');
     $('.descripcion-error').empty().removeClass('text-danger');
 }
