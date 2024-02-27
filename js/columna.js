@@ -73,7 +73,7 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
 
 
                 if (result.code == "ok") {
-                    limpiarForm();
+                    limpiarFormulario();
                     tabla._fnAjaxUpdate();
                     $('#modalNew').modal('toggle');
                     Alert(result.message, 'success')
@@ -149,7 +149,7 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
 
 
                 if (result.code == "ok") {
-                    limpiarForm();
+                    limpiarFormulario();
                     tabla._fnAjaxUpdate();
                     $('#modalDelete').modal('toggle');
                     Alert(result.message, 'success')
@@ -249,7 +249,7 @@ const getColumnas = () => {
 }
 
 function limpiarFormulario() {
-    $('#nombre').val(''); 
+    $('#formNew').trigger("reset");
     $('.nombre').removeClass('is-invalid');
     $('.nombre-error').empty().removeClass('text-danger');
 }

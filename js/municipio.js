@@ -87,11 +87,11 @@ $(function () {
 
 
     $('#formEdit').submit(function () {
-        const nombre = $('#nombre').val();
+        const nombre = $('#nombreEdit').val();
 
-        if (!validarNombre(nombre)) {
-            return false;
-        }
+    if (!validarNombre(nombre)) {
+      return false;
+    }
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", token);
@@ -150,7 +150,7 @@ $(function () {
 
 
                 if (result.code == "ok") {
-                    limpiarForm();
+                    limpiarFormulario();
                     tabla._fnAjaxUpdate();
                     $('#modalDelete').modal('toggle');
                     Alert(result.message, 'success')

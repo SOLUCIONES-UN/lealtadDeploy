@@ -285,7 +285,7 @@ const getUsuarios = () => {
 
 
 const limpiarForm = () => {
-
+    $('#formNew').trigger("reset");
     $('.nombre-error').empty().removeClass('text-danger');
     $('.username-error').empty().removeClass('text-danger');
 

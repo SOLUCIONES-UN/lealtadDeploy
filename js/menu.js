@@ -134,7 +134,7 @@ $(function () {
             .then(response => response.json())
             .then(result => {
                 if (result.code == "ok") {
-                    limpiarForm();
+                    limpiarFormulario();
                     tabla._fnAjaxUpdate();
                     $('#modalDelete').modal('toggle');
                     Alert(result.message, 'success')

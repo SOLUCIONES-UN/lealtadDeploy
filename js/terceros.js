@@ -136,7 +136,7 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
             .then(result => {
 
                 if(result.code == "ok"){
-                    limpiarForm();
+                    limpiarFormulario();
                     tabla._fnAjaxUpdate();
                     $('#modalDelete').modal('toggle');
                     Alert(result.mesagge, 'success');
