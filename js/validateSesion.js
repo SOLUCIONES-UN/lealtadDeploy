@@ -18,15 +18,18 @@ const verifyLogin = () => {
             const expiracion = new Date(payload.exp * 1000); // El tiempo está en segundos, convertir a milisegundos
             const currentTime = new Date();
 
-            if (expiracion < currentTime) {
+            console.log("diferencia de tiempo: " + ((expiracion - currentTime) / 1000) / 60);
 
-                localStorage.removeItem('token');
+            let tiempoRestante = ((expiracion - currentTime) / 1000) / 60;
+
+            if (tiempoRestante <= 14) {
 
                 Alert('Session Caducada', 'error');
 
                 setTimeout(() => {
+                    localStorage.removeItem('token');
                     window.location.href = 'login.html';
-                }, 5000);
+                }, 1000 * 8);
             }else{
                 console.log('El token es válido');
             }
