@@ -1,7 +1,27 @@
 let usuario = JSON.parse(localStorage.getItem("infoUsuario"));
 $(function () {
   getMenuAccesible();
+  verifyToken();
 });
+
+document.addEventListener('DOMContentLoaded', () =>{
+  validateSesion();
+});
+
+
+//verify if the user is logged in and has a valid token
+const verifyToken = () => {
+  var token = localStorage.getItem('token');
+
+  if (token == null) {
+    window.location.href = 'login.html';
+  } else{
+    const partes = token.split('.');
+    if (partes.length !== 3) {
+      window.location.href = 'login.html';
+    }
+  }
+}
 
 
 const getMenuAccesible = () => {

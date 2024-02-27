@@ -21,6 +21,8 @@ const Alert = (message, status) => {
 
 };
 
+
+
 //RegEX & Replace
 const removeLeadingZeroes = value => parseFloat(value)
 

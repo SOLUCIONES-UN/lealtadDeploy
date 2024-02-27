@@ -68,7 +68,8 @@ $(function () {
             Alert('Las contraseñas no coinciden', 'error');
             return;
      
-         }
+        }
+        
 
         var raw = JSON.stringify({
             "username": $('#username').val(),
