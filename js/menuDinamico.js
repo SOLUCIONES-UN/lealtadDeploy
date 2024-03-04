@@ -14,6 +14,29 @@ const getMenuAccesible = () => {
     headers: { "Authorization": token }
   };
 
+
+  //meti esto para mostrar el premio, perdon
+  fetch(`${url}premio/${usuario.username}`, requestOptions)
+  .then((response) => response.json())
+  .then((premio) => {
+    // Lógica para incluir el premio en el menú
+    let premioItem = `
+      <li class="nav-item">
+        <a class="nav-link" href="#" title="Premio">
+          <i class="feather-20" data-feather="award"></i>
+          <span class="menu-title text-truncate">Premio: ${premio.descripcion}</span>
+        </a>
+      </li>
+    `;
+    $("#main-menu-navigation").append(premioItem);
+  })
+  .catch((error) => console.log("error", error));
+
+
+
+
+//el fetch del permiso de usuario ya estaba no lo quiten
+
   fetch(`${url}permisosUsuario/${usuario.username}`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
