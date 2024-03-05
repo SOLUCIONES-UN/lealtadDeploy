@@ -22,6 +22,30 @@ const verifyToken = () => {
   }
 }
 
+
+// Función para obtener y mostrar todas las participaciones activas
+const getAllParticipaciones = () => {
+  const headers = {
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  };
+
+  var requestOptions = {
+    method: "GET",
+    headers: headers,
+    redirect: "follow"
+  };
+
+  fetch(`${url}Participacion`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+  
+      console.log("Data de participaciones:", result);
+  
+    })
+    .catch((error) => console.log("Error al obtener participaciones:", error));
+};
+
 const displayNumPromociones = (numPromociones) => {
   const numPromocionesElement = document.getElementById("num-promociones");
   numPromocionesElement.textContent = numPromociones;
@@ -204,6 +228,8 @@ document.getElementById("ver-detalles-btn").addEventListener("click", function (
   var myModal = new bootstrap.Modal(document.getElementById('graficaModal'));
   myModal.show();
 });
+// Función para obtener y mostrar la gráfica de campañas
+
 
 function mostrarGraficaCampañas() {
   // Obtener el canvas
@@ -225,6 +251,8 @@ function mostrarGraficaCampañas() {
   fetch(`${url}Campania`, requestOptions)
     .then(response => response.json())
     .then(data => {
+      console.log("Datos de campañas:", data);
+
 
       const labels = data.map(campaña => campaña.nombre);
       const numClientes = data.map(campaña => campaña.numero_clientes);
@@ -241,16 +269,13 @@ function mostrarGraficaCampañas() {
         }]
       };
 
-
       const chartOptions = {
         scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true
-            }
-          }]
+          yAxes: [{}]
         }
       };
+      console.log("Labels:", labels);
+console.log("NumClientes:", numClientes);
 
 
       const ctx = canvas.getContext('2d');
@@ -275,6 +300,14 @@ document.getElementById("ver-detalles-btn").addEventListener("click", function (
 
 
 
+const cerrarModalBtn = document.getElementById('cerrar-modal-btn');
+
+cerrarModalBtn.addEventListener('click', () => {
+    console.log('Botón de cerrar modal clickeado');
+
+    const modalInstance = new bootstrap.Modal(document.getElementById('graficaModal'));
+    modalInstance.hide();
+});
 
 
 
