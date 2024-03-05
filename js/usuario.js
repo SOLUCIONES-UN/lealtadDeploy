@@ -9,29 +9,29 @@ $(function () {
     function validarNombreYusername(nombre, username) {
         const nombreValido = /^[a-zA-Z0-9\s]+$/.test(nombre.trim());
         const usernameValida = /^[a-zA-Z0-9\s]+$/.test(username.trim());
-    
+
         if (!nombreValido) {
-            $('#nombreEdit').addClass('is-invalid'); 
-            $('#nombreEditError').text('El nombre no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
+            $('#nombre').addClass('is-invalid');
+            $('#nombreError').text('El nombre no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
             return false;
         } else {
-            $('#nombreEdit').removeClass('is-invalid'); 
+            $('#nombreEdit').removeClass('is-invalid');
             $('#nombreEditError').empty().removeClass('text-danger');
         }
-    
+
         if (!usernameValida) {
-            $('#usernameEdit').addClass('is-invalid');
-            $('#usernameEditError').text('El nombre de usuario no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
+            $('#username').addClass('is-invalid');
+            $('#usernameError').text('El nombre de usuario no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
             return false;
         } else {
             $('#usernameEdit').removeClass('is-invalid');
             $('#usernameEditError').empty().removeClass('text-danger');
         }
-    
+
         return true;
     }
-    
-    
+
+
 
 
     $('#modalNew, #modalEdit').on('show.bs.modal', function () {
@@ -63,8 +63,7 @@ $(function () {
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", token);
 
-        if($('#password').val().trim() != $('#password2').val().trim())
-        {
+        if ($('#password').val().trim() != $('#password2').val().trim()) {
             Alert('Las contraseñas no coinciden', 'error');
             return;
      
@@ -78,7 +77,7 @@ $(function () {
             "telefono": $('#telefono').val(),
             "emailNotificacion": $('#emailNotification').val(),
             "idRol": $('#rol').val(),
-       });
+        });
 
         var requestOptions = {
             method: 'POST',
@@ -109,65 +108,64 @@ $(function () {
 
 
 
-// para actualizar usuarios
-  // para actualizar usuarios
-$('#formEdit').submit(function (e) {
-    const nombre = $('#nombreEdit').val();
-    const username = $('#usernameEdit').val(); // Aquí defines username correctamente
-    
-    if (!validarNombreYusername(nombre, username)) { 
+
+    // para actualizar usuarios
+    $('#formEdit').submit(function (e) {
+        const nombre = $('#nombreEdit').val();
+        const username = $('#usernameEdit').val();
+
+        if (!validarNombreYusername(nombre, username)) {
+            return false;
+        }
+
+        e.preventDefault();
+        var myHeaders = new Headers();
+
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", token);
+
+
+        if ($('#passwordEdit').val().trim() != $('#passwordEdit2').val().trim()) {
+            Alert('Las contraseñas no coinciden', 'error');
+            return;
+
+        }
+        console.log('Contraseñas correctas');
+
+        var raw = JSON.stringify({
+            "username": username,
+            "password": $('#passwordEdit').val(),
+            "nombre": $('#nombreEdit').val(),
+            "telefono": $('#telefonoEdit').val(),
+            "emailNotificacion": $('#emailEdit').val(),
+            "idRol": $('#rolActualizar').val(),
+        });
+
+        var requestOptions = {
+            method: 'PUT',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        fetch(`${url}Usuario/${username}`, requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                if (result.code == "ok") {
+                    limpiarForm();
+                    tabla._fnAjaxUpdate();
+                    $('#modalEdit').modal('toggle');
+                    Alert(result.message, 'success')
+                } else {
+                    Alert(result.message, 'error')
+                }
+            })
+            .catch(error => { Alert(error.errors, 'error') });
         return false;
-    }
-
-    e.preventDefault();
-    var myHeaders = new Headers();
-    
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Authorization", token);
-
-    // Aquí también estás usando correctamente la variable username
-    if($('#passwordEdit').val().trim() != $('#passwordEdit2').val().trim())
-    {
-        Alert('Las contraseñas no coinciden', 'error');
-        return;
- 
-     }
-     console.log('Contraseñas correctas');
-
-    var raw = JSON.stringify({
-        "username": username, // Aquí también utilizas la variable username
-        "password": $('#passwordEdit').val(),
-        "nombre": $('#nombreEdit').val(),
-        "telefono": $('#telefonoEdit').val(),
-        "emailNotificacion": $('#emailEdit').val(),
-        "idRol": $('#rolActualizar').val(),
     });
 
-    var requestOptions = {
-        method: 'PUT',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow'
-    };
 
-    fetch(`${url}Usuario/${username}`, requestOptions)
-        .then(response => response.json())
-        .then(result => {
-            if (result.code == "ok") {
-                limpiarForm();
-                tabla._fnAjaxUpdate();
-                $('#modalEdit').modal('toggle');
-                Alert(result.message, 'success')
-            } else {
-                Alert(result.message, 'error')
-            }
-        })
-        .catch(error => { Alert(error.errors, 'error') });
-    return false;
-});
-
-
-// para borrar usuarios
+    // para borrar usuarios
     $('#BtnDelete').click(function () {
 
         var myHeaders = new Headers();
@@ -218,16 +216,16 @@ const getUsuarios = () => {
             type: "GET",
             datatype: "json",
             dataSrc: "",
-            headers: {"Authorization": token}
+            headers: { "Authorization": token }
         },
-        
+
         columns: [
-            
+
             { data: "nombre" },
-            { data: "rol.descripcion"},
+            { data: "rol.descripcion" },
             {
                 data: "username", render: function (data) {
-        
+
                     return `
               <div class="btn-group">
                 <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
@@ -247,9 +245,9 @@ const getUsuarios = () => {
               </div> 
             `;
                 }
-                
+
             }
-            
+
         ],
         // order: [[1, 'asc']],
         dom:
@@ -285,14 +283,14 @@ const getUsuarios = () => {
 }
 
 
+
+
 const limpiarForm = () => {
     $('#formNew').trigger("reset");
-    $('.nombre-error').empty().removeClass('text-danger');
-    $('.username-error').empty().removeClass('text-danger');
-
-
-    $('#nombreEdit').removeClass('is-invalid');
-    $('#usernameEdit').removeClass('is-invalid');
+    $('#nombre').removeClass('is-invalid').val('');
+    $('#username').removeClass('is-invalid').val('');
+    $('#nombreError').empty();
+    $('#usernameError').empty();
 }
 
 
@@ -311,13 +309,13 @@ const OpenEdit = (username) => {
     var requestOptions = {
         method: 'GET',
         redirect: 'follow',
-        headers: {"Authorization": token}
+        headers: { "Authorization": token }
     };
 
     fetch(`${url}Usuario/${username}`, requestOptions)
         .then(response => response.json())
         .then(result => {
-            
+
             $('#usernameEdit').val(username);
             $('#nombreEdit').val(result.nombre);
             $('#passwordEdit').val(result.password);
@@ -342,7 +340,7 @@ const getRoles = () => {
     var requestOptions = {
         method: 'GET',
         redirect: 'follow',
-        headers: {"Authorization": token}
+        headers: { "Authorization": token }
     };
 
     $('#rol').html('<option value="0" selected disabled>Selecciona una Opcion</option>');
@@ -351,9 +349,9 @@ const getRoles = () => {
         .then(response => response.json())
         .then(result => {
             result.forEach(element => {
-               var opc  = `<option value="${element.id}">${element.descripcion}</option>`;
-               $('#rol').append(opc);
-               $('#rolActualizar').append(opc);
+                var opc = `<option value="${element.id}">${element.descripcion}</option>`;
+                $('#rol').append(opc);
+                $('#rolActualizar').append(opc);
             });
         })
         .catch(error => console.log('error', error));
