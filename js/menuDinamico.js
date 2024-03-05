@@ -23,13 +23,14 @@ const verifyToken = () => {
 }
 
 
-// Función para obtener y mostrar todas las participaciones activas
+
 const getAllParticipaciones = () => {
+  const token = localStorage.getItem('token');
+
   const headers = {
-    'Authorization': `Bearer ${token}`,
+    'Authorization': token,
     'Content-Type': 'application/json'
   };
-
   var requestOptions = {
     method: "GET",
     headers: headers,
@@ -39,12 +40,14 @@ const getAllParticipaciones = () => {
   fetch(`${url}Participacion`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
-  
       console.log("Data de participaciones:", result);
-  
     })
     .catch((error) => console.log("Error al obtener participaciones:", error));
 };
+
+// Llamar a la función para obtener las participaciones
+getAllParticipaciones();
+
 
 const displayNumPromociones = (numPromociones) => {
   const numPromocionesElement = document.getElementById("num-promociones");
