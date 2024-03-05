@@ -39,6 +39,11 @@
     <link rel="stylesheet" type="text/css" href="../app-assets/css/pages/app-invoice-list.min.css">
     <link rel="stylesheet" type="text/css" href="../app-assets/css/plugins/forms/form-wizard.min.css" />
     <link rel="stylesheet" type="text/css" href="../app-assets/css/plugins/forms/form-file-uploader.css">
+    <link rel="stylesheet" href="ruta/a/bootstrap-timepicker.min.css">
+
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css">
 
     <!-- END: Page CSS-->
 
@@ -481,11 +486,15 @@
                                                 Participación</label>
                                             <input type="number" id="limiteParticipacion" class="form-control" />
                                         </div>
+                                        <div class="form-group col-md-6">
+                                            <label class="form-label" for="correosElectrónicos">Correo Electrónico</label>
+                                            <input type="email" id="correosElectrónicos" class="form-control" placeholder="Ingresa el Correo Electrónico" />
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="imgAkisi">Icono de la campaña</label>
+                                                <label for="imgAkisi">imagen  de la campaña</label>
                                                 <input type="file" class="form-control" id="imgAkisi" autocomplete="off"
                                                     style="min-height: 70px;">
                                             </div>
@@ -544,6 +553,18 @@
                                                 <option value="1">Cualquiera</option>
                                                 <option value="2">Hombre</option>
                                                 <option value="3">Mujer</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label class="form-label" for="dia">Día</label>
+                                            <input type="text" id="dia" class="form-control" placeholder="Ingresa el día" />
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label class="form-label" for="hora">Hora</label>
+                                            <select id="hora" class="form-control">
+                                                <option value="">Selecciona la hora</option>
                                             </select>
                                         </div>
                                     </div>
@@ -1358,6 +1379,9 @@
     <!-- BEGIN Vendor JS-->
 
     <!-- BEGIN: Page Vendor JS-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
+  
     <script src="../app-assets/vendors/js/extensions/moment.min.js"></script>
     <script src="../app-assets/vendors/js/forms/wizard/bs-stepper.min.js"></script>
     <script src="../app-assets/vendors/js/forms/select/select2.full.min.js"></script>
@@ -1374,9 +1398,11 @@
     <script src="../app-assets/js/core/app-menu.min.js"></script>
     <script src="../app-assets/js/core/app.min.js"></script>
     <script src="../app-assets/js/scripts/customizer.min.js"></script>
+    
     <!-- END: Theme JS-->
 
     <!-- BEGIN: Page JS-->
+    <!-- <script src="../js/"></script> -->
     <script src="../js/functions.js"></script>
     <script src="../js/campanias.js"></script>
     <script src="../js/menuDinamico.js"></script>

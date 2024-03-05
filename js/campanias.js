@@ -84,6 +84,34 @@ document.addEventListener('DOMContentLoaded', () => {
   const sexo = document.querySelector('#sexo');
   validate(sexo, 'Sexo');
 
+  const diaReporte = document.querySelector('#dia');
+  validate(diaReporte, 'diaReporte');
+
+  const horaReporte = document.querySelector('#hora');
+  validate(horaReporte, 'horaReporte');
+ $(document).ready(function(){
+    // Generar opciones de hora en incrementos de 1 hora
+    for (var hour = 0; hour < 24; hour++) {
+        $('#hora').append($('<option>', {
+            value: (hour < 10 ? '0' : '') + hour + ':00', // Formato HH:00
+            text: (hour < 10 ? '0' : '') + hour + ':00'
+        }));
+    }
+
+    // Escuchar el evento de cambio en el select de hora
+    $('#hora').on('change', function() {
+        var selectedHour = $(this).val();
+        // Aquí puedes hacer algo con la hora seleccionada, como enviarla al backend
+        console.log(selectedHour);
+    });
+
+  
+  const emails = document.querySelector('#correosElectrónicos');
+  validate(emails, 'emails');
+
+
+ 
+});
 
   /* allFormVal['nombre'] = false;
   allFormVal['tituloNotificacion'] = false;
@@ -126,6 +154,15 @@ document.addEventListener('DOMContentLoaded', () => {
     reader.readAsBinaryString(file);
   }
 })
+
+$(document).ready(function(){
+  $('#hora').timepicker({
+      showMeridian: false, // Esto evita que se muestren AM/PM
+      minuteStep: 1 // Esto establece el paso del minuto a 1
+  });
+});
+
+
 
 $(function () {
   loadMenu();
@@ -189,6 +226,9 @@ $(function () {
       Participacion: participantes,
       Bloqueados: bloqueados,
       maximoParticipaciones: $("#limiteParticipacion").val(),
+      horaReporte:  $("#hora").val(),
+      diaReporte:  $("#dia").val(),
+      emails:  $("#correosElectrónicos").val(),
     };
     console.log(data);
     saveData(data);
@@ -1212,6 +1252,7 @@ const saveData = (data) => {
     body: JSON.stringify(data),
     redirect: 'follow'
   };
+  console.log(data)
 
   fetch(`${url}Campania`, requestOptions)
     .then((response) => response.json())
@@ -1242,6 +1283,9 @@ const Limpiar = (isEdith) => {
     $("#fechaRegistro").val(null);
     $("#edadIni").val(null);
     $("#sexo").val(0);
+    $("#hora").val(0);
+    $("#dia").val(0);
+    $("#correosElectrónicos").val(0);
     $("#tipoUsuario").val(0);
     ChangePanel(1);
   }
@@ -1643,7 +1687,10 @@ const tipoDeTransaccion = (id) => {
 
     $('#Transacciones' + id).html(null);
 
+    console.log("biene")
+    console.log("biene")
     fetch(`${url}categoria`, requestOptions)
+    
       .then(response => response.json())
       .then(result => {
         result.forEach(element => {
