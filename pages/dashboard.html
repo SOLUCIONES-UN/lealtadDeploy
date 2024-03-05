@@ -41,6 +41,9 @@
     <!-- BEGIN: Custom CSS-->
     <link rel="stylesheet" type="text/css" href="../css/custom-ag.css">
     <!-- END: Custom CSS-->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
 
 </head>
 <!-- END: Head-->
@@ -241,11 +244,11 @@
                                     <div class="row pb-50">
                                         <div class="col-sm-6 col-12 d-flex justify-content-between flex-column order-sm-1 order-2 mt-1 mt-sm-0">
                                             <div class="mb-1 mb-sm-0">
-                                                <h2 class="fw-bolder mb-25">122</h2>
-                                                <p class="card-text fw-bold mb-2">Clientes</p>
+                                                <h2 class="fw-bolder mt-1" id="cantidadClientesTransacciones"></h2>
+                                                <p class="card-text">Top Clientes</p>
                                                 <div class="font-medium-2">
-                                                    <span class="text-success me-25">+1.2%</span>
-                                                    <span>última semana</span>
+                                                    <span class="text-success me-25">+</span>
+                                                    <span>Información Recopilada</span>
                                                 </div>
                                             </div>
                                             <button id="ver-detalles-btn" type="button" class="btn btn-primary">Ver Detalles</button>
@@ -254,7 +257,7 @@
                                         <div class="col-sm-6 col-12 d-flex justify-content-between flex-column text-end order-sm-2 order-1">
                                             <div class="dropdown chart-dropdown">
                                                 <button class="btn btn-sm border-0 dropdown-toggle p-50" type="button" id="dropdownItem5" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    Última Semana
+                                               
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownItem5">
                                                     <a class="dropdown-item" href="#">Last 28 Days</a>
@@ -268,17 +271,19 @@
                                     <hr />
                                     <div class="row avg-sessions pt-50">
                                         <div class="col-6 mb-2">
-                                            <p class="mb-50">Beneficios esperados: Q150,000</p>
+                                            <p class="mb-50">Beneficios obtenidos: <span id="totalValorTransacciones"></span></p>
                                             <div class="progress progress-bar-primary" style="height: 6px">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="50" aria-valuemax="100" style="width: 50%"></div>
+                                                <div id="progressBarValorTransacciones" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
                                             </div>
                                         </div>
                                         <div class="col-6 mb-2">
-                                            <p class="mb-50">Clientes: 200</p>
+                                            <p class="mb-50">Clientes: <span id="totalClientes"></span></p>
                                             <div class="progress progress-bar-warning" style="height: 6px">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="60" aria-valuemax="100" style="width: 60%"></div>
+                                                <div id="progressBarTotalClientes" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
                                             </div>
                                         </div>
+                                        
+                                        
                                         <div class="col-6">
                                             <p class="mb-50">Éxito de promociones: 98%</p>
                                             <div class="progress progress-bar-danger" style="height: 6px">
@@ -297,27 +302,66 @@
                         </div>
                         <!-- Avg Sessions Chart Card ends -->
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="graficaModal" tabindex="-1" aria-labelledby="graficaModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="graficaModalLabel">Gráfica de Campañas</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                
-                                    <canvas id="graficaCampañas"></canvas>
-                                </div>
-                                <div class="modal-footer">
-                                    <button id="cerrar-modal-btn" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-
+                        <style>
+                            #graficaModal {
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            }
+                    
+                            .modal-body {
+                                overflow-y: scroll;
+                            }
+                    
+                            .grafica-container {
+                                margin: 20px;
+                                text-align: center;
+                            }
+                    
+                            .grafica-titulo {
+                                font-size: 18px;
+                                font-weight: bold;
+                                margin-bottom: 10px;
+                            }
+                    
+                            .grafica {
+                                margin: auto;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                    
+                        <div class="modal fade" id="graficaModal" tabindex="-1" aria-labelledby="graficaModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="graficaModalLabel">Gráficas de Campañas y Clientes</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- Gráfica de Campañas -->
+                                        <div class="grafica-container">
+                                            <div class="grafica-titulo">Gráfica de Campañas</div>
+                                            <div id="graficaCampañas" class="grafica"></div>
+                                        </div>
+                                        
+                                        <!-- Gráfica de Clientes -->
+                                        <div class="grafica-container">
+                                            <div class="grafica-titulo">Gráfica de Clientes</div>
+                                            <div id="graficaClientes" class="grafica"></div>
+                                        </div>
+                        
+                                        <!-- Agregar más gráficas aquí si es necesario -->
+                        
+                                        <!-- Slider para desplazar hacia abajo en la modal -->
+                                        <input type="range" class="form-range" id="modalSlider">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="cerrar-modal-btn" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-
 
                         <!-- Support Tracker Chart Card starts -->
                         <div class="col-lg-6 col-12">
@@ -338,7 +382,8 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-sm-2 col-12 d-flex flex-column flex-wrap text-center">
-                                            <h1 class="font-large-2 fw-bolder mt-2 mb-0">42</h1>
+                                        
+                                            <h1 class="font-large-2 fw-bolder mt-2 mb-0" id="cantidadTotalTransacciones"></h1>
                                             <p class="card-text">Transacciones</p>
                                         </div>
                                         <div class="col-sm-10 col-12 d-flex justify-content-center">

@@ -22,7 +22,7 @@ const verifyLogin = () => {
 
             let tiempoRestante = ((expiracion - currentTime) / 1000) / 60;
 
-            if (tiempoRestante <= 14) {
+            if (tiempoRestante <= 0) {
 
                 Alert('Session Caducada', 'error');
 
