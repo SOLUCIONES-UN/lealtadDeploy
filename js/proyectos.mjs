@@ -1,19 +1,24 @@
 const url = 'http://localhost:3000/'
 let token = localStorage.getItem("token");
+const headers = {
+    'Authorization': token,
+    'Content-Type': 'application/json'
+};
 
 
 $(function () {
     let tabla = getMenus();
     Usuario();
     function validarDescripcion(descripcion) {
+        
         const descripcionValida = /^[a-zA-Z0-9\s]+$/.test(descripcion.trim());
-
         if (!descripcionValida) {
             $('.descripcion').addClass('is-invalid');
-            $('.descripcion-error').text('La descripción no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
+            $('.descripcion-error').text('La descripcion no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
             return false;
         }
         return true;
+        
     }
 
     $('#modalNew').on('show.bs.modal', function () {
@@ -43,17 +48,25 @@ $(function () {
     //evento submit del formulario
     $('#formNew').submit(function () {
 
-        const descripcion = $('#Descripcion').val();
+        const descripcion = $('#descripcion').val();
+      
         
 
         if (!validarDescripcion(descripcion)) {
             return false;
         }
-        var myHeaders = new Headers();
+        console.log("Datos a enviar:", {
+            descripcion: $('#descripcion').val(),
+            ruta: $('#ruta').val()
+        });
+        var myHeaders = new headers();
         myHeaders.append("Content-Type", "application/json");
 
         var raw = JSON.stringify({
-            "descripcion": $('#descripcion').val()
+            "descripcion": $('#descripcion').val(),
+            "ruta": $('#ruta').val()
+
+            
         });
 
         var requestOptions = {
@@ -63,7 +76,7 @@ $(function () {
             redirect: 'follow'
         };
 
-        fetch(`${url}projects`, requestOptions)
+        fetch(`${url}projects/`, requestOptions)
             .then(response => response.json())
             .then(result => {
                 if (result.code == "ok") {
@@ -79,10 +92,11 @@ $(function () {
         return false;
     });
 
-    //eventos de edicion para un menu
-    $('#formEdit').submit(function () {
+    //eventos de edicion para un proyecto
+    /*$('#formEdit').submit(function () {
 
         const descripcion = $('#descripcionEdit').val();
+        const ruta = $('#rutaEdit').val();
 
         if (!validarDescripcion(descripcion)) {
             return false;
@@ -92,7 +106,8 @@ $(function () {
         const id = $('#id').val();
 
         var raw = JSON.stringify({
-            "descripcion": $('#descripcionEdit').val()
+            "descripcion": $('#descripcionEdit').val(),
+            "ruta": $('#rutaEdit').val()
         });
 
         var requestOptions = {
@@ -111,6 +126,46 @@ $(function () {
                     $('#modalEdit').modal('toggle');
                     Alert(result.message, 'success')
                 } else {
+                    Alert(result.message, 'error')
+                }
+            })
+            .catch(error => { Alert(error.errors, 'error') });
+        return false;
+    });*/
+    $('#formEdit').submit(function () {
+        const descripcion = $('#descripcionEdit').val();
+
+        if (!validarDescripcion(descripcion)) {
+            return false;
+        }
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", token);
+
+        const id = $('#id').val();
+
+        var raw = JSON.stringify({
+            "descripcion": $('#descripcionEdit').val()
+        });
+
+        var requestOptions = {
+            method: 'PUT',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow',
+        };
+
+        fetch(`${url}projects/${id}`, requestOptions)
+            .then(response => response.json())
+            .then(result => {
+
+                if (result.code == "ok") {
+                    limpiarFormulario();
+                    tabla._fnAjaxUpdate();
+                    $('#modalEdit').modal('toggle');
+                    Alert(result.message, 'success');
+                } else {
+
                     Alert(result.message, 'error')
                 }
             })
@@ -166,12 +221,12 @@ const getMenus = () => {
             type: "GET",
             datatype: "json",
             dataSrc: "",
-            headers: { "Authorization": token }
+            headers: headers,
         },
         columns: [
             {
-                data: null, render: function (data, type, row, meta) {
-
+                data: null,
+                render: function (data, type, row, meta) {
                     if (type === 'display') {
                         return meta.row + 1;
                     }
@@ -180,26 +235,21 @@ const getMenus = () => {
             },
             { data: "descripcion" },
             {
-                data: "id", render: function (data) {
-
-                    return `
-              <div class="btn-group">
-                <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
-                    ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
-                </a>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <a href="#" onclick="OpenEdit(${data})" class="btn_edit dropdown-item">
-                        ${feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' })} Actualizar
-                    </a>
-                
-                <div class="dropdown-menu dropdown-menu-right">
-                    <a href="#" onclick="OpenDelete(${data})" class="btn_delete dropdown-item">
-                      ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
-                    </a>
-                </div>
-                </div>
-              </div> 
-            `;
+                data: "id",
+                render: function (data) {
+                    return '<div class="btn-group">' +
+                        '<a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">' +
+                        feather.icons['more-vertical'].toSvg({ class: 'font-small-4' }) +
+                        '</a>' +
+                        '<div class="dropdown-menu dropdown-menu-right">' +
+                        '<a href="#" onclick="OpenEdit(' + data + ')" class="btn_edit dropdown-item">' +
+                        feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' }) + ' Actualizar' +
+                        '</a>' +
+                        '<a href="#" onclick="OpenDelete(' + data + ')" class="btn_delete dropdown-item">' +
+                        feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' }) + ' Inhabilitar' +
+                        '</a>' +
+                        '</div>' +
+                        '</div>';
                 }
             }
         ],
@@ -239,9 +289,11 @@ const getMenus = () => {
 function limpiarFormulario(formNew = false) {
     if (formNew) {
         $('#descripcion, #descripcionEdit').val('');
+        $('ruta, #rutaEdit').val('');
     }
     $('.descripcion').removeClass('is-invalid');
-    $('.descripcion-error').empty().removeClass('text-danger');
+    $('.ruta').removeClass('is-invalid');
+   
 }
 
 

@@ -62,7 +62,7 @@
         <ul class="nav navbar-nav">
           <li class="nav-item">
             <a class="nav-link menu-toggle" href="javascript:void(0);">
-              <b>Administración de Menus</b>
+              <b>Administracion de Proyectos</b>
             </a>
           </li>
         </ul>
@@ -287,10 +287,18 @@
           <div class="form-group">
             <label class="form-label" for="basic-icon-default-fullname">Descripción</label>
             <input type="text" class="form-control dt-full-name descripcion" id="descripcion"
-              placeholder="Descripción del menú" name="descripcion" aria-label=""
+              placeholder="Descripción del proyecto " name="descripcion" aria-label=""
               aria-describedby="basic-icon-default-fullname2" required />
             <div id="descripcionError" class="descripcion-error invalid-feedback"></div>
           </div>
+          <div class="form-group">
+            <label class="form-label" for="basic-icon-default-fullname">Ruta</label>
+            <input type="text" class="form-control dt-full-name ruta" id="ruta"
+              placeholder="Ruta del proyecto" name="ruta" aria-label=""
+              aria-describedby="basic-icon-default-fullname2" required />
+            <div id="rutaError" class="ruta-error invalid-feedback"></div>
+          </div>
+
 
 
           <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar</button>
@@ -310,10 +318,17 @@
         <div class="modal-body flex-grow-1">
           <div class="form-group">
             <label class="form-label" for="descripcionEdit">Descripción</label>
-            <textarea class="form-control descripcion" id="descripcionEdit" placeholder="Descripción del menú"
+            <textarea class="form-control descripcion" id="descripcionEdit" placeholder="Descripción del proyecto"
               name="descripcion" required rows="3"></textarea>
             <div class="invalid-feedback descripcion-error"></div>
           </div>
+          <div class="form-group">
+            <label class="form-label" for="rutaEdit">Ruta</label>
+            <textarea class="form-control ruta" id="rutaEdit" placeholder="Ruta del proyecto"
+              name="ruta" required rows="3"></textarea>
+            <div class="invalid-feedback ruta-error"></div>
+          </div>
+
 
 
 
