@@ -1,13 +1,253 @@
 const url = 'http://localhost:3000/'
-
 let token = localStorage.getItem("token");
 
-const headers = {
-    'Authorization': token,
-    'Content-Type': 'application/json'
-};
 
-const Alert = function (message, status) {
+$(function () {
+    let tabla = getMenus();
+    Usuario();
+    function validarDescripcion(descripcion) {
+        const descripcionValida = /^[a-zA-Z0-9\s]+$/.test(descripcion.trim());
+
+        if (!descripcionValida) {
+            $('.descripcion').addClass('is-invalid');
+            $('.descripcion-error').text('La descripción no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
+            return false;
+        }
+        return true;
+    }
+
+    $('#modalNew').on('show.bs.modal', function () {
+        limpiarFormulario();
+    });
+
+    $('#modalEdit').on('show.bs.modal', function () {
+        limpiarFormulario();
+    });
+
+    $('#modalNew').on('hidden.bs.modal', function () {
+        limpiarFormulario();
+    });
+
+    $('#modalEdit').on('hidden.bs.modal', function () {
+        limpiarFormulario();
+    });
+
+    $('#modalNew').find('[data-dismiss="modal"]').click(function () {
+        limpiarFormulario();
+    });
+
+    $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
+        limpiarFormulario();
+    });
+
+    //evento submit del formulario
+    $('#formNew').submit(function () {
+
+        const descripcion = $('#Descripcion').val();
+        
+
+        if (!validarDescripcion(descripcion)) {
+            return false;
+        }
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        var raw = JSON.stringify({
+            "descripcion": $('#descripcion').val()
+        });
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        fetch(`${url}projects`, requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                if (result.code == "ok") {
+                    limpiarFormulario();
+                    tabla._fnAjaxUpdate();
+                    $('#modalNew').modal('toggle');
+                    Alert(result.message, 'success')
+                } else {
+                    Alert(result.message, 'error')
+                }
+            })
+            .catch(error => { Alert(error.errors, 'error') });
+        return false;
+    });
+
+    //eventos de edicion para un menu
+    $('#formEdit').submit(function () {
+
+        const descripcion = $('#descripcionEdit').val();
+
+        if (!validarDescripcion(descripcion)) {
+            return false;
+        }
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        const id = $('#id').val();
+
+        var raw = JSON.stringify({
+            "descripcion": $('#descripcionEdit').val()
+        });
+
+        var requestOptions = {
+            method: 'PUT',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        fetch(`${url}projects/${id}`, requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                if (result.code == "ok") {
+                    limpiarFormulario();
+                    tabla._fnAjaxUpdate();
+                    $('#modalEdit').modal('toggle');
+                    Alert(result.message, 'success')
+                } else {
+                    Alert(result.message, 'error')
+                }
+            })
+            .catch(error => { Alert(error.errors, 'error') });
+        return false;
+    });
+
+    //eventos para la inhabilitacion de un menu
+    $('#BtnDelete').click(function () {
+
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+
+        const id = $('#idDelete').val();
+        var requestOptions = {
+            method: 'DELETE',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+
+        fetch(`${url}projects/${id}`, requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                if (result.code == "ok") {
+                    limpiarFormulario();
+                    tabla._fnAjaxUpdate();
+                    $('#modalDelete').modal('toggle');
+                    Alert(result.message, 'success')
+                } else {
+                    Alert(result.message, 'error')
+                }
+
+            })
+            .catch(error => { Alert(error.errors, 'error') });
+    })
+});
+
+const Usuario = () => {
+
+    let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
+    console.log(usuario.nombre)
+    $('.user-name').text(usuario.nombre);
+    $('.user-status').text(usuario.rol.descripcion);
+}
+
+
+//obtiene la lista de menus
+const getMenus = () => {
+    return $('#tableData').dataTable({
+        ajax: {
+            url: `${url}projects`,
+            type: "GET",
+            datatype: "json",
+            dataSrc: "",
+            headers: { "Authorization": token }
+        },
+        columns: [
+            {
+                data: null, render: function (data, type, row, meta) {
+
+                    if (type === 'display') {
+                        return meta.row + 1;
+                    }
+                    return meta.row + 1;
+                }
+            },
+            { data: "descripcion" },
+            {
+                data: "id", render: function (data) {
+
+                    return `
+              <div class="btn-group">
+                <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
+                    ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a href="#" onclick="OpenEdit(${data})" class="btn_edit dropdown-item">
+                        ${feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' })} Actualizar
+                    </a>
+                
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a href="#" onclick="OpenDelete(${data})" class="btn_delete dropdown-item">
+                      ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
+                    </a>
+                </div>
+                </div>
+              </div> 
+            `;
+                }
+            }
+        ],
+        // order: [[1, 'asc']],
+        dom:
+            '<"d-flex justify-content-between align-items-center header-actions mx-1 row mt-75"' +
+            '<"col-lg-12 col-xl-6" l>' +
+            '<"col-lg-12 col-xl-6 pl-xl-75 pl-0"<"dt-action-buttons text-xl-right text-lg-left text-md-right text-left d-flex align-items-center justify-content-lg-end align-items-center flex-sm-nowrap flex-wrap mr-1"<"mr-1"f>B>>' +
+            '>t' +
+            '<"d-flex justify-content-between mx-2 row mb-1"' +
+            '<"col-sm-12 col-md-6"i>' +
+            '<"col-sm-12 col-md-6"p>' +
+            '>',
+        language: {
+            sLengthMenu: 'Show _MENU_',
+            search: 'Buscar',
+            searchPlaceholder: 'Buscar...',
+        },
+        // Buttons with Dropdown
+        buttons: [
+            {
+                text: 'Nuevo',
+                className: 'add-new btn btn-primary mt-50',
+                attr: {
+                    'data-toggle': 'modal',
+                    'data-target': '#modalNew',
+                },
+                init: function (api, node, config) {
+                    $(node).removeClass('btn-secondary');
+                    //Metodo para agregar un nuevo usuario
+                },
+            },
+        ],
+    });
+}
+
+function limpiarFormulario(formNew = false) {
+    if (formNew) {
+        $('#descripcion, #descripcionEdit').val('');
+    }
+    $('.descripcion').removeClass('is-invalid');
+    $('.descripcion-error').empty().removeClass('text-danger');
+}
+
+
+
+const Alert = function (message, status) // si se proceso correctamente la solicitud
+{
     toastr[`${status}`](message, `${status}`, {
         closeButton: true,
         tapToDismiss: false,
@@ -16,200 +256,27 @@ const Alert = function (message, status) {
     });
 }
 
-const createProject = async () => {
-    const projectName = document.querySelector('#project-name');
 
-        if (projectName.value != '') {
-
-            await fetch(`${url}projects/`, {
-                method: 'POST',
-                headers: headers,
-                body: JSON.stringify({ "descripcion": projectName.value }),
-                redirect: 'follow',
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        Alert('Error al crear el proyecto.', 'error');
-                        throw new Error('Failed to fetch data');
-                    }
-                    if (response.status === 200) {
-                        return response.json();
-                    } else {
-                        Alert('Error al crear el proyecto.', 'error');
-                        throw new Error('Unexpected status code: ' + response.status);
-                    }
-                })
-                .then(result => {
-                    Alert('Proyecto creado exitosamente.', 'success');
-                    Swal.close();
-                    setTimeout(() => window.location.reload(), 350);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    Alert('Error al crear el proyecto.', 'error');
-                })
-        } else {
-
-            Alert('Nombre incorrecto', 'error');
-
-        }
-}
-
-document.addEventListener('DOMContentLoaded', async () => {
-
-    let gridOptions;
-    let myGrid;
-    let data = [{}];
-
-    const myGridElement = document.querySelector('#myGrid');
-
-    const searchBar = document.querySelector('#ag-search-bar');
-    searchBar.addEventListener('input', () => myGrid.setGridOption('quickFilterText', searchBar.value))
-
-    await fetch(`${url}projects`, {
+const OpenEdit = (id) => {
+    var requestOptions = {
         method: 'GET',
-        headers: headers,
-        redirect: 'follow',
-    })
-        .then(response => {
-            if (!response.ok) {
-                Alert('Error al obtener los proyectos.', 'error');
-                throw new Error('Failed to fetch data');
-            }
-            if (response.status === 200) {
-                return response.json();
-            } else {
-                Alert('Error al obtener los proyectos.', 'error');
-                throw new Error('Unexpected status code: ' + response.status);
-            }
-        })
-        .then(result => {
-            data = result.map(item => ({
-                ...item,
-                estado: item.estado === 1 ? true : false
-            }));
-            Alert('Proyectos obtenidos.', 'success');
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            Alert('Error al obtener los proyectos.', 'error');
-        });
-
-
-    gridOptions = {
-        columnDefs: [
-            { headerName: "No.", field: "id", /* type: 'numericColumn', */ filter: 'agNumberColumnFilter', autoHeight: true, width: .10 * myGridElement.clientWidth },
-            {
-                headerName: "Descripción", field: "descripcion", filter: 'agTextColumnFilter', autoHeight: true, editable: true, width: .595 * myGridElement.clientWidth
-            },
-            {
-                headerName: "Estado", field: "estado", autoHeight: true, editable: true, /* cellEditor: 'booleanEditor', cellRenderer: params => {
-                    const checkbox = document.createElement('input');
-                    checkbox.type = 'checkbox';
-                    checkbox.disabled = true;
-                    checkbox.checked = params.value;
-                    return checkbox;
-                } ,*/ width: .10 * myGridElement.clientWidth
-            },
-            {
-                headerName: "Acciones", field: "actions", autoHeight: true, cellRenderer: params => {
-                    const button = document.createElement('button');
-                    button.classList = 'btn-sm btn-primary mt-50 waves-effect waves-float waves-light';
-                    button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>';
-                    button.style = 'margin: .5rem 0 .35rem 0;';
-                    button.addEventListener('click', async () => await fetch(`${url}projects/${params.data.id}`, {
-                        method: 'PUT',
-                        headers: headers,
-                        body: JSON.stringify({ "descripcion": params.data.descripcion, "estado": params.data.estado === true ? 1 : 0 }),
-                        redirect: 'follow',
-                    })
-                        .then(response => {
-                            if (!response.ok) {
-                                Alert('Error al actualizar el proyecto.', 'error');
-                                throw new Error('Failed to fetch data');
-                            }
-                            if (response.status === 200) {
-                                return response.json();
-                            } else {
-                                Alert('Error al actualizar el proyecto.', 'error');
-                                throw new Error('Unexpected status code: ' + response.status);
-                            }
-                        })
-                        .then(result => {
-                            Alert('Proyecto actualizado exitosamente.', 'success');
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            Alert('Error al actualizar el proyecto.', 'error');
-                        }));
-                    return button;
-                }, width: .20 * myGridElement.clientWidth
-            },
-            //{ headerName: "Ruta", field: "route", /* type: 'rightAligned', */ autoHeight: true, width: 500 },
-            //{ headerName: "Estado", field: "status", enableRowGroup: true, enablePivot: true, enableValue: true, pivot: true, autoHeight: true, width: 100 }
-        ],
-        rowData: data,
-
-        //rowHeight: 30,
-        //headerHeight: 40,
-
+        redirect: 'follow'
     };
 
-    for (let key in customGridOptions) {
-        if (customGridOptions.hasOwnProperty(key)) {
-            gridOptions[key] = customGridOptions[key]
-        }
-    }
+    fetch(`${url}projects/${id}`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            console.log(result)
+            $('#id').val(id);
+            $('#descripcionEdit').val(result.descripcion);
+            $('#modalEdit').modal('toggle');
+        })
+        .catch(error => console.log('error', error));
 
-    myGrid = agGrid.createGrid(myGridElement, gridOptions);
-
-    const paginationPageSizeOptions = customGridOptions.paginationPageSizeOptions;
-    const selectPaginationSize = document.querySelector('#tableData_length select');
-    //document.querySelector('.ag-wrapper.ag-picker-field-wrapper.ag-picker-collapsed').focus();
-    //const selectPaginationSizeAG = document.querySelector('.ag-list.ag-select-list.ag-ltr.ag-popup-child.ag-popup-positioned-under');
-    //selectPaginationSizeAG.innerHTML = '';
-
-    selectPaginationSize.addEventListener('change', () => {
-        //myGrid.setPaginationPageSize(selectPaginationSize.value);
-        myGrid.gos.gridOptions.paginationPageSize = Number(selectPaginationSize.value)
-        gridOptions.paginationPageSize = Number(selectPaginationSize.value)
-    })
-
-    for (let key in paginationPageSizeOptions) {
-        if (paginationPageSizeOptions.hasOwnProperty(key)) {
-            let option = document.createElement('option');
-            option.value = paginationPageSizeOptions[key];
-            var t = document.createTextNode(paginationPageSizeOptions[key]);
-            option.appendChild(t);
-            selectPaginationSize.appendChild(option);
+}
 
 
-
-
-            /*         `<div role="option" class="ag-list-item ag-select-list-item" tabindex="-1" aria-posinset="1" aria-setsize="4" aria-selected="false"><span></span></div>` */
-
-        }
-    }
-
-    
-
-    document.querySelector('#new-project').addEventListener('click', async () => {
-        await Swal.fire({
-            title: "Nuevo Proyecto",
-            showCancelButton: false,
-            showConfirmButton: false,
-            html: `<div class="modal-body flex-grow-1">
-            <div class="form-group">
-              <label class="form-label" for="project">Nombre del Proyecto</label>
-              <input type="text" id="project-name" class="form-control" placeholder="Ingrese nombre del proyecto" name="project" required="">
-            </div>
-            <button type="button" id="create-project" onclick="createProject()" class="btn btn-primary mr-1 data-submit waves-effect waves-float waves-light">Crear </button>
-            <button type="button" id="cancel-new-project" onclick="Swal.close()" class="btn btn-outline-secondary waves-effect" data-dismiss="modal">Cancelar</button>
-          </div>`
-        });
-
-        //document.querySelector('#create-project').addEventListener('click', async () => {})
-        //document.querySelector('#cancel-new-project').addEventListener('click', async () => Swal.close());
-    })
-
-});
+const OpenDelete = (id) => {
+    $('#idDelete').val(id);
+    $('#modalDelete').modal('toggle');
+}

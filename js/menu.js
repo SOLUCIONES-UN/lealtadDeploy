@@ -1,6 +1,7 @@
 const url = 'http://localhost:3000/'
 let token = localStorage.getItem("token");
 
+
 $(function () {
     let tabla = getMenus();
     Usuario();
@@ -42,7 +43,8 @@ $(function () {
     //evento submit del formulario
     $('#formNew').submit(function () {
 
-        const descripcion = $('#descripcion').val();
+        const descripcion = $('#Descripcion').val();
+        
 
         if (!validarDescripcion(descripcion)) {
             return false;
