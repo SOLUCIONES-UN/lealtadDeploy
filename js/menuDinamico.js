@@ -3,11 +3,12 @@ let usuario = JSON.parse(localStorage.getItem("infoUsuario"));
 $(function () {
   getMenuAccesible();
   verifyToken();
-});
-
-document.addEventListener('DOMContentLoaded', () => {
   validateSesion();
 });
+
+// document.addEventListener('DOMContentLoaded', () => {
+//   validateSesion();
+// });
 
 const verifyToken = () => {
   var token = localStorage.getItem('token');
@@ -23,291 +24,67 @@ const verifyToken = () => {
 }
 
 
-// Función para obtener y mostrar todas las participaciones activas
-const getAllParticipaciones = () => {
-  const headers = {
-    'Authorization': `Bearer ${token}`,
-    'Content-Type': 'application/json'
-  };
+const verifyLogin = () => {
 
-  var requestOptions = {
-    method: "GET",
-    headers: headers,
-    redirect: "follow"
-  };
+  var token = localStorage.getItem('token');
 
-  fetch(`${url}Participacion`, requestOptions)
-    .then((response) => response.json())
-    .then((result) => {
-  
-      console.log("Data de participaciones:", result);
-  
-    })
-    .catch((error) => console.log("Error al obtener participaciones:", error));
-};
+  if (token == null) {
+    window.location.href = 'login.html';
+  } 
+  else{
 
-const displayNumPromociones = (numPromociones) => {
-  const numPromocionesElement = document.getElementById("num-promociones");
-  numPromocionesElement.textContent = numPromociones;
-};
+    const partes = token.split('.');
 
-const getAllPromocionesActivas = () => {
-  const token = localStorage.getItem('token');
+    // Decodificar el payload (parte intermedia en base64)
+    const payloadBase64 = partes[1];
+    const payload = JSON.parse(atob(payloadBase64));
 
-  const headers = {
-    'Authorization': token,
-    'Content-Type': 'application/json'
-  };
+    // La fecha de expiración está en el campo "exp"
+    if (payload.exp) {
+      const expiracion = new Date(payload.exp * 1000); // El tiempo está en segundos, convertir a milisegundos
+      const currentTime = new Date();
 
-  var requestOptions = {
-    method: "GET",
-    headers: headers,
-    redirect: "follow"
-  };
+      let tiempoRestante = ((expiracion - currentTime) / 1000) / 60;
 
-  fetch(`${url}Promocion`, requestOptions)
-    .then((response) => response.json())
-    .then((result) => {
-      const promocionesActivas = result.filter(promocion => promocion.estado === 1);
-      console.log(promocionesActivas);
-      displayNumPromociones(promocionesActivas.length);
-    })
-    .catch((error) => console.log("error", error));
-};
+      if (tiempoRestante <= 1) {
 
-document.addEventListener('DOMContentLoaded', () => {
-  getAllPromocionesActivas();
-});
+        AlertSession('Session Caducada', 'error');
 
-const displayNumCampanas = (numCampanas) => {
-  const numCampanasElement = document.getElementById("num-campanas");
-  numCampanasElement.textContent = numCampanas;
-};
+        setTimeout(() => {
+          localStorage.removeItem('token');
+          window.location.href = 'login.html';
+        }, 1000 * 3);
+      }else{
+        return;
+      }
+    } else {
+      throw new Error('El token no tiene una fecha de expiración');
+    }
+  }
 
-const getAllCampanasActivas = () => {
-  const token = localStorage.getItem('token');
-
-  const headers = {
-    'Authorization': token,
-    'Content-Type': 'application/json'
-  };
-
-  var requestOptions = {
-    method: "GET",
-    headers: headers,
-    redirect: "follow"
-  };
-
-  fetch(`${url}Campania`, requestOptions)
-    .then((response) => response.json())
-    .then((result) => {
-      const campanasActivas = result.filter(campana => campana.estado === 1);
-      console.log(campanasActivas);
-      displayNumCampanas(campanasActivas.length);
-    })
-    .catch((error) => console.log("error", error));
-};
-
-document.addEventListener('DOMContentLoaded', () => {
-  getAllCampanasActivas();
-});
-
-const displayNumReferidos = (numReferidos) => {
-  const numReferidosElement = document.getElementById("num-referidos");
-  numReferidosElement.textContent = numReferidos;
-};
-
-// const getAllReferidosLastWeek = () => {
-//     const token = localStorage.getItem('token');
-//     const today = new Date();
-//     const lastWeekStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 6);
-//     const lastWeekEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-
-//     const headers = {
-//         'Authorization': token,
-//         'Content-Type': 'application/json'
-//     };
-
-//     var requestOptions = {
-//         method: "GET",
-//         headers: headers,
-//         redirect: "follow"
-//     };
-
-//     fetch(`${url}Referidos`, requestOptions)
-//         .then((response) => response.json())
-//         .then((result) => {
-//             const referidosLastWeek = result.filter(referido => new Date(referido.fechaCreacion) >= lastWeekStart && new Date(referido.fechaCreacion) <= lastWeekEnd);
-//             console.log("Referidos de la última semana:", referidosLastWeek);
-//             displayNumReferidos(referidosLastWeek.length);
-//         })
-//         .catch((error) => console.log("error", error));
-// };
-
-// document.addEventListener('DOMContentLoaded', () => {
-//     getAllReferidosLastWeek();
-// });
-
-
-const displayNumCampanasLastWeek = (numCampanas) => {
-  const numCampanasElement = document.getElementById("num-campanas-last-week");
-  numCampanasElement.textContent = numCampanas;
-};
-
-const getAllCampanasActivasLastWeek = () => {
-  const token = localStorage.getItem('token');
-  const today = new Date();
-  const lastWeekStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 6);
-  const lastWeekEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-
-  const headers = {
-    'Authorization': token,
-    'Content-Type': 'application/json'
-  };
-
-  var requestOptions = {
-    method: "GET",
-    headers: headers,
-    redirect: "follow"
-  };
-
-  fetch(`${url}Campania`, requestOptions)
-    .then((response) => response.json())
-    .then((result) => {
-      const campanasActivasLastWeek = result.filter(campana => campana.estado === 1 && new Date(campana.fechaCreacion) >= lastWeekStart && new Date(campana.fechaCreacion) <= lastWeekEnd);
-      console.log("Campañas activas de la última semana:", campanasActivasLastWeek);
-      displayNumCampanasLastWeek(campanasActivasLastWeek.length);
-    })
-    .catch((error) => console.log("error", error));
-};
-
-
-document.addEventListener('DOMContentLoaded', () => {
-  getAllCampanasActivasLastWeek();
-});
-
-
-const displayNumPromocionesLastWeek = (numPromociones) => {
-  const numPromocionesElement = document.getElementById("num-promociones-last-week");
-  numPromocionesElement.textContent = numPromociones;
-};
-
-const getAllPromocionesActivasLastWeek = () => {
-  const token = localStorage.getItem('token');
-  const today = new Date();
-  const lastWeekStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 6);
-  const lastWeekEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-
-  const headers = {
-    'Authorization': token,
-    'Content-Type': 'application/json'
-  };
-
-  var requestOptions = {
-    method: "GET",
-    headers: headers,
-    redirect: "follow"
-  };
-
-  fetch(`${url}Promocion`, requestOptions)
-    .then((response) => response.json())
-    .then((result) => {
-      const promocionesActivasLastWeek = result.filter(promocion => promocion.estado === 1 && new Date(promocion.fechaCreacion) >= lastWeekStart && new Date(promocion.fechaCreacion) <= lastWeekEnd);
-      console.log("Promociones activas de la última semana:", promocionesActivasLastWeek);
-      displayNumPromocionesLastWeek(promocionesActivasLastWeek.length);
-    })
-    .catch((error) => console.log("error", error));
-};
-
-document.addEventListener('DOMContentLoaded', () => {
-  getAllPromocionesActivasLastWeek();
-});
-
-//grafica
-document.getElementById("ver-detalles-btn").addEventListener("click", function () {
-  var myModal = new bootstrap.Modal(document.getElementById('graficaModal'));
-  myModal.show();
-});
-// Función para obtener y mostrar la gráfica de campañas
-
-
-function mostrarGraficaCampañas() {
-  // Obtener el canvas
-  const canvas = document.getElementById('graficaCampañas');
-
-
-  const token = localStorage.getItem('token');
-  const headers = {
-    'Authorization': token,
-    'Content-Type': 'application/json'
-  };
-
-  var requestOptions = {
-    method: "GET",
-    headers: headers,
-    redirect: "follow"
-  };
-
-  fetch(`${url}Campania`, requestOptions)
-    .then(response => response.json())
-    .then(data => {
-      console.log("Datos de campañas:", data);
-
-
-      const labels = data.map(campaña => campaña.nombre);
-      const numClientes = data.map(campaña => campaña.numero_clientes);
-
-
-      const chartData = {
-        labels: labels,
-        datasets: [{
-          label: 'Número de clientes',
-          data: numClientes,
-          backgroundColor: 'rgba(54, 162, 235, 0.2)',
-          borderColor: 'rgba(54, 162, 235, 1)',
-          borderWidth: 1
-        }]
-      };
-
-      const chartOptions = {
-        scales: {
-          yAxes: [{}]
-        }
-      };
-      console.log("Labels:", labels);
-console.log("NumClientes:", numClientes);
-
-
-      const ctx = canvas.getContext('2d');
-      new Chart(ctx, {
-        type: 'bar',
-        data: chartData,
-        options: chartOptions
-      });
-    })
-    .catch(error => console.error('Error al obtener datos de campañas:', error));
 }
 
 
-document.getElementById("ver-detalles-btn").addEventListener("click", function () {
-
-  var myModal = new bootstrap.Modal(document.getElementById('graficaModal'));
-  myModal.show();
 
 
-  mostrarGraficaCampañas();
-});
+const validateSesion = () => {
+
+  setInterval(() => {
+      verifyLogin();
+  }, 1000 * 10); 
+
+}
+
+const AlertSession = function (message, status) {
+  toastr[`${status}`](message, `${status}`, {
+      closeButton: true,
+      tapToDismiss: false,
+      positionClass: 'toast-top-right',
+      rtl: false
+  });
+}
 
 
-
-const cerrarModalBtn = document.getElementById('cerrar-modal-btn');
-
-cerrarModalBtn.addEventListener('click', () => {
-    console.log('Botón de cerrar modal clickeado');
-
-    const modalInstance = new bootstrap.Modal(document.getElementById('graficaModal'));
-    modalInstance.hide();
-});
 
 
 

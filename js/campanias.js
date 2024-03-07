@@ -107,7 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const reader = new FileReader();
     reader.onload = event => {
       imgAkisi = `data:image/${fileExtension};base64,${btoa(event.target.result)}`;
-      console.log(imgAkisi)
     };
     reader.readAsBinaryString(file);
   }
@@ -121,7 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const reader = new FileReader();
     reader.onload = event => {
       imgPush = `data:image/${fileExtension};base64,${btoa(event.target.result)}`;
-      console.log(imgPush)
     };
     reader.readAsBinaryString(file);
   }
@@ -160,7 +158,6 @@ $(function () {
       fechaCreacion: $("#fechaRegistro").val(),
       estado: 3,
     };
-    console.log(data);
     saveData(data);
     Limpiar();
   });
@@ -190,7 +187,6 @@ $(function () {
       Bloqueados: bloqueados,
       maximoParticipaciones: $("#limiteParticipacion").val(),
     };
-    console.log(data);
     saveData(data);
     $("#addConfig").html(null);
     $("#addFormConfig").html(null);
@@ -225,7 +221,6 @@ $(function () {
       presupuestos: "",
     });
 
-    console.log(etapas);
 
     $("#tbetapas").html(null);
     $(".etapaSelect").html(null);
@@ -234,7 +229,6 @@ $(function () {
     addConfig(index++, nombre.val());
 
     etapas.forEach((element, index) => {
-      console.log(element.tipoParticipacion);
       var opc = `<option>${element.nombre}</option>`;
 
       if (element.tipoParticipacion == 1) {
@@ -295,7 +289,6 @@ $(function () {
 $("#TipoTransaccion").on("change", function () {
   var addConfig;
   let val = $("#TipoTransaccion").val();
-  console.log(val);
 
   if (val == 3 || val == 4) {
     addConfig = `
@@ -345,7 +338,6 @@ $("#TipoTransaccion").on("change", function () {
 const Usuario = () => {
 
   let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
-  console.log(usuario.nombre)
   $('.user-name').text(usuario.nombre);
   $('.user-status').text(usuario.rol.descripcion);
 }
@@ -358,7 +350,6 @@ function loadMenu(isEtapa) {
         var index = event.detail.indexStep;
         var numberOfSteps = $(event.target).find(".step").length - 1;
         var line = $(event.target).find(".step");
-        console.log(line);
         // The first for loop is for increasing the steps,
         // the second is for turning them off when going back
         // and the third with the if statement because the last line
