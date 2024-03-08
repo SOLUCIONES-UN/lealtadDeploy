@@ -17,37 +17,47 @@ $(function () {
 
   $('#modalNew').on('show.bs.modal', function () {
     limpiarFormulario();
+    $("#btnSubmit").attr("disabled", false);
+    
   });
 
   $('#modalEdit').on('show.bs.modal', function () {
-
+    $("#btnSubmitEdit").attr("disabled", false);
   });
 
   $('#modalNew').on('hidden.bs.modal', function () {
     limpiarFormulario();
+    $("#btnSubmit").attr("disabled", false);
   });
+
   $('#modalEdit').on('hidden.bs.modal', function () {
     limpiarFormulario();
+    $("#btnSubmitEdit").attr("disabled", false);
   });
 
 
 
   $('#modalNew').find('[data-dismiss="modal"]').click(function () {
     limpiarFormulario();
+    $("#btnSubmit").attr("disabled", false);
   });
 
 
   $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
     limpiarFormulario();
+    ("#btnSubmitEdit").attr("disabled", false);
   });
 
   //evento submit del formulairo
   $("#formNew").submit(function () {
     const nombre = $('#nombre').val();
-
+    
     if (!validarNombre(nombre)) {
+      
       return false;
     }
+    
+    $("#btnSubmit").attr("disabled", true);
 
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -76,20 +86,27 @@ $(function () {
           Alert(result.message, "success");
         } else {
           Alert(result.message, "error");
+          
         }
       })
       .catch((error) => {
         Alert(error, "error");
       });
+      
     return false;
   });
 
   $("#formEdit").submit(function () {
+
+    $("#btnSubmitEdit").attr("disabled", true);
     const nombre = $('#nombreEdit').val();
 
     if (!validarNombre(nombre)) {
+      
       return false;
     }
+
+
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Authorization", token);
@@ -116,6 +133,7 @@ $(function () {
           tabla._fnAjaxUpdate();
           $("#modalEdit").modal("toggle");
           Alert(result.message, "success");
+          
         } else {
           Alert(result.message, "error");
         }
@@ -123,6 +141,7 @@ $(function () {
       .catch((error) => {
         Alert(error.errors, "error");
       });
+    
     return false;
   });
 
@@ -262,9 +281,18 @@ const Alert = function (message, status) {
 };
 
 const OpenEdit = (id) => {
+
+
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", token);
+
+
   var requestOptions = {
     method: "GET",
     redirect: "follow",
+    headers: myHeaders,
+
   };
 
   fetch(`${url}Departamento/${id}`, requestOptions)

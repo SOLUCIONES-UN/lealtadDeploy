@@ -44,7 +44,7 @@ function mostrarGraficaCampañas() {
         datasets: [
           {
             label: "Número de clientes",
-            data: numClientes,
+            data: [20,10,40,33],
             backgroundColor: "rgba(54, 162, 235, 0.2)",
             borderColor: "rgba(54, 162, 235, 1)",
             borderWidth: 1,
@@ -76,7 +76,6 @@ function mostrarGraficaCampañas() {
 const cerrarModalBtn = document.getElementById("cerrar-modal-btn");
 
 cerrarModalBtn.addEventListener("click", () => {
-  console.log("Botón de cerrar modal clickeado");
 
   const modalInstance = new bootstrap.Modal(
     document.getElementById("graficaModal")
