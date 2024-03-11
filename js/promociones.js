@@ -892,3 +892,111 @@ const UpdatePromocion = (id, type) => {
       Alert(error, "error");
     });
 };
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+  var valorInput = document.getElementById('valorPremio');
+
+  document.getElementById('increment').addEventListener('click', function () {
+      valorInput.value = parseInt(valorInput.value) + 1;
+  });
+
+  document.getElementById('decrement').addEventListener('click', function () {
+      if (parseInt(valorInput.value) > 1) {
+          valorInput.value = parseInt(valorInput.value) - 1;
+      }
+  });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+  var valorInput = document.getElementById('valorPremio2');
+
+  document.getElementById('incrementable').addEventListener('click', function () {
+      valorInput.value = parseInt(valorInput.value) + 1;
+  });
+
+  document.getElementById('decrementable').addEventListener('click', function () {
+      if (parseInt(valorInput.value) > 1) {
+          valorInput.value = parseInt(valorInput.value) - 1;
+      }
+  });
+});
+
+
+
+//para generar un excel
+
+document.querySelector('.BtnExcel').addEventListener('click', function () {
+  var wb = XLSX.utils.book_new();
+  var ws_data = [
+      ['Cantidad', 'Premio', 'Valor']
+  ];
+
+  var tableRows = document.querySelectorAll('#detallePremioRes tr');
+
+  tableRows.forEach(function (row) {
+      var rowData = [];
+      row.querySelectorAll('td').forEach(function (cell) {
+          rowData.push(cell.innerText);
+      });
+      ws_data.push(rowData);
+  });
+
+  var ws = XLSX.utils.aoa_to_sheet(ws_data);
+  XLSX.utils.book_append_sheet(wb, ws, 'Premios');
+
+  var wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+  function s2ab(s) {
+      var buf = new ArrayBuffer(s.length);
+      var view = new Uint8Array(buf);
+      for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+      return buf;
+  }
+  
+  // Creamos un objeto Blob con los datos del libro Excel
+  var blob = new Blob([s2ab(wbout)], { type: "application/octet-stream" });
+  
+  // Creamos una URL para el objeto Blob
+  var url = window.URL.createObjectURL(blob);
+  
+  // Creamos un enlace temporal y lo hacemos clic para descargar
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'premios.xlsx';
+  a.click();
+  
+  // Liberamos la URL del objeto Blob
+  window.URL.revokeObjectURL(url);
+});
+
+// Función para convertir una cadena a una matriz de bytes
+function s2ab(s) {
+  var buf = new ArrayBuffer(s.length);
+  var view = new Uint8Array(buf);
+  for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+  return buf;
+}
+
+
+
+
+
+
+
+//para generar un pdf 
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelector('.BtnPDF').addEventListener('click', function () {
+      var doc = new jsPDF();
+      doc.text('Este es un PDF de ejemplo', 10, 10);
+      var pdfOutput = doc.output();
+      var blob = new Blob([pdfOutput], { type: 'application/pdf' });
+    
+      var url = window.URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'ejemplo.pdf';
+      a.click();
+      window.URL.revokeObjectURL(url);
+  });
+});
