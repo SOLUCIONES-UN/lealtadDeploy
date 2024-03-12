@@ -1733,6 +1733,10 @@ const getEtapas = (id) => {
           </tr>`;
 
           $("#PreviewEtapsEdit").append(opcTableEtapas);
+          $("#nombreEtapaEdith").val(element.nombre);
+          $("#ordenEtapaEdith").val(element.orden);
+          $("#descEtapaEdith").val(element.descripcion);
+          $("#TipoTransaccionEdith").val(element.tipoParticipacion);
         });
       } else {
         console.log("No se encontraron etapas para la campaña con ID: " + id);
@@ -1754,6 +1758,7 @@ const OpenEdit = (id, index, idEtapa, isEtapa = false) => {
       redirect: 'follow',
       headers: headers
     };
+    $("#modaletapas").modal("toggle");
 
     fetch(`${url}Campania/${id}`, requestOptions)
       .then((response) => response.json())
@@ -1779,6 +1784,9 @@ const OpenEdit = (id, index, idEtapa, isEtapa = false) => {
         getMunicipios(id, true);
 
         $("#modalEdit").modal("toggle");
+        
+
+        
       })
       .catch((error) => console.log("error", error));
 

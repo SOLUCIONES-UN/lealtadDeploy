@@ -977,11 +977,71 @@
                                     </div>
                                 </div>
                             </div>
+
+
+
+
+
+
                             <div id="edith-detalle-Parametros" class="content" style="height: 650px;">
                                 <div class="content-header">
                                     <h5 class="mb-0">Etapas de la campaña</h5>
-                                    <small>Descripcion de las etapas para esta campaña</small>
+                                    <small>Descripcion de las etapas para esta campañasss</small>
                                 </div>
+
+                                <div class="col-md-8">
+                                    <label for="nombreEtapaEdith">Nombre</label>
+                                    <input class="form-control" id="nombreEtapaEdith" />
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="ordenEtapaEdith">Orden</label>
+                                    <input class="form-control" id="ordenEtapaEdith" />
+                                </div>
+                                <div class="form-group form-password-toggle col-md-12">
+                                    <label class="form-label" for="descEtapaEdith">Descripción De Las
+                                        Etapas</label>
+                                    <textarea type="password" id="descEtapaEdith" class="form-control" placeholder="Ingrese la descripcion de la etapa" rows="2"></textarea>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="form-label" for="TipoTransaccionEdith">Tipo Transaccion</label>
+                                    <!-- <input type="number" id="TipoTransaccion" class="form-control" /> -->
+                                    <select class="form-control" id="TipoTransaccionEdith">
+                                        <option value="0" default selected disabled>Seleccione Una Transaccion
+                                        </option>
+                                        <option value="1">Por Transaccion</option>
+                                        <option value="2">Acumular Transacciones </option>
+                                        <option value="3">Recurrente</option>
+                                        <option value="4">Acumular Recurentes</option>
+                                        <option value="5">Acumular valor</option>
+                                        <option value="6">Combinar Transacciones</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-6" id="transaccionesDinamicas">
+
+                                </div>
+                                <div class="form-group col-md-6" id="Periodo">
+
+                                </div>
+                                <div class="col-md-12 mt-2">
+                                    <button class="btn btn-success" type="button" id="btnAddEtapa" style="float: right;">
+                                        <span class="align-middle d-sm-inline-block d-none">AGREGAR</span>
+                                    </button>
+                                </div>
+                                <div class="col-md-12 mt-5">
+                                    <h4>Lista de Etapas:</h4>
+                                    <br />
+                                </div>
+
+
+
+
+
+
+
+
+
+
+
                                 <div class=" mt-5">
                                     <div style="height:200px; width:auto;overflow-y: scroll;">
                                         <table class="table table-bordered table-striped">
@@ -1099,7 +1159,10 @@
                                 </button>
                             </div>
                         </div>
+
+
                         <div class="bs-stepper-content">
+
                             <div id="edith-detalle-etapas" class="content" style="height: 850px;">
                                 <div class="content-header">
                                     <h5 class="mb-0">Configuración de la Etapa</h5>
