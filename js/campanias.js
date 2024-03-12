@@ -1717,7 +1717,7 @@ const getEtapas = (id) => {
                   })}
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
-                  <a href="#" onclick="OpenEdit(${data}, ${data}, ${data}, ${true})" class="borrar btn_edit dropdown-item">
+                <a href="#" onclick="OpenEdit(${id}, '${element.nombre}', '${element.descripcion}', true)" class="borrar btn_edit dropdown-item">
                     ${feather.icons["archive"].toSvg({
                       class: "font-small-4 mr-50",
                     })} Actualizar
@@ -1765,6 +1765,7 @@ const OpenEdit = (id, index, idEtapa, isEtapa = false) => {
         
         $("#idEtapa").val(etapa.id);
         $("#nombreEtapaEdith").val(etapa.nombre);
+        console.log('esta es el nombre de esta cosa',etapa.name)
         $("#ordenEtapaEdith").val(etapa.orden);
         $("#descEtapaEdith").val(etapa.descripcion);
         $("#TipoTransaccionEdith").val(etapa.tipoParticipacion);

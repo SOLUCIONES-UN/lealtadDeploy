@@ -847,7 +847,7 @@
                                 <div class="row">
                                     <div class="form-group col-md-6">
                                         <input id="id" type="hidden">
-                                        <label class="form-label" for="nombreEdith">Campaña</label>
+                                        <label class="form-label" for="nombre">Campaña</label>
                                         <input type="text" id="nombreEdith" class="form-control" placeholder="Ingresa el Nombre" />
                                     </div>
                                     <div class="form-group form-password-toggle col-md-6">
@@ -894,20 +894,66 @@
                                         </div>
                                     </div>
                                 </div>
+
+
                                 <div class="row">
                                     <div class="form-group col-md-6">
-                                        <label class="form-label" for="fechaInicioEdith">Fecha Inicio</label>
-                                        <input type="date" id="fechaInicioEdith" class="form-control" placeholder="Nemonico" />
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalFechastwo">
+                                            Ahutomatizar reporte
+                                        </button>
                                     </div>
-                                    <div class="form-group col-md-6">
-                                        <label class="form-label" for="fechaFinEdith">Fecha Fin</label>
-                                        <input type="date" id="fechaFinEdith" class="form-control" placeholder="Ingresa el Nombre" />
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label class="form-label" for="fechaRegistroEdith">Fecha De Registro</label>
-                                        <input type="date" id="fechaRegistroEdith" class="form-control" placeholder="Ingresa el Nombre" />
+                                    <div class="modal fade" id="modalFechastwo" tabindex="-1" role="dialog" aria-labelledby="modalFechastwoLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="modalFechastwoLabel">Seleccionar Fechas</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="form-group col-md-6">
+                                                        <label class="form-label" for="fechaInicioEdith">Fecha Inicio</label>
+                                                        <input type="date" id="fechaInicioEdith" class="form-control" placeholder="Nemonico" />
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label class="form-label" for="fechaFinEdith">Fecha Fin</label>
+                                                        <input type="date" id="fechaFinEdith" class="form-control" placeholder="Ingresa el Nombre" />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="dia">Día de Envío</label>
+                                                        <select id="dia" class="form-control">
+                                                            <option value="1">1</option>
+                                                            <option value="2">2</option>
+                                                            <option value="3">3</option>
+                                                            <!-- Continúa agregando opciones hasta 31 -->
+                                                            <option value="31">31</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="horaEdith">Hora de Envío</label>
+                                                        <input type="time" id="horaEdith" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                    <button type="button" class="btn btn-primary">Guardar</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+
+
+
+
+
+
+
+
+
+
+                             
                                 <div class="row">
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="edadIniEdith">Edad Inicial</label>
@@ -937,13 +983,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="form-group col-md-6">
-                                        <label class="form-label" for="diaEdith">Día</label>
-                                        <input type="text" id="diaEdith" class="form-control" placeholder="Ingresa el día" />
-                                    </div>
-                                 
-                                </div>
+                              
                                 <div class="d-flex justify-content-between">
                                     <div class="d-flex justify-content-between">
                                         <div>
@@ -953,8 +993,8 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-
+                           
+                    
 
                              <!--CONFIGURACION DE LAS ETAPAS-->
                              <div id="edith-detalle-Parametros" class="content">
@@ -962,19 +1002,19 @@
                                     <h5 class="mb-0">Configuración de Etapas</h5>
                                     <small>Edita tus Etapas.</small>
                                 </div>
-                                <div class="row" id="panelGenerar">
+                                <div class="row" id="id">
                                     <div class="col-md-8">
-                                        <label for="nombre">Nombre</label>
-                                        <input class="form-control" id="nombreEdith" />
+                                        <label for="nombreEtapaEdith">Nombre</label>
+                                        <input class="form-control" id="nombreEtapaEdith" placeholder="ingresa tu etapa" />
                                     </div>
                                     <div class="col-md-4">
-                                        <label for="orden">Orden</label>
-                                        <input class="form-control" id="ordenEtapa" />
+                                        <label for="ordenEtapaEdith">Orden</label>
+                                        <input class="form-control" id="ordenEtapaEdith" placeholder="ingresa tu orden"/>
                                     </div>
                                     <div class="form-group form-password-toggle col-md-12">
-                                        <label class="form-label" for="descripcion">Descripción De Las
+                                        <label class="form-label" for="descEtapaEdith">Descripción De Las
                                             Etapas</label>
-                                        <textarea type="password" id="descEtapa" class="form-control" placeholder="Ingrese la descripcion de la etapa" rows="2"></textarea>
+                                        <textarea type="password" id="descEtapaEdith" class="form-control" placeholder="Ingrese la descripcion de la etapa82" rows="2"></textarea>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="TipoTransaccion">Tipo Transaccion</label>
@@ -1015,7 +1055,7 @@
                                                     <th>Accion</th>
                                                 </tr>
                                             </thead>
-                                            <tbody id="tbetapas">
+                                            <tbody id="PreviewEtapsEdit">
 
                                             </tbody>
                                         </table>
@@ -1070,7 +1110,7 @@
                                     </div>
                                 </div>
 
-                                <span class="title-participantes">Bloqueados</span>
+                                <span class="title-participantesblock">Bloqueados</span>
                                 <div class=" mt-2">
                                     <div style="height:200px; width:auto;overflow-y: scroll;">
 
@@ -1101,7 +1141,8 @@
     <div class="modal modal-slide-in test-modal fade" id="modalEditEtapas">
         <div class="modal-dialog w-75">
             <form id="formEditEtapas" class="add-new-user modal-content pt-0 " autocomplete="off">
-                <button type="button" onclick="limpiarTablas()" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                <button type="button" onclick="limpiarTablas()" class="close" data-dismiss="modal"
+                    aria-label="Close">×</button>
                 <div class="modal-header mb-1">
                     <h5 class="modal-title" id="exampleModalLabel">ACTUALIZE LOS DATOS DE SU ETAPA</h5>
                 </div>
@@ -1152,43 +1193,6 @@
                                     <h5 class="mb-0">Configuración de la Etapa</h5>
                                     <small class="text-muted">Modifique los datos basicos de la Etapa.</small>
                                 </div>
-
-                                <div class="row">
-                                    <input id="idEtapa" type="hidden">
-                                    <div class="col-md-5">
-                                        <label for="nombreEtapaEdith">Nombre</label>
-                                        <input class="form-control" id="nombreEtapaEdith" />
-                                    </div>
-                                    <div class="col-md-5">
-                                        <label for="ordenEtapaEdith">Orden</label>
-                                        <input class="form-control" id="ordenEtapaEdith" />
-                                    </div>
-                                </div>
-
-                                <div class="row">
-
-                                    <div class="form-group form-password-toggle col-md-10 mt-1">
-                                        <label class="form-label" for="descEtapaEdith">Descripción De Las Etapas</label>
-                                        <textarea type="password" id="descEtapaEdith" class="form-control" placeholder="Ingrese la descripcion de la etapa" rows="2"></textarea>
-                                    </div>
-
-                                    <div class="form-group col-md-8">
-                                        <label class="form-label" for="TipoTransaccionEdith">Tipo Transaccion</label>
-                                        <!-- <input type="number" id="TipoTransaccion" class="form-control" /> -->
-                                        <select class="form-control" id="TipoTransaccionEdith">
-                                            <option value="1">Por Transaccion</option>
-                                            <option value="2">Recurrente</option>
-                                            <option value="3">Acumular Transacciones</option>
-                                            <option value="4">Acumular Recurentes</option>
-                                            <option value="5">Acumular valor</option>
-                                            <option value="6">Combinar Transacciones</option>
-                                        </select>
-
-                                        <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit mt-2">Modificar </button>
-                                    </div>
-
-                                </div>
-
 
                             </div>
                             <div id="edith-detalle-Parametros" class="content" style="height: 650px;">
@@ -1241,14 +1245,16 @@
                                 <div class="row">
                                     <div class="form-group col-md-6">
 
-                                        <button class="btn btn-outline-success mt-2 btn-block" type="button" onclick="updateCampaña( 1)" id="btnActualizarParametros">Actualizar
+                                        <button class="btn btn-outline-success mt-2 btn-block" type="button"
+                                            onclick="updateCampaña( 1)" id="btnActualizarParametros">Actualizar
                                             Parametros</button>
 
                                     </div>
 
                                     <div class="form-group col-md-6">
 
-                                        <button class="btn btn-outline-primary mt-2 btn-block" type="button" onclick="" id="btnAgregarParametros">Agregar</button>
+                                        <button class="btn btn-outline-primary mt-2 btn-block" type="button" onclick=""
+                                            id="btnAgregarParametros">Agregar</button>
 
                                     </div>
                                 </div>
@@ -1299,14 +1305,16 @@
                                 <div class="row">
                                     <div class="form-group col-md-6">
 
-                                        <button class="btn btn-outline-success mt-2 btn-block" type="button" onclick="updateCampaña(2)" id="btnActualizarPremios">Actualizar
+                                        <button class="btn btn-outline-success mt-2 btn-block" type="button"
+                                            onclick="updateCampaña(2)" id="btnActualizarPremios">Actualizar
                                             Premios</button>
 
                                     </div>
 
                                     <div class="form-group col-md-6">
 
-                                        <button class="btn btn-outline-primary mt-2 btn-block" type="button" onclick="" id="btnAgregarPremios">Agregar</button>
+                                        <button class="btn btn-outline-primary mt-2 btn-block" type="button" onclick=""
+                                            id="btnAgregarPremios">Agregar</button>
 
                                     </div>
                                 </div>
@@ -1339,7 +1347,7 @@
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="departamentoEdit">Departamento</label>
                                         <select class="form-control" id="departamentoEdit">
-                                            <option value="0">Todos las cagadas de pollo</option>
+                                            <option value="0">Todos los departamentos</option>
                                         </select>
                                     </div>
                                     <div class="form-group col-md-6">
@@ -1365,14 +1373,16 @@
                                 <div class="row">
                                     <div class="form-group col-md-6">
 
-                                        <button class="btn btn-outline-success mt-2 btn-block" type="button" onclick="updateCampaña(3)" id="btnActualizarPresupuesto">Actualizar
+                                        <button class="btn btn-outline-success mt-2 btn-block" type="button"
+                                            onclick="updateCampaña(3)" id="btnActualizarPresupuesto">Actualizar
                                             Presupuesto</button>
 
                                     </div>
 
                                     <div class="form-group col-md-6">
 
-                                        <button class="btn btn-outline-primary mt-2 btn-block" type="button" onclick="" id="btnAgregarPresupuesto">Agregar</button>
+                                        <button class="btn btn-outline-primary mt-2 btn-block" type="button" onclick=""
+                                            id="btnAgregarPresupuesto">Agregar</button>
 
                                     </div>
                                 </div>
