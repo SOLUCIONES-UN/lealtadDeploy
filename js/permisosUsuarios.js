@@ -106,6 +106,8 @@ $('#menu').on('change', function () {
 
     const idMenu = $('#menu').val();
     const idRol = $('#Rols').val();
+    
+    
     console.log(idMenu, idRol)
 
     if (idMenu != null && idRol != null) {

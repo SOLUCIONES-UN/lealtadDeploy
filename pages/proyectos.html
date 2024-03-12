@@ -263,6 +263,7 @@
                   <tr>
                     <th>#</th>
                     <th>Descripcion</th>
+                    <th>Ruta</th>
                     <th>Acciones</th>
                   </tr>
                 </thead>
@@ -289,15 +290,17 @@
             <input type="text" class="form-control dt-full-name descripcion" id="descripcion"
               placeholder="Descripción del proyecto " name="descripcion" aria-label=""
               aria-describedby="basic-icon-default-fullname2" required />
-            <div id="descripcionError" class="descripcion-error invalid-feedback"></div>
+            <div id="descripcionError" class="invalid-feedback descripcion-error"></div>
           </div>
           <div class="form-group">
             <label class="form-label" for="basic-icon-default-fullname">Ruta</label>
             <input type="text" class="form-control dt-full-name ruta" id="ruta"
               placeholder="Ruta del proyecto" name="ruta" aria-label=""
               aria-describedby="basic-icon-default-fullname2" required />
-            <div id="rutaError" class="ruta-error invalid-feedback"></div>
+            <div id="rutaError" class="invalid-feedback ruta-error"></div>
           </div>
+
+          
 
 
 
@@ -317,15 +320,16 @@
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
+            <input id="id" type="hidden">
             <label class="form-label" for="descripcionEdit">Descripción</label>
-            <textarea class="form-control descripcion" id="descripcionEdit" placeholder="Descripción del proyecto"
-              name="descripcion" required rows="3"></textarea>
+            <input class="form-control descripcion" id="descripcionEdit" placeholder="Descripción del proyecto"
+              name="descripcion" required rows="3"></input>
             <div class="invalid-feedback descripcion-error"></div>
           </div>
-          <div class="form-group">
+            <div class="form-group">
             <label class="form-label" for="rutaEdit">Ruta</label>
-            <textarea class="form-control ruta" id="rutaEdit" placeholder="Ruta del proyecto"
-              name="ruta" required rows="3"></textarea>
+            <input class="form-control ruta" id="rutaEdit" placeholder="Ruta del proyecto"
+              name="ruta" required rows="3"></input>
             <div class="invalid-feedback ruta-error"></div>
           </div>
 
@@ -351,8 +355,9 @@
             <input id="idDelete" type="hidden">
             <p>¿Esta seguro que desea <b>¿esta seguro que desea inhabilitar este proyecto?</b></p>
           </div>
-          <button id="BtnDelete" type="button" class="btn btn-danger mr-1 data-submit">Confirmar</button>
+          <button id="BtnDelete" type="button" class="btn btn-danger mr-1 data-submit" >Confirmar</button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+          
         </div>
       </form>
     </div>
@@ -391,7 +396,7 @@
   <!-- END: Theme JS-->
 
   <!-- BEGIN: Page JS-->
-  <script src="../js/proyectos.mjs"></script>
+  <script src="../js/proyectos.js"></script>
 
   <script src="../js/menuDinamico.js"></script>
   <!-- END: Page JS-->

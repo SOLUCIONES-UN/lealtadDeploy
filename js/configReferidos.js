@@ -1,7 +1,20 @@
 const url = "http://localhost:3000/";
+let token = localStorage.getItem("token");
+const headers = {
+    'Authorization': token,
+    'Content-Type': 'application/json'
+};
+
+
 $(function () {
   obtenerData();
+  
   Usuario();
+
+  
+});
+
+
 
   $("#swFacebook").change(function () {
     chechFacebook();
@@ -21,21 +34,21 @@ $(function () {
 
   //guardar texto
   $("#btnFacebook").click(function () {
-    updateReferido(1, $(textFacebook).val());
+    updateConfigReferidos(1, $(textFacebook).val());
   });
   $("#btnInstagram").click(function () {
-    updateReferido(2, $(textInstagram).val());
+    updateConfigReferidos(2, $(textInstagram).val());
   });
   $("#btnWhatsapp").click(function () {
-    updateReferido(3, $(textWhatsapp).val());
+    updateConfigReferidos(3, $(textWhatsapp).val());
   });
   $("#btnMensaje").click(function () {
-    updateReferido(4, $(textMensaje).val());
+    updateConfigReferidos(4, $(textMensaje).val());
   });
   $("#btnPantalla").click(function () {
-    updateReferido(5, $(textPantalla).val());
+    updateConfigReferidos(5, $(textPantalla).val());
   });
-});
+
 
 const Usuario = () => {
   let usuario = JSON.parse(localStorage.getItem("infoUsuario"));
@@ -134,12 +147,19 @@ const chechPantalla = () => {
   }
 };
 
+
+
 const obtenerData = () => {
-  var requestOptions = {
+
+  var requestOptions = { 
     method: "GET",
+    headers: {
+      'Authorization': token,
+    },
     redirect: "follow",
   };
-  fetch("http://localhost:3000/ConfigReferidos", requestOptions)
+
+  fetch(`${url}ConfigReferidos`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
       result.forEach((element) => {
@@ -148,12 +168,12 @@ const obtenerData = () => {
             $("#textFacebook").val(element.descripcion);
             $("#swFacebook").prop(
               "checked",
-              element.estado == 0 ? false : true
+              element.estado == 0 ? false : true,
+            
             );
-
             break;
-          case 2:
-            $("#textInstagram").val(element.descripcion);
+          case 2:      
+          $("#textInstagram").val(element.descripcion);
             $("#swInstagram").prop(
               "checked",
               element.estado == 0 ? false : true
@@ -187,38 +207,76 @@ const obtenerData = () => {
         chechPantalla();
       });
     })
-    .catch((error) => console.log("error", error));
-};
+    .catch((error) => console.log("error", error))
 
-const updateReferido = (id, descripcion) => {
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-
-  var raw = JSON.stringify({
-    descripcion: descripcion,
-  });
-
-  var requestOptions = {
-    method: "PUT",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow",
   };
-
-  fetch("http://localhost:3000/ConfigReferidos/" + id, requestOptions)
+  const updateConfigReferidos = (id, descripcion, estado,duracion) => {
+    const boton = $("#tuBotonId");
+    
+    // Si el botón está deshabilitado, significa que la solicitud está en progreso
+    if (boton.prop("disabled")) {
+      return;
+    }
+  
+    boton.prop("disabled", true); // Deshabilitar el botón para evitar clics múltiples
+  
+    console.log("Valid",id);
+    $("#tuBotonId").prop("disabled", true);
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", token);
+  
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+    
+      redirect: "follow",
+    };
+  
+    fetch( `${url}ConfigReferidos/${id}`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
-      if (result.code == "ok") {
-        Alert(result.message, "success");
+      if (!result) {
+        console.log("Resultado",result);
+        CreateConfigReferidos(descripcion,id,duracion);
+        obtenerData();
+  
       } else {
-        console.log("error", error);
+        console.log("",result);
+        CreateConfigReferidos(id, descripcion, duracion, result.estado);  // Utiliza result.message en lugar de error
       }
     })
-    .catch((error) => console.log("error", error));
-};
+    .catch((error) => console.log("error", error))
+    .finally(()=> {
+      $("#tuBotonId").prop("disabled", false);
+    });
+  /*const id = $('#id').val();*/
 
-const Alert = function (
-  message,
+      var raw = JSON.stringify({
+      descripcion: descripcion,
+      estado : estado, 
+      duracion: duracion,
+    });
+
+      var requestOptions = {
+        method: "PUT",
+        headers: myHeaders,
+      body: raw,
+        redirect: "follow",
+      };
+      fetch( `${url}ConfigReferidos/${id}`, requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+        if (result.code === "ok") {
+       Alert(result.message, "success");
+    } else {
+       console.log("error", result);  // Utiliza result.message en lugar de error
+    }
+  })
+  boton.prop("disabled", false); 
+}
+ 
+ function Alert(message,
   status // si se proceso correctamente la solicitud
 ) {
   toastr[`${status}`](message, `${status}`, {
@@ -227,4 +285,68 @@ const Alert = function (
     positionClass: "toast-top-right",
     rtl: false,
   });
-};
+
+
+
+}
+
+    const CreateConfigReferidos=(descripcion, estado, duracion)=>{
+
+      const myHeaders = new Headers();
+       myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", token);
+       
+       var raw = JSON.stringify({
+        descripcion: descripcion,
+        estado : estado,
+        duracion: duracion 
+      
+      });
+
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+       };
+          
+      fetch( `${url}ConfigReferidos`, requestOptions)
+      .then((response) => response.json())
+       .then((result) => {
+         if (result.code === "ok") {
+          Alert(result.message, "Exitoso");
+        } else {
+           console.log("error", result);  // Utiliza result.message en lugar de error
+         }
+       })
+      .catch((error) => console.log("error", error));
+    
+    }
+    const DeleteConfigReferidos=(estado)=>{
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+       myHeaders.append("Authorization", token);
+       
+      var raw = JSON.stringify({
+        estado: estado,
+      });
+
+      var requestOptions = {
+        method: "DELETE",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+          
+      fetch( `${url}ConfigReferido`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.code === "ok") {
+          Alert(result.message, "Exitoso");
+        } else {
+          console.log("error", result);  // Utiliza result.message en lugar de error
+        }
+      })
+      .catch((error) => console.log("error", error));
+
+    }

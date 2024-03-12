@@ -1,25 +1,36 @@
-const url = 'http://localhost:3000/'
+const url = 'http://localhost:3000/';
+
 let token = localStorage.getItem("token");
 const headers = {
     'Authorization': token,
     'Content-Type': 'application/json'
 };
 
-
 $(function () {
-    let tabla = getMenus();
+    let tabla = getProyectos();
     Usuario();
     function validarDescripcion(descripcion) {
-        
-        const descripcionValida = /^[a-zA-Z0-9\s]+$/.test(descripcion.trim());
+        const descripcionValida =  /^[a-zA-Z0-9\s]+$/.test(descripcion.trim());
         if (!descripcionValida) {
             $('.descripcion').addClass('is-invalid');
-            $('.descripcion-error').text('La descripcion no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
+            $('.descripcion-error').text('La descripción no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
             return false;
         }
         return true;
-        
     }
+    function validarRuta(ruta)    {
+        console.log("Imprimir",ruta);
+
+        const rutaValida =  /^[a-zA-Z0-9\s]+$/i.test(ruta.trim());
+
+        if (!rutaValida) {
+            $('.ruta').addClass('is-invalid');
+            $('.ruta-error').text('La ruta no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
+            return false;
+        }
+        return true;
+    }
+
 
     $('#modalNew').on('show.bs.modal', function () {
         limpiarFormulario();
@@ -46,27 +57,35 @@ $(function () {
     });
 
     //evento submit del formulario
-    $('#formNew').submit(function () {
+    let formSubmitted = false;
 
+    $('#formNew').submit(function (event) {
+        if (formSubmitted) {
+            // Si el formulario ya se envió, evitar envíos múltiples
+            event.preventDefault();
+            return false;
+        }
+
+        console.log("DAta", $('#descripcion').val());
         const descripcion = $('#descripcion').val();
-      
+        const ruta = $('#ruta').val();
         
+     
 
         if (!validarDescripcion(descripcion)) {
             return false;
         }
-        console.log("Datos a enviar:", {
-            descripcion: $('#descripcion').val(),
-            ruta: $('#ruta').val()
-        });
-        var myHeaders = new headers();
+        if (!validarRuta(ruta)){
+            return false;
+        }
+        var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", token);
 
         var raw = JSON.stringify({
             "descripcion": $('#descripcion').val(),
             "ruta": $('#ruta').val()
 
-            
         });
 
         var requestOptions = {
@@ -76,7 +95,7 @@ $(function () {
             redirect: 'follow'
         };
 
-        fetch(`${url}projects/`, requestOptions)
+        fetch(`${url}projects`, requestOptions)
             .then(response => response.json())
             .then(result => {
                 if (result.code == "ok") {
@@ -89,11 +108,13 @@ $(function () {
                 }
             })
             .catch(error => { Alert(error.errors, 'error') });
+            formSubmitted = true;
         return false;
     });
 
-    //eventos de edicion para un proyecto
-    /*$('#formEdit').submit(function () {
+    //eventos de edicion para un 
+
+    $('#formEdit').submit(function () {
 
         const descripcion = $('#descripcionEdit').val();
         const ruta = $('#rutaEdit').val();
@@ -101,13 +122,19 @@ $(function () {
         if (!validarDescripcion(descripcion)) {
             return false;
         }
+        if (!validarRuta(ruta)) {
+            return false;
+        }
+        
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", token);
+
         const id = $('#id').val();
 
         var raw = JSON.stringify({
             "descripcion": $('#descripcionEdit').val(),
-            "ruta": $('#rutaEdit').val()
+            "ruta": $('#rutaEdit').val(),
         });
 
         var requestOptions = {
@@ -131,46 +158,6 @@ $(function () {
             })
             .catch(error => { Alert(error.errors, 'error') });
         return false;
-    });*/
-    $('#formEdit').submit(function () {
-        const descripcion = $('#descripcionEdit').val();
-
-        if (!validarDescripcion(descripcion)) {
-            return false;
-        }
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("Authorization", token);
-
-        const id = $('#id').val();
-
-        var raw = JSON.stringify({
-            "descripcion": $('#descripcionEdit').val()
-        });
-
-        var requestOptions = {
-            method: 'PUT',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow',
-        };
-
-        fetch(`${url}projects/${id}`, requestOptions)
-            .then(response => response.json())
-            .then(result => {
-
-                if (result.code == "ok") {
-                    limpiarFormulario();
-                    tabla._fnAjaxUpdate();
-                    $('#modalEdit').modal('toggle');
-                    Alert(result.message, 'success');
-                } else {
-
-                    Alert(result.message, 'error')
-                }
-            })
-            .catch(error => { Alert(error.errors, 'error') });
-        return false;
     });
 
     //eventos para la inhabilitacion de un menu
@@ -178,7 +165,7 @@ $(function () {
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
-
+        myHeaders.append("Authorization", token);
 
         const id = $('#idDelete').val();
         var requestOptions = {
@@ -196,11 +183,16 @@ $(function () {
                     $('#modalDelete').modal('toggle');
                     Alert(result.message, 'success')
                 } else {
+                    console.log("Result",result);
+
                     Alert(result.message, 'error')
                 }
 
             })
-            .catch(error => { Alert(error.errors, 'error') });
+            .catch(error => { 
+                console.log("Error",error);
+                Alert(error.errors, 'error') });
+            
     })
 });
 
@@ -214,7 +206,7 @@ const Usuario = () => {
 
 
 //obtiene la lista de menus
-const getMenus = () => {
+const getProyectos = () => {
     return $('#tableData').dataTable({
         ajax: {
             url: `${url}projects`,
@@ -234,6 +226,7 @@ const getMenus = () => {
                 }
             },
             { data: "descripcion" },
+            { data: "ruta"},
             {
                 data: "id",
                 render: function (data) {
@@ -279,21 +272,22 @@ const getMenus = () => {
                 },
                 init: function (api, node, config) {
                     $(node).removeClass('btn-secondary');
-                    //Metodo para agregar un nuevo usuario
+                    //Metodo para agregar un nuevo proyecto
                 },
             },
         ],
     });
+    
 }
-
-function limpiarFormulario(formNew = false) {
-    if (formNew) {
-        $('#descripcion, #descripcionEdit').val('');
-        $('ruta, #rutaEdit').val('');
-    }
+function limpiarFormulario() {
+    $('#descripcion').val('');
+    $('#ruta').val('');
     $('.descripcion').removeClass('is-invalid');
+    $('.descripcion-error').empty().removeClass('text-danger');
     $('.ruta').removeClass('is-invalid');
-   
+    $('.ruta-error').empty().removeClass('text-danger');
+
+  
 }
 
 
@@ -308,27 +302,42 @@ const Alert = function (message, status) // si se proceso correctamente la solic
     });
 }
 
-
 const OpenEdit = (id) => {
     var requestOptions = {
         method: 'GET',
+        headers: {
+            'Authorization': token,
+        },
         redirect: 'follow'
     };
 
+    
     fetch(`${url}projects/${id}`, requestOptions)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                if (response.status === 401) {
+                    console.error("Error de autenticación: Token no válido o expirado.");
+                }
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(result => {
-            console.log(result)
+            console.log(result);
+            // Lógica para llenar el formulario de edición con los datos obtenidos
             $('#id').val(id);
             $('#descripcionEdit').val(result.descripcion);
+            $('#rutaEdit').val(result.ruta);
             $('#modalEdit').modal('toggle');
         })
-        .catch(error => console.log('error', error));
-
+        .catch(error => {
+            console.error("Error en la solicitud GET:", error);
+            Alert("Error al obtener datos del proyecto", 'error');
+        });
 }
 
 
-const OpenDelete = (id) => {
-    $('#idDelete').val(id);
-    $('#modalDelete').modal('toggle');
+const OpenDelete = (id) => { 
+    $("#idDelete").val(id);
+  $("#modalDelete").modal("toggle");
 }
