@@ -115,31 +115,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    $(document).ready(function(){
-      $('#fechaHoraInicioPicker').datetimepicker({
-          format: 'YYYY-MM-DD' // Formato de fecha
-      });
-      $('#fechaHoraFinPicker').datetimepicker({
-          format: 'YYYY-MM-DD' // Formato de fecha
-      });
-      // Llenar opciones de hora
-      for (let i = 0; i < 24; i++) {
-          $('#horaInicio').append(`<option value="${i}">${i}:00</option>`);
-      }
+    $(document).ready(function() {
+        $('#fechaHoraInicioPicker').datetimepicker({
+            format: 'YYYY-MM-DD' // Formato de fecha
+        });
+        $('#fechaHoraFinPicker').datetimepicker({
+            format: 'YYYY-MM-DD' // Formato de fecha
+        });
+        // Llenar opciones de hora
+        for (let i = 0; i < 24; i++) {
+            $('#horaInicio').append(`<option value="${i}">${i}:00</option>`);
+        }
     });
-    
-    
-    
+
+
+
     function guardarDia() {
-      var diaSeleccionado = document.getElementById('dia').value;
-      // Aquí puedes hacer lo que necesites con el día seleccionado
-      console.log("Día seleccionado:", diaSeleccionado);
-      // Por ejemplo, podrías enviarlo a través de una solicitud AJAX a tu servidor
+        var diaSeleccionado = document.getElementById('dia').value;
+        // Aquí puedes hacer lo que necesites con el día seleccionado
+        console.log("Día seleccionado:", diaSeleccionado);
+        // Por ejemplo, podrías enviarlo a través de una solicitud AJAX a tu servidor
     }
-    
-    
-    
-    
+
+
+
+
 
     /* allFormVal['nombre'] = false;
     allFormVal['tituloNotificacion'] = false;
@@ -183,26 +183,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 })
 
-$(document).ready(function(){
-  $('#fechaHoraInicioPicker').datetimepicker({
-      format: 'YYYY-MM-DD' // Formato de fecha
-  });
-  $('#fechaHoraFinPicker').datetimepicker({
-      format: 'YYYY-MM-DD' // Formato de fecha
-  });
-  // Llenar opciones de hora
-  for (let i = 0; i < 24; i++) {
-      $('#horaInicio').append(`<option value="${i}">${i}:00</option>`);
-  }
+$(document).ready(function() {
+    $('#fechaHoraInicioPicker').datetimepicker({
+        format: 'YYYY-MM-DD' // Formato de fecha
+    });
+    $('#fechaHoraFinPicker').datetimepicker({
+        format: 'YYYY-MM-DD' // Formato de fecha
+    });
+    // Llenar opciones de hora
+    for (let i = 0; i < 24; i++) {
+        $('#horaInicio').append(`<option value="${i}">${i}:00</option>`);
+    }
 });
 
 
 
 function guardarDia() {
-  var diaSeleccionado = document.getElementById('diaEnvio').value;
-  // Aquí puedes hacer lo que necesites con el día seleccionado
-  console.log("Día seleccionado:", diaSeleccionado);
-  // Por ejemplo, podrías enviarlo a través de una solicitud AJAX a tu servidor
+    var diaSeleccionado = document.getElementById('diaEnvio').value;
+    // Aquí puedes hacer lo que necesites con el día seleccionado
+    console.log("Día seleccionado:", diaSeleccionado);
+    // Por ejemplo, podrías enviarlo a través de una solicitud AJAX a tu servidor
 }
 
 
@@ -1747,6 +1747,7 @@ const getEtapas = (id) => {
 const OpenEdit = (id, index, idEtapa, isEtapa = false) => {
   if (isEtapa) {
     console.log("aca ira el formulario de etapas " + id, idEtapa);
+    
 
     var requestOptions = {
       method: "GET",
