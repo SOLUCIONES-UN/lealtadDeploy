@@ -1181,6 +1181,9 @@ const getAllCampanias = () => {
     })
     .catch((error) => console.log("error", error));
 };
+
+
+
 const table = (table, data) => {
 
 
@@ -1717,7 +1720,7 @@ const getEtapas = (id) => {
                   })}
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
-                <a href="#" onclick="OpenEdit(${id}, '${element.nombre}', '${element.descripcion}', true)" class="borrar btn_edit dropdown-item">
+                <a href="#" onclick="ChangePanel(1)" class="borrar btn_edit dropdown-item">
                     ${feather.icons["archive"].toSvg({
                       class: "font-small-4 mr-50",
                     })} Actualizar
@@ -1758,7 +1761,7 @@ const OpenEdit = (id, index, idEtapa, isEtapa = false) => {
       redirect: 'follow',
       headers: headers
     };
-    $("#modaletapas").modal("toggle");
+    // $("#modaletapas").modal("toggle");
 
     fetch(`${url}Campania/${id}`, requestOptions)
       .then((response) => response.json())
