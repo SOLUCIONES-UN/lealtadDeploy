@@ -44,10 +44,11 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
 });
 
     $('#formNew').submit(function () {
-
+        $('#btnSubmit').prop('disabled', true);
         const nombre = $('#nombre').val();
 
         if (!validarNombre(nombre)) {
+            $('#btnSubmit').prop('disabled', false);
             return false;
         }
         var myHeaders = new Headers();
@@ -68,6 +69,9 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
         fetch(`${url}categoria`, requestOptions)
             .then(response => response.json())
             .then(result => {
+                $('#btnSubmit').prop('disabled', false);
+
+
 
 
                 if (result.code == "ok") {
@@ -80,10 +84,13 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
                 }
 
             })
-            .catch(error => { Alert(error.errors, 'error') });
+            .catch(error => {
+         
+                $('#btnSubmit').prop('disabled', false);
+                Alert(error.errors, 'error');
+            });
         return false;
     });
-
 
     $('#formEdit').submit(function () {
         const nombre = $('#nombreEdit').val();
