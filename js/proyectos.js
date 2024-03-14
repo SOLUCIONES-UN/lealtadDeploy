@@ -10,22 +10,20 @@ $(function () {
     let tabla = getProyectos();
     Usuario();
     function validarDescripcion(descripcion) {
-        const descripcionValida =  /^[a-zA-Z0-9\s]+$/.test(descripcion.trim());
+        const descripcionValida =/^[a-zA-Z0-9]+(?:\s[a-zA-Z0-9]+)*$/.test(descripcion);
         if (!descripcionValida) {
             $('.descripcion').addClass('is-invalid');
-            $('.descripcion-error').text('La descripción no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
+            $('.descripcion-error').text('La descripción no admite caracteres especiales ni espacios en blanco y debe iniciar con una letra o un numero').addClass('text-danger');
             return false;
         }
         return true;
     }
-    function validarRuta(ruta)    {
+    function validarRuta(ruta){
         console.log("Imprimir",ruta);
-
-        const rutaValida =  /^[a-zA-Z0-9\s]+$/i.test(ruta.trim());
-
+        const rutaValida = /^[a-zA-Z0-9]+(?:\s[a-zA-Z0-9]+)*$/.test(ruta)
         if (!rutaValida) {
             $('.ruta').addClass('is-invalid');
-            $('.ruta-error').text('La ruta no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
+            $('.ruta-error').text('La ruta no admite caracteres especiales ni espacios en blanco y debe iniciar con una letra o con un numero').addClass('text-danger');
             return false;
         }
         return true;
@@ -56,28 +54,40 @@ $(function () {
         limpiarFormulario();
     });
 
+    $('#modalNew').find('[data-dismiss="modal"]').click(function () {
+        limpiarFormulario();
+        $("#btnSubmit").attr("disabled",false);
+
+    });
+
+    $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
+        limpiarFormulario();
+        $("#btnSubmEdit").attr("disabled",false);
+
+    });
     //evento submit del formulario
-    let formSubmitted = false;
+    // let formSubmitted = false;
 
-    $('#formNew').submit(function (event) {
-        if (formSubmitted) {
-            // Si el formulario ya se envió, evitar envíos múltiples
-            event.preventDefault();
-            return false;
-        }
+    $('#formNew').submit(function () {
+        // if (formSubmitted) {
+        //     // Si el formulario ya se envió, evitar envíos múltiples
+        //     event.preventDefault();
+        //     return false;
+        // }
 
-        console.log("DAta", $('#descripcion').val());
+        console.log("Datos", $('#descripcion').val());
         const descripcion = $('#descripcion').val();
         const ruta = $('#ruta').val();
         
-     
-
         if (!validarDescripcion(descripcion)) {
             return false;
         }
         if (!validarRuta(ruta)){
             return false;
         }
+
+        $("#btnSubmit").attr("disabled",true);
+
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", token);
@@ -108,7 +118,7 @@ $(function () {
                 }
             })
             .catch(error => { Alert(error.errors, 'error') });
-            formSubmitted = true;
+           
         return false;
     });
 
@@ -160,7 +170,7 @@ $(function () {
         return false;
     });
 
-    //eventos para la inhabilitacion de un menu
+    //eventos para la inhabilitacion de un proyecto
     $('#BtnDelete').click(function () {
 
         var myHeaders = new Headers();
@@ -205,7 +215,7 @@ const Usuario = () => {
 }
 
 
-//obtiene la lista de menus
+//obtiene la lista de proyectos
 const getProyectos = () => {
     return $('#tableData').dataTable({
         ajax: {
