@@ -86,27 +86,29 @@ const chechInstagram = () => {
   }
 };
 
- const chechWhatsApp = () => {
-   if ($("#swWhatsapp").prop("checked")) {
-     $("#whatsapp").prop("disabled", false);
-     $("#btnWhatsapp").prop("disabled",false);
-     $("#btnWhatsapp").removeClass("btn-secondary");
-     $("#btnWhatsapp").addClass("btn-success");
-     $("#pnWhatsapp").removeClass("bg-secondary");
-     $("#pnWhatsapp").addClass("bg-success");
-   } else {
-     $("#whatsapp").prop("disabled", true);
-     $("#btnWhatsapp").prop("disabled", true);
-     $("#btnWhatsapp").removeClass("btn-success");
-     $("#btnWhatsapp").addClass("btn-secondary");
-     $("#pnWhatsapp").removeClass("bg-success");
-     $("#pnWhatsapp").addClass("bg-secondary");
-   }
- };
 
- const chechMensajes = () => {
-   if ($("#swMensaje").prop("checked")) {
-     $("#textMensaje").prop("disabled", false);
+const chechWhatsApp = () => {
+
+  if ($("#swWhatsapp").prop("checked")) {
+    $("#whatssapxxx").prop("disabled", false);
+    $("#btnWhatsapp").prop("disabled", false);
+    $("#btnWhatsapp").removeClass("btn-secondary");
+    $("#btnWhatsapp").addClass("btn-success");
+    $("#pnWhatsapp").removeClass("bg-secondary");
+    $("#pnWhatsapp").addClass("bg-success");
+  } else {
+    $("#whatssapxxx").prop("disabled", true);
+    $("#btnWhatsapp").prop("disabled", true);
+    $("#btnWhatsapp").removeClass("btn-success");
+    $("#btnWhatsapp").addClass("btn-secondary");
+    $("#pnWhatsapp").removeClass("bg-success");
+    $("#pnWhatsapp").addClass("bg-secondary");
+  }
+};
+
+ const chechMensajes = () => {   
+  if ($("#swMensaje").prop("checked")) {
+    $("#mensajexxx").prop("disabled", false);
     $("#btnMensaje").prop("disabled", false);
      $("#btnMensaje").removeClass("btn-secondary");
      $("#btnMensaje").addClass("btn-primary");
@@ -124,8 +126,10 @@ const chechInstagram = () => {
  
 
 const chechPantalla = () => {
-   if ($("#swPantalla").prop("checked")) {
+   if ($("#swPantalla").prop("checked"));
      $("#pantalla").prop("disabled", false);
+  if ($("#swPantalla").prop("checked")) {
+    $("#pantallaxxx").prop("disabled", false);
     $("#btnPantalla").prop("disabled", false);
      $("#btnPantalla").removeClass("btn-secondary");
      $("#btnPantalla").addClass("btn-warning");
@@ -140,6 +144,9 @@ const chechPantalla = () => {
      $("#pnPantalla").addClass("bg-secondary");
    }
   };
+
+
+
 
 const obtenerData = () => {
 
@@ -347,49 +354,91 @@ const DeleteConfigReferidos = (id) => {
 
     }
     
+    $(document).ready(function() {
+      // Evento de clic en la tarjeta de Facebook
+      $("#pnFacebook").click(function() {
+          // Cambiar el estado del switch al contrario del estado actual
+          $("#swFacebook").prop("checked", !$("#swFacebook").prop("checked"));
+          // Llamar a la función para ajustar el estado visual
+          chechFacebook();
+      });
+  });
+
+
   $(document).ready(function() {
-    // Evento de clic en la tarjeta de Facebook
+    // Evento de clic en el texto asociado a Facebook
     $("#textFacebook").click(function() {
-        // Cambiar el estado del switch al contrario del estado actual
-        $("#swFacebook").prop("checked", !$("#swFacebook").prop("checked"));
-        // Llamar a la función para ajustar el estado visual
-        chechFacebook();
+        // Verificar el estado actual del switch
+        if (!$("#swFacebook").prop("checked")) {
+            // Cambiar el estado del switch solo si está apagado
+            $("#swFacebook").prop("checked", true);
+            // Llamar a la función para ajustar el estado visual
+            chechFacebook();
+        }
     });
 });
 
+
 $(document).ready(function() {
   // Evento de clic en la tarjeta de instagram
+  // Evento de clic en el texto asociado a Facebook
   $("#textInstagram").click(function() {
-      // Cambiar el estado del switch al contrario del estado actual
-      $("#swInstagram").prop("checked", !$("#swInstagram").prop("checked"));
-      // Llamar a la función para ajustar el estado visual
-      chechInstagram();
+      // Verificar el estado actual del switch
+      if (!$("#swInstagram").prop("checked")) {
+          // Cambiar el estado del switch solo si está apagado
+          $("#swInstagram").prop("checked", true);
+          // Llamar a la función para ajustar el estado visual
+          chechInstagram();
+      }
   });
 });
+
+
+//whatssap
 $(document).ready(function() {
-  // Evento de clic en la tarjeta de mensaje
-  $("#textMensaje").click(function() {
-      // Cambiar el estado del switch al contrario del estado actual
-      $("#swMensaje").prop("checked", !$("#swMensaje").prop("checked"));
-      // Llamar a la función para ajustar el estado visual
-      chechMensajes();
-  });
-});
-$(document).ready(function() {
-  // Evento de clic en la tarjeta de pantalla
-  $("#textPantalla").click(function() {
-      // Cambiar el estado del switch al contrario del estado actual
-      $("#swPantalla").prop("checked", !$("#swPantalla").prop("checked"));
-      // Llamar a la función para ajustar el estado visual
-      chechPantalla();
-  });
-});
-$(document).ready(function() {
-  // Evento de clic en la tarjeta de whatsapp
+  // Evento de clic en el texto asociado a Facebook
   $("#textWhatsapp").click(function() {
-      // Cambiar el estado del switch al contrario del estado actual
-      $("#swWhatsapp").prop("checked", !$("#swWhatsapp").prop("checked"));
-        // Llamar a la función para ajustar el estado visual
-      chechWhatsApp();
+      // Verificar el estado actual del switch
+      if (!$("#swWhatsapp").prop("checked")) {
+          // Cambiar el estado del switch solo si está apagado
+          $("#swWhatsapp").prop("checked", true);
+          // Llamar a la función para ajustar el estado visual
+          chechWhatsApp();
+      }
   });
 });
+
+
+//mensaje
+$(document).ready(function() {
+  // Evento de clic en el texto asociado a Facebook
+  $("#textMensaje").click(function() {
+      // Verificar el estado actual del switch
+      if (!$("#swMensaje").prop("checked")) {
+          // Cambiar el estado del switch solo si está apagado
+          $("#swMensaje").prop("checked", true);
+          // Llamar a la función para ajustar el estado visual
+          chechMensajes();
+      }
+  });
+});
+
+
+//pantalla
+
+$(document).ready(function() {
+  // Evento de clic en el texto asociado a Facebook
+  $("#textPantalla").click(function() {
+      // Verificar el estado actual del switch
+      if (!$("#swPantalla").prop("checked")) {
+          // Cambiar el estado del switch solo si está apagado
+          $("#swPantalla").prop("checked", true);
+          // Llamar a la función para ajustar el estado visual
+          chechPantalla();
+      }
+  });
+});
+
+
+
+
