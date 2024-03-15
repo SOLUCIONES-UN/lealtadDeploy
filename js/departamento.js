@@ -175,12 +175,12 @@ $(function () {
   });
 });
 
-const Usuario = () => {
-  let usuario = JSON.parse(localStorage.getItem("infoUsuario"));
-  console.log(usuario);
-  $(".user-name").text(usuario.nombre);
-  $(".user-status").text(usuario.rol.descripcion);
-};
+// const Usuario = () => {
+//   let usuario = JSON.parse(localStorage.getItem("infoUsuario"));
+//   console.log(usuario);
+//   $(".user-name").text(usuario.nombre);
+//   $(".user-status").text(usuario.rol.descripcion);
+// };
 
 const getDepartamentos = () => {
   return $("#tableData").dataTable({

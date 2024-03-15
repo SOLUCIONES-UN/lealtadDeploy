@@ -1,6 +1,7 @@
 const url = 'http://localhost:3000/'
 let token = localStorage.getItem("token");
 
+
 $(function () {
     let tabla = getMenus();
     Usuario();
@@ -42,7 +43,8 @@ $(function () {
     //evento submit del formulario
     $('#formNew').submit(function () {
 
-        const descripcion = $('#descripcion').val();
+        const descripcion = $('#Descripcion').val();
+        
 
         if (!validarDescripcion(descripcion)) {
             return false;
@@ -147,13 +149,13 @@ $(function () {
     })
 });
 
-const Usuario = () => {
+// const Usuario = () => {
 
-    let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
-    console.log(usuario.nombre)
-    $('.user-name').text(usuario.nombre);
-    $('.user-status').text(usuario.rol.descripcion);
-}
+//     let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
+//     console.log(usuario.nombre)
+//     $('.user-name').text(usuario.nombre);
+//     $('.user-status').text(usuario.rol.descripcion);
+// }
 
 
 //obtiene la lista de menus

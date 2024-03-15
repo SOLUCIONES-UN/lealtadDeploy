@@ -1,58 +1,113 @@
 const url = 'http://localhost:3000/';
+
 let token = localStorage.getItem("token");
+const headers = {
+    'Authorization': token,
+    'Content-Type': 'application/json'
+};
 
 $(function () {
-    let tabla = getRoles();
+    let tabla = getProyectos();
     Usuario();
     function validarDescripcion(descripcion) {
-        const descripcionValida = /^[a-zA-Z0-9\s]+$/.test(descripcion.trim());
-
+        const descripcionValida =/^[a-zA-Z]+(?:\s[a-zA-Z]+)*$/.test(descripcion);
         if (!descripcionValida) {
             $('.descripcion').addClass('is-invalid');
-            $('.descripcion-error').text('La descripción no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
+            $('.descripcion-error').text('La descripción no admite caracteres especiales ni espacios en blanco solo debe contener letras').addClass('text-danger');
+            return false;
+        }
+        return true;
+    }
+    function validarRuta(ruta){
+        console.log("Imprimir",ruta);
+        const rutaValida = /^[a-zA-Z]+(?:\s[a-zA-Z]+)*$/.test(ruta)
+        if (!rutaValida) {
+            $('.ruta').addClass('is-invalid');
+            $('.ruta-error').text('La ruta no admite caracteres especiales ni espacios en blanco solo contener letras').addClass('text-danger');
             return false;
         }
         return true;
     }
 
+
     $('#modalNew').on('show.bs.modal', function () {
         limpiarFormulario();
+        $("#btnSubmit").attr("disabled",false);
+
     });
 
     $('#modalEdit').on('show.bs.modal', function () {
-        limpiarFormulario();
+        limpiarFormulario();  
+        $("#btnSubmEdit").attr("disabled",false);
+
     });
 
     $('#modalNew').on('hidden.bs.modal', function () {
-        limpiarFormulario();
+        limpiarFormulario();     
+        $("#btnSubmit").attr("disabled",false);
+
     });
 
     $('#modalEdit').on('hidden.bs.modal', function () {
         limpiarFormulario();
+        $("#btnSubmEdit").attr("disabled",false);
+
     });
 
     $('#modalNew').find('[data-dismiss="modal"]').click(function () {
         limpiarFormulario();
+        $("#btnSubmit").attr("disabled",false);
+
     });
 
     $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
         limpiarFormulario();
+        $("#btnSubmEdit").attr("disabled",false);
+
     });
 
-    //evento submit del formulairo
-    $('#formNew').submit(function () {
-        const descripcion = $('#descripcion').val();
+    $('#modalNew').find('[data-dismiss="modal"]').click(function () {
+        limpiarFormulario();
+        $("#btnSubmit").attr("disabled",false);
 
+    });
+
+    $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
+        limpiarFormulario();
+        $("#btnSubmEdit").attr("disabled",false);
+
+    });
+    //evento submit del formulario
+    // let formSubmitted = false;
+
+    $('#formNew').submit(function () {
+        // if (formSubmitted) {
+        //     // Si el formulario ya se envió, evitar envíos múltiples
+        //     event.preventDefault();
+        //     return false;
+        // }
+
+        console.log("Datos", $('#descripcion').val());
+        const descripcion = $('#descripcion').val();
+        const ruta = $('#ruta').val();
+        
         if (!validarDescripcion(descripcion)) {
             return false;
         }
+        if (!validarRuta(ruta)){
+            return false;
+        }
+
+        $("#btnSubmit").attr("disabled",true);
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", token);
 
         var raw = JSON.stringify({
-            "descripcion": $('#descripcion').val()
+            "descripcion": $('#descripcion').val(),
+            "ruta": $('#ruta').val()
+
         });
 
         var requestOptions = {
@@ -62,33 +117,37 @@ $(function () {
             redirect: 'follow'
         };
 
-        fetch(`${url}Rol`, requestOptions)
+        fetch(`${url}projects`, requestOptions)
             .then(response => response.json())
             .then(result => {
-                console.log(result)
                 if (result.code == "ok") {
                     limpiarFormulario();
                     tabla._fnAjaxUpdate();
                     $('#modalNew').modal('toggle');
                     Alert(result.message, 'success')
                 } else {
-                    Alert(result.message, 'error');
+                    Alert(result.message, 'error')
                 }
             })
-            .catch(error => {
-                Alert(error, 'error')
-            });
+            .catch(error => { Alert(error.errors, 'error') });
+           
         return false;
     });
 
-
+    //eventos de edicion para un 
 
     $('#formEdit').submit(function () {
+
         const descripcion = $('#descripcionEdit').val();
+        const ruta = $('#rutaEdit').val();
 
         if (!validarDescripcion(descripcion)) {
             return false;
         }
+        if (!validarRuta(ruta)) {
+            return false;
+        }
+        
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", token);
@@ -96,27 +155,26 @@ $(function () {
         const id = $('#id').val();
 
         var raw = JSON.stringify({
-            "descripcion": $('#descripcionEdit').val()
+            "descripcion": $('#descripcionEdit').val(),
+            "ruta": $('#rutaEdit').val(),
         });
 
         var requestOptions = {
             method: 'PUT',
             headers: myHeaders,
             body: raw,
-            redirect: 'follow',
+            redirect: 'follow'
         };
 
-        fetch(`${url}Rol/${id}`, requestOptions)
+        fetch(`${url}projects/${id}`, requestOptions)
             .then(response => response.json())
             .then(result => {
-
                 if (result.code == "ok") {
                     limpiarFormulario();
                     tabla._fnAjaxUpdate();
                     $('#modalEdit').modal('toggle');
-                    Alert(result.message, 'success');
+                    Alert(result.message, 'success')
                 } else {
-
                     Alert(result.message, 'error')
                 }
             })
@@ -124,6 +182,7 @@ $(function () {
         return false;
     });
 
+    //eventos para la inhabilitacion de un proyecto
     $('#BtnDelete').click(function () {
 
         var myHeaders = new Headers();
@@ -134,27 +193,29 @@ $(function () {
         var requestOptions = {
             method: 'DELETE',
             headers: myHeaders,
-            redirect: 'follow',
-            headers: { "Authorization": token }
+            redirect: 'follow'
         };
 
-        fetch(`${url}Rol/${id}`, requestOptions)
+        fetch(`${url}projects/${id}`, requestOptions)
             .then(response => response.json())
             .then(result => {
-
                 if (result.code == "ok") {
                     limpiarFormulario();
                     tabla._fnAjaxUpdate();
                     $('#modalDelete').modal('toggle');
                     Alert(result.message, 'success')
                 } else {
+                    console.log("Result",result);
+
                     Alert(result.message, 'error')
                 }
+
             })
-            .catch(error => {
-                Alert(error, 'error');
-            });
-    });
+            .catch(error => { 
+                console.log("Error",error);
+                Alert(error.errors, 'error') });
+            
+    })
 });
 
 // const Usuario = () => {
@@ -165,21 +226,21 @@ $(function () {
 //     $('.user-status').text(usuario.rol.descripcion);
 // }
 
-//obtiene los roles
-const getRoles = () => {
 
+//obtiene la lista de proyectos
+const getProyectos = () => {
     return $('#tableData').dataTable({
         ajax: {
-            url: `${url}Rol`,
+            url: `${url}projects`,
             type: "GET",
             datatype: "json",
             dataSrc: "",
-            headers: { "Authorization": token }
+            headers: headers,
         },
         columns: [
             {
-                data: null, render: function (data, type, row, meta) {
-
+                data: null,
+                render: function (data, type, row, meta) {
                     if (type === 'display') {
                         return meta.row + 1;
                     }
@@ -187,29 +248,27 @@ const getRoles = () => {
                 }
             },
             { data: "descripcion" },
+            { data: "ruta"},
             {
-                data: "id", render: function (data) {
-                    return `
-              <div class="btn-group">
-                <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
-                    ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
-                </a>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <a href="#" onclick="OpenEdit(${data})" class="btn_edit dropdown-item">
-                        ${feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' })} Actualizar
-                    </a>
-                
-                <div class="dropdown-menu dropdown-menu-right">
-                    <a href="#" onclick="OpenDelete(${data})" class="btn_delete dropdown-item">
-                      ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
-                    </a>
-                </div>
-                </div>
-              </div> 
-            `;
+                data: "id",
+                render: function (data) {
+                    return '<div class="btn-group">' +
+                        '<a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">' +
+                        feather.icons['more-vertical'].toSvg({ class: 'font-small-4' }) +
+                        '</a>' +
+                        '<div class="dropdown-menu dropdown-menu-right">' +
+                        '<a href="#" onclick="OpenEdit(' + data + ')" class="btn_edit dropdown-item">' +
+                        feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' }) + ' Actualizar' +
+                        '</a>' +
+                        '<a href="#" onclick="OpenDelete(' + data + ')" class="btn_delete dropdown-item">' +
+                        feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' }) + ' Inhabilitar' +
+                        '</a>' +
+                        '</div>' +
+                        '</div>';
                 }
             }
         ],
+        // order: [[1, 'asc']],
         dom:
             '<"d-flex justify-content-between align-items-center header-actions mx-1 row mt-75"' +
             '<"col-lg-12 col-xl-6" l>' +
@@ -224,8 +283,7 @@ const getRoles = () => {
             search: 'Buscar',
             searchPlaceholder: 'Buscar...',
         },
-
-        //Buttons with Dropdown
+        // Buttons with Dropdown
         buttons: [
             {
                 text: 'Nuevo',
@@ -236,21 +294,28 @@ const getRoles = () => {
                 },
                 init: function (api, node, config) {
                     $(node).removeClass('btn-secondary');
-                    //Metodo para agregar un nuevo usuario
+                    //Metodo para agregar un nuevo proyecto
                 },
             },
         ],
-
     });
+    
 }
 function limpiarFormulario() {
-    $('#formNew').trigger("reset");
+    $('#descripcion').val('');
+    $('#ruta').val('');
     $('.descripcion').removeClass('is-invalid');
     $('.descripcion-error').empty().removeClass('text-danger');
+    $('.ruta').removeClass('is-invalid');
+    $('.ruta-error').empty().removeClass('text-danger');
+
+  
 }
 
 
-const Alert = function (message, status) {
+
+const Alert = function (message, status) // si se proceso correctamente la solicitud
+{
     toastr[`${status}`](message, `${status}`, {
         closeButton: true,
         tapToDismiss: false,
@@ -262,25 +327,39 @@ const Alert = function (message, status) {
 const OpenEdit = (id) => {
     var requestOptions = {
         method: 'GET',
-        redirect: 'follow',
-        headers: { "Authorization": token }
+        headers: {
+            'Authorization': token,
+        },
+        redirect: 'follow'
     };
 
-    fetch(`${url}Rol/${id}`, requestOptions)
-        .then(response => response.json())
+    
+    fetch(`${url}projects/${id}`, requestOptions)
+        .then(response => {
+            if (!response.ok) {
+                if (response.status === 401) {
+                    console.error("Error de autenticación: Token no válido o expirado.");
+                }
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(result => {
             console.log(result);
+            // Lógica para llenar el formulario de edición con los datos obtenidos
             $('#id').val(id);
             $('#descripcionEdit').val(result.descripcion);
+            $('#rutaEdit').val(result.ruta);
             $('#modalEdit').modal('toggle');
         })
-        .catch(error => console.log('error', error));
+        .catch(error => {
+            console.error("Error en la solicitud GET:", error);
+            Alert("Error al obtener datos del proyecto", 'error');
+        });
 }
 
-const OpenDelete = (id) => {
 
-    $('#idDelete').val(id);
-    $('#modalDelete').modal('toggle');
-
+const OpenDelete = (id) => { 
+    $("#idDelete").val(id);
+  $("#modalDelete").modal("toggle");
 }
-

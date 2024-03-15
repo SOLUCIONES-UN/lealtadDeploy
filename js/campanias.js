@@ -3,8 +3,8 @@ const url = "http://localhost:3000/";
 let token = localStorage.getItem("token");
 
 const headers = {
-  'Authorization': token,
-  'Content-Type': 'application/json'
+    'Authorization': token,
+    'Content-Type': 'application/json'
 };
 
 
@@ -20,8 +20,8 @@ let index = 1;
 let indexB = 1;
 var isAddLimited = true;
 var bsStepper = document.querySelectorAll(".bs-stepper"),
-  select = $(".select2"),
-  verticalWizard = document.querySelector(".vertical-wizard-example");
+    select = $(".select2"),
+    verticalWizard = document.querySelector(".vertical-wizard-example");
 
 var numConfigButtons = 4;
 const inputFile = document.getElementById('formFile');
@@ -38,64 +38,92 @@ const getBlob = file => file.slice(0, file.size, file.type)
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  initDateInputs();
-  removeLettersAndSC();
-  removeSpecialCharacters();
+    initDateInputs();
+    removeLettersAndSC();
+    removeSpecialCharacters();
 
-  const nombre = document.querySelector('#nombre');
-  validate(nombre, 'Campaña');
+    const nombre = document.querySelector('#nombre');
+    validate(nombre, 'Campaña');
 
-  const tituloNotificacion = document.querySelector('#tituloNotificacion');
-  validate(tituloNotificacion, 'Campaña');
+    const tituloNotificacion = document.querySelector('#tituloNotificacion');
+    validate(tituloNotificacion, 'Campaña');
 
-  const limiteParticipacion = document.querySelector('#limiteParticipacion');
-  validate(limiteParticipacion, 'Límite de Participación');
+    const limiteParticipacion = document.querySelector('#limiteParticipacion');
+    validate(limiteParticipacion, 'Límite de Participación');
 
-  const imgAkisi = document.querySelector('#imgAkisi');
-  validate(imgAkisi, 'Ícono de la campaña');
+    const imgAkisi = document.querySelector('#imgAkisi');
+    validate(imgAkisi, 'Ícono de la campaña');
 
-  const fechaInicio = document.querySelector('#fechaInicio');
-  validate(fechaInicio, 'Fecha Inicio');
+    const fechaInicio = document.querySelector('#fechaInicio');
+    validate(fechaInicio, 'Fecha Inicio');
 
-  const fechaRegistro = document.querySelector('#fechaRegistro');
-  validate(fechaRegistro, 'Fecha Inicio');
+    const fechaRegistro = document.querySelector('#fechaRegistro');
+    validate(fechaRegistro, 'Fecha Inicio');
 
-  const edadIni = document.querySelector('#edadIni');
-  validate(edadIni, 'Edad Inicial');
+    const edadIni = document.querySelector('#edadIni');
+    validate(edadIni, 'Edad Inicial');
 
-  const tipoUsuario = document.querySelector('#tipoUsuario');
-  validate(tipoUsuario, 'Tipo De Usuario');
+    const tipoUsuario = document.querySelector('#tipoUsuario');
+    validate(tipoUsuario, 'Tipo De Usuario');
 
-  const descripcionCampania = document.querySelector('#descripcionCampania');
-  validate(descripcionCampania, 'Descripción');
+    const descripcionCampania = document.querySelector('#descripcionCampania');
+    validate(descripcionCampania, 'Descripción');
 
-  const descripcionNotificacion = document.querySelector('#descripcionNotificacion');
-  validate(descripcionNotificacion, 'Descripción De La Notificación');
+    const descripcionNotificacion = document.querySelector('#descripcionNotificacion');
+    validate(descripcionNotificacion, 'Descripción De La Notificación');
 
-  const imgPush = document.querySelector('#imgPush');
-  validate(imgPush, 'Imagen de Notificación');
+    const imgPush = document.querySelector('#imgPush');
+    validate(imgPush, 'Imagen de Notificación');
 
-  const fechaFin = document.querySelector('#fechaFin');
-  validate(fechaFin, 'Fecha Fin');
+    const fechaFin = document.querySelector('#fechaFin');
+    validate(fechaFin, 'Fecha Fin');
 
-  const edadFini = document.querySelector('#edadFini');
-  validate(edadFini, 'Edad Final');
+    const edadFini = document.querySelector('#edadFini');
+    validate(edadFini, 'Edad Final');
 
-  const sexo = document.querySelector('#sexo');
-  validate(sexo, 'Sexo');
+    const sexo = document.querySelector('#sexo');
+    validate(sexo, 'Sexo');
+
+    const diaReporte = document.querySelector('#dia');
+    validate(diaReporte, 'diaReporte');
+
+    const horaReporte = document.querySelector('#hora');
+    validate(horaReporte, 'horaReporte');
+    $(document).ready(function() {
+        // Generar opciones de hora en incrementos de 1 hora
+        for (var hour = 0; hour < 24; hour++) {
+            $('#hora').append($('<option>', {
+                value: (hour < 10 ? '0' : '') + hour + ':00', // Formato HH:00
+                text: (hour < 10 ? '0' : '') + hour + ':00'
+            }));
+        }
+
+        // Escuchar el evento de cambio en el select de hora
+        $('#hora').on('change', function() {
+            var selectedHour = $(this).val();
+            // Aquí puedes hacer algo con la hora seleccionada, como enviarla al backend
+            console.log(selectedHour);
+        });
 
 
-  /* allFormVal['nombre'] = false;
-  allFormVal['tituloNotificacion'] = false;
-  allFormVal['limiteParticipacion'] = false;
-  allFormVal['imgAkisi'] = false; */
+        const emails = document.querySelector('#correosElectrónicos');
+        validate(emails, 'emails');
 
-  const inputs = document.querySelectorAll('input');
-  inputs.forEach(input => {
-    if (input.id != '' && input.type != 'hidden') {
-      allFormVal[input.id] = false;
-    }
-  });
+
+
+    });
+
+    /* allFormVal['nombre'] = false;
+    allFormVal['tituloNotificacion'] = false;
+    allFormVal['limiteParticipacion'] = false;
+    allFormVal['imgAkisi'] = false; */
+
+    const inputs = document.querySelectorAll('input');
+    inputs.forEach(input => {
+        if (input.id != '' && input.type != 'hidden') {
+            allFormVal[input.id] = false;
+        }
+    });
 
 
   const img1 = document.querySelector('#imgAkisi');
@@ -125,27 +153,36 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 })
 
-$(function () {
-  loadMenu();
-  ("use strict");
-  ChangePanel(1);
-  getAllCampanias();
-  $("#formFile").hide();
-  $("#tableParticipantes").hide();
-  $("#btnActualizarParametros").hide();
-  $("#btnActualizarPremios").hide();
-  $("#btnActualizarPresupuesto").hide();
+$(document).ready(function() {
+    $('#hora').timepicker({
+        showMeridian: false, // Esto evita que se muestren AM/PM
+        minuteStep: 1 // Esto establece el paso del minuto a 1
+    });
+});
 
-  Usuario();
 
-  //Inicializacion de Navs
-  $("#NavsOpc button").on("click", function (event) {
-    let data = $(this).attr("data-bs-target");
-    event.preventDefault();
-    $(this).tab("show");
-    $(".opcLista").removeClass("show active");
-    $(data).addClass("show active");
-  });
+
+$(function() {
+    loadMenu();
+    ("use strict");
+    ChangePanel(1);
+    getAllCampanias();
+    $("#formFile").hide();
+    $("#tableParticipantes").hide();
+    $("#btnActualizarParametros").hide();
+    $("#btnActualizarPremios").hide();
+    $("#btnActualizarPresupuesto").hide();
+
+    Usuario();
+
+    //Inicializacion de Navs
+    $("#NavsOpc button").on("click", function(event) {
+        let data = $(this).attr("data-bs-target");
+        event.preventDefault();
+        $(this).tab("show");
+        $(".opcLista").removeClass("show active");
+        $(data).addClass("show active");
+    });
 
   $(".BtnBottador").click(function () {
     var data = {
@@ -162,11 +199,11 @@ $(function () {
     Limpiar();
   });
 
-  $("#submitData").click(function () {
+    $("#submitData").click(function() {
 
-    //checkFormVals();
+        //checkFormVals();
 
-    //if (!allFormIsOK) return invalidFormData()
+        //if (!allFormIsOK) return invalidFormData()
 
     var data = {
       nombre: $("#nombre").val(),
@@ -192,60 +229,60 @@ $(function () {
     $("#addFormConfig").html(null);
   });
 
-  $("#btnAddEtapa").click(function () {
-    var nombre = $("#nombreEtapa");
-    var orden = $("#ordenEtapa");
-    var descripcion = $("#descEtapa");
-    var tipoTransaccion = $("#TipoTransaccion option:selected");
-    var intervalo;
-    $("#intervalo") ? (intervalo = $("#intervalo").val()) : (intervalo = "");
-    var periodo;
-    $("#periodo") ? (periodo = $("#periodo").val()) : (periodo = "");
-    var valor;
-    $("#valor") ? (valor = $("#valor").val()) : (valor = "");
+    $("#btnAddEtapa").click(function() {
+        var nombre = $("#nombreEtapa");
+        var orden = $("#ordenEtapa");
+        var descripcion = $("#descEtapa");
+        var tipoTransaccion = $("#TipoTransaccion option:selected");
+        var intervalo;
+        $("#intervalo") ? (intervalo = $("#intervalo").val()) : (intervalo = "");
+        var periodo;
+        $("#periodo") ? (periodo = $("#periodo").val()) : (periodo = "");
+        var valor;
+        $("#valor") ? (valor = $("#valor").val()) : (valor = "");
 
-    var nombreParticipacion;
+        var nombreParticipacion;
 
-    etapas.push({
-      nombre: nombre.val(),
-      orden: orden.val(),
-      descripcion: descripcion.val(),
-      tipoParticipacion: tipoTransaccion.val(),
-      intervalo: typeof intervalo != "undefined" ? intervalo : "",
-      periodo: typeof periodo != "undefined" ? periodo : "",
-      valorAcumulado: typeof valor != "undefined" ? valor : "",
+        etapas.push({
+            nombre: nombre.val(),
+            orden: orden.val(),
+            descripcion: descripcion.val(),
+            tipoParticipacion: tipoTransaccion.val(),
+            intervalo: typeof intervalo != "undefined" ? intervalo : "",
+            periodo: typeof periodo != "undefined" ? periodo : "",
+            valorAcumulado: typeof valor != "undefined" ? valor : "",
 
-      estado: 1,
-      premios: "",
-      parametros: "",
-      presupuestos: "",
-    });
+            estado: 1,
+            premios: "",
+            parametros: "",
+            presupuestos: "",
+        });
 
 
-    $("#tbetapas").html(null);
-    $(".etapaSelect").html(null);
-    $("#descEtapa").html(null);
+        $("#tbetapas").html(null);
+        $(".etapaSelect").html(null);
+        $("#descEtapa").html(null);
 
-    addConfig(index++, nombre.val());
+        addConfig(index++, nombre.val());
 
     etapas.forEach((element, index) => {
       var opc = `<option>${element.nombre}</option>`;
 
-      if (element.tipoParticipacion == 1) {
-        nombreParticipacion = "Por Transaccion";
-      } else if (element.tipoParticipacion == 2) {
-        nombreParticipacion = "Recurrente";
-      } else if (element.tipoParticipacion == 3) {
-        nombreParticipacion = "Acumular Transacciones";
-      } else if (element.tipoParticipacion == 4) {
-        nombreParticipacion = "Acumular Recurrente";
-      } else if (element.tipoParticipacion == 5) {
-        nombreParticipacion = "Acumular Valor";
-      } else if (element.tipoParticipacion == 6) {
-        nombreParticipacion = "Combinar Transacciones";
-      }
+            if (element.tipoParticipacion == 1) {
+                nombreParticipacion = "Por Transaccion";
+            } else if (element.tipoParticipacion == 2) {
+                nombreParticipacion = "Recurrente";
+            } else if (element.tipoParticipacion == 3) {
+                nombreParticipacion = "Acumular Transacciones";
+            } else if (element.tipoParticipacion == 4) {
+                nombreParticipacion = "Acumular Recurrente";
+            } else if (element.tipoParticipacion == 5) {
+                nombreParticipacion = "Acumular Valor";
+            } else if (element.tipoParticipacion == 6) {
+                nombreParticipacion = "Combinar Transacciones";
+            }
 
-      var tr = `<tr id='fila${index + 1}'>
+            var tr = `<tr id='fila${index + 1}'>
           <th>${index + 1}</th>
           <th>${element.nombre}</th>
           <th>${nombreParticipacion}</th>
@@ -272,26 +309,26 @@ $(function () {
         </div> </th>
       </tr>`;
 
-      $("#tbetapas").append(tr);
-      //console.log(index);
-      $(".etapaSelect").append(opc);
-      //$('#EtapaPremio').append(opc);
-    });
+            $("#tbetapas").append(tr);
+            //console.log(index);
+            $(".etapaSelect").append(opc);
+            //$('#EtapaPremio').append(opc);
+        });
 
-    nombre.val(null);
-    orden.val(null);
-    descripcion.val(null);
-    $("#TipoTransaccion").val(0);
-    $("#intervalo").val(0);
-  });
+        nombre.val(null);
+        orden.val(null);
+        descripcion.val(null);
+        $("#TipoTransaccion").val(0);
+        $("#intervalo").val(0);
+    });
 });
 
 $("#TipoTransaccion").on("change", function () {
   var addConfig;
   let val = $("#TipoTransaccion").val();
 
-  if (val == 3 || val == 4) {
-    addConfig = `
+    if (val == 3 || val == 4) {
+        addConfig = `
       <label class="form-label" for="intervalo">Intervalo</label>
       <select class="form-control" id="intervalo">
       <option value="0" default selected disabled>Seleccione Un Intervalo</option>
@@ -302,45 +339,45 @@ $("#TipoTransaccion").on("change", function () {
       </select>
     `;
 
-    addPeriodo = `
+        addPeriodo = `
       <label for="periodo">Periodo</label>
       <input class="form-control" id="periodo"/>
     `;
 
-    $("#transaccionesDinamicas").html(addConfig);
-    $("#Periodo").html(addPeriodo);
+        $("#transaccionesDinamicas").html(addConfig);
+        $("#Periodo").html(addPeriodo);
 
-    isAddLimited = false;
-  } else if (val == 5) {
-    addConfig = `
+        isAddLimited = false;
+    } else if (val == 5) {
+        addConfig = `
       <label class="form-label" for="valor">Valor</label>
       <input class="form-control" id="valor" />
     
     `;
 
-    $("#transaccionesDinamicas").html(addConfig);
-    isAddLimited = false;
-  } else if (val == 2) {
-    addConfig = `
+        $("#transaccionesDinamicas").html(addConfig);
+        isAddLimited = false;
+    } else if (val == 2) {
+        addConfig = `
       <label class="form-label" for="valor">Valor</label>
       <input class="form-control" id="valor" />
       
     `;
-    $("#transaccionesDinamicas").html(addConfig);
-    isAddLimited = true;
-  } else {
-    $("#transaccionesDinamicas").html(null);
-    $("#Periodo").html(null);
-    isAddLimited = true;
-  }
+        $("#transaccionesDinamicas").html(addConfig);
+        isAddLimited = true;
+    } else {
+        $("#transaccionesDinamicas").html(null);
+        $("#Periodo").html(null);
+        isAddLimited = true;
+    }
 });
 
-const Usuario = () => {
+/*const Usuario = () => {
 
   let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
   $('.user-name').text(usuario.nombre);
   $('.user-status').text(usuario.rol.descripcion);
-}
+}*/
 
 function loadMenu(isEtapa) {
   // Adds crossed class
@@ -355,68 +392,68 @@ function loadMenu(isEtapa) {
         // and the third with the if statement because the last line
         // can't seem to turn off when I press the first item. ¯\_(ツ)_/¯
 
-        for (var i = 0; i < index; i++) {
-          line[i].classList.add("crossed");
+                for (var i = 0; i < index; i++) {
+                    line[i].classList.add("crossed");
 
-          for (var j = index; j < numberOfSteps; j++) {
-            line[j].classList.remove("crossed");
-          }
+                    for (var j = index; j < numberOfSteps; j++) {
+                        line[j].classList.remove("crossed");
+                    }
+                }
+                if (event.detail.to == 0) {
+                    for (var k = index; k < numberOfSteps; k++) {
+                        line[k].classList.remove("crossed");
+                    }
+                    line[0].classList.remove("crossed");
+                }
+            });
         }
-        if (event.detail.to == 0) {
-          for (var k = index; k < numberOfSteps; k++) {
-            line[k].classList.remove("crossed");
-          }
-          line[0].classList.remove("crossed");
-        }
-      });
     }
-  }
 
-  // select2
-  select.each(function () {
-    var $this = $(this);
-    $this.wrap('<div class="position-relative"></div>');
-    $this.select2({
-      placeholder: "Select value",
-      dropdownParent: $this.parent(),
+    // select2
+    select.each(function() {
+        var $this = $(this);
+        $this.wrap('<div class="position-relative"></div>');
+        $this.select2({
+            placeholder: "Select value",
+            dropdownParent: $this.parent(),
+        });
     });
-  });
 
-  // Vertical Wizard
-  // --------------------------------------------------------------------
-  if (typeof verticalWizard !== undefined && verticalWizard !== null) {
-    var verticalStepper = new Stepper(verticalWizard, {
-      linear: false,
-    });
-    $(verticalWizard)
-      .find(".btn-next")
-      .on("click", function () {
-        verticalStepper.next();
-      });
-    $(verticalWizard)
-      .find(".btn-prev")
-      .on("click", function () {
-        verticalStepper.previous();
-      });
+    // Vertical Wizard
+    // --------------------------------------------------------------------
+    if (typeof verticalWizard !== undefined && verticalWizard !== null) {
+        var verticalStepper = new Stepper(verticalWizard, {
+            linear: false,
+        });
+        $(verticalWizard)
+            .find(".btn-next")
+            .on("click", function() {
+                verticalStepper.next();
+            });
+        $(verticalWizard)
+            .find(".btn-prev")
+            .on("click", function() {
+                verticalStepper.previous();
+            });
 
-    $(verticalWizard)
-      .find(".btn-submit")
-      .on("click", function () {
-        //Alert("Campaña Creada con Exito", "success");
-        ChangePanel(1);
-      });
-  }
+        $(verticalWizard)
+            .find(".btn-submit")
+            .on("click", function() {
+                //Alert("Campaña Creada con Exito", "success");
+                ChangePanel(1);
+            });
+    }
 
-  if (isEtapa) {
-    verticalStepper.reset();
-    verticalStepper.to(3);
-  }
+    if (isEtapa) {
+        verticalStepper.reset();
+        verticalStepper.to(3);
+    }
 }
 
 function addConfig(id, nombreEtapa) {
-  console.log(isAddLimited);
+    console.log(isAddLimited);
 
-  var configbuttons = `<div id="opc${id}" class="step" data-target="#social-links-vertical-${id}">
+    var configbuttons = `<div id="opc${id}" class="step" data-target="#social-links-vertical-${id}">
     <button type="button" class="step-trigger">
         <span class="bs-stepper-box">${numConfigButtons + 1}</span>
         <span class="bs-stepper-label">
@@ -426,7 +463,7 @@ function addConfig(id, nombreEtapa) {
     </button>
   </div>`;
 
-  var configForm = `<div id="social-links-vertical-${id}" class="content" style="height: auto;">
+    var configForm = `<div id="social-links-vertical-${id}" class="content" style="height: auto;">
   <div class="content-header">
       <h5 class="mb-0">Parametros De La Campaña</h5>
       <small></small>
@@ -1203,6 +1240,7 @@ const saveData = (data) => {
     body: JSON.stringify(data),
     redirect: 'follow'
   };
+  console.log(data)
 
   fetch(`${url}Campania`, requestOptions)
     .then((response) => response.json())
@@ -1233,6 +1271,9 @@ const Limpiar = (isEdith) => {
     $("#fechaRegistro").val(null);
     $("#edadIni").val(null);
     $("#sexo").val(0);
+    $("#hora").val(0);
+    $("#dia").val(0);
+    $("#correosElectrónicos").val(0);
     $("#tipoUsuario").val(0);
     ChangePanel(1);
   }
@@ -1513,7 +1554,7 @@ const getEtapas = (id) => {
     .then((response) => response.json())
     .then((result) => {
       result.etapas.forEach((element, index) => {
-        console.log(index);
+        console.log("bienen estas cosas aqui",response);
         var opcTableEtapas = `<tr>
               <td>${index + 1}</td>
               <td>${element.nombre}</td>
@@ -1526,7 +1567,7 @@ const getEtapas = (id) => {
         })}
                   </a>
                   <div class="dropdown-menu dropdown-menu-right">
-                      <a href="#" onclick="OpenEdit(${id}, ${index}, ${element.id
+                      <a href="#" onclick="OpenEdit(${data}, ${data}, ${data
           } , ${true})" class="borrar btn_edit dropdown-item">
                           ${feather.icons["archive"].toSvg({
             class: "font-small-4 mr-50",
@@ -1578,7 +1619,7 @@ const OpenEdit = (id, index, idEtapa, isEtapa = false) => {
         getDepartamentos(0, true);
         getMunicipios(0, true);
 
-        $("#modalEditEtapas").modal("toggle");
+        $("#modalEdit").modal("toggle");
       })
       .catch((error) => console.log("error", error));
 
@@ -1606,12 +1647,16 @@ const OpenEdit = (id, index, idEtapa, isEtapa = false) => {
         $("#edadFiniEdith").val(result.edadFinal);
         $("#tipoUsuarioEdith").val(result.tipoUsuario);
         $("#sexoEdith").val(result.sexo);
+        $("#horaEdith").val(result.horaReporte);
+        $("#diaEdith").val(result.diaReporte);
+        $("#correosElectrónicosEdith").val(result.emails);
 
         getEtapas(id);
         getParticipantes(id);
         getBloqueados(id);
 
         $("#modalEdit").modal("toggle");
+        console.log("aqui biene todo esto ",result)
       })
       .catch((error) => console.log("error", error));
     loadMenuEdit();
@@ -1634,7 +1679,10 @@ const tipoDeTransaccion = (id) => {
 
     $('#Transacciones' + id).html(null);
 
+    console.log("biene")
+    console.log("biene")
     fetch(`${url}categoria`, requestOptions)
+    
       .then(response => response.json())
       .then(result => {
         result.forEach(element => {
@@ -1900,7 +1948,7 @@ $("#formEditEtapas").submit(function () {
       if (result.code == "ok") {
         $("#PreviewEtapsEdit").html(null);
         getEtapas(idCamp);
-        $("#modalEditEtapas").modal("toggle");
+        $("#modalEdit").modal("toggle");
         Alert(result.message, "success");
       } else {
         Alert(result.message, "error");
@@ -1926,6 +1974,9 @@ $("#formEdit").submit(function () {
     edadInicial: $("#edadIniEdith").val(),
     edadFinal: $("#edadFiniEdith").val(),
     sexo: $("#sexoEdith option:selected").val(),
+    horaReporte: $("#horaEdith option:selected").val(),
+    diaReporte: $("#diaEdith option:selected").val(),
+    emails: $("#correosElectrónicosEdith option:selected").val(),
     tipoUsuario: $("#tipoUsuarioEdith option:selected").val(),
     tituloNotificacion: $("#tituloNotificacionEdith").val(),
     descripcionNotificacion: $("#descripcionNotificacionEdith").val(),

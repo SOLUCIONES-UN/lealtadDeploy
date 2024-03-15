@@ -17,10 +17,9 @@
 
   <!-- BEGIN: Vendor CSS-->
   <link rel="stylesheet" type="text/css" href="../app-assets/vendors/css/vendors.min.css">
-  <link rel="stylesheet" href="../app-assets/vendors/js/tables/ag-grid/styles/ag-grid.css">
-  <link rel="stylesheet" href="../app-assets/vendors/js/tables/ag-grid/styles/ag-theme-quartz.css">
-  <link rel="stylesheet" href="../app-assets/vendors/js/sweetalert2/sweetalert2.all.min.js">
-
+  <link rel="stylesheet" type="text/css"
+    href="../app-assets/vendors/css/tables/datatable/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" type="text/css" href="../app-assets/vendors/css/tables/datatable/responsive.bootstrap.min.css">
   <!-- END: Vendor CSS-->
 
   <!-- BEGIN: Theme CSS-->
@@ -39,7 +38,7 @@
   <!-- END: Page CSS-->
 
   <!-- BEGIN: Custom CSS-->
-  <link rel="stylesheet" type="text/css" href="../css/custom-ag.css">
+  <link rel="stylesheet" type="text/css" href="../../../assets/css/style.css">
   <!-- END: Custom CSS-->
 
 </head>
@@ -63,7 +62,7 @@
         <ul class="nav navbar-nav">
           <li class="nav-item">
             <a class="nav-link menu-toggle" href="javascript:void(0);">
-              <b>Proyectos</b>
+              <b>Administracion de Proyectos</b>
             </a>
           </li>
         </ul>
@@ -167,25 +166,21 @@
         <li class="nav-item dropdown dropdown-user"><a class="nav-link dropdown-toggle dropdown-user-link"
             id="dropdown-user" href="javascript:void(0);" data-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false">
-            <div class="user-nav d-sm-flex d-none"><span class="user-name font-weight-bolder">Admin</span><span
-                class="user-status">Admin</span>
-            </div><span class="avatar"><img class="round"
+            <div class="user-nav d-sm-flex d-none"><span class="user-name font-weight-bolder">John Doe</span><span
+                class="user-status">Admin</span></div><span class="avatar"><img class="round"
                 src="../../../app-assets/images/portrait/small/avatar-s-11.jpg" alt="avatar" height="40"
                 width="40"><span class="avatar-status-online"></span></span>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-user"><a class="dropdown-item"
-              href="page-profile.html"><i class="mr-50" data-feather="user"></i>
-              Profile</a><a class="dropdown-item" href="app-email.html"><i class="mr-50" data-feather="mail"></i>
-              Inbox</a><a class="dropdown-item" href="app-todo.html"><i class="mr-50" data-feather="check-square"></i>
-              Task</a><a class="dropdown-item" href="app-chat.html"><i class="mr-50" data-feather="message-square"></i>
-              Chats</a>
+              href="page-profile.html"><i class="mr-50" data-feather="user"></i> Profile</a><a class="dropdown-item"
+              href="app-email.html"><i class="mr-50" data-feather="mail"></i> Inbox</a><a class="dropdown-item"
+              href="app-todo.html"><i class="mr-50" data-feather="check-square"></i> Task</a><a class="dropdown-item"
+              href="app-chat.html"><i class="mr-50" data-feather="message-square"></i> Chats</a>
             <div class="dropdown-divider"></div><a class="dropdown-item" href="page-account-settings.html"><i
-                class="mr-50" data-feather="settings"></i>
-              Settings</a><a class="dropdown-item" href="page-pricing.html"><i class="mr-50"
-                data-feather="credit-card"></i> Pricing</a><a class="dropdown-item" href="page-faq.html"><i
-                class="mr-50" data-feather="help-circle"></i> FAQ</a><a class="dropdown-item" href="login.html"><i
-                class="mr-50" data-feather="power"></i>
-              Logout</a>
+                class="mr-50" data-feather="settings"></i> Settings</a><a class="dropdown-item"
+              href="page-pricing.html"><i class="mr-50" data-feather="credit-card"></i> Pricing</a><a
+              class="dropdown-item" href="page-faq.html"><i class="mr-50" data-feather="help-circle"></i> FAQ</a><a
+              class="dropdown-item" href="login.html"><i class="mr-50" data-feather="power"></i> Logout</a>
           </div>
         </li>
       </ul>
@@ -226,14 +221,11 @@
                         d="M69.3453773,32.2519224 L101.428699,1.42108547e-14 L138.784583,1.42108547e-14 L138.784199,29.8015838 C137.958931,37.3510206 135.784352,42.5567762 132.260463,45.4188507 C128.736573,48.2809251 112.33867,64.5239941 83.0667527,94.1480575 L56.2750821,94.1480575 L32.8435758,70.5039241 L69.3453773,32.2519224 Z"
                         fill="url(#linearGradient-1)" opacity="0.2"></path>
                       <polygon id="Path-2" fill="#000000" opacity="0.049999997"
-                        points="69.3922914 32.4202615 32.8435758 70.5039241 54.0490008 16.1851325">
-                      </polygon>
+                        points="69.3922914 32.4202615 32.8435758 70.5039241 54.0490008 16.1851325"></polygon>
                       <polygon id="Path-21" fill="#000000" opacity="0.099999994"
-                        points="69.3922914 32.4202615 32.8435758 70.5039241 58.3683556 20.7402338">
-                      </polygon>
+                        points="69.3922914 32.4202615 32.8435758 70.5039241 58.3683556 20.7402338"></polygon>
                       <polygon id="Path-3" fill="url(#linearGradient-2)" opacity="0.099999994"
-                        points="101.428699 0 83.0667527 94.1480575 130.378721 47.0740288">
-                      </polygon>
+                        points="101.428699 0 83.0667527 94.1480575 130.378721 47.0740288"></polygon>
                     </g>
                   </g>
                 </g>
@@ -266,43 +258,106 @@
         <section class="invoice-list-wrapper">
           <div class="card">
             <div class="card-datatable table-responsive">
-              <div id="tableData_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                <div class="d-flex justify-content-between align-items-center header-actions mx-1 row mt-75">
-                  <div class="col-lg-12 col-xl-6">
-                    <div class="dataTables_length" id="tableData_length"><label>Mostrar <select name="tableData_length"
-                          aria-controls="tableData" class="custom-select form-control">
-                          <!-- <option value="10">10</option>
-                                                    <option value="25">25</option>
-                                                    <option value="50">50</option>
-                                                    <option value="100">100</option> -->
-                        </select></label></div>
-                  </div>
-                  <div class="col-lg-12 col-xl-6 pl-xl-75 pl-0">
-                    <div
-                      class="dt-action-buttons text-xl-right text-lg-left text-md-right text-left d-flex align-items-center justify-content-lg-end align-items-center flex-sm-nowrap flex-wrap mr-1 dt-grid-inputs">
-                      <div class="mr-1">
-                        <div id="tableData_filter" class="dataTables_filter"><label><input type="search"
-                              id="ag-search-bar" class="form-control" placeholder="Buscar..." aria-controls="tableData">
-                        </div>
-                      </div>
-                      <div class="dt-buttons"><button id="new-project" class="dt-button add-new btn btn-primary mt-50"
-                          tabindex="0" aria-controls="tableData" type="button"><span>Nuevo</span></button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div id="myGrid" class="ag-theme-quartz" style="flex: 1 1 auto; overflow: hidden; height: 500px;"></div>
-
-              </div>
+              <table class="datatables-basic table" id="tableData">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Descripcion</th>
+                    <th>Ruta</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+              </table>
             </div>
           </div>
         </section>
+
       </div>
     </div>
   </div>
-  <!-- modal de creacion or Update -->
 
+  <!-- modal de creacion or Update -->
+  <div class="modal modal-slide-in new-user-modal fade" id="modalNew">
+    <div class="modal-dialog">
+      <form id="formNew" class="add-new-user modal-content pt-0" autocomplete="off">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+        <div class="modal-header mb-1">
+          <h5 class="modal-title" id="exampleModalLabel">Agregar Nuevo Proyecto</h5>
+        </div>
+        <div class="modal-body flex-grow-1">
+          <div class="form-group">
+            <label class="form-label" for="basic-icon-default-fullname">Descripción</label>
+            <input type="text" class="form-control dt-full-name descripcion" id="descripcion"
+              placeholder="Descripción del proyecto " name="descripcion" aria-label=""
+              aria-describedby="descripcion-error" required />
+            <div id="descripcionError" class="invalid-feedback descripcion-error"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="basic-icon-default-fullname">Ruta</label>
+            <input type="text" class="form-control dt-full-name ruta" id="ruta"
+              placeholder="Ruta del proyecto" name="ruta" aria-label=""
+              aria-describedby="basic-icon-default-fullname2" required />
+            <div id="ruta-error" class="invalid-feedback ruta-error"></div>
+          </div>
+
+          <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar</button>
+          <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal modal-slide-in new-user-modal fade" id="modalEdit">
+    <div class="modal-dialog">
+      <form id="formEdit" class="add-new-user modal-content pt-0" autocomplete="off">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+        <div class="modal-header mb-1">
+          <h5 class="modal-title" id="exampleModalLabel">Actualizar el Proyecto</h5>
+        </div>
+        <div class="modal-body flex-grow-1">
+          <div class="form-group">
+            <input id="id" type="hidden">
+            <label class="form-label" for="descripcionEdit">Descripción</label>
+            <input class="form-control descripcion" id="descripcionEdit" placeholder="Descripción del proyecto"
+              name="descripcion" required rows="3"></input>
+            <div class="invalid-feedback descripcion-error"></div>
+          </div>
+            <div class="form-group">
+            <label class="form-label" for="rutaEdit">Ruta</label>
+            <input class="form-control ruta" id="rutaEdit" placeholder="Ruta del proyecto"
+              name="ruta" required rows="3"></input>
+            <div class="invalid-feedback ruta-error"></div>
+          </div>
+
+
+
+
+          <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Actualizar</button>
+          <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal modal-slide-in new-user-modal fade" id="modalDelete">
+    <div class="modal-dialog">
+      <form id="formDelete" class="add-new-user modal-content pt-0" autocomplete="off">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+        <div class="modal-header mb-1">
+          <h5 class="modal-title" id="exampleModalLabel">Inhabilitar un proyecto</h5>
+        </div>
+        <div class="modal-body flex-grow-1">
+          <div class="form-group">
+            <input id="idDelete" type="hidden">
+            <p>¿Esta seguro que desea <b>¿esta seguro que desea inhabilitar este proyecto?</b></p>
+          </div>
+          <button id="BtnDelete" type="button" class="btn btn-danger mr-1 data-submit" >Confirmar</button>
+          <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+          
+        </div>
+      </form>
+    </div>
+  </div>
   <!-- END: Content-->
   </div>
   <!-- End: Customizer-->
@@ -310,8 +365,8 @@
   <footer class="footer footer-static footer-light">
     <p class="clearfix mb-0"><span class="float-md-left d-block d-md-inline-block mt-25">&copy; 2024<a class="ml-25"
           href="#" target="_blank">LEALTAD</a><span class="d-none d-sm-inline-block">, Reservados todos los
-          derechos.</span></span><span class="float-md-right d-none d-md-block">Desarrollado por:
-        SOLUCIONES-UN<i data-feather="code"></i></span></p>
+          derechos.</span></span><span class="float-md-right d-none d-md-block">Desarrollado por: SOLUCIONES-UN<i
+          data-feather="code"></i></span></p>
   </footer>
   <button class="btn btn-primary btn-icon scroll-top" type="button"><i data-feather="arrow-up"></i></button>
   <!-- END: Footer-->
@@ -323,8 +378,11 @@
 
   <!-- BEGIN: Page Vendor JS-->
   <script src="../app-assets/vendors/js/extensions/moment.min.js"></script>
-  <script src="../app-assets/vendors/js/tables/ag-grid/ag-grid-community.min.noStyle.js"></script>
-  <script src="../app-assets/vendors/js/sweetalert2/sweetalert2.all.min.js"></script>
+  <script src="../app-assets/vendors/js/tables/datatable/jquery.dataTables.min.js"></script>
+  <script src="../app-assets/vendors/js/tables/datatable/datatables.buttons.min.js"></script>
+  <script src="../app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js"></script>
+  <script src="../app-assets/vendors/js/tables/datatable/dataTables.responsive.min.js"></script>
+  <script src="../app-assets/vendors/js/tables/datatable/responsive.bootstrap4.min.js"></script>
   <!-- END: Page Vendor JS-->
   <script src="../app-assets/vendors/js/extensions/toastr.min.js"></script>
   <!-- BEGIN: Theme JS-->
@@ -334,8 +392,8 @@
   <!-- END: Theme JS-->
 
   <!-- BEGIN: Page JS-->
-  <script src="../js/ag-grid_es.mjs"></script>
-  <script src="../js/proyectos.mjs"></script>
+  <script src="../js/proyectos.js"></script>
+
   <script src="../js/menuDinamico.js"></script>
   <!-- END: Page JS-->
 

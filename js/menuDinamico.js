@@ -1,3 +1,4 @@
+// const url = "http://localhost:3000/";
 let usuario = JSON.parse(localStorage.getItem("infoUsuario"));
 
 $(function () {
