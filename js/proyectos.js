@@ -20,7 +20,7 @@ $(function () {
     }
     function validarRuta(ruta){
         console.log("Imprimir",ruta);
-        const rutaValida = /^[a-zA-Z]+(?:\s[a-zA-Z]+)*$/.test(ruta)
+        const rutaValida = /^[a-zA-Z\s!@#$%^/&*(),.?":{}|<>]+(?:\s[a-zA-Z\s!@#$%^/&*(),.?":{}|<>]+)*$/.test(ruta);
         if (!rutaValida) {
             $('.ruta').addClass('is-invalid');
             $('.ruta-error').text('La ruta no admite caracteres especiales ni espacios en blanco solo contener letras').addClass('text-danger');
