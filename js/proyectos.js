@@ -10,20 +10,20 @@ $(function () {
     let tabla = getProyectos();
     Usuario();
     function validarDescripcion(descripcion) {
-        const descripcionValida =/^[a-zA-Z0-9]+(?:\s[a-zA-Z0-9]+)*$/.test(descripcion);
+        const descripcionValida =/^[a-zA-Z]+(?:\s[a-zA-Z]+)*$/.test(descripcion);
         if (!descripcionValida) {
             $('.descripcion').addClass('is-invalid');
-            $('.descripcion-error').text('La descripción no admite caracteres especiales ni espacios en blanco y debe iniciar con una letra o un numero').addClass('text-danger');
+            $('.descripcion-error').text('La descripción no admite caracteres especiales ni espacios en blanco solo debe contener letras').addClass('text-danger');
             return false;
         }
         return true;
     }
     function validarRuta(ruta){
         console.log("Imprimir",ruta);
-        const rutaValida = /^[a-zA-Z0-9]+(?:\s[a-zA-Z0-9]+)*$/.test(ruta)
+        const rutaValida = /^[a-zA-Z]+(?:\s[a-zA-Z]+)*$/.test(ruta)
         if (!rutaValida) {
             $('.ruta').addClass('is-invalid');
-            $('.ruta-error').text('La ruta no admite caracteres especiales ni espacios en blanco y debe iniciar con una letra o con un numero').addClass('text-danger');
+            $('.ruta-error').text('La ruta no admite caracteres especiales ni espacios en blanco solo contener letras').addClass('text-danger');
             return false;
         }
         return true;
@@ -32,26 +32,38 @@ $(function () {
 
     $('#modalNew').on('show.bs.modal', function () {
         limpiarFormulario();
+        $("#btnSubmit").attr("disabled",false);
+
     });
 
     $('#modalEdit').on('show.bs.modal', function () {
-        limpiarFormulario();
+        limpiarFormulario();  
+        $("#btnSubmEdit").attr("disabled",false);
+
     });
 
     $('#modalNew').on('hidden.bs.modal', function () {
-        limpiarFormulario();
+        limpiarFormulario();     
+        $("#btnSubmit").attr("disabled",false);
+
     });
 
     $('#modalEdit').on('hidden.bs.modal', function () {
         limpiarFormulario();
+        $("#btnSubmEdit").attr("disabled",false);
+
     });
 
     $('#modalNew').find('[data-dismiss="modal"]').click(function () {
         limpiarFormulario();
+        $("#btnSubmit").attr("disabled",false);
+
     });
 
     $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
         limpiarFormulario();
+        $("#btnSubmEdit").attr("disabled",false);
+
     });
 
     $('#modalNew').find('[data-dismiss="modal"]').click(function () {

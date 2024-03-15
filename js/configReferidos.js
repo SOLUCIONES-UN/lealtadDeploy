@@ -88,14 +88,14 @@ const chechInstagram = () => {
 
  const chechWhatsApp = () => {
    if ($("#swWhatsapp").prop("checked")) {
-     $("#textWhatsapp").prop("disabled", false);
-     $("#btnWhatsapp").prop("disabled", true);
+     $("#whatsapp").prop("disabled", false);
+     $("#btnWhatsapp").prop("disabled",false);
      $("#btnWhatsapp").removeClass("btn-secondary");
      $("#btnWhatsapp").addClass("btn-success");
      $("#pnWhatsapp").removeClass("bg-secondary");
      $("#pnWhatsapp").addClass("bg-success");
    } else {
-     $("#textWhatsapp").prop("disabled", true);
+     $("#whatsapp").prop("disabled", true);
      $("#btnWhatsapp").prop("disabled", true);
      $("#btnWhatsapp").removeClass("btn-success");
      $("#btnWhatsapp").addClass("btn-secondary");
@@ -113,7 +113,7 @@ const chechInstagram = () => {
      $("#pnMensaje").removeClass("bg-secondary");
      $("#pnMensaje").addClass("bg-primary");
    } else {
-     $("#textMensaje").prop("disabled", true);
+     $("#mensaje").prop("disabled", true);
      $("#btnMensaje").prop("disabled", true);
      $("#btnMensaje").removeClass("btn-primary");
      $("#btnMensaje").addClass("btn-secondary");
@@ -125,14 +125,14 @@ const chechInstagram = () => {
 
 const chechPantalla = () => {
    if ($("#swPantalla").prop("checked")) {
-     $("#textPantalla").prop("disabled", false);
+     $("#pantalla").prop("disabled", false);
     $("#btnPantalla").prop("disabled", false);
      $("#btnPantalla").removeClass("btn-secondary");
      $("#btnPantalla").addClass("btn-warning");
      $("#pnPantalla").removeClass("bg-secondary");
      $("#pnPantalla").addClass("bg-warning");
    } else {
-     $("#textPantalla").prop("disabled", true);
+     $("#pantalla").prop("disabled", true);
      $("#btnPantalla").prop("disabled", true);
      $("#btnPantalla").removeClass("btn-warning");
      $("#btnPantalla").addClass("btn-secondary");
@@ -203,14 +203,14 @@ const obtenerData = () => {
 
 
 const updateConfigReferidos = (id, descripcion) => {
-  const boton = $("#tuBotonId");
+  // const boton = $("#tuBotonId");
 
-  // Si el botón está deshabilitado, significa que la solicitud está en progreso
-  if (boton.prop("disabled")) {
-    return;
-  }
+  // // Si el botón está deshabilitado, significa que la solicitud está en progreso
+  // if (boton.prop("disabled")) {
+  //   return;
+  // }
 
-  boton.prop("disabled", true); 
+  // boton.prop("disabled", true); 
 
   console.log("Valid", id);
   $("#tuBotonId").prop("disabled", true);
@@ -346,15 +346,7 @@ const DeleteConfigReferidos = (id) => {
     .catch((error) => console.log("error", error));
 
     }
-    $(document).ready(function() {
-      // Evento de clic en la tarjeta de Facebook
-      $("#pnFacebook").click(function() {
-          // Cambiar el estado del switch al contrario del estado actual
-          $("#swFacebook").prop("checked", !$("#swFacebook").prop("checked"));
-          // Llamar a la función para ajustar el estado visual
-          chechFacebook();
-      });
-  });
+    
   $(document).ready(function() {
     // Evento de clic en la tarjeta de Facebook
     $("#textFacebook").click(function() {
@@ -366,7 +358,7 @@ const DeleteConfigReferidos = (id) => {
 });
 
 $(document).ready(function() {
-  // Evento de clic en la tarjeta de Facebook
+  // Evento de clic en la tarjeta de instagram
   $("#textInstagram").click(function() {
       // Cambiar el estado del switch al contrario del estado actual
       $("#swInstagram").prop("checked", !$("#swInstagram").prop("checked"));
@@ -374,6 +366,30 @@ $(document).ready(function() {
       chechInstagram();
   });
 });
-
-
-
+$(document).ready(function() {
+  // Evento de clic en la tarjeta de mensaje
+  $("#textMensaje").click(function() {
+      // Cambiar el estado del switch al contrario del estado actual
+      $("#swMensaje").prop("checked", !$("#swMensaje").prop("checked"));
+      // Llamar a la función para ajustar el estado visual
+      chechMensajes();
+  });
+});
+$(document).ready(function() {
+  // Evento de clic en la tarjeta de pantalla
+  $("#textPantalla").click(function() {
+      // Cambiar el estado del switch al contrario del estado actual
+      $("#swPantalla").prop("checked", !$("#swPantalla").prop("checked"));
+      // Llamar a la función para ajustar el estado visual
+      chechPantalla();
+  });
+});
+$(document).ready(function() {
+  // Evento de clic en la tarjeta de whatsapp
+  $("#textWhatsapp").click(function() {
+      // Cambiar el estado del switch al contrario del estado actual
+      $("#swWhatsapp").prop("checked", !$("#swWhatsapp").prop("checked"));
+        // Llamar a la función para ajustar el estado visual
+      chechWhatsApp();
+  });
+});
