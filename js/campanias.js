@@ -113,6 +113,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
 
+
+
+    $(document).ready(function() {
+        $('#fechaHoraInicioPicker').datetimepicker({
+            format: 'YYYY-MM-DD' // Formato de fecha
+        });
+        $('#fechaHoraFinPicker').datetimepicker({
+            format: 'YYYY-MM-DD' // Formato de fecha
+        });
+        // Llenar opciones de hora
+        for (let i = 0; i < 24; i++) {
+            $('#horaInicio').append(`<option value="${i}">${i}:00</option>`);
+        }
+    });
+
+
+
+    function guardarDia() {
+        var diaSeleccionado = document.getElementById('dia').value;
+        // Aquí puedes hacer lo que necesites con el día seleccionado
+        console.log("Día seleccionado:", diaSeleccionado);
+        // Por ejemplo, podrías enviarlo a través de una solicitud AJAX a tu servidor
+    }
+
+
+
+
+
     /* allFormVal['nombre'] = false;
     allFormVal['tituloNotificacion'] = false;
     allFormVal['limiteParticipacion'] = false;
@@ -154,11 +182,47 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 $(document).ready(function() {
-    $('#hora').timepicker({
-        showMeridian: false, // Esto evita que se muestren AM/PM
-        minuteStep: 1 // Esto establece el paso del minuto a 1
+    $('#fechaHoraInicioPicker').datetimepicker({
+        format: 'YYYY-MM-DD' // Formato de fecha
     });
+    $('#fechaHoraFinPicker').datetimepicker({
+        format: 'YYYY-MM-DD' // Formato de fecha
+    });
+    // Llenar opciones de hora
+    for (let i = 0; i < 24; i++) {
+        $('#horaInicio').append(`<option value="${i}">${i}:00</option>`);
+    }
 });
+
+
+
+function guardarDia() {
+    var diaSeleccionado = document.getElementById('diaEnvio').value;
+    // Aquí puedes hacer lo que necesites con el día seleccionado
+    console.log("Día seleccionado:", diaSeleccionado);
+    // Por ejemplo, podrías enviarlo a través de una solicitud AJAX a tu servidor
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// esto es para la hora cuando es input individual 
+
+
+// $(document).ready(function() {
+//     $('#hora').timepicker({
+//         showMeridian: false, // Esto evita que se muestren AM/PM
+//         minuteStep: 1 // Esto establece el paso del minuto a 1
+//     });
+// });
 
 
 
@@ -589,13 +653,13 @@ function addConfig(id, nombreEtapa) {
                                     <div class="row">
                                         <div class="form-group col-md-6">
                                             <label class="form-label" for="departamento">Departamento</label>
-                                            <select class="form-control" id="departamento${id}">
+                                            <select class="form-control" id="departamento${id}" onchange="getMunicipios(this.value)">
                                                 <option value="0">Todos los departamentos</option>
                                             </select>
                                         </div>
                                         <div class="form-group col-md-6">
-                                            <label class="form-label" for="municipio">Municipio</label>
-                                            <select class="form-control" id="municipio${id}">
+                                            <label class="form-label" for="municipioSelect">Municipio</label>
+                                            <select class="form-control" id="municipioSelect">
                                                 <option value="0">Todos los Municipios</option>
                                             </select>
                                         </div>
@@ -809,46 +873,69 @@ const getDepartamentos = (id, isEdith = false) => {
     fetch(`${url}Departamento`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
+        console.log("esto biene en departamentos",result);
         result.forEach((element) => {
           var opc = `<option value="${element.id}">${element.nombre}</option>`;
           $("#departamento" + id).append(opc);
+        });
+        $("#departamento" + id).on("change", function() {
+          var id = $(this).val();
+          console.log("Departamento seleccionado con jquery:", id);
+          getMunicipios(id);
         });
       })
       .catch((error) => console.log("error", error));
   }
 };
 
+
+
+
+
+
 const getMunicipios = (id, isEdit = false) => {
+  const departamentoId = isEdit ? document.querySelector('#departamentoActualizar').value : id;
 
-  const departamento = document.querySelector(`#departamento${id}`);
-  const departamentoActualizar = document.querySelector('#departamentoActualizar');
-
-  fetch(`${url}Municipio/by/${isEdit ? departamentoActualizar.value : 1}`, {
+  fetch(`${url}Municipio/by/${departamentoId}`, {
     method: 'GET',
     redirect: 'follow',
     headers: headers
   })
     .then((response) => response.json())
     .then((result) => {
-      if (isEdit) {
-        result.forEach((element) => {
-          const option = document.createElement('option');
-          option.value = element.id;
-          option.textContent = element.nombre;
-          document.querySelector('#municipioEdit').append(option);
-        });
-      } else {
-        result.forEach((element) => {
-          const option = document.createElement('option');
-          option.value = element.id;
-          option.textContent = element.nombre;
-          document.querySelector(`#municipio${id}`).append(option);
-        });
+      console.log("esto biene en munisipios",result);
+      const selectId = isEdit ? '#municipioEdit' : `#municipioSelect`;
+      
+      const municipioSelect = document.querySelector(selectId);
+      if (!municipioSelect) {
+        console.error(`No se pudo encontrar el elemento select con el ID ${selectId}`);
+        return;
       }
+      
+      // Limpiar el select de municipios
+      // $("#selectId").empty();
+      municipioSelect.innerHTML = '';
+
+      const defaultOption = document.createElement('option');
+      defaultOption.value = '0';
+      defaultOption.textContent = 'Todos los Municipios';
+      municipioSelect.appendChild(defaultOption);
+
+
+      result.forEach((municipio) => {
+        const option = document.createElement('option');
+        option.value = municipio.id;
+        option.textContent = municipio.nombre;
+        municipioSelect.appendChild(option);
+      });
+      console.log("Select de municipios después de llenar:", municipioSelect);
     })
     .catch((error) => console.log("error", error));
-
 }
+
+
+
+
 
 const getTransacciones = (id, isEdit = false) => {
   var requestOptions = {
@@ -1082,6 +1169,9 @@ const getAllCampanias = () => {
     })
     .catch((error) => console.log("error", error));
 };
+
+
+
 const table = (table, data) => {
 
 
@@ -1543,83 +1633,151 @@ const getPresupuesto = (idEtapa) => {
     });
 };
 
+// const getEtapas = (id) => {
+//   var requestOptions = {
+//     method: "GET",
+//     redirect: 'follow',
+//     headers: headers,
+//   };
+//   console.log("ID de la camapaña" + id);
+//   fetch(`${url}Campania/${id}`, requestOptions)
+//     .then((response) => response.json())
+//     .then((result) => {
+//       result.etapas.forEach((element, index) => {
+//         console.log("bienen estas cosas aqui",response);
+//         var opcTableEtapas = `<tr>
+//               <td>${index + 1}</td>
+//               <td>${element.nombre}</td>
+//               <td>${element.descripcion}</td>
+//               <td>
+//                 <div class="btn-group">
+//                   <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
+//                       ${feather.icons["more-vertical"].toSvg({
+//           class: "font-small-4",
+//         })}
+//                   </a>
+//                   <div class="dropdown-menu dropdown-menu-right">
+//                       <a href="#" onclick="OpenEdit(${data}, ${data}, ${data
+//           } , ${true})" class="borrar btn_edit dropdown-item">
+//                           ${feather.icons["archive"].toSvg({
+//             class: "font-small-4 mr-50",
+//           })} Actualizar
+//                       </a>
+                  
+//                   <div class="dropdown-menu dropdown-menu-right">
+//                       <a href="#" onclick="eliminarFila(${index})" class="btn_delete dropdown-item">
+//                         ${feather.icons["trash-2"].toSvg({
+//             class: "font-small-4 mr-50",
+//           })} Inhabilitar
+//                       </a>
+//                   </div>
+//                   </div>
+//                 </div> 
+//               </td>
+//               </tr>`;
+
+//         $("#PreviewEtapsEdit").append(opcTableEtapas);
+//       });
+//     })
+//     .catch((error) => console.log("error", error));
+// };
+
+
+
 const getEtapas = (id) => {
   var requestOptions = {
     method: "GET",
     redirect: 'follow',
     headers: headers,
   };
-  console.log("ID de la camapaña" + id);
+  console.log("ID de la campaña: " + id);
   fetch(`${url}Campania/${id}`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
-      result.etapas.forEach((element, index) => {
-        console.log("bienen estas cosas aqui",response);
-        var opcTableEtapas = `<tr>
-              <td>${index + 1}</td>
-              <td>${element.nombre}</td>
-              <td>${element.descripcion}</td>
-              <td>
-                <div class="btn-group">
-                  <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
-                      ${feather.icons["more-vertical"].toSvg({
-          class: "font-small-4",
-        })}
+      if (result.etapas && result.etapas.length > 0) {
+        result.etapas.forEach((element, index) => {
+          var opcTableEtapas = `<tr>
+            <td>${index + 1}</td>
+            <td>${element.nombre}</td>
+            <td>${element.descripcion}</td>
+            <td>
+              <div class="btn-group">
+                <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
+                  ${feather.icons["more-vertical"].toSvg({
+                    class: "font-small-4",
+                  })}
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                <a href="#" onclick="ChangePanel(1)" class="borrar btn_edit dropdown-item">
+                    ${feather.icons["archive"].toSvg({
+                      class: "font-small-4 mr-50",
+                    })} Actualizar
                   </a>
-                  <div class="dropdown-menu dropdown-menu-right">
-                      <a href="#" onclick="OpenEdit(${data}, ${data}, ${data
-          } , ${true})" class="borrar btn_edit dropdown-item">
-                          ${feather.icons["archive"].toSvg({
-            class: "font-small-4 mr-50",
-          })} Actualizar
-                      </a>
-                  
-                  <div class="dropdown-menu dropdown-menu-right">
-                      <a href="#" onclick="eliminarFila(${index})" class="btn_delete dropdown-item">
-                        ${feather.icons["trash-2"].toSvg({
-            class: "font-small-4 mr-50",
-          })} Inhabilitar
-                      </a>
-                  </div>
-                  </div>
-                </div> 
-              </td>
-              </tr>`;
+                  <a href="#" onclick="eliminarFila(${index})" class="btn_delete dropdown-item">
+                    ${feather.icons["trash-2"].toSvg({
+                      class: "font-small-4 mr-50",
+                    })} Inhabilitar
+                  </a>
+                </div>
+              </div> 
+            </td>
+          </tr>`;
 
-        $("#PreviewEtapsEdit").append(opcTableEtapas);
-      });
+          $("#PreviewEtapsEdit").append(opcTableEtapas);
+          $("#nombreEtapaEdith").val(element.nombre);
+          $("#ordenEtapaEdith").val(element.orden);
+          $("#descEtapaEdith").val(element.descripcion);
+          $("#TipoTransaccionEdith").val(element.tipoParticipacion);
+        });
+      } else {
+        console.log("No se encontraron etapas para la campaña con ID: " + id);
+      }
     })
-    .catch((error) => console.log("error", error));
+    .catch((error) => console.log("Error al obtener las etapas:", error));
 };
+
+
+
 
 const OpenEdit = (id, index, idEtapa, isEtapa = false) => {
   if (isEtapa) {
     console.log("aca ira el formulario de etapas " + id, idEtapa);
+    
 
     var requestOptions = {
       method: "GET",
       redirect: 'follow',
       headers: headers
     };
-    console.log(id);
+    // $("#modaletapas").modal("toggle");
+
     fetch(`${url}Campania/${id}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result.index);
-        $("#idEtapa").val(result.etapas[index].id);
-        $("#nombreEtapaEdith").val(result.etapas[index].nombre);
-        $("#ordenEtapaEdith").val(result.etapas[index].orden);
-        $("#descEtapaEdith").val(result.etapas[index].descripcion);
-        $("#TipoTransaccionEdith").val(result.etapas[index].tipoParticipacion);
+        const etapa = result.etapas.find((etapa) => etapa.id === idEtapa);
+        if (!etapa) {
+          console.error(`No se encontró la etapa con ID ${idEtapa}`);
+          return;
+        }
+        
+        $("#idEtapa").val(etapa.id);
+        $("#nombreEtapaEdith").val(etapa.nombre);
+        console.log('esta es el nombre de esta cosa',etapa.name)
+        $("#ordenEtapaEdith").val(etapa.orden);
+        $("#descEtapaEdith").val(etapa.descripcion);
+        $("#TipoTransaccionEdith").val(etapa.tipoParticipacion);
 
         getParametros(idEtapa);
         getPremiosEtapa(idEtapa);
         getPresupuesto(idEtapa);
         getPremios(0, true);
-        getDepartamentos(0, true);
-        getMunicipios(0, true);
+        getDepartamentos(id, true);
+        getMunicipios(id, true);
 
         $("#modalEdit").modal("toggle");
+        
+
+        
       })
       .catch((error) => console.log("error", error));
 
@@ -1651,7 +1809,7 @@ const OpenEdit = (id, index, idEtapa, isEtapa = false) => {
         $("#diaEdith").val(result.diaReporte);
         $("#correosElectrónicosEdith").val(result.emails);
 
-        getEtapas(id);
+        getEtapas(id); // Llama a getEtapas solo una vez
         getParticipantes(id);
         getBloqueados(id);
 

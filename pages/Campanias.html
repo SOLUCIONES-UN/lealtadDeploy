@@ -13,6 +13,8 @@
     <link rel="apple-touch-icon" href="../app-assets/images/ico/apple-icon-120.png">
     <link rel="shortcut icon" type="image/x-icon" href="../app-assets/images/ico/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500;1,600" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 
     <!-- BEGIN: Vendor CSS-->
     <link rel="stylesheet" type="text/css" href="../app-assets/vendors/css/vendors.min.css">
@@ -482,17 +484,53 @@
                                         </div>
                                     </div>
                                     <div class="row">
+
                                         <div class="form-group col-md-6">
-                                            <label class="form-label" for="fechaInicio">Fecha Inicio</label>
-                                            <input type="date" id="fechaInicio" class="form-control" placeholder="Nemonico" />
+
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalFechas">
+                                                Automatizar reporte
+                                            </button>
                                         </div>
-                                        <div class="form-group col-md-6">
-                                            <label class="form-label" for="fechaFin">Fecha Fin</label>
-                                            <input type="date" id="fechaFin" class="form-control" placeholder="Ingresa el Nombre" />
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <label class="form-label" for="fechaRegistro">Fecha De Registro</label>
-                                            <input type="date" id="fechaRegistro" class="form-control" placeholder="Ingresa el Nombre" />
+
+                                        <div class="modal fade" id="modalFechas" tabindex="-1" role="dialog" aria-labelledby="modalFechasLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="modalFechasLabel">Seleccionar Fechas</h5>
+
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="fechaInicio">Fecha de Inicio</label>
+                                                            <input type="date" id="fechaInicio" class="form-control" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="fechaFin">Fecha de Fin</label>
+                                                            <input type="date" id="fechaFin" class="form-control" />
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="dia">Día de Envío</label>
+                                                            <select id="dia" class="form-control">
+                                                                <option value="1">1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3">3</option>
+                                                                <!-- Continúa agregando opciones hasta 31 -->
+                                                                <option value="31">31</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="hora">Hora de Envío</label>
+                                                            <input type="time" id="hora" class="form-control" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                        <button type="button" class="btn btn-primary">Guardar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -524,18 +562,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="form-group col-md-6">
-                                            <label class="form-label" for="dia">Día</label>
-                                            <input type="text" id="dia" class="form-control" placeholder="Ingresa el día" />
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <label class="form-label" for="hora">Hora</label>
-                                            <select id="hora" class="form-control">
-                                                <option value="">Selecciona la hora</option>
-                                            </select>
-                                        </div>
-                                    </div>
+
                                     <div class="d-flex justify-content-between">
                                         <div>
                                             <button class="btn btn-outline-secondary btn-prev" disabled>
@@ -846,10 +873,6 @@
                                             Participacion</label>
                                         <input type="number" id="limiteParticipacionEdith" class="form-control" />
                                     </div>
-                                    <div class="form-group col-md-6">
-                                        <label class="form-label" for="correosElectrónicosEdith">Correo Electrónico</label>
-                                        <input type="email" id="correosElectrónicosEdith" class="form-control" placeholder="Ingresa el Correo Electrónico" />
-                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group form-password-toggle col-md-6">
@@ -865,20 +888,57 @@
                                         </div>
                                     </div>
                                 </div>
+
+
                                 <div class="row">
+
                                     <div class="form-group col-md-6">
-                                        <label class="form-label" for="fechaInicioEdith">Fecha Inicio</label>
-                                        <input type="date" id="fechaInicioEdith" class="form-control" placeholder="Nemonico" />
+
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalFechas2">
+                                            Automatizar reporte
+                                        </button>
                                     </div>
-                                    <div class="form-group col-md-6">
-                                        <label class="form-label" for="fechaFinEdith">Fecha Fin</label>
-                                        <input type="date" id="fechaFinEdith" class="form-control" placeholder="Ingresa el Nombre" />
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label class="form-label" for="fechaRegistroEdith">Fecha De Registro</label>
-                                        <input type="date" id="fechaRegistroEdith" class="form-control" placeholder="Ingresa el Nombre" />
+
+                                    <div class="modal fade custom-modal" id="modalFechas2" tabindex="-1" role="dialog" aria-labelledby="modalFechasLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content custom-modal">
+
+                                                <div class="modal-body">
+                                                    <h5 class="modal-title" id="modalFechasLabel">Seleccionar Fechas</h5>
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="fechaInicioEdith">Fecha Inicio</label>
+                                                        <input type="date" id="fechaInicioEdith" class="form-control" />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="fechaFinEdith">Fecha de Fin</label>
+                                                        <input type="date" id="fechaFinEdith" class="form-control" />
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="diaEdith">Día de Envío</label>
+                                                        <select id="diaEdith" class="form-control">
+                                                            <option value="1">1</option>
+                                                            <option value="2">2</option>
+                                                            <option value="3">3</option>
+                                                            <!-- Continúa agregando opciones hasta 31 -->
+                                                            <option value="31">31</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="horaEdith">Hora de Envío</label>
+                                                        <input type="time" id="horaEdith" class="form-control" />
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Guardar</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+
                                 <div class="row">
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="edadIniEdith">Edad Inicial</label>
@@ -908,18 +968,6 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="form-group col-md-6">
-                                        <label class="form-label" for="diaEdith">Día</label>
-                                        <input type="text" id="diaEdith" class="form-control" placeholder="Ingresa el día" />
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label class="form-label" for="horaEdith">Hora</label>
-                                        <select id="horaEdith" class="form-control">
-                                            <option value="">Selecciona la hora</option>
-                                        </select>
-                                    </div>
-                                </div>
                                 <div class="d-flex justify-content-between">
                                     <div class="d-flex justify-content-between">
                                         <div>
@@ -930,11 +978,71 @@
                                     </div>
                                 </div>
                             </div>
+
+
+
+
+
+
                             <div id="edith-detalle-Parametros" class="content" style="height: 650px;">
                                 <div class="content-header">
                                     <h5 class="mb-0">Etapas de la campaña</h5>
-                                    <small>Descripcion de las etapas para esta campaña</small>
+                                    <small>Descripcion de las etapas para esta campañasss</small>
                                 </div>
+
+                                <div class="col-md-8">
+                                    <label for="nombreEtapaEdith">Nombre</label>
+                                    <input class="form-control" id="nombreEtapaEdith" />
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="ordenEtapaEdith">Orden</label>
+                                    <input class="form-control" id="ordenEtapaEdith" />
+                                </div>
+                                <div class="form-group form-password-toggle col-md-12">
+                                    <label class="form-label" for="descEtapaEdith">Descripción De Las
+                                        Etapas</label>
+                                    <textarea type="password" id="descEtapaEdith" class="form-control" placeholder="Ingrese la descripcion de la etapa" rows="2"></textarea>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="form-label" for="TipoTransaccionEdith">Tipo Transaccion</label>
+                                    <!-- <input type="number" id="TipoTransaccion" class="form-control" /> -->
+                                    <select class="form-control" id="TipoTransaccionEdith">
+                                        <option value="0" default selected disabled>Seleccione Una Transaccion
+                                        </option>
+                                        <option value="1">Por Transaccion</option>
+                                        <option value="2">Acumular Transacciones </option>
+                                        <option value="3">Recurrente</option>
+                                        <option value="4">Acumular Recurentes</option>
+                                        <option value="5">Acumular valor</option>
+                                        <option value="6">Combinar Transacciones</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-6" id="transaccionesDinamicas">
+
+                                </div>
+                                <div class="form-group col-md-6" id="Periodo">
+
+                                </div>
+                                <div class="col-md-12 mt-2">
+                                    <button class="btn btn-success" type="button" id="btnAddEtapa" style="float: right;">
+                                        <span class="align-middle d-sm-inline-block d-none">AGREGAR</span>
+                                    </button>
+                                </div>
+                                <div class="col-md-12 mt-5">
+                                    <h4>Lista de Etapas:</h4>
+                                    <br />
+                                </div>
+
+
+
+
+
+
+
+
+
+
+
                                 <div class=" mt-5">
                                     <div style="height:200px; width:auto;overflow-y: scroll;">
                                         <table class="table table-bordered table-striped">
@@ -1052,7 +1160,10 @@
                                 </button>
                             </div>
                         </div>
+
+
                         <div class="bs-stepper-content">
+
                             <div id="edith-detalle-etapas" class="content" style="height: 850px;">
                                 <div class="content-header">
                                     <h5 class="mb-0">Configuración de la Etapa</h5>
@@ -1312,7 +1423,10 @@
 
 
     <!-- END: Content-->
-    </div>
+
+
+
+
     <!-- End: Customizer-->
     <!-- BEGIN: Footer-->
     <footer class="footer footer-static footer-light">
@@ -1330,7 +1444,7 @@
     <!-- BEGIN Vendor JS-->
 
     <!-- BEGIN: Page Vendor JS-->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
 
     <script src="../app-assets/vendors/js/extensions/moment.min.js"></script>
@@ -1353,7 +1467,7 @@
     <!-- END: Theme JS-->
 
     <!-- BEGIN: Page JS-->
-    <!-- <script src="../js/"></script> -->
+
     <script src="../js/functions.js"></script>
     <script src="../js/campanias.js"></script>
     <script src="../js/menuDinamico.js"></script>

@@ -263,6 +263,7 @@
                   <tr>
                     <th>#</th>
                     <th>Descripcion</th>
+                    <th>Icono</th>
                     <th>Acciones</th>
                   </tr>
                 </thead>
@@ -292,6 +293,15 @@
             <div id="descripcionError" class="descripcion-error invalid-feedback"></div>
           </div>
 
+          <div class="form-group">
+            <label class="form-label" for="basic-icon-default-fullname">Icono</label>
+            <input type="text" class="form-control dt-full-name icono" id="icono"
+              placeholder="Icono del menú" name="icono" aria-label=""
+              aria-describedby="basic-icon-default-fullname2" required />
+            <div id="iconoError" class="icono-error invalid-feedback"></div>
+          </div>
+          
+
 
           <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar</button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
@@ -308,16 +318,33 @@
           <h5 class="modal-title" id="exampleModalLabel">Actualizar el Menu</h5>
         </div>
         <div class="modal-body flex-grow-1">
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label class="form-label" for="descripcionEdit">Descripción</label>
             <textarea class="form-control descripcion" id="descripcionEdit" placeholder="Descripción del menú"
               name="descripcion" required rows="3"></textarea>
             <div class="invalid-feedback descripcion-error"></div>
+          </div> -->
+
+          <div class="form-group">
+            <input id="id" type="hidden">
+            <label class="form-label" for="basic-icon-default-fullname">Descripción</label>
+            <input type="text" class="form-control dt-full-name descripcion" id="descripcionEdit"
+              placeholder="Descripción del menú" name="descripcion" aria-label=""
+              aria-describedby="basic-icon-default-fullname2" required />
+            <div id="descripcionedError" class="descripcion-error invalid-feedback"></div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="iconoEdit">Icono</label>
+            <input type="text" class="form-control dt-full-name icono " id="iconoEdit"
+              placeholder="Icono del menú" name="icono" aria-label=""
+              aria-describedby="basic-icon-default-fullname2" required />
+            <div id="iconoError" class="icono-error invalid-feedback"></div>
           </div>
 
 
 
-          <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar</button>
+          <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Actualizar</button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
         </div>
       </form>
