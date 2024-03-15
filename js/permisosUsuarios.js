@@ -16,13 +16,13 @@ $(function () {
 })
 
 
-const Usuario = () => {
+// const Usuario = () => {
 
-    let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
-    console.log(usuario.nombre)
-    $('.user-name').text(usuario.nombre);
-    $('.user-status').text(usuario.rol.descripcion);
-}
+//     let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
+//     console.log(usuario.nombre)
+//     $('.user-name').text(usuario.nombre);
+//     $('.user-status').text(usuario.rol.descripcion);
+// }
 
 
 const getRols = () => {
@@ -106,6 +106,8 @@ $('#menu').on('change', function () {
 
     const idMenu = $('#menu').val();
     const idRol = $('#Rols').val();
+    
+    
     console.log(idMenu, idRol)
 
     if (idMenu != null && idRol != null) {

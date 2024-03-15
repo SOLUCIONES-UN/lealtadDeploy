@@ -17,41 +17,47 @@ $(function () {
 
   $('#modalNew').on('show.bs.modal', function () {
     limpiarFormulario();
+    $("#btnSubmit").attr("disabled", false);
+    
   });
 
   $('#modalEdit').on('show.bs.modal', function () {
-
+    $("#btnSubmitEdit").attr("disabled", false);
   });
 
   $('#modalNew').on('hidden.bs.modal', function () {
     limpiarFormulario();
+    $("#btnSubmit").attr("disabled", false);
   });
+
   $('#modalEdit').on('hidden.bs.modal', function () {
     limpiarFormulario();
+    $("#btnSubmitEdit").attr("disabled", false);
   });
 
 
 
   $('#modalNew').find('[data-dismiss="modal"]').click(function () {
     limpiarFormulario();
+    $("#btnSubmit").attr("disabled", false);
   });
 
 
   $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
     limpiarFormulario();
+    ("#btnSubmitEdit").attr("disabled", false);
   });
 
   //evento submit del formulairo
   $("#formNew").submit(function () {
-    $('#btnSubmit').prop('disabled', true);
-
     const nombre = $('#nombre').val();
-
+    
     if (!validarNombre(nombre)) {
-      $('#btnSubmit').prop('disabled', false);
-
+      
       return false;
     }
+    
+    $("#btnSubmit").attr("disabled", true);
 
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -72,8 +78,6 @@ $(function () {
     fetch(`${url}Departamento`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        $('#btnSubmit').prop('disabled', false);
-
         console.log(result);
         if (result.code == "ok") {
           limpiarFormulario();
@@ -82,26 +86,27 @@ $(function () {
           Alert(result.message, "success");
         } else {
           Alert(result.message, "error");
+          
         }
       })
       .catch((error) => {
-        $('#btnSubmit').prop('disabled', false);
-
         Alert(error, "error");
       });
+      
     return false;
   });
 
   $("#formEdit").submit(function () {
-    $('#btnSubmitEdit').prop('disabled', true);
 
     const nombre = $('#nombreEdit').val();
-
+    
     if (!validarNombre(nombre)) {
-      $('#btnSubmitEdit').prop('disabled', false);
-
+      
       return false;
     }
+    
+    $("#btnSubmitEdit").attr("disabled", true);
+
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Authorization", token);
@@ -123,22 +128,20 @@ $(function () {
     fetch(`${url}Departamento/${id}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        $('#btnSubmitEdit').prop('disabled', false);
-
         if (result.code == "ok") {
           limpiarFormulario();
           tabla._fnAjaxUpdate();
           $("#modalEdit").modal("toggle");
           Alert(result.message, "success");
+          
         } else {
           Alert(result.message, "error");
         }
       })
       .catch((error) => {
-        $('#btnSubmitEdit').prop('disabled', false);
-
         Alert(error.errors, "error");
       });
+    
     return false;
   });
 
@@ -172,15 +175,14 @@ $(function () {
   });
 });
 
-const Usuario = () => {
-  let usuario = JSON.parse(localStorage.getItem("infoUsuario"));
-  console.log(usuario);
-  $(".user-name").text(usuario.nombre);
-  $(".user-status").text(usuario.rol.descripcion);
-};
+// const Usuario = () => {
+//   let usuario = JSON.parse(localStorage.getItem("infoUsuario"));
+//   console.log(usuario);
+//   $(".user-name").text(usuario.nombre);
+//   $(".user-status").text(usuario.rol.descripcion);
+// };
 
 const getDepartamentos = () => {
-  
   return $("#tableData").dataTable({
     ajax: {
       url: `${url}Departamento`,
@@ -262,6 +264,7 @@ const getDepartamentos = () => {
     ],
   });
 };
+
 function limpiarFormulario() {
   $('#nombre').val('');
   $('.nombre').removeClass('is-invalid');
@@ -279,9 +282,18 @@ const Alert = function (message, status) {
 };
 
 const OpenEdit = (id) => {
+
+
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", token);
+
+
   var requestOptions = {
     method: "GET",
     redirect: "follow",
+    headers: myHeaders,
+
   };
 
   fetch(`${url}Departamento/${id}`, requestOptions)

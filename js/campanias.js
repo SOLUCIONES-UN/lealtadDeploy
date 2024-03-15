@@ -154,33 +154,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-    const img1 = document.querySelector('#imgAkisi');
-    img1.onchange = () => {
-        const file = img1.files[0];
-        const fileName = file.name;
-        const fileExtension = fileName.split('.').pop().toLowerCase();
-        //imgAkisi = getBlob(file);
-        const reader = new FileReader();
-        reader.onload = event => {
-            imgAkisi = `data:image/${fileExtension};base64,${btoa(event.target.result)}`;
-            console.log(imgAkisi)
-        };
-        reader.readAsBinaryString(file);
-    }
+  const img1 = document.querySelector('#imgAkisi');
+  img1.onchange = () => {
+    const file = img1.files[0];
+    const fileName = file.name;
+    const fileExtension = fileName.split('.').pop().toLowerCase();
+    //imgAkisi = getBlob(file);
+    const reader = new FileReader();
+    reader.onload = event => {
+      imgAkisi = `data:image/${fileExtension};base64,${btoa(event.target.result)}`;
+    };
+    reader.readAsBinaryString(file);
+  }
 
-    const img2 = document.querySelector('#imgPush');
-    img2.onchange = () => {
-        const file = img2.files[0];
-        const fileName = file.name;
-        const fileExtension = fileName.split('.').pop().toLowerCase();
-        //imgPush = getBlob(file);
-        const reader = new FileReader();
-        reader.onload = event => {
-            imgPush = `data:image/${fileExtension};base64,${btoa(event.target.result)}`;
-            console.log(imgPush)
-        };
-        reader.readAsBinaryString(file);
-    }
+  const img2 = document.querySelector('#imgPush');
+  img2.onchange = () => {
+    const file = img2.files[0];
+    const fileName = file.name;
+    const fileExtension = fileName.split('.').pop().toLowerCase();
+    //imgPush = getBlob(file);
+    const reader = new FileReader();
+    reader.onload = event => {
+      imgPush = `data:image/${fileExtension};base64,${btoa(event.target.result)}`;
+    };
+    reader.readAsBinaryString(file);
+  }
 })
 
 $(document).ready(function() {
@@ -250,21 +248,20 @@ $(function() {
         $(data).addClass("show active");
     });
 
-    $(".BtnBottador").click(function() {
-        var data = {
-            nombre: $("#nombre").val(),
-            descripcion: $("#descripcion").val(),
-            imgSuccess: "test.png",
-            imgFail: "test.png",
-            fechaInicio: $("#fechaInicio").val(),
-            fechaFin: $("#fechaFin").val(),
-            fechaCreacion: $("#fechaRegistro").val(),
-            estado: 3,
-        };
-        console.log(data);
-        saveData(data);
-        Limpiar();
-    });
+  $(".BtnBottador").click(function () {
+    var data = {
+      nombre: $("#nombre").val(),
+      descripcion: $("#descripcion").val(),
+      imgSuccess: "test.png",
+      imgFail: "test.png",
+      fechaInicio: $("#fechaInicio").val(),
+      fechaFin: $("#fechaFin").val(),
+      fechaCreacion: $("#fechaRegistro").val(),
+      estado: 3,
+    };
+    saveData(data);
+    Limpiar();
+  });
 
     $("#submitData").click(function() {
 
@@ -272,33 +269,29 @@ $(function() {
 
         //if (!allFormIsOK) return invalidFormData()
 
-        var data = {
-            nombre: $("#nombre").val(),
-            descripcion: $("#descripcionCampania").val(),
-            tituloNotificacion: $("#tituloNotificacion").val(),
-            fechaRegistro: $("#fechaRegistro").val(),
-            fechaInicio: $("#fechaInicio").val(),
-            fechaFin: $("#fechaFin").val(),
-            edadInicial: $("#edadIni").val(),
-            edadFinal: $("#edadFini").val(),
-            sexo: $("#sexo option:selected").val(),
-            tipoUsuario: $("#tipoUsuario option:selected").val(),
-            descripcionNotificacion: $("#descripcionNotificacion").val(),
-            imgPush: imgPush,
-            imgAkisi: imgAkisi,
-            etapas: etapas,
-            Participacion: participantes,
-            Bloqueados: bloqueados,
-            maximoParticipaciones: $("#limiteParticipacion").val(),
-            horaReporte: $("#hora").val(),
-            diaReporte: $("#dia").val(),
-            emails: $("#correosElectrónicos").val(),
-        };
-        console.log(data);
-        saveData(data);
-        $("#addConfig").html(null);
-        $("#addFormConfig").html(null);
-    });
+    var data = {
+      nombre: $("#nombre").val(),
+      descripcion: $("#descripcionCampania").val(),
+      tituloNotificacion: $("#tituloNotificacion").val(),
+      fechaRegistro: $("#fechaRegistro").val(),
+      fechaInicio: $("#fechaInicio").val(),
+      fechaFin: $("#fechaFin").val(),
+      edadInicial: $("#edadIni").val(),
+      edadFinal: $("#edadFini").val(),
+      sexo: $("#sexo option:selected").val(),
+      tipoUsuario: $("#tipoUsuario option:selected").val(),
+      descripcionNotificacion: $("#descripcionNotificacion").val(),
+      imgPush: imgPush,
+      imgAkisi: imgAkisi,
+      etapas: etapas,
+      Participacion: participantes,
+      Bloqueados: bloqueados,
+      maximoParticipaciones: $("#limiteParticipacion").val(),
+    };
+    saveData(data);
+    $("#addConfig").html(null);
+    $("#addFormConfig").html(null);
+  });
 
     $("#btnAddEtapa").click(function() {
         var nombre = $("#nombreEtapa");
@@ -329,7 +322,6 @@ $(function() {
             presupuestos: "",
         });
 
-        console.log(etapas);
 
         $("#tbetapas").html(null);
         $(".etapaSelect").html(null);
@@ -337,9 +329,8 @@ $(function() {
 
         addConfig(index++, nombre.val());
 
-        etapas.forEach((element, index) => {
-            console.log(element.tipoParticipacion);
-            var opc = `<option>${element.nombre}</option>`;
+    etapas.forEach((element, index) => {
+      var opc = `<option>${element.nombre}</option>`;
 
             if (element.tipoParticipacion == 1) {
                 nombreParticipacion = "Por Transaccion";
@@ -396,10 +387,9 @@ $(function() {
     });
 });
 
-$("#TipoTransaccion").on("change", function() {
-    var addConfig;
-    let val = $("#TipoTransaccion").val();
-    console.log(val);
+$("#TipoTransaccion").on("change", function () {
+  var addConfig;
+  let val = $("#TipoTransaccion").val();
 
     if (val == 3 || val == 4) {
         addConfig = `
@@ -446,27 +436,25 @@ $("#TipoTransaccion").on("change", function() {
     }
 });
 
-const Usuario = () => {
+/*const Usuario = () => {
 
-    let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
-    console.log(usuario.nombre)
-    $('.user-name').text(usuario.nombre);
-    $('.user-status').text(usuario.rol.descripcion);
-}
+  let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
+  $('.user-name').text(usuario.nombre);
+  $('.user-status').text(usuario.rol.descripcion);
+}*/
 
 function loadMenu(isEtapa) {
-    // Adds crossed class
-    if (typeof bsStepper !== undefined && bsStepper !== null) {
-        for (var el = 0; el < bsStepper.length; ++el) {
-            bsStepper[el].addEventListener("show.bs-stepper", function(event) {
-                var index = event.detail.indexStep;
-                var numberOfSteps = $(event.target).find(".step").length - 1;
-                var line = $(event.target).find(".step");
-                console.log(line);
-                // The first for loop is for increasing the steps,
-                // the second is for turning them off when going back
-                // and the third with the if statement because the last line
-                // can't seem to turn off when I press the first item. ¯\_(ツ)_/¯
+  // Adds crossed class
+  if (typeof bsStepper !== undefined && bsStepper !== null) {
+    for (var el = 0; el < bsStepper.length; ++el) {
+      bsStepper[el].addEventListener("show.bs-stepper", function (event) {
+        var index = event.detail.indexStep;
+        var numberOfSteps = $(event.target).find(".step").length - 1;
+        var line = $(event.target).find(".step");
+        // The first for loop is for increasing the steps,
+        // the second is for turning them off when going back
+        // and the third with the if statement because the last line
+        // can't seem to turn off when I press the first item. ¯\_(ツ)_/¯
 
                 for (var i = 0; i < index; i++) {
                     line[i].classList.add("crossed");

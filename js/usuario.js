@@ -68,8 +68,9 @@ $(function () {
         if ($('#password').val().trim() != $('#password2').val().trim()) {
             Alert('Las contraseñas no coinciden', 'error');
             return;
-
+     
         }
+        
 
         var raw = JSON.stringify({
             "username": $('#username').val(),
@@ -212,13 +213,13 @@ $(function () {
     })
 });
 
-const Usuario = () => {
+// const Usuario = () => {
 
-    let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
-    console.log(usuario.nombre)
-    $('.user-name').text(usuario.nombre);
-    $('.user-status').text(usuario.rol.descripcion);
-}
+//     let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
+//     console.log(usuario.nombre)
+//     $('.user-name').text(usuario.nombre);
+//     $('.user-status').text(usuario.rol.descripcion);
+// }
 
 
 //obtiene los usuarios

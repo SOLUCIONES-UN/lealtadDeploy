@@ -10,7 +10,40 @@ const headers = {
 $(function() {
     let tabla = getPremios();
 
-    Usuario();
+    //Usuario();
+
+    $('#modalNew').on('show.bs.modal', function () {
+        limpiarFormulario();
+        $("#btnSubmit").attr("disabled", false);
+    
+    });
+    
+    $('#modalEdit').on('show.bs.modal', function () {
+        $("#btnSubmitEdit").attr("disabled", false);
+    });
+    
+    $('#modalNew').on('hidden.bs.modal', function () {
+        limpiarFormulario();
+        $("#btnSubmit").attr("disabled", false);
+    });
+    
+    $('#modalEdit').on('hidden.bs.modal', function () {
+        limpiarFormulario();
+        $("#btnSubmitEdit").attr("disabled", false);
+    });
+    
+    
+    
+    $('#modalNew').find('[data-dismiss="modal"]').click(function () {
+        limpiarFormulario();
+        $("#btnSubmit").attr("disabled", false);
+    });
+    
+    
+    $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
+        limpiarFormulario();
+        $("#btnSubmitEdit").attr("disabled", false);
+    });
     
     //evento submit del formulario
     $('#formNew').submit(function(){
@@ -18,30 +51,30 @@ $(function() {
     
 
         var valor = $('#tipoTransaccion').val();
+        var infoUsuario = JSON.parse(localStorage.getItem('infoUsuario'));
 
         if(valor !== "0"){
 
             if(valor=== "1"){
                 var raw = JSON.stringify({
-                    "nombre": $('#nombre').val(),
-                    "descripcion": $('#descripcion').val(),
-                    "link": "",
-                    "claveSecreta": "",
                     "idTransaccion": $('#transaccion').val(),
                     "tipoTransaccion" : valor,
+                    "usuario" : infoUsuario.username,
                 });
             } else if( valor === "2"){
                 var raw = JSON.stringify({
+                    "tipoTransaccion" : valor,
                     "descripcion": $('#descripcion').val(),
-                    "nombre": $('#nombre').val(),
                     "link": $('#link').val(),
                     "claveSecreta": $('#clave').val(),
-                    "tipoTransaccion" : valor,
+                    "usuario" : infoUsuario.username,
                 });
             }
         }
 
-        
+        $("#btnSubmit").attr("disabled", true);
+
+        //return false;
 
         var requestOptions = {
             method: 'POST',
@@ -75,31 +108,32 @@ $(function() {
 
         const id = $('#id').val();
         var valor = $('#tipoTransaccionEdit').val();
-
-        console.log(id)
+        var infoUsuario = JSON.parse(localStorage.getItem('infoUsuario'));
 
         if(valor !== "0"){
             
 
             if(valor=== "1"){
                 var raw = JSON.stringify({
-                    "nombre": $('#nombreEdit').val(),
                     "descripcion": $('#descripcionEditPremio').val(),
                     "link": "",
                     "claveSecreta": "",
                     "idTransaccion": $('#transaccionEdit').val(),
                     "tipoTransaccion" : valor,
+                    "usuario" : infoUsuario.username,
                 });
             } else if( valor === "2"){
                 var raw = JSON.stringify({
                     "descripcion": $('#descripcionEdit').val(),
-                    "nombre": $('#nombreEdit').val(),
                     "link": $('#linkEdit').val(),
                     "claveSecreta": $('#claveEdit').val(),
                     "tipoTransaccion" : valor,
+                    "usuario" : infoUsuario.username,
                 });
             }
         }
+
+        $("#btnSubmitEdit").attr("disabled", true);
         
         var requestOptions = {
             method: 'PUT',
@@ -161,16 +195,21 @@ $(function() {
 //     $('.user-status').text(usuario.rol.descripcion);
 // }
 
-const Usuario = () => {
-    let usuario = JSON.parse(sessionStorage.getItem('infoUsuario'));
-    if (usuario !== null && usuario.nombre !== null) {
-        console.log(usuario.nombre);
-        $('.user-name').text(usuario.nombre);
-        $('.user-status').text(usuario.rol.descripcion);
-    } else {
-        console.log('El objeto de usuario o su propiedad "nombre" es null.');
-        // Aquí puedes manejar el caso en el que el objeto de usuario o su propiedad "nombre" sean null
-    }
+// const Usuario = () => {
+//     let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
+//     if (usuario !== null && usuario.username !== null) {
+//         console.log(usuario.username);
+//         $('.user-name').text(usuario.nombre);
+//         $('.user-status').text(usuario.rol.descripcion);
+//     } else {
+//         console.log('El objeto de usuario o su propiedad "nombre" es null.');
+//         // Aquí puedes manejar el caso en el que el objeto de usuario o su propiedad "nombre" sean null
+//     }
+// }
+
+function limpiarFormulario() {
+    $('#tipoTransaccion').val("0");
+    $('#tipoForm').empty();
 }
 
 
@@ -188,7 +227,15 @@ const getPremios = () => {
         },
         columns: [
             {data: "id"},
-            {data: "descripcion"},
+            {data: "descripcion", render: function(data){
+                
+                if(data == null){
+                    return "Premio por transaccion"
+                } else {
+                    return data;
+                }
+
+            }},
             {data: "tipo",render: function(data){
                 if(data == 1){
                     return "Transaccion"
@@ -307,6 +354,23 @@ const OpenDelete = (id) =>{
 
 function tipoTransaccionForm() {
 
+    // <div class="form-group">
+    //     <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
+    //     <input type="text" class="form-control dt-full-name" id="nombre" placeholder="Nombre del cliente"
+    //     name="nombre" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
+    // </div>
+
+    // <div class="form-group">
+    //     <label class="form-label" for="basic-icon-default-fullname">Descripcion</label>
+    //     <input type="text" class="form-control dt-full-name" id="descripcion" placeholder="Descripcion del premio"
+    //     name="descripcion" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
+    // </div>
+    // <div class="form-group">
+    //     <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
+    //     <input type="text" class="form-control dt-full-name" id="nombre" placeholder="Nombre del cliente"
+    //     name="nombre" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
+    // </div>
+
     
     var valor = $('#tipoTransaccion').val();
 
@@ -317,16 +381,7 @@ function tipoTransaccionForm() {
             $('#tipoForm').empty();
 
             $('#tipoForm').append(`
-                <div class="form-group">
-                    <label class="form-label" for="basic-icon-default-fullname">Descripcion</label>
-                    <input type="text" class="form-control dt-full-name" id="descripcion" placeholder="Descripcion del premio"
-                    name="descripcion" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
-                    <input type="text" class="form-control dt-full-name" id="nombre" placeholder="Nombre del cliente"
-                    name="nombre" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
-                </div>
+                
                 <div class="form-group">
                     <label class="form-label" for="basic-icon-default-fullname">Transaccion</label>
                     <select type="text" class="form-control dt-full-name" id="transaccion" placeholder="Transaccion"
@@ -345,12 +400,6 @@ function tipoTransaccionForm() {
                     <label class="form-label" for="basic-icon-default-fullname">Descripcion</label>
                     <input type="text" class="form-control dt-full-name" id="descripcion" placeholder="Descripcion del premio"
                     name="descripcion" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
-                    <input type="text" class="form-control dt-full-name" id="nombre" placeholder="Nombre del cliente"
-                    name="nombre" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
                 </div>
                 
                 <div class="form-group">
@@ -372,6 +421,17 @@ function tipoTransaccionFormEdit(idTransaccion) {
 
     
     var valor = $('#tipoTransaccionEdit').val();
+
+    // <div class="form-group">
+    //     <label class="form-label" for="basic-icon-default-fullname">Descripcion</label>
+    //     <input type="text" class="form-control dt-full-name" id="descripcionEditPremio" placeholder="Descripcion del premio"
+    //     name="descripcionEditPremio" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
+    // </div>
+    // <div class="form-group">
+    //     <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
+    //     <input type="text" class="form-control dt-full-name" id="nombreEdit" placeholder="Nombre del cliente"
+    //     name="nombreEdit" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
+    // </div>
     
     if(valor !== "0"){
         if (valor === "1"){
@@ -380,16 +440,7 @@ function tipoTransaccionFormEdit(idTransaccion) {
             $('#tipoFormEdit').empty();
 
             $('#tipoFormEdit').append(`
-                <div class="form-group">
-                    <label class="form-label" for="basic-icon-default-fullname">Descripcion</label>
-                    <input type="text" class="form-control dt-full-name" id="descripcionEditPremio" placeholder="Descripcion del premio"
-                    name="descripcionEditPremio" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
-                    <input type="text" class="form-control dt-full-name" id="nombreEdit" placeholder="Nombre del cliente"
-                    name="nombreEdit" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
-                </div>
+                
                 <div class="form-group">
                     <label class="form-label" for="basic-icon-default-fullname">Transaccion</label>
                     <select type="text" class="form-control dt-full-name" id="transaccionEdit" placeholder="Transaccion" name="transaccionEdit" aria-label="" aria-describedby="basic-icon-default-fullname2" required >
@@ -409,12 +460,6 @@ function tipoTransaccionFormEdit(idTransaccion) {
                     <label class="form-label" for="basic-icon-default-fullname">Descripcion</label>
                     <input type="text" class="form-control dt-full-name" id="descripcionEdit" placeholder="Descripcion del premio"
                     name="descripcionEdit" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
-                    <input type="text" class="form-control dt-full-name" id="nombreEdit" placeholder="Nombre del cliente"
-                    name="nombreEdit" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
                 </div>
                 
                 <div class="form-group">

@@ -18,39 +18,44 @@ $(function () {
     
       $('#modalNew').on('show.bs.modal', function () {
         limpiarFormulario();
+        $("#btnSubmit").attr("disabled", false);
       });
     
       $('#modalEdit').on('show.bs.modal', function () {
-    
+        $("#btnSubmitEdit").attr("disabled", false);
       });
     
       $('#modalNew').on('hidden.bs.modal', function () {
         limpiarFormulario();
+        $("#btnSubmit").attr("disabled", false);
       });
       $('#modalEdit').on('hidden.bs.modal', function () {
         limpiarFormulario();
+        $("#btnSubmitEdit").attr("disabled", false);
       });
     
     
     
       $('#modalNew').find('[data-dismiss="modal"]').click(function () {
         limpiarFormulario();
+        $("#btnSubmit").attr("disabled", false);
       });
     
     
       $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
         limpiarFormulario();
+        $("#btnSubmitEdit").attr("disabled", false);
       });
     
     //evento submit del formulario
     $('#formNew').submit(function () {
-        $('#btnSubmit').prop('disabled', true);
         const nombre = $('#nombre').val();
 
         if (!validarNombre(nombre)) {
-            $('#btnSubmit').prop('disabled', false);
             return false;
         }
+
+        $("#btnSubmit").attr("disabled", true);
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -71,7 +76,6 @@ $(function () {
         fetch(`${url}Municipio`, requestOptions)
             .then(response => response.json())
             .then(result => {
-                $('#btnSubmit').prop('disabled', false);
 
 
                 if (result.code == "ok") {
@@ -84,22 +88,20 @@ $(function () {
                 }
 
             })
-            .catch(error => {
-                $('#btnSubmit').prop('disabled', false); Alert(error.errors, 'error') });
+            .catch(error => { Alert(error.errors, 'error') });
         return false;
     });
 
 
     $('#formEdit').submit(function () {
-        $('#btnSubmitEdit').prop('disabled', true);
-
         const nombre = $('#nombreEdit').val();
 
-    if (!validarNombre(nombre)) {
-        $('#btnSubmitEdit').prop('disabled', false);
+        if (!validarNombre(nombre)) {
+        return false;
+        }
 
-      return false;
-    }
+        $("#btnSubmitEdit").attr("disabled", true);
+
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", token);
@@ -122,8 +124,6 @@ $(function () {
         fetch(`${url}Municipio/${id}`, requestOptions)
             .then(response => response.json())
             .then(result => {
-                $('#btnSubmitEdit').prop('disabled', false);
-
 
 
                 if (result.code == "ok") {
@@ -136,9 +136,7 @@ $(function () {
                 }
 
             })
-            .catch(error => { 
-                $('#btnSubmitEdit').prop('disabled', false);
-                Alert(error.errors, 'error') });
+            .catch(error => { Alert(error.errors, 'error') });
         return false;
     });
 
@@ -175,13 +173,13 @@ $(function () {
     })
 });
 
-const Usuario = () => {
+// const Usuario = () => {
 
-    let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
-    console.log(usuario.nombre)
-    $('.user-name').text(usuario.nombre);
-    $('.user-status').text(usuario.rol.descripcion);
-}
+//     let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
+//     console.log(usuario.nombre)
+//     $('.user-name').text(usuario.nombre);
+//     $('.user-status').text(usuario.rol.descripcion);
+// }
 
 
 //obtiene los municipios
@@ -279,9 +277,15 @@ const Alert = function (message, status) // si se proceso correctamente la solic
 
 
 const OpenEdit = (id) => {
+
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", token);
+
     var requestOptions = {
         method: 'GET',
-        redirect: 'follow'
+        redirect: 'follow',
+        headers: myHeaders
     };
 
     fetch(`${url}Municipio/${id}`, requestOptions)
