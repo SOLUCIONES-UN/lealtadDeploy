@@ -42,9 +42,9 @@ $(function () {
     });
 
     //evento submit del formulario
-    $('#formNew').submit(function (event) {
+    $('#formNew').submit(function () {
 
-        event.preventDefault();
+       
         $('#btnSubmit').prop('disabled', true);
         const descripcion = $('#descripcion').val();
        
@@ -52,6 +52,7 @@ $(function () {
         
 
         if (!validarDescripcion(descripcion)) {
+            $('#btnSubmit').prop('disabled', false);
             return false;
         }
         var myHeaders = new Headers();
@@ -73,6 +74,7 @@ $(function () {
         fetch(`${url}Profecion`, requestOptions)
             .then(response => response.json())
             .then(result => {
+                $('#btnSubmit').prop('disabled', false);
                
                 if (result.code == "ok") {
                     limpiarFormulario();
@@ -84,15 +86,18 @@ $(function () {
                 }
             })
             .catch(error => {
+                $('#btnSubmit').prop('disabled', false);
+
                 Alert(error.errors, 'error') });
         return false;
     });
 
     //eventos de edicion para un menu
-    $('#formEdit').submit(function (event) {
+    $('#formEdit').submit(function () {
 
-        event.preventDefault();
+        
         $('#btnSubmitEdit').prop('disabled', true);
+
         const descripcion = $('#descripcionEdit').val();
         
        
@@ -101,6 +106,8 @@ $(function () {
         
 
         if (!validarDescripcion(descripcion)) {
+            $('#btnSubmitEdit').prop('disabled', false);
+
             return false;
         }
         var myHeaders = new Headers();
@@ -128,6 +135,8 @@ $(function () {
         fetch(`${url}Profecion/${id}`, requestOptions)
             .then(response => response.json())
             .then(result => {
+                $('#btnSubmitEdit').prop('disabled', false);
+
               
                 if (result.code == "ok") {
                     limpiarFormulario();
@@ -140,6 +149,8 @@ $(function () {
             })
             
             .catch(error => { 
+                $('#btnSubmitEdit').prop('disabled', false);
+
                 
                 Alert(error.errors, 'error') });
         return false;
@@ -267,16 +278,24 @@ const GetProfecion = () => {
     });
 }
 
-function limpiarFormulario(formNew = false) {
-    if (formNew) {
-        $('#descripcion, #descripcionEdit').val('');
-        $('#proyecto, #proyectoEdit').val('');
-    }
+function limpiarFormulario() {
+    $('#descripcion').val('');
+    $('#proyecto').val('');
     $('.descripcion').removeClass('is-invalid');
+    $('.proyecto').removeClass('is-invalid');
     $('.descripcion-error').empty().removeClass('text-danger');
-    // $('.icono').removeClass('is-invalid');
-    // $('.icono-error').empty().removeClass('text-danger');
-}
+  }
+  
+// function limpiarFormulario(formNew = false) {
+//     if (formNew) {
+//         $('#descripcion').val('');
+//         $('#proyecto, #proyectoEdit').val('');
+//     }
+//     $('.descripcion').removeClass('is-invalid');
+//     $('.descripcion-error').empty().removeClass('text-danger');
+//     // $('.icono').removeClass('is-invalid');
+//     // $('.icono-error').empty().removeClass('text-danger');
+// }
 
 
 
