@@ -98,14 +98,14 @@ $(function () {
 
   $("#formEdit").submit(function () {
 
-    $("#btnSubmitEdit").attr("disabled", true);
     const nombre = $('#nombreEdit').val();
-
+    
     if (!validarNombre(nombre)) {
       
       return false;
     }
-
+    
+    $("#btnSubmitEdit").attr("disabled", true);
 
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -264,6 +264,7 @@ const getDepartamentos = () => {
     ],
   });
 };
+
 function limpiarFormulario() {
   $('#nombre').val('');
   $('.nombre').removeClass('is-invalid');

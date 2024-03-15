@@ -4,11 +4,24 @@ $(function () {
   getMenuAccesible();
   verifyToken();
   validateSesion();
+  Usuario();
 });
 
 // document.addEventListener('DOMContentLoaded', () => {
 //   validateSesion();
 // });
+
+const Usuario = () => {
+  let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
+  if (usuario !== null && usuario.username !== null) {
+      console.log(usuario.username);
+      $('.user-name').text(usuario.nombre);
+      $('.user-status').text(usuario.rol.descripcion);
+  } else {
+      console.log('El objeto de usuario o su propiedad "nombre" es null.');
+      // Aquí puedes manejar el caso en el que el objeto de usuario o su propiedad "nombre" sean null
+  }
+}
 
 const verifyToken = () => {
   var token = localStorage.getItem('token');
