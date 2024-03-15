@@ -463,28 +463,28 @@
                                                 placeholder="Ingresa el Nombre" />
                                         </div>
                                     </div>
-                                    <!-- <div class="row">
+                                    <div class="row">
                                         <div class="form-group form-password-toggle col-md-12">
                                             <label class="form-label" for="descripcion">Descripción</label>
                                             <textarea type="password" id="descripcion" class="form-control"
                                                 placeholder="Ingrese la descripcion" rows="2"></textarea>
                                         </div>
-                                    </div> -->
-                                    <!-- <div class="row">
+                                    </div>
+                                    <div class="row">
                                         <div class="form-group form-password-toggle col-md-6">
                                             <label class="form-label" for="successaMessage">Mensaje Exito</label>
                                             <textarea type="password" id="successaMessage" class="form-control"
                                                 placeholder="Ingrese la descripcion" rows="2"></textarea>
-                                        </div> -->
-                                        <!-- <div class="col-md-6">
+                                        </div>
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="newImagen">Imagen de codigo valido</label>
                                                 <input type="file" class="form-control" id="newImagen"
                                                     autocomplete="off" style="min-height: 70px;">
                                             </div>
-                                        </div> -->
-                                    <!-- </div> -->
-                                    <!-- <div class="row">
+                                        </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="form-group form-password-toggle col-md-6">
                                             <label class="form-label" for="failMessage">Mensaje Codigo No Valido</label>
                                             <textarea type="password" id="failMessage" class="form-control"
@@ -497,7 +497,7 @@
                                                     autocomplete="off" style="min-height: 70px;">
                                             </div>
                                         </div>
-                                    </div> -->
+                                    </div>
                                     <div class="row">
                                         <div class="form-group col-md-6">
                                             <label class="form-label" for="fechaInicio">Fecha Inicio</label>
@@ -512,29 +512,10 @@
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-md-6">
-                                            <label class="form-label" for="valor">Longitud</label>
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <button type="button" id="decrement" class="btn btn-outline-secondary">
-                                                        <span class="fa fa-chevron-down"></span> Bajar
-                                                    </button>
-                                                </div>
-                                                <input type="text" id="valorPremio" class="form-control input-number" value="1" min="1" max="100" readonly>
-                                                <div class="input-group-append">
-                                                    <button type="button" id="increment" class="btn btn-outline-secondary">
-                                                        <span class="fa fa-chevron-up"></span> Subir
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    
-                                        <div class="form-group col-md-6">
-                                            <label class="form-label" for="premioxCampana">seleccionar Caracteres</label>
+                                            <label class="form-label" for="premioxCampana">Entrega Premios</label>
                                             <select class="form-control" id="premioxCampana" required>
-                                                <option selected>solo numeros</option>
-                                                <option>solo numeros</option>
-                                                <option>solo letras</option>
-                                                <option>numeros y letras</option>
+                                                <option selected>NO</option>
+                                                <option>SI</option>
                                             </select>
                                         </div>
                                     </div>
@@ -663,41 +644,6 @@
                                                 id="BtnPremios">AGREGAR</button>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="form-group form-password-toggle col-md-6">
-                                            <label class="form-label" for="successaMessage">Mensaje Exito</label>
-                                            <textarea type="password" id="successaMessage" class="form-control"
-                                                placeholder="Ingrese la descripcion" rows="2"></textarea>
-                                        </div>
-                                        <div class="form-group form-password-toggle col-md-6">
-                                            <label class="form-label" for="failMessage">Mensaje Codigo No Valido</label>
-                                            <textarea type="password" id="failMessage" class="form-control"
-                                                placeholder="Ingrese la descripcion" rows="2"></textarea>
-                                        </div>
-                                        <div class="form-group col-md-6">
-                                            <label class="form-label" for="valor">Cupones</label>
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <button type="button" id="decrementable" class="btn btn-outline-secondary">
-                                                        <span class="fa fa-chevron-down"></span> Bajar
-                                                    </button>
-                                                </div>
-                                                <input type="text" id="valorPremio2" class="form-control input-number" value="1" min="1" max="100" readonly>
-                                                <div class="input-group-append">
-                                                    <button type="button" id="incrementable" class="btn btn-outline-secondary">
-                                                        <span class="fa fa-chevron-up"></span> Subir
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="newImagen">Imagen</label>
-                                                <input type="file" class="form-control" id="newImagen"
-                                                    autocomplete="off" style="min-height: 70px;">
-                                            </div>
-                                        </div>
-                                    </div>
                                     <div class="col-md-12" style="height: 400px;">
                                         <table class="table table-bordered">
                                             <thead>
@@ -711,12 +657,6 @@
                                             <tbody id="detallePremios"></tbody>
                                         </table>
                                     </div>
-
-
-                                    
-
-
-
                                     <div class="d-flex justify-content-between">
                                         <div>
                                             <button class="btn btn-primary btn-prev">
@@ -914,8 +854,6 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                   
-                                    
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="premioxCampana">Entrega Premios</label>
                                         <select class="form-control" id="premioxCampana">
@@ -1102,7 +1040,6 @@
     <!-- BEGIN Vendor JS-->
 
     <!-- BEGIN: Page Vendor JS-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.3/xlsx.full.min.js"></script>
     <script src="../app-assets/vendors/js/extensions/moment.min.js"></script>
     <script src="../app-assets/vendors/js/forms/wizard/bs-stepper.min.js"></script>
     <script src="../app-assets/vendors/js/forms/select/select2.full.min.js"></script>
