@@ -49,11 +49,13 @@ $(function () {
 
     //evento submit del formulario
     $('#formNew').submit(function (e) {
+        $('#btnSubmitAdd').prop('disabled', true);
 
         const nombre = $('#nombre').val();
         const username = $('#username').val();
 
         if (!validarNombreYusername(nombre, username)) {
+            $('#btnSubmitAdd').prop('disabled', false);
             return false;
         }
 
@@ -75,6 +77,7 @@ $(function () {
             "nombre": $('#nombre').val(),
             "telefono": $('#telefono').val(),
             "emailNotificacion": $('#emailNotification').val(),
+            "tipoUsuario": $("#tipoUsuario").val(),
             "idRol": $('#rol').val(),
         });
 
@@ -88,6 +91,7 @@ $(function () {
         fetch(`${url}Usuario`, requestOptions)
             .then(response => response.json())
             .then(result => {
+                $('#btnSubmitAdd').prop('disabled', false);
 
 
                 if (result.code == "ok") {
@@ -100,7 +104,10 @@ $(function () {
                 }
 
             })
-            .catch(error => { Alert(error.errors, 'error') });
+            
+            .catch(error => { 
+                $('#btnSubmitAdd').prop('disabled', false);
+                Alert(error.errors, 'error') });
         return false;
     });
 
@@ -110,10 +117,12 @@ $(function () {
 
     // para actualizar usuarios
     $('#formEdit').submit(function (e) {
+        $('#btnSubmitEdit').prop('disabled', true);
         const nombre = $('#nombreEdit').val();
         const username = $('#usernameEdit').val();
 
         if (!validarNombreYusername(nombre, username)) {
+            $('#btnSubmitEdit').prop('disabled', false);
             return false;
         }
 
@@ -124,12 +133,12 @@ $(function () {
         myHeaders.append("Authorization", token);
 
 
-        if ($('#passwordEdit').val().trim() != $('#passwordEdit2').val().trim()) {
-            Alert('Las contraseñas no coinciden', 'error');
-            return;
+        // if ($('#passwordEdit').val().trim() != $('#passwordEdit2').val().trim()) {
+        //     Alert('Las contraseñas no coinciden', 'error');
+        //     return;
 
-        }
-        console.log('Contraseñas correctas');
+        // }
+        // console.log('Contraseñas correctas');
 
         var raw = JSON.stringify({
             "username": username,
@@ -137,6 +146,7 @@ $(function () {
             "nombre": $('#nombreEdit').val(),
             "telefono": $('#telefonoEdit').val(),
             "emailNotificacion": $('#emailEdit').val(),
+            "tipoUsuario": $("#tipoUsuarioEdit").val(),
             "idRol": $('#rolActualizar').val(),
         });
 
@@ -150,6 +160,8 @@ $(function () {
         fetch(`${url}Usuario/${username}`, requestOptions)
             .then(response => response.json())
             .then(result => {
+                $('#btnSubmitEdit').prop('disabled', false);
+
                 if (result.code == "ok") {
                     limpiarForm();
                     tabla._fnAjaxUpdate();
@@ -159,7 +171,9 @@ $(function () {
                     Alert(result.message, 'error')
                 }
             })
-            .catch(error => { Alert(error.errors, 'error') });
+            .catch(error => { 
+                $('#btnSubmitEdit').prop('disabled', false);
+                Alert(error.errors, 'error') });
         return false;
     });
 
@@ -320,6 +334,7 @@ const OpenEdit = (username) => {
             $('#passwordEdit').val(result.password);
             $('#telefonoEdit').val(result.telefono);
             $('#emailEdit').val(result.emailNotificacion);
+            $('#tipoUsuarioEdit').val(result.tipoUsuario),
             $('#rolActualizar').val(result.idRol);
             $('#modalEdit').modal('toggle');
         })

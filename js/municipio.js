@@ -44,9 +44,11 @@ $(function () {
     
     //evento submit del formulario
     $('#formNew').submit(function () {
+        $('#btnSubmit').prop('disabled', true);
         const nombre = $('#nombre').val();
 
         if (!validarNombre(nombre)) {
+            $('#btnSubmit').prop('disabled', false);
             return false;
         }
 
@@ -69,6 +71,7 @@ $(function () {
         fetch(`${url}Municipio`, requestOptions)
             .then(response => response.json())
             .then(result => {
+                $('#btnSubmit').prop('disabled', false);
 
 
                 if (result.code == "ok") {
@@ -81,15 +84,20 @@ $(function () {
                 }
 
             })
-            .catch(error => { Alert(error.errors, 'error') });
+            .catch(error => {
+                $('#btnSubmit').prop('disabled', false); Alert(error.errors, 'error') });
         return false;
     });
 
 
     $('#formEdit').submit(function () {
+        $('#btnSubmitEdit').prop('disabled', true);
+
         const nombre = $('#nombreEdit').val();
 
     if (!validarNombre(nombre)) {
+        $('#btnSubmitEdit').prop('disabled', false);
+
       return false;
     }
         var myHeaders = new Headers();
@@ -114,6 +122,8 @@ $(function () {
         fetch(`${url}Municipio/${id}`, requestOptions)
             .then(response => response.json())
             .then(result => {
+                $('#btnSubmitEdit').prop('disabled', false);
+
 
 
                 if (result.code == "ok") {
@@ -126,7 +136,9 @@ $(function () {
                 }
 
             })
-            .catch(error => { Alert(error.errors, 'error') });
+            .catch(error => { 
+                $('#btnSubmitEdit').prop('disabled', false);
+                Alert(error.errors, 'error') });
         return false;
     });
 

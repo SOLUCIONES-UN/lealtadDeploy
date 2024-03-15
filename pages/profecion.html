@@ -62,7 +62,7 @@
         <ul class="nav navbar-nav">
           <li class="nav-item">
             <a class="nav-link menu-toggle" href="javascript:void(0);">
-              <b>Administración de Usuarios</b>
+              <b>Administración de Profeciones</b>
             </a>
           </li>
         </ul>
@@ -261,8 +261,9 @@
               <table class="datatables-basic table" id="tableData">
                 <thead>
                   <tr>
-                    <th>Nombre</th>
-                    <th>Rol</th>
+                    <th>#</th>
+                    <th>Descripcion</th>
+                    <!-- <th>Proyecto</th> -->
                     <th>Acciones</th>
                   </tr>
                 </thead>
@@ -270,62 +271,36 @@
             </div>
           </div>
         </section>
+
       </div>
     </div>
   </div>
+
   <!-- modal de creacion or Update -->
   <div class="modal modal-slide-in new-user-modal fade" id="modalNew">
     <div class="modal-dialog">
       <form id="formNew" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Agregar Nuevo Usuario</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Agregar Nuevo Menu</h5>
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
-            <label class="form-label" for="username">Nombre Usuario</label>
-            <input type="text" class="form-control " id="username" placeholder="Nombre del usuario" name="username"
-              required />
-            <div id="usernameError" class="invalid-feedback"></div>
+            <label class="form-label" for="basic-icon-default-fullname">Descripción</label>
+            <input type="text" class="form-control dt-full-name descripcion" id="descripcion"
+              placeholder="Descripción de la profecion" name="descripcion" aria-label=""
+              aria-describedby="basic-icon-default-fullname2" required />
+            <div id="descripcionError" class="descripcion-error invalid-feedback"></div>
           </div>
+
           <div class="form-group">
-            <label class="form-label" for="nombre">Nombre</label>
-            <input type="text" class="form-control " id="nombre" placeholder="Nombre" name="nombre" required />
-            <div id="nombreError" class="invalid-feedback nombre-error"></div>
+            <label class="form-label" for="proyecto">proyecto</label>
+            <select type="text" class="form-control" id="proyecto" name="proyecto" required></select>
           </div>
-          <div class="form-group">
-            <label class="form-label" for="password">Contraseña</label>
-            <input type="password" alt="strongPass" class="form-control " id="password" placeholder="Contraseña"
-              name="password" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="password2">Confirmar Contraseña</label>
-            <input type="password" alt="strongPass" class="form-control " id="password2" placeholder="Contraseña"
-              name="password2" required />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="telefono">Telefono</label>
-            <input type="text" class="form-control " id="telefono" placeholder="# de telefono" name="telefono"
-              required />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="emailNotification">E-mail</label>
-            <input type="text" class="form-control " id="emailNotification" placeholder="E-mail"
-              name="emailNotification" required />
-          </div>
-         
-        <div class="form-group">
-          <label class="form-label" for="tipoUsuario">Tipo De Usuario</label>
-          <select type="text" class="form-control" id="tipoUsuario" name="tipoUsuario" required>
-            <option value="0" selected disabled>Seleccione una Opcion</option>
-            <option value="1">admin</option>
-          </select>
-        </div>
-          <div class="form-group">
-            <label class="form-label" for="rol">Roles</label>
-            <select type="text" class="form-control" id="rol" name="rol" required></select>
-          </div>
-          <button id="btnSubmitAdd" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
+          
+
+
+          <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar</button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
         </div>
       </form>
@@ -337,53 +312,34 @@
       <form id="formEdit" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Actualizar el ususario</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Actualizar el Menu</h5>
         </div>
         <div class="modal-body flex-grow-1">
-          <div class="form-group">
-            <label class="form-label" for="usernameEdit">Nombre Usuario</label>
-            <input type="text" class="form-control" id="usernameEdit" placeholder="Nombre del usuario"
-              name="usernameEdit" required readonly/>
-            <div id="usernameEditError" class="invalid-feedback"></div>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="nombreEdit">Nombre</label>
-            <input type="text" class="form-control" id="nombreEdit" placeholder="Nombre" name="nombreEdit" required />
-            <div id="nombreEditError" class="invalid-feedback"></div>
-          </div>
-
-
-          <div class="form-group">
-            <label class="form-label" for="passwordEdit">Contraseña</label>
-            <input type="password" alt="strongPass" class="form-control " id="passwordEdit" placeholder="Contraseña"
-              name="passwordEdit" required readonly />
-          </div>
           <!-- <div class="form-group">
-            <label class="form-label" for="passwordEdit2">Confirmar Contraseña</label>
-            <input type="password" alt="strongPass" class="form-control " id="passwordEdit2" placeholder="Contraseña"
-              name="passwordEdit2" required />
+            <label class="form-label" for="descripcionEdit">Descripción</label>
+            <textarea class="form-control descripcion" id="descripcionEdit" placeholder="Descripción del menú"
+              name="descripcion" required rows="3"></textarea>
+            <div class="invalid-feedback descripcion-error"></div>
           </div> -->
+
           <div class="form-group">
-            <label class="form-label" for="telefonoEdit">Telefono</label>
-            <input type="text" class="form-control " id="telefonoEdit" placeholder="# de telefono" name="telefonoEdit"
-              required />
+            <input id="id" type="hidden">
+            <label class="form-label" for="basic-icon-default-fullname">Descripción</label>
+            <input type="text" class="form-control dt-full-name descripcion" id="descripcionEdit"
+              placeholder="Descripción del menú" name="descripcion" aria-label=""
+              aria-describedby="basic-icon-default-fullname2" required />
+            <div id="descripcionedError" class="descripcion-error invalid-feedback"></div>
           </div>
+
           <div class="form-group">
-            <label class="form-label" for="emailEdit">E-mail</label>
-            <input type="text" class="form-control " id="emailEdit" placeholder="E-mail" name="emailEdit" required />
+            <label class="form-label" for="proyectoEdit">proyecto</label>
+            <select type="text" class="form-control" id="proyectoEdit" name="proyectoEdit" required></select>
           </div>
-          <div class="form-group">
-            <label class="form-label" for="tipoUsuarioEdit">Tipo De Usuario</label>
-            <select type="text" class="form-control" id="tipoUsuarioEdit" name="tipoUsuarioEdit" required>
-              <option value="0" selected disabled>Seleccione una Opcion</option>
-              <option value="1">admin</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="rolActualizar">Rol</label>
-            <select type="text" class="form-control" id="rolActualizar" name="rolActualizar" required></select>
-          </div>
-          <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
+          
+
+
+
+          <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Actualizar</button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
         </div>
       </form>
@@ -395,14 +351,14 @@
       <form id="formDelete" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Inhabilitar el usuario</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Inhabilitar un Menu</h5>
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
-            <input id="usernameDelete" type="hidden">
-            <p>¿Esta seguro que desea <b>Inhabilitar este usuario?</b></p>
+            <input id="idDelete" type="hidden">
+            <p>¿Esta seguro que desea <b>¿esta seguro que desea inhabilitar este menu?</b></p>
           </div>
-          <button id="BtnDelete" type="button" class="btn btn-danger mr-1 data-submit">Confirmar </button>
+          <button id="BtnDelete" type="button" class="btn btn-danger mr-1 data-submit">Confirmar</button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
         </div>
       </form>
@@ -442,7 +398,8 @@
   <!-- END: Theme JS-->
 
   <!-- BEGIN: Page JS-->
-  <script src="../js/usuario.js"></script>
+  <script src="../js/profeciones.js"></script>
+
   <script src="../js/menuDinamico.js"></script>
   <!-- END: Page JS-->
 

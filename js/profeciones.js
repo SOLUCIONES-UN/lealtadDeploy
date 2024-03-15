@@ -3,7 +3,8 @@ let token = localStorage.getItem("token");
 
 
 $(function () {
-    let tabla = getMenus();
+    GetProjects();
+    let tabla = GetProfecion();
     Usuario();
     function validarDescripcion(descripcion) {
         const descripcionValida = /^[a-zA-Z0-9\s]+$/.test(descripcion.trim());
@@ -59,7 +60,7 @@ $(function () {
 
         var raw = JSON.stringify({
             "descripcion": $('#descripcion').val(),
-            "icono": $('#icono').val()
+            "proyecto": $('#proyecto').val()
         });
 
         var requestOptions = {
@@ -69,7 +70,7 @@ $(function () {
             redirect: 'follow'
         };
 
-        fetch(`${url}Menu`, requestOptions)
+        fetch(`${url}Profecion`, requestOptions)
             .then(response => response.json())
             .then(result => {
                
@@ -112,7 +113,7 @@ $(function () {
 
         var raw = JSON.stringify({
             "descripcion": $('#descripcionEdit').val(),
-            "icono": $('#iconoEdit').val(),
+            "proyecto": $('#proyectoEdit').val(),
         });
 
         console.log(raw);
@@ -124,7 +125,7 @@ $(function () {
             redirect: 'follow'
         };
 
-        fetch(`${url}Menu/${id}`, requestOptions)
+        fetch(`${url}Profecion/${id}`, requestOptions)
             .then(response => response.json())
             .then(result => {
               
@@ -158,7 +159,7 @@ $(function () {
             redirect: 'follow'
         };
 
-        fetch(`${url}Menu/${id}`, requestOptions)
+        fetch(`${url}Profecion/${id}`, requestOptions)
             .then(response => response.json())
             .then(result => {
                 if (result.code == "ok") {
@@ -185,10 +186,10 @@ const Usuario = () => {
 
 
 //obtiene la lista de menus
-const getMenus = () => {
+const GetProfecion = () => {
     return $('#tableData').dataTable({
         ajax: {
-            url: `${url}Menu`,
+            url: `${url}Profecion`,
             type: "GET",
             datatype: "json",
             dataSrc: "",
@@ -205,7 +206,7 @@ const getMenus = () => {
                 }
             },
             { data: "descripcion" },
-            { data: "icono" },
+            // { data: "proyecto" },
 
 
             
@@ -269,7 +270,7 @@ const getMenus = () => {
 function limpiarFormulario(formNew = false) {
     if (formNew) {
         $('#descripcion, #descripcionEdit').val('');
-        $('#icono, #iconoEdit').val('');
+        $('#proyecto, #proyectoEdit').val('');
     }
     $('.descripcion').removeClass('is-invalid');
     $('.descripcion-error').empty().removeClass('text-danger');
@@ -296,13 +297,13 @@ const OpenEdit = (id) => {
         redirect: 'follow'
     };
 
-    fetch(`${url}Menu/${id}`, requestOptions)
+    fetch(`${url}Profecion/${id}`, requestOptions)
         .then(response => response.json())
         .then(result => {
             console.log(result)
             $('#id').val(id);
             $('#descripcionEdit').val(result.descripcion);
-            $('#iconoEdit').val(result.icono);
+            $('#proyectoEdit').val(result.proyecto);
             $('#modalEdit').modal('toggle');
         })
         .catch(error => console.log('error', error));
@@ -313,4 +314,27 @@ const OpenEdit = (id) => {
 const OpenDelete = (id) => {
     $('#idDelete').val(id);
     $('#modalDelete').modal('toggle');
+}
+
+
+const GetProjects = () => {
+    var requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+        headers: { "Authorization": token }
+    };
+
+    $('#proyecto').html('<option value="0" selected disabled>Selecciona una Opcion</option>');
+    $('#proyectoEdit').html('<option value="0" selected disabled>Selecciona una Opcion</option>');
+    fetch(`${url}projects`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            result.forEach(element => {
+                var opc = `<option value="${element.id}">${element.descripcion}</option>`;
+                $('#proyecto').append(opc);
+                $('#proyectoEdit').append(opc);
+            });
+        })
+        .catch(error => console.log('error', error));
+
 }
