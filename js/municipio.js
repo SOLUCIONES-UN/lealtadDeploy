@@ -18,28 +18,33 @@ $(function () {
     
       $('#modalNew').on('show.bs.modal', function () {
         limpiarFormulario();
+        $("#btnSubmit").attr("disabled", false);
       });
     
       $('#modalEdit').on('show.bs.modal', function () {
-    
+        $("#btnSubmitEdit").attr("disabled", false);
       });
     
       $('#modalNew').on('hidden.bs.modal', function () {
         limpiarFormulario();
+        $("#btnSubmit").attr("disabled", false);
       });
       $('#modalEdit').on('hidden.bs.modal', function () {
         limpiarFormulario();
+        $("#btnSubmitEdit").attr("disabled", false);
       });
     
     
     
       $('#modalNew').find('[data-dismiss="modal"]').click(function () {
         limpiarFormulario();
+        $("#btnSubmit").attr("disabled", false);
       });
     
     
       $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
         limpiarFormulario();
+        $("#btnSubmitEdit").attr("disabled", false);
       });
     
     //evento submit del formulario
@@ -49,6 +54,8 @@ $(function () {
         if (!validarNombre(nombre)) {
             return false;
         }
+
+        $("#btnSubmit").attr("disabled", true);
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -89,9 +96,12 @@ $(function () {
     $('#formEdit').submit(function () {
         const nombre = $('#nombreEdit').val();
 
-    if (!validarNombre(nombre)) {
-      return false;
-    }
+        if (!validarNombre(nombre)) {
+        return false;
+        }
+
+        $("#btnSubmitEdit").attr("disabled", true);
+
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", token);
@@ -163,13 +173,13 @@ $(function () {
     })
 });
 
-const Usuario = () => {
+// const Usuario = () => {
 
-    let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
-    console.log(usuario.nombre)
-    $('.user-name').text(usuario.nombre);
-    $('.user-status').text(usuario.rol.descripcion);
-}
+//     let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
+//     console.log(usuario.nombre)
+//     $('.user-name').text(usuario.nombre);
+//     $('.user-status').text(usuario.rol.descripcion);
+// }
 
 
 //obtiene los municipios
@@ -267,9 +277,15 @@ const Alert = function (message, status) // si se proceso correctamente la solic
 
 
 const OpenEdit = (id) => {
+
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", token);
+
     var requestOptions = {
         method: 'GET',
-        redirect: 'follow'
+        redirect: 'follow',
+        headers: myHeaders
     };
 
     fetch(`${url}Municipio/${id}`, requestOptions)

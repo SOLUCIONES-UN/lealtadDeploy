@@ -167,13 +167,13 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
     })
 });
 
-const Usuario = () => {
+// const Usuario = () => {
 
-    let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
-    console.log(usuario.nombre)
-    $('.user-name').text(usuario.nombre);
-    $('.user-status').text(usuario.rol.descripcion);
-}
+//     let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
+//     console.log(usuario.nombre)
+//     $('.user-name').text(usuario.nombre);
+//     $('.user-status').text(usuario.rol.descripcion);
+// }
 
 const getCategorias = () => {
     return $('#tableData').dataTable({
