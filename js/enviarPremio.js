@@ -188,8 +188,6 @@ const GetEnviaPremio = () => {
                 <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
                     ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
                 </a>
-                <div class="dropdown-menu dropdown-menu-right">
-                   
                 
                 <div class="dropdown-menu dropdown-menu-right">
                     <a href="#" onclick="OpenDelete(${data})" class="btn_delete dropdown-item">
