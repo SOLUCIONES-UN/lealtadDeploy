@@ -4,12 +4,13 @@ let token = localStorage.getItem("token");
 
 let numeros = [];
 
-$(function () {
+$(function() {
     GetcampanasActivas();
     let tabla = GetEnviaPremio();
     Usuario();
+
     function validarDescripcion(descripcion) {
-        console.log("esto biene ",descripcion)
+        console.log("esto biene ", descripcion)
         const descripcionValida = /^[a-zA-Z0-9\s]+$/.test(descripcion.trim());
 
         if (!descripcionValida) {
@@ -20,27 +21,27 @@ $(function () {
         return true;
     }
 
-    $('#modalNew').on('show.bs.modal', function () {
+    $('#modalNew').on('show.bs.modal', function() {
         limpiarFormulario();
     });
 
-    $('#modalEdit').on('show.bs.modal', function () {
+    $('#modalEdit').on('show.bs.modal', function() {
         limpiarFormulario();
     });
 
-    $('#modalNew').on('hidden.bs.modal', function () {
+    $('#modalNew').on('hidden.bs.modal', function() {
         limpiarFormulario();
     });
 
-    $('#modalEdit').on('hidden.bs.modal', function () {
+    $('#modalEdit').on('hidden.bs.modal', function() {
         limpiarFormulario();
     });
 
-    $('#modalNew').find('[data-dismiss="modal"]').click(function () {
+    $('#modalNew').find('[data-dismiss="modal"]').click(function() {
         limpiarFormulario();
     });
 
-    $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
+    $('#modalEdit').find('[data-dismiss="modal"]').click(function() {
         limpiarFormulario();
     });
 
@@ -48,74 +49,58 @@ $(function () {
 
 
 
-    
-
-
-    $('#formNew').submit(function (event) {
+    $('#formNew').submit(function(event) {
         event.preventDefault();
         $('#btnSubmit').prop('disabled', true);
         console.log("Formulario enviado");
-    
+
         // Obtener el ID de la campaña seleccionada
         const campaniaId = $('#campania').val();
-    
-        // Contador para verificar el número de solicitudes completadas
-        let solicitudesCompletadas = 0;
-    
+
+        // Crear un array para almacenar los datos a enviar
+        const dataArray = [];
+
         // Recorrer cada fila de la tabla de Excel
         $('#tablaExcelBody tr').each(function() {
             const numeroTelefono = $(this).find('td:eq(1)').text().trim();
-    
+
             // Verificar que el número no esté vacío
             if (numeroTelefono !== '') {
-                const dataToSend = {
+                // Agregar el objeto con los datos al array
+                dataArray.push({
                     telefono: numeroTelefono,
                     campania: campaniaId
-                };
-    
-                // Realizar la solicitud POST para guardar el número con el ID de la campaña
-                fetch(`${url}enviaPremio`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': token
-                    },
-                    body: JSON.stringify(dataToSend)
-                })
-                .then(response => response.json())
-                .then(result => {
-                    console.log(result);
-                    if (result.code == "ok") {
-                        limpiarFormulario();
-                        tabla._fnAjaxUpdate();
-                        $('#modalNew').modal('toggle');
-                        Alert(result.message, 'success');
-                    } else {
-                        Alert(result.message, 'error');
-                    }
-                    solicitudesCompletadas++; 
-                    if (solicitudesCompletadas === $('#tablaExcelBody tr').length) {
-                       
-                        $('#btnSubmit').prop('disabled', false);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error al enviar el número de teléfono:', error);
-                    solicitudesCompletadas++; 
-                    if (solicitudesCompletadas === $('#tablaExcelBody tr').length) {
-                        
-                        $('#btnSubmit').prop('disabled', false);
-                    }
                 });
-            } else {
-               
-                solicitudesCompletadas++;
-                if (solicitudesCompletadas === $('#tablaExcelBody tr').length) {
-                    
-                    $('#btnSubmit').prop('disabled', false);
-                }
             }
         });
+
+        // Realizar la solicitud POST para enviar el array al backend
+        fetch(`${url}enviaPremio`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': token
+                },
+                body: JSON.stringify(dataArray) // Enviar el array como JSON
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log(result);
+                if (result.code == "ok") {
+                    limpiarFormulario();
+                    tabla._fnAjaxUpdate();
+                    $('#modalNew').modal('toggle');
+                    limpiarFormulario();
+                    Alert(result.message, 'success');
+                } else {
+                    Alert(result.message, 'error');
+                }
+                $('#btnSubmit').prop('disabled', false);
+            })
+            .catch(error => {
+                console.error('Error al enviar los datos:', error);
+                $('#btnSubmit').prop('disabled', false);
+            });
     });
 
 
@@ -124,89 +109,10 @@ $(function () {
 
 
 
-
-    // $('#formNew').submit(function (event) {
-       
-
-    //     event.preventDefault();
-    //     $('#btnSubmit').prop('disabled', true);
-    
-
-    //     console.log("Formulario enviado");
-    
-    //     // Obtener el ID de la campaña seleccionada
-    //     const campaniaId = $('#campania').val();
-    
-    //     // Recorrer cada fila de la tabla de Excel
-       
-    //     $('#tablaExcelBody tr').each(function() {
-    //         const numeroTelefono = $(this).find('td:eq(1)').text().trim(); // Obtener el número de teléfono de la segunda columna
-    
-    //         // Verificar que el número no esté vacío
-    //         if(numeroTelefono !== '') {
-    //             // Crear el objeto con los datos a enviar
-    //             const dataToSend = {
-    //                 telefono: numeroTelefono,
-    //                 campania: campaniaId
-    //             };
-               
-
-    
-    //             // Realizar la solicitud POST para guardar el número con el ID de la campaña
-    //             fetch(`${url}enviaPremio`, {
-    //                 method: 'POST',
-    //                 headers: {
-    //                     'Content-Type': 'application/json',
-    //                     'Authorization': token
-    //                 },
-    //                 body: JSON.stringify(dataToSend)
-    //             })
-    //             .then(response => response.json())
-    //             .then(result => {
-                  
-                   
-
-    //                 console.log(result);
-    //                 // Aquí puedes agregar lógica adicional si es necesario
-    //               if (result.code == "ok") {
-    //                 limpiarFormulario();
-    //                 tabla._fnAjaxUpdate();
-    //                 $('#modalNew').modal('toggle');
-    //                 Alert(result.message, 'success')
-    //             } else {
-    //                 Alert(result.message, 'error')
-    //             }
-   
-    //             })
-    //             .catch(error => {
-                    
-                   
-
-    //                 console.error('Error al enviar el número de teléfono:', error);
-    //                 // Aquí puedes manejar el error si es necesario
-    //             });
-    //         }
-    //     });
-
-    //     $('#btnSubmit').prop('disabled', false);
-    
-    //     // Limpiar el formulario después de enviar los datos
-    //     // limpiarFormulario();
-    //     // // Cerrar el modal después de enviar los datos
-    //     // $('#modalNew').modal('hide');
-    // });
-
-
-
-
-
-
-
-  
     //eventos de edicion para un menu
-   
+
     //eventos para la inhabilitacion de un menu
-    $('#BtnDelete').click(function () {
+    $('#BtnDelete').click(function() {
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -255,9 +161,9 @@ const GetEnviaPremio = () => {
             dataSrc: "",
             headers: { "Authorization": token }
         },
-        columns: [
-            {
-                data: null, render: function (data, type, row, meta) {
+        columns: [{
+                data: null,
+                render: function(data, type, row, meta) {
 
                     if (type === 'display') {
                         return meta.row + 1;
@@ -267,14 +173,15 @@ const GetEnviaPremio = () => {
             },
             { data: "telefono" },
 
-            
+
 
             { data: "campaign.nombre" },
 
 
-            
+
             {
-                data: "id", render: function (data) {
+                data: "id",
+                render: function(data) {
 
                     return `
               <div class="btn-group">
@@ -296,8 +203,7 @@ const GetEnviaPremio = () => {
             }
         ],
         // order: [[1, 'asc']],
-        dom:
-            '<"d-flex justify-content-between align-items-center header-actions mx-1 row mt-75"' +
+        dom: '<"d-flex justify-content-between align-items-center header-actions mx-1 row mt-75"' +
             '<"col-lg-12 col-xl-6" l>' +
             '<"col-lg-12 col-xl-6 pl-xl-75 pl-0"<"dt-action-buttons text-xl-right text-lg-left text-md-right text-left d-flex align-items-center justify-content-lg-end align-items-center flex-sm-nowrap flex-wrap mr-1"<"mr-1"f>B>>' +
             '>t' +
@@ -311,43 +217,52 @@ const GetEnviaPremio = () => {
             searchPlaceholder: 'Buscar...',
         },
         // Buttons with Dropdown
-        buttons: [
-            {
-                text: 'Nuevo',
-                className: 'add-new btn btn-primary mt-50',
-                attr: {
-                    'data-toggle': 'modal',
-                    'data-target': '#modalNew',
-                },
-                init: function (api, node, config) {
-                    $(node).removeClass('btn-secondary');
-                    //Metodo para agregar un nuevo usuario
-                },
+        buttons: [{
+            text: 'Nuevo',
+            className: 'add-new btn btn-primary mt-50',
+            attr: {
+                'data-toggle': 'modal',
+                'data-target': '#modalNew',
             },
-        ],
+            init: function(api, node, config) {
+                $(node).removeClass('btn-secondary');
+                //Metodo para agregar un nuevo usuario
+            },
+        }, ],
     });
 }
 
 function limpiarFormulario() {
     $('#telefono').val('');
     $('#campania').val('');
+    $('#tablaExcelBody').empty(); // Vaciar el contenido del cuerpo de la tabla
+    $('#tipo-operacion').val('option');
+
+    $('.tablaExcel').removeClass('is-invalid');
     $('.telefono').removeClass('is-invalid');
     $('.campania').removeClass('is-invalid');
     $('.telefono-error').empty().removeClass('text-danger');
-  }
-  
+
+    $('#campoNumero').hide();
+    $('#campoExcel').hide();
 
 
-
-const Alert = function (message, status) // si se proceso correctamente la solicitud
-{
-    toastr[`${status}`](message, `${status}`, {
-        closeButton: true,
-        tapToDismiss: false,
-        positionClass: 'toast-top-right',
-        rtl: false
-    });
+    $('#btnSubmit').prop('disabled', false);
 }
+
+
+
+
+
+const Alert = function(message, status) // si se proceso correctamente la solicitud
+    {
+        toastr[`${status}`](message, `${status}`, {
+            closeButton: true,
+            tapToDismiss: false,
+            positionClass: 'toast-top-right',
+            rtl: false
+        });
+    }
 
 
 const OpenEdit = (id) => {
@@ -402,14 +317,14 @@ const GetcampanasActivas = () => {
 // console.log(excel-input)
 const inputFile = document.getElementById("excel-input");
 
-inputFile.addEventListener("change", function () {
+inputFile.addEventListener("change", function() {
     const extPermitidas = /(.xlsx)$/;
 
     if (!extPermitidas.exec(inputFile.value)) {
         Alert("El archivo debe ser un excel", "error");
         inputFile.value = ""; // Vacía el valor del input
     } else {
-        readXlsxFile(inputFile.files[0]).then(function (data) {
+        readXlsxFile(inputFile.files[0]).then(function(data) {
             let tablaExcelBody = document.getElementById("tablaExcelBody");
             tablaExcelBody.innerHTML = ""; // Vacía la tabla antes de agregar nuevos datos
 
@@ -417,7 +332,7 @@ inputFile.addEventListener("change", function () {
                 var tr = `<tr id="fila${indexP}">
                     <td>${indexP + 1}</td>
                     <td>${row[0]}</td>
-                   
+                    <td><button class="btn btn-sm btn-danger btnEliminar">Eliminar</button></td>
                     <!-- Agrega más columnas según sea necesario -->
                 </tr>`;
                 tablaExcelBody.innerHTML += tr;
@@ -435,30 +350,32 @@ const inputTelefono = document.getElementById('telefono');
 btnAgregarNumero.addEventListener('click', function() {
     const numeroTelefono = inputTelefono.value;
 
-    if(numeroTelefono.trim() !== '') {
+    if (numeroTelefono.trim() !== '') {
         const tablaExcelBody = document.getElementById('tablaExcelBody');
         const nuevaFila = document.createElement('tr');
         nuevaFila.innerHTML = `
             <td>${tablaExcelBody.rows.length + 1}</td>
             <td>${numeroTelefono}</td>
+            <td><button class="btn btn-sm btn-danger btnEliminar">Eliminar</button></td>
             <!-- Puedes agregar más columnas según sea necesario -->
         `;
         tablaExcelBody.appendChild(nuevaFila);
 
-       
+
         inputTelefono.value = '';
 
-      
+
     } else {
-       
+
         alert('Por favor ingresa un número de teléfono');
     }
 });
 
 
 //funcion de el select para agregar numero o cargarlo 
-$(document).ready(function () {
-    $('#tipo-operacion').change(function () {
+$(document).ready(function() {
+    //funcion de el select para agregar numero o cargarlo 
+    $('#tipo-operacion').change(function() {
         var seleccionado = $(this).val();
         if (seleccionado === 'numero') {
             $('#campoNumero').show();
@@ -466,6 +383,15 @@ $(document).ready(function () {
         } else if (seleccionado === 'excel') {
             $('#campoNumero').hide();
             $('#campoExcel').show();
+        } else if (seleccionado === 'option') {
+            $('#campoNumero').hide();
+            $('#campoExcel').hide();
         }
     });
+});
+
+document.addEventListener('click', function(event) {
+    if (event.target.classList.contains('btnEliminar')) {
+        event.target.closest('tr').remove(); // Eliminar la fila más cercana que contiene el botón de eliminar
+    }
 });
