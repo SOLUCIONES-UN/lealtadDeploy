@@ -244,9 +244,13 @@ function limpiarFormulario() {
     $('#campoNumero').hide();
     $('#campoExcel').hide();
 
+    $('#excel-input').val('');
 
     $('#btnSubmit').prop('disabled', false);
 }
+
+
+
 
 
 
