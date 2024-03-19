@@ -106,6 +106,22 @@ $(function() {
 
 
 
+    $('#telefono').on('input', function() {
+        // Obtener el valor ingresado en el campo
+        const telefono = $(this).val();
+
+        // Verificar si el valor ingresado no es un número
+        if (!(/^\d+$/.test(telefono))) {
+            // Mostrar mensaje de error
+            $('#telefonoError').text('Por favor, ingrese solo números.').addClass('text-danger');
+            // Limpiar el valor no numérico ingresado
+            $(this).val(telefono.replace(/\D/g, ''));
+        } else {
+            // Limpiar el mensaje de error si el valor es un número
+            $('#telefonoError').text('').removeClass('text-danger');
+        }
+    });
+
 
 
 
