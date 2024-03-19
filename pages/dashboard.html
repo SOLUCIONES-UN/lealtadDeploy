@@ -111,8 +111,7 @@
     <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
         <div class="navbar-header">
             <ul class="nav navbar-nav flex-row">
-                <li class="nav-item mr-auto"><a class="navbar-brand"
-                        href="./dashboard.html"><span class="brand-logo">
+                <li class="nav-item mr-auto"><a class="navbar-brand" href="./dashboard.html"><span class="brand-logo">
                             <svg viewbox="0 0 139 95" version="1.1" xmlns="http://www.w3.org/2000/svg"
                                 xmlns:xlink="http://www.w3.org/1999/xlink" height="24">
                                 <defs>
@@ -176,7 +175,7 @@
             <div class="content-body">
                 <!-- Dashboard Analytics Start -->
                 <section id="dashboard-analytics">
-                    <div class="row match-height">
+                    <div id="dataDashboard" class="row  match-height">
                         <!-- Greetings Card starts -->
                         <div class="col-lg-6 col-md-12 col-sm-12">
                             <div class="card card-congratulations">
@@ -280,31 +279,43 @@
                                         <hr />
                                         <div class="row avg-sessions pt-50">
                                             <div class="col-6 mb-2">
-                                                <p class="mb-50">Beneficios esperados: Q150,000</p>
+                                                <p class="mb-50">Beneficios esperados: <span id="sumaValor"></span></p>
                                                 <div class="progress progress-bar-primary" style="height: 6px">
                                                     <div class="progress-bar" role="progressbar" aria-valuenow="50"
-                                                        aria-valuemin="50" aria-valuemax="100" style="width: 50%"></div>
+                                                        aria-valuemin="50" aria-valuemax="100" style="width: 50%">
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-6 mb-2">
-                                                <p class="mb-50">Clientes: 200</p>
+                                                <p  class="mb-50">Clientes: <span id="clientesCount"></span> </p>
                                                 <div class="progress progress-bar-warning" style="height: 6px">
-                                                    <div class="progress-bar" role="progressbar" aria-valuenow="60"
-                                                        aria-valuemin="60" aria-valuemax="100" style="width: 60%"></div>
+                                                    <div class="progress-bar" id="progressBar" role="progressbar" aria-valuenow="0"
+                                                        aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                                    </div>
                                                 </div>
                                             </div>
+                                                <!-- <div class="col-6 mb-2">
+                                                    <p class="mb-50">Clientes: 200</p>
+                                                    <div class="progress progress-bar-warning" style="height: 6px">
+                                                        <div class="progress-bar" role="progressbar" aria-valuenow="60"
+                                                            aria-valuemin="60" aria-valuemax="100" style="width: 60%">
+                                                        </div>
+                                                    </div>
+                                                </div> -->
                                             <div class="col-6">
-                                                <p class="mb-50">Éxito de promociones: 98%</p>
+                                                <p class="mb-50">Numero de promociones: 98%</p>
                                                 <div class="progress progress-bar-danger" style="height: 6px">
                                                     <div class="progress-bar" role="progressbar" aria-valuenow="70"
-                                                        aria-valuemin="70" aria-valuemax="100" style="width: 70%"></div>
+                                                        aria-valuemin="70" aria-valuemax="100" style="width: 70%">
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-6">
                                                 <p class="mb-50">Duración: 11 meses</p>
                                                 <div class="progress progress-bar-success" style="height: 6px">
                                                     <div class="progress-bar" role="progressbar" aria-valuenow="90"
-                                                        aria-valuemin="90" aria-valuemax="100" style="width: 90%"></div>
+                                                        aria-valuemin="90" aria-valuemax="100" style="width: 90%">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -313,28 +324,6 @@
                             </div>
                             <!-- Avg Sessions Chart Card ends -->
 
-                            <!-- Modal -->
-                            <div class="modal fade" id="graficaModal" tabindex="-1" aria-labelledby="graficaModalLabel"
-                                aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="graficaModalLabel">Gráfica de Campañas</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-
-                                            <canvas id="graficaCampañas"></canvas>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button id="cerrar-modal-btn" type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Cerrar</button>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
 
 
@@ -370,7 +359,7 @@
                                         <div class="d-flex justify-content-between mt-1">
                                             <div class="text-center">
                                                 <p class="card-text mb-50">Nuevas Campañas</p>
-                                                <span class="font-large-1 fw-bold" id="num-campanas-last-week">0</span>
+                                                <span class="font-large-1 fw-bold" id="num-campanas-last-week"></span>
                                             </div>
 
                                             <div class="text-center">
@@ -390,17 +379,195 @@
                             <!-- Support Tracker Chart Card ends -->
                         </div>
 
+                        <!-- -->
+
                         <!-- comentario -->
 
 
                         <!--/ List DataTable -->
+
+                        
+
+
+
+
+                    </div>
+                    <div id="datosGrafica" class="row match-height">
+                        <!-- Greetings Card starts -->
+                        <div class="col-lg-12 col-md-12 col-sm-12 text-right">
+                            <button class="btn btn-primary" id="btnRegresar">Volver</button>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <canvas id="graficaCampañas"></canvas>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="row match-height">
+                      <div id="datosGrafica1" class="col-md-12">
+                        <canvas id="graficaCampanas" width="400" height="400"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                  <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                      const ctx = document.getElementById("graficaCampanas").getContext("2d");
+                
+                      // Datos para las 12 columnas
+                      const labels = [];
+                      for (let i = 1; i <= 6; i++) {
+                        labels.push(' ' + i);
+                      }
+                      const data = [25, 20, 15,10, 5, 3]; // Datos quemados
+
+                      const backgroundColors = [
+                        "rgba(255, 99, 132, 0.2)", // Color para la primera columna
+                        "rgba(54, 162, 235, 0.2)",  // Color para la segunda columna
+                        "rgba(255, 206, 86, 0.2)",  // Color para la tercera columna
+                        "rgba(75, 192, 192, 0.2)",  // Color para la cuarta columna
+                        "rgba(153, 102, 255, 0.2)", // Color para la quinta columna
+                        "rgba(255, 159, 64, 0.2)"   // Color para la sexta columna
+                           ];
+
+
+                        // Configuración del gráfico
+                        const chartData = {
+                        labels: labels,
+                        datasets: [{
+                            label: "Número de Campañas",
+                            data: data,
+                            backgroundColor: backgroundColors,
+                            borderColor: "rgba(54, 162, 235, 1)",
+                            borderWidth: 1,
+                        }]
+                        };
+
+                        const chartOptions = {
+                        scales: {
+                            yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                            }]
+                        }
+                        };
+
+                        // Crear la gráfica
+                        new Chart(ctx, {
+                        type: "bar",
+                        data: chartData,
+                        options: chartOptions
+                        });
+                        });
+                        </script>
+                
+                <div class="container">
+                    <div class="row match-height">
+                      <div id="datosGrafica2" class="col-md-12">
+                        <canvas id="graficaCampanas2" width="400" height="400"></canvas>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                      const ctx = document.getElementById("graficaCampanas2").getContext("2d");
+                
+                      // Datos para las 7 columnas
+                      const labels = ['Testing', 'test','prueba de campaña APPSIP ', 'APITEST', 'Prueba Campaña Acumulativa', 'test 05', 'test 4 Acumulativa'];
+                      const data = [0, 0, 0, 0, 5, 30, 1]; // Datos quemados
+                      const backgroundColors = [
+                        "rgba(255, 99, 132, 0.2)", // Color para la primera columna
+                        "rgba(54, 162, 235, 0.2)",  // Color para la segunda columna
+                        "rgba(255, 206, 86, 0.2)",  // Color para la tercera columna
+                        "rgba(75, 192, 192, 0.2)",  // Color para la cuarta columna
+                        "rgba(153, 102, 255, 0.2)", // Color para la quinta columna
+                        "rgba(255, 159, 64, 0.2)"   // Color para la sexta columna
+                           ];
+                      // Configuración del gráfico
+                      const chartData = {
+                        labels: labels,
+                        datasets: [{
+                          label: "Número de Campañas",
+                          data: data,
+                          backgroundColor: backgroundColors,
+                          borderColor: "rgba(54, 162, 235, 1)",
+                          borderWidth: 1,
+                        }]
+                      };
+                
+                      const chartOptions = {
+                        scales: {
+                          xAxes: [{
+                            ticks: {
+                              autoSkip: false, // Evita que las etiquetas se recorten
+                              maxRotation: 90, // Rotación máxima en grados
+                              minRotation: 90 // Rotación mínima en grados
+                            }
+                          }],
+                          yAxes: [{
+                            ticks: {
+                              beginAtZero: true
+                            }
+                          }]
+                        }
+                      };
+                
+                      // Crear la gráfica
+                      new Chart(ctx, {
+                        type: "bar",
+                        data: chartData,
+                        options: chartOptions
+                      });
+                    });
+                  </script>
+                    
+              
+
+                    <!-- -->
+
+                    <!-- comentario -->
+
+
+                    <!--/ List DataTable -->
+
                 </section>
                 <!-- Dashboard Analytics end -->
+
 
             </div>
         </div>
     </div>
     <!-- END: Content-->
+
+    <!-- Modal -->
+    <!-- <div class="modal modal-slide-in new-user-modal fade" id="graficaModal">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="graficaModalLabel">Gráfica de Campañas</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="graficaCampañas"></div>
+                </div>
+                <div class="modal-footer">
+                    <button id="cerrar-modal-btn" type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Cerrar</button>
+
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- modal de creacion or Update -->
+    <!-- <div class="modal modal-slide-in new-user-modal fade" id="graficaModal">
+        <div class="modal-dialog">
+
+            <div id="graficaCampañas"></div>
+        </div>
+    </div> -->
 
     <!-- modal de creacion or Update -->
     <div class="modal modal-slide-in new-user-modal fade" id="modalNew">
@@ -518,6 +685,11 @@
                     <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
                 </div>
             </form>
+        </div>
+    </div>
+    <div class="modal modal-slide-in new-user-modal fade" id="graficaModal">
+        <div class="modal-dialog">
+            <h3>Thony gay</h3>
         </div>
     </div>
     <!-- END: Content-->
