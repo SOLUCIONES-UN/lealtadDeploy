@@ -328,7 +328,7 @@ inputFile.addEventListener("change", function() {
     } else {
         readXlsxFile(inputFile.files[0]).then(function(data) {
             let tablaExcelBody = document.getElementById("tablaExcelBody");
-            tablaExcelBody.innerHTML = ""; // Vacía la tabla antes de agregar nuevos datos
+            // tablaExcelBody.innerHTML = ""; // Vacía la tabla antes de agregar nuevos datos
 
             data.forEach((row, indexP) => {
                 var tr = `<tr id="fila${indexP}">
@@ -342,7 +342,6 @@ inputFile.addEventListener("change", function() {
         });
     }
 });
-
 
 
 // Obtener referencia al botón y al campo de entrada
