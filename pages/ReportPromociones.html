@@ -62,7 +62,7 @@
         <ul class="nav navbar-nav">
           <li class="nav-item">
             <a class="nav-link menu-toggle" href="javascript:void(0);">
-              <b>Administración de Categorias</b>
+              <b>Administración de Promociones</b>
             </a>
           </li>
         </ul>
@@ -274,23 +274,27 @@
               <button id="ConsultarPromo" class="btn btn-info mt-2 btn-block"> Consultar </button>
             </div>
             <div class="col-md-2">
-              <button class="btn btn-success mt-2 btn-block"> Excel </button>
+              <button id="ExportarInfo" class="btn btn-success mt-2 btn-block"> Excel </button>
             </div>
+            
           </div>
           <div class="card-datatable table-responsive">
             <table class="datatables-basic table" id="tableData">
               <thead>
                 <tr>
-                  <th>#</th>
-                  <th>CODIGO</th>
-                  <th>FECHA</th>
-                  <th>USUARIO</th>
-                  <th>APLICA PREMIO</th>
+                  <th>FECHA ACREDITACION</th>
+                  <th>TELEFONO</th>
+                  <th>NOMBRE</th>
+                  <th>CAMPAÑA</th>
                   <th>PREMIO</th>
+                  <th>MONTO</th>
+                  <th>TRANSACCION</th>
+                  <th>CODIGO</th>
+                  <th>MONTO TRANSACCION</th>
+                  <th>FECHA PARTICIPACIÓN</th>
                 </tr>
               </thead>
               <tbody id="TablaReportePromo">
-
               </tbody>
             </table>
           </div>
