@@ -10,6 +10,17 @@ const headers = {
 $(function() {
     let tabla = getPremios();
 
+    function validarDescripcion(descripcion) {
+        const descValido = /^[a-zA-Z0-9\s]+$/.test(descripcion.trim());
+
+        if (!descValido) {  
+            $('#descripcion').addClass('is-invalid');
+            $('#desc-error').text('El nombre no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
+            return false;
+        }
+        return true;
+    }
+
     //Usuario();
 
     $('#modalNew').on('show.bs.modal', function () {
@@ -48,6 +59,11 @@ $(function() {
     //evento submit del formulario
     $('#formNew').submit(function(){
 
+        if($('#tipoTransaccion').val() === null || $('#tipoTransaccion').val() === undefined){
+            $('#tipoTransaccion').addClass('is-invalid');
+            $('#tipoTransaccion-error').text('El campo tipo transaccion es obligatorio').addClass('text-danger');
+            return false;
+        }
     
 
         var valor = $('#tipoTransaccion').val();
@@ -56,15 +72,31 @@ $(function() {
         if(valor !== "0"){
 
             if(valor=== "1"){
+
+                if($('#transaccion').val() === null || $('#transaccion').val() === undefined){
+                    $('#transaccion').addClass('is-invalid');
+                    $('#transaccion-error').text('El campo transaccion es obligatorio').addClass('text-danger');
+                    return false;
+                }
+
+
                 var raw = JSON.stringify({
                     "idTransaccion": $('#transaccion').val(),
                     "tipoTransaccion" : valor,
                     "usuario" : infoUsuario.username,
                 });
             } else if( valor === "2"){
+
+                const descripcion = $('#descripcion').val();
+
+                if(  validarDescripcion(descripcion)){
+                    return false;
+                }
+
+
                 var raw = JSON.stringify({
                     "tipoTransaccion" : valor,
-                    "descripcion": $('#descripcion').val(),
+                    "descripcion": descripcion,
                     "link": $('#link').val(),
                     "claveSecreta": $('#clave').val(),
                     "usuario" : infoUsuario.username,
@@ -114,6 +146,9 @@ $(function() {
             
 
             if(valor=== "1"){
+
+                
+
                 var raw = JSON.stringify({
                     "descripcion": $('#descripcionEditPremio').val(),
                     "link": "",
@@ -123,6 +158,13 @@ $(function() {
                     "usuario" : infoUsuario.username,
                 });
             } else if( valor === "2"){
+
+                const descripcion = $('#descripcion').val();
+
+                if(  validarDescripcion(descripcion)){
+                    return false;
+                }
+
                 var raw = JSON.stringify({
                     "descripcion": $('#descripcionEdit').val(),
                     "link": $('#linkEdit').val(),
@@ -387,6 +429,7 @@ function tipoTransaccionForm() {
                     <select type="text" class="form-control dt-full-name" id="transaccion" placeholder="Transaccion"
                     name="transaccion" aria-label="" aria-describedby="basic-icon-default-fullname2" required >
                     </select>
+                    <div id="transaccion-error" class="invalid-feedback transaccion-error"></div>
                 </div>
             `);
 
@@ -400,6 +443,7 @@ function tipoTransaccionForm() {
                     <label class="form-label" for="basic-icon-default-fullname">Descripcion</label>
                     <input type="text" class="form-control dt-full-name" id="descripcion" placeholder="Descripcion del premio"
                     name="descripcion" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
+                    <div id="desc-error" class="invalid-feedback depa-error"></div>
                 </div>
                 
                 <div class="form-group">
