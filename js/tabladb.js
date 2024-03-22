@@ -18,14 +18,7 @@ $(function () {
         }
         return true;
     }
-    function validarSelect(proyecto) {
-        if (proyecto.trim() === ""){
-            $('.ruta').addClass('is-invalid');
-            $('.ruta-error').text('La descripción no admite caracteres especiales ni espacios en blanco solo debe contener letras').addClass('text-danger');
-            return false;
-        }
-        return true;
-    }
+
 
     $('#modalNew').on('show.bs.modal', function () {
         limpiarFormulario();
@@ -80,12 +73,14 @@ $(function () {
         const descripcion = $('#descripcion').val();
         const proyecto = $("#ruta").val();
 
-        getSelect();
         if (!validarDescripcion(descripcion)) {
             return false;
         }
-        if(!validarSelect(proyecto)){
-            return false;
+
+        if(proyecto == 0 || proyecto == null){
+            $('.ruta').addClass('is-invalid');
+            $('.ruta-error').text('El campo departamento es obligatorio').addClass('text-danger');
+            return false;   
         }
 
         $("#btnSubmit").attr("disabled",true);
@@ -128,11 +123,13 @@ $(function () {
     $('#formEdit').submit(function () {
 
         const descripcion = $('#descripcionEdit').val();
+        const idProyectos = $('#rutaEdit').val()
 
         if (!validarDescripcion(descripcion)) {
             return false;
         }
-        
+        $("#btnSubmitEdit").attr("disabled", true);
+
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", token);
@@ -141,7 +138,7 @@ $(function () {
         
         var raw = JSON.stringify({
             "nombre_tabla": $('#descripcionEdit').val(),
-            "idProyecto": $('#rutaEdit').val(),
+            "idProyecto": idProyectos,
         });
 
         var requestOptions = {
@@ -187,6 +184,7 @@ $(function () {
                 if (result.code == "ok") {
                     limpiarFormulario();
                     tabla._fnAjaxUpdate();
+                    getSelect();
                     $('#modalDelete').modal('toggle');
                     Alert(result.message, 'success')
                 } else {
@@ -225,7 +223,7 @@ const getTablaDb = () => {
             },
             { data: "nombre_tabla" },
             {
-                data: "id",
+                data: "id", 
                 render: function (data) {
                     return '<div class="btn-group">' +
                         '<a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">' +
@@ -279,7 +277,7 @@ const getTablaDb = () => {
 
 function limpiarFormulario() {
     $('#descripcion').val('');
-    $('#ruta').val();
+    $('#ruta').val("");
     $('.descripcion').removeClass('is-invalid');
     $('.descripcion-error').empty().removeClass('text-danger');
     $('.ruta').removeClass('is-invalid');
@@ -297,37 +295,27 @@ const Alert = function (message, status) // si se proceso correctamente la solic
 }
 
 const OpenEdit = (id) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", token);
+
     var requestOptions = {
         method: 'GET',
-        headers: {
-            'Authorization': token,
-        },
-        redirect: 'follow'
+        redirect: 'follow', 
+        headers: myHeaders
     };
 
-    
-    fetch(`${url}tablabd/${id}`, requestOptions)
-        .then(response => {
-            if (!response.ok) {
-                if (response.status === 401) {
-                    console.error("Error de autenticación: Token no válido o expirado.");
-                }
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(result => {
+    fetch(`${url}tabladb/${id}`, requestOptions)
+        .then(response => response.json())
+        .then(result =>{
             console.log(result);
-            // Lógica para llenar el formulario de edición con los datos obtenidos
             $('#id').val(id);
-            $('#descripcionEdit').val(result.descripcion);
-            $('#rutaEdit').val(result.ruta);
+            $('#descripcionEdit').val(result.nombre_tabla);
+            $('#rutaEdit').val(result.idProyectos);
             $('#modalEdit').modal('toggle');
+
         })
-        .catch(error => {
-            console.error("Error en la solicitud GET:", error);
-            Alert("Error al obtener datos del proyecto", 'error');
-        });
+        .catch(err => console.log('error', err))
 }
 
 
@@ -354,5 +342,26 @@ const getSelect = ()=>{
             });
         })
         .catch(err => console.log('error', err))
-
 }
+
+
+/*
+const EditSelect=(id)=>{
+    console.log("errrrrorr", id)
+    var requestOptions ={
+        method: 'GET',
+        redirect: 'follow',
+        headers: {"Authorization":token}
+    };
+
+    fetch(`${url}projects/${id}`,requestOptions)
+        .then(response => response.json())
+        .then(result =>{
+            result.forEach(element=>{
+                var selected = (element.id == id) ? 'selected' : '';
+                var opc = `<option value="${element.id}" ${selected}>${element.descripcion}</option>`; 
+                $('#rutaEdit').append(opc);
+            });
+        })
+        .catch(err => console.log('error', err));
+}*/
