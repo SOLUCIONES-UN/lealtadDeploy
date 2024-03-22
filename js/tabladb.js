@@ -69,7 +69,6 @@ $(function () {
 
     $('#formNew').submit(function () {
 
-        console.log("Datos", $('#descripcion').val());
         const descripcion = $('#descripcion').val();
         const proyecto = $("#ruta").val();
 
@@ -326,6 +325,7 @@ const OpenDelete = (id) => {
 
 
 const getSelect = ()=>{
+    limpiarFormulario();
     var requestOptions ={
         method: 'GET',
         redirect: 'follow',
@@ -344,24 +344,3 @@ const getSelect = ()=>{
         .catch(err => console.log('error', err))
 }
 
-
-/*
-const EditSelect=(id)=>{
-    console.log("errrrrorr", id)
-    var requestOptions ={
-        method: 'GET',
-        redirect: 'follow',
-        headers: {"Authorization":token}
-    };
-
-    fetch(`${url}projects/${id}`,requestOptions)
-        .then(response => response.json())
-        .then(result =>{
-            result.forEach(element=>{
-                var selected = (element.id == id) ? 'selected' : '';
-                var opc = `<option value="${element.id}" ${selected}>${element.descripcion}</option>`; 
-                $('#rutaEdit').append(opc);
-            });
-        })
-        .catch(err => console.log('error', err));
-}*/
