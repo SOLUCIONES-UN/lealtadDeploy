@@ -18,7 +18,14 @@ $(function () {
         }
         return true;
     }
-
+    function validarSelect(proyecto) {
+        if (proyecto.trim() === ""){
+            $('.ruta').addClass('is-invalid');
+            $('.ruta-error').text('La descripción no admite caracteres especiales ni espacios en blanco solo debe contener letras').addClass('text-danger');
+            return false;
+        }
+        return true;
+    }
 
     $('#modalNew').on('show.bs.modal', function () {
         limpiarFormulario();
@@ -71,9 +78,13 @@ $(function () {
 
         console.log("Datos", $('#descripcion').val());
         const descripcion = $('#descripcion').val();
+        const proyecto = $("#ruta").val();
 
         getSelect();
         if (!validarDescripcion(descripcion)) {
+            return false;
+        }
+        if(!validarSelect(proyecto)){
             return false;
         }
 
@@ -127,7 +138,7 @@ $(function () {
         myHeaders.append("Authorization", token);
 
         const id = $('#id').val();
-
+        
         var raw = JSON.stringify({
             "nombre_tabla": $('#descripcionEdit').val(),
             "idProyecto": $('#rutaEdit').val(),
