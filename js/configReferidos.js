@@ -20,7 +20,7 @@ $(function () {
   });
   $("#swInstagram").change(function () {
     chechInstagram();
-    if ($("#swFacebook").prop("checked")) {
+    if ($("#swInstagram").prop("checked")) {
       //habilitar la card de facebook
       DeleteConfigReferidos(2, 1);
     } else {
@@ -30,7 +30,7 @@ $(function () {
   });
   $("#swWhatsapp").change(function () {
     chechWhatsApp();
-    if ($("#swFacebook").prop("checked")) {
+    if ($("#swWhatsapp").prop("checked")) {
       //habilitar la card de facebook
       DeleteConfigReferidos(3, 1);
     } else {
@@ -40,7 +40,7 @@ $(function () {
   });
   $("#swMensaje").change(function () {
     chechMensajes();
-    if ($("#swFacebook").prop("checked")) {
+    if ($("#swMensaje").prop("checked")) {
       //habilitar la card de facebook
       DeleteConfigReferidos(4, 1);
     } else {
@@ -50,7 +50,7 @@ $(function () {
   });
   $("#swPantalla").change(function () {
     chechPantalla();
-    if ($("#swFacebook").prop("checked")) {
+    if ($("#swPantalla").prop("checked")) {
       //habilitar la card de facebook
       DeleteConfigReferidos(5, 1);
     } else {
