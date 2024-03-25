@@ -6,7 +6,7 @@ $(function () {
     let tabla = getMunicipios();
     Usuario()
     function validarNombre(nombre) {
-        const nombreValido = /^[a-zA-Z0-9\s]+$/.test(nombre.trim());
+        const nombreValido = /^[a-zA-Z\s]+$/.test(nombre.trim());
     
         if (!nombreValido) {
           $('.nombre').addClass('is-invalid');
@@ -50,8 +50,18 @@ $(function () {
     //evento submit del formulario
     $('#formNew').submit(function () {
         const nombre = $('#nombre').val();
+        const idDepartamento = $('#departamento').val();
+
+        
 
         if (!validarNombre(nombre)) {
+            return false;
+        }
+
+        if (idDepartamento == 0 || idDepartamento == null) {
+            
+            $('.departamento').addClass('is-invalid');
+            $('.depa-error').text('El campo departamento es obligatorio').addClass('text-danger');
             return false;
         }
 
@@ -63,7 +73,7 @@ $(function () {
 
         var raw = JSON.stringify({
             "nombre": $('#nombre').val(),
-            "departamento": $('#departamento').val(),
+            "departamento":idDepartamento,
         });
 
         var requestOptions = {
