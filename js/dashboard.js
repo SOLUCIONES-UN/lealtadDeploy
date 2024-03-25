@@ -1,12 +1,11 @@
 let usuarioDashboardDashboard = JSON.parse(localStorage.getItem("infousuarioDashboard"));
 
-  
+
 const token = localStorage.getItem("token");
 
 $(function () {
   $('#datosGrafica').hide();
-  $('#datosGrafica1').hide();
-  $('#datosGrafica2').hide();
+
   getAllCountCoustomeName();
   getAllSumValor();
   getAllCampanasActivasLastWeek();
@@ -18,9 +17,7 @@ $(function () {
 //boton para volver a pagina anterior
 $("#btnRegresar").click(function () {
   $('#datosGrafica').hide();
-  $('#datosGrafica1').hide();
-  $('#datosGrafica2').hide();
-
+  
   $("#dataDashboard").show('low');
 
 })
@@ -99,141 +96,141 @@ function mostrarGraficaCampañas() {
     );
 }
 
-function mostrarGraficaCampañas1() {
-  // Obtener el canvas
-  const canvas = document.getElementById("graficaCampanas1");
-    var labels = [];
-  for (var i = 1; i <= 12; i++) {
-      labels.push('Columna ' + i);
-  }
-  var data = [];
-for (var i = 0; i < 12; i++) {
-    data.push(Math.floor(Math.random() * 100)); // Generar valores aleatorios para cada columna
-}
+// function mostrarGraficaCampañas1() {
+//   // Obtener el canvas
+//   const canvas = document.getElementById("graficaCampanas1");
+//   var labels = [];
+//   for (var i = 1; i <= 12; i++) {
+//     labels.push('Columna ' + i);
+//   }
+//   var data = [];
+//   for (var i = 0; i < 12; i++) {
+//     data.push(Math.floor(Math.random() * 100)); // Generar valores aleatorios para cada columna
+//   }
 
 
-  const token = localStorage.getItem("token");
-  const headers = {
-    Authorization: token,
-    "Content-Type": "application/json",
-  };
+//   const token = localStorage.getItem("token");
+//   const headers = {
+//     Authorization: token,
+//     "Content-Type": "application/json",
+//   };
 
-  var requestOptions = {
-    method: "GET",
-    headers: headers,
-    redirect: "follow",
-  };
+//   var requestOptions = {
+//     method: "GET",
+//     headers: headers,
+//     redirect: "follow",
+//   };
 
-  fetch(`${url}Campania`, requestOptions)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Datos de campañas:", data);
+//   fetch(`${url}Campania`, requestOptions)
+//     .then((response) => response.json())
+//     .then((data) => {
+//       console.log("Datos de campañas:", data);
 
-      const labels = data.map((campaña) => campaña.nombre);
-      const numCampanas = data.map((campaña) => campaña.numero_campana);
+//       const labels = data.map((campaña) => campaña.nombre);
+//       const numCampanas = data.map((campaña) => campaña.numero_campana);
 
-      const chartData = {
-        labels: labels,
-        datasets: [
-          {
-            label: "Número de Campanas",
-            data: [20, 10, 40, 33, 22, 32, 23, 53, 55, 66, 33, 44],
-            backgroundColor: "rgba(54, 162, 235, 0.2)",
-            borderColor: "rgba(54, 162, 235, 1)",
-            borderWidth: 1,
-          },
-        ],
-      };
+//       const chartData = {
+//         labels: labels,
+//         datasets: [
+//           {
+//             label: "Número de Campanas",
+//             data: [20, 10, 40, 33, 22, 32, 23, 53, 55, 66, 33, 44],
+//             backgroundColor: "rgba(54, 162, 235, 0.2)",
+//             borderColor: "rgba(54, 162, 235, 1)",
+//             borderWidth: 1,
+//           },
+//         ],
+//       };
 
-      const chartOptions = {
-        scales: {
-          yAxes: [{}],
-        },
-      };
-      console.log("Labels:", labels);
-      console.log("NumCampanas:", numCampanas);
+//       const chartOptions = {
+//         scales: {
+//           yAxes: [{}],
+//         },
+//       };
+//       console.log("Labels:", labels);
+//       console.log("NumCampanas:", numCampanas);
 
-      const ctx = canvas.getContext("2d");
-      new Chart(ctx, {
-        type: "bar",
-        data: chartData,
-        options: chartOptions,
-      });
-
-
-    })
-    .catch((error) =>
-      console.error("Error al obtener datos de campañas:", error)
-    );
-}
-
-function mostrarGraficaCampañas2() {
-  // Obtener el canva
-  const canvas = document.getElementById("graficaCampanas2");
-    var labels = [];
-  for (var i = 1; i <= 12; i++) {
-      labels.push('Columna ' + i);
-  }
-  var data = [];
-for (var i = 0; i < 12; i++) {
-    data.push(Math.floor(Math.random() * 100)); // Generar valores aleatorios para cada columna
-}
+//       const ctx = canvas.getContext("2d");
+//       new Chart(ctx, {
+//         type: "bar",
+//         data: chartData,
+//         options: chartOptions,
+//       });
 
 
-  const token = localStorage.getItem("token");
-  const headers = {
-    Authorization: token,
-    "Content-Type": "application/json",
-  };
+//     })
+//     .catch((error) =>
+//       console.error("Error al obtener datos de campañas:", error)
+//     );
+// }
 
-  var requestOptions = {
-    method: "GET",
-    headers: headers,
-    redirect: "follow",
-  };
-
-  fetch(`${url}Campania`, requestOptions)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Datos de campañas:", data);
-
-      const labels = data.map((campaña) => campaña.nombre);
-      const numCampanas = data.map((campaña) => campaña.numero_campana);
-
-      const chartData = {
-        labels: labels,
-        datasets: [
-          {
-            label: "Número de Campanas",
-            data: [20, 10, 40, 33, 22, 32, 23,],
-            backgroundColor: "rgba(54, 162, 235, 0.2)",
-            borderColor: "rgba(54, 162, 235, 1)",
-            borderWidth: 1,
-          },
-        ],
-      };
-
-      const chartOptions = {
-        scales: {
-          yAxes: [{}],
-        },
-      };
-      console.log("Labels:", labels);
-      console.log("NumCampanas:", numCampanas);
-
-      const ctx = canvas.getContext("2d");
-      new Chart(ctx, {
-        type: "bar",
-        data: chartData,
-        options: chartOptions,
-      });
+// function mostrarGraficaCampañas2() {
+//   // Obtener el canva
+//   const canvas = document.getElementById("graficaCampanas2");
+//   var labels = [];
+//   for (var i = 1; i <= 12; i++) {
+//     labels.push('Columna ' + i);
+//   }
+//   var data = [];
+//   for (var i = 0; i < 12; i++) {
+//     data.push(Math.floor(Math.random() * 100)); // Generar valores aleatorios para cada columna
+//   }
 
 
-    })
-    .catch((error) =>
-      console.error("Error al obtener datos de campañas:", error)
-    );
-};
+//   const token = localStorage.getItem("token");
+//   const headers = {
+//     Authorization: token,
+//     "Content-Type": "application/json",
+//   };
+
+//   var requestOptions = {
+//     method: "GET",
+//     headers: headers,
+//     redirect: "follow",
+//   };
+
+//   fetch(`${url}Campania`, requestOptions)
+//     .then((response) => response.json())
+//     .then((data) => {
+//       console.log("Datos de campañas:", data);
+
+//       const labels = data.map((campaña) => campaña.nombre);
+//       const numCampanas = data.map((campaña) => campaña.numero_campana);
+
+//       const chartData = {
+//         labels: labels,
+//         datasets: [
+//           {
+//             label: "Número de Campanas",
+//             data: [20, 10, 40, 33, 22, 32, 23,],
+//             backgroundColor: "rgba(54, 162, 235, 0.2)",
+//             borderColor: "rgba(54, 162, 235, 1)",
+//             borderWidth: 1,
+//           },
+//         ],
+//       };
+
+//       const chartOptions = {
+//         scales: {
+//           yAxes: [{}],
+//         },
+//       };
+//       console.log("Labels:", labels);
+//       console.log("NumCampanas:", numCampanas);
+
+//       const ctx = canvas.getContext("2d");
+//       new Chart(ctx, {
+//         type: "bar",
+//         data: chartData,
+//         options: chartOptions,
+//       });
+
+
+//     })
+//     .catch((error) =>
+//       console.error("Error al obtener datos de campañas:", error)
+//     );
+// };
 
 
 
@@ -269,13 +266,79 @@ function getAllCampanasActivas() {
   fetch(`${url}Campania`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
+
+      console.log('\n\n\n\n Datos campania ' + result + "\n\n\n\n");
       const campanasActivas = result.filter((campana) => campana.estado === 1);
-      console.log(campanasActivas);
+      const fechaActual = new Date();
+      const datosCampañas = campanasActivas.map((campana) => {
+        const fechaFin = new Date(campana.fechaFin);
+        const tiempoRestante = fechaFin.getTime() - fechaActual.getTime();
+
+        console.log("FECHA FIN ES " + campana.fechaFin);
+
+        const año = fechaActual.getFullYear();
+        const mes = (fechaActual.getMonth() + 1).toString().padStart(2, '0');
+        const día = fechaActual.getDate().toString().padStart(2, '0');
+
+        const fechaFormateada = `${año}-${mes}-${día}`;
+
+        console.log(fechaFormateada); // Output: "2024-03-21"
+
+        console.log("FECHA FIN ES " + campana.fechaFin);
+        console.log("FECHA actual ES " + fechaFormateada);
+
+        const fechaInicial = new Date(fechaFin);
+        const fechaActualizada = new Date(fechaFormateada);
+
+        console.log("FECHA INICIAL ANTES DE CALCULAR " + fechaInicial);
+        console.log("FECHA fechaActualizada ANTES DE CALCULAR " + fechaActualizada);
+
+        const diferenciaMs = fechaActualizada.getTime() - fechaInicial.getTime();
+
+        const diferenciaDias = Math.ceil(diferenciaMs / (1000 * 60 * 60 * 24));
+
+        console.log("LA DIFERENCIA DE DIAS DE LAS FECHAS ES " + diferenciaDias);
+
+        return {
+          nombre: campana.nombre,
+          diasRestantes: diferenciaDias,
+          fechaVencimiento: fechaFin.toLocaleDateString(),
+        };
+
+      });
+      displayCampanas(datosCampañas);
       displayNumCampanas(campanasActivas.length);
     })
     .catch((error) => console.log("error", error));
-};
+}
 
+function displayCampanas(campanas) {
+  const tabla = document.getElementById("campaniatable");
+
+  campanas.forEach((campana) => {
+    const fila = tabla.insertRow();
+
+    const celdaNombre = fila.insertCell(0);
+    celdaNombre.textContent = campana.nombre;
+
+    const celdaDiasRestantes = fila.insertCell(1);
+    celdaDiasRestantes.textContent = `Vence en ${campana.diasRestantes} dias, ${campana.fechaVencimiento}`;
+
+    console.log("LOS DIAS SON " + campana.diasRestantes);
+
+    // Agregar clases de estilo según el número de días restantes
+    if (campana.diasRestantes>=10 || campana.diasRestantes <=10 && campana.diasRestantes>5) {
+      celdaDiasRestantes.classList.add("verde");
+
+    }else if(campana.diasRestantes <=5 && campana.diasRestantes >2){
+      celdaDiasRestantes.classList.add("anaranjado");
+
+    }else if(campana.diasRestantes <= 2){
+      celdaDiasRestantes.classList.add("rojo");
+    }
+
+  });
+}
 function displayNumReferidos(numReferidos) {
   const numReferidosElement = document.getElementById("num-referidos");
   numReferidosElement.textContent = numReferidos;
@@ -342,7 +405,7 @@ function getAllSumValor() {
     .then((response) => response.json())
     .then((result) => {
       console.log("Data de count:", result);
-      $('#sumaValor').text("Q "+parseFloat(result.total).toFixed(2));
+      $('#sumaValor').text("Q " + parseFloat(result.total).toFixed(2));
     })
     .catch((error) => console.log("Error al obtener el total de beneficios:", error));
 };
@@ -478,4 +541,5 @@ function getAllPromocionesActivasLastWeek() {
     .catch((error) => console.log("error", error));
 };
 
-   
+
+
