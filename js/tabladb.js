@@ -22,49 +22,40 @@ $(function () {
 
     $('#modalNew').on('show.bs.modal', function () {
         limpiarFormulario();
-        $("#btnSubmit").attr("disabled",false);
+
     });
 
     $('#modalEdit').on('show.bs.modal', function () {
-        limpiarFormulario();  
-        $("#btnSubmEdit").attr("disabled",false);
 
     });
 
     $('#modalNew').on('hidden.bs.modal', function () {
         limpiarFormulario();     
-        $("#btnSubmit").attr("disabled",false);
+
 
     });
 
     $('#modalEdit').on('hidden.bs.modal', function () {
         limpiarFormulario();
-        $("#btnSubmEdit").attr("disabled",false);
 
     });
 
     $('#modalNew').find('[data-dismiss="modal"]').click(function () {
         limpiarFormulario();
-        $("#btnSubmit").attr("disabled",false);
 
     });
 
     $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
         limpiarFormulario();
-        $("#btnSubmEdit").attr("disabled",false);
 
     });
 
     $('#modalNew').find('[data-dismiss="modal"]').click(function () {
         limpiarFormulario();
-        $("#btnSubmit").attr("disabled",false);
-
     });
 
     $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
         limpiarFormulario();
-        $("#btnSubmEdit").attr("disabled",false);
-
     });
 
     $('#formNew').submit(function () {
@@ -82,7 +73,7 @@ $(function () {
             return false;   
         }
 
-        $("#btnSubmit").attr("disabled",true);
+        //$("#btnSubmit").attr("disabled",true);
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -122,12 +113,12 @@ $(function () {
     $('#formEdit').submit(function () {
 
         const descripcion = $('#descripcionEdit').val();
-        const idProyectos = $('#rutaEdit').val()
+        //const idProyectos = $('#rutaEdit').val();
 
         if (!validarDescripcion(descripcion)) {
             return false;
         }
-        $("#btnSubmitEdit").attr("disabled", true);
+       // $("#btnSubmitEdit").attr("disabled", true);
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -137,7 +128,7 @@ $(function () {
         
         var raw = JSON.stringify({
             "nombre_tabla": $('#descripcionEdit').val(),
-            "idProyecto": idProyectos,
+            "idProyecto": $('#rutaEdit').val(),
         });
 
         var requestOptions = {
@@ -275,6 +266,7 @@ const getTablaDb = () => {
 }
 
 function limpiarFormulario() {
+    $('#formNew').trigger("reset");
     $('#descripcion').val('');
     $('#ruta').val("");
     $('.descripcion').removeClass('is-invalid');
