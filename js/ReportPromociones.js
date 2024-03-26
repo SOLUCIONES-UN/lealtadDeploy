@@ -2,6 +2,9 @@ const url = "http://localhost:3000/";
 let token = localStorage.getItem("token");
 
 $(function () {
+
+  // Deshabilitar el botón al inicio
+  $("#btnDescargarExcel").prop("disabled", true);
   getPromociones();
 
   $("#ConsultarPromo").on("click", function () {
@@ -68,8 +71,34 @@ const getReport = () => {
 };
 
 document.getElementById("btnDescargarExcel").addEventListener("click", function () {
-  const table = document.getElementById("TablaReportePromo");
-  const wb = XLSX.utils.table_to_book(table, { sheet: "Sheet JS" });
+  const table = document.getElementById("tableData"); // Obtener la tabla
+  const wb = XLSX.utils.book_new(); // Crear un nuevo libro de Excel
+
+  // Obtener los datos de la tabla
+  const data = [];
+  const headers = [];
+  for (let i = 0; i < table.rows.length; i++) {
+    const row = [];
+    for (let j = 0; j < table.rows[i].cells.length; j++) {
+      if (i === 0) {
+        // Obtener los nombres de las columnas de la primera fila
+        headers.push(table.rows[i].cells[j].innerText);
+      } else {
+        row.push(table.rows[i].cells[j].innerText);
+      }
+    }
+    if (i !== 0) {
+      data.push(row);
+    }
+  }
+
+  // Agregar los datos y los nombres de las columnas a una hoja
+  const ws = XLSX.utils.aoa_to_sheet([headers, ...data]);
+
+  // Agregar la hoja al libro
+  XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+  // Descargar el archivo Excel
   XLSX.writeFile(wb, "reporte_promociones.xlsx");
 });
 
@@ -90,18 +119,21 @@ function mostrarDatosEnTabla(datos) {
       <tr> 
         <td>${fechaAcreditacion}</td>
         <td>${element.numeroTelefono}</td>
-        <td>${descripcion}</td>
+        <td>${element.descripcion}</td>
         <td>${element.id}</td>
-        <td>${cupon}</td>
-        <td>${esPremio === 1 ? "SI" : "NO"}</td>
+        <td>${element.detallepromocion.premiopromocion.premio.descripcion}</td>
         <td>${monto}</td>
-        <td>${cupon}</td>
+        <td>${element.detallepromocion.premiopromocion.idPromocion}</td>
+        <td>${element.detallepromocion.cupon}</td>
         <td>${montoTransaccion}</td>
-        <td>${element.fechaInicial}</td>
+        <td>${element.fecha}</td>
       </tr>
     `;
     $("#TablaReportePromo").append(fila);
   });
+
+  // Habilitar el botón de descarga de Excel una vez que se muestra la tabla
+  $("#btnDescargarExcel").prop("disabled", false);
 }
 
 // Función para formatear la fecha y hora
