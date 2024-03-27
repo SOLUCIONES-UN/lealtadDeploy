@@ -331,7 +331,7 @@ function displayCampanas(campanas) {
       celdaDiasRestantes.classList.add("verde");
 
     }else if(campana.diasRestantes <=5 && campana.diasRestantes >2){
-      celdaDiasRestantes.classList.add("anaranjado");
+      celdaDiasRestantes.classList.add("amarillo");
 
     }else if(campana.diasRestantes <= 2){
       celdaDiasRestantes.classList.add("rojo");

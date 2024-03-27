@@ -259,7 +259,10 @@
       <div class="content-body p-1">
         <section class="card">
             <div class="row p-2">
-                
+              <div class="col-md-4">
+                <label for="Campanas">Campañas</label>
+                <input  id="Campanas" class="form-control"  type="text" >
+            </div>
                 <div class="col-md-4">
                     <label for="FechaInicio">Fecha Inicio</label>
                     <input  id="FechaInicio" class="form-control"  type="date" >
@@ -268,6 +271,7 @@
                     <label for="FechaFin">Fecha Final</label>
                     <input  id="FechaFin" class="form-control"  type="date" >
                 </div>
+                
                 <div class="col-md-2">
                     <button id="ConsultarReferido" class="btn btn-info mt-2 btn-block" > Consultar </button>  
                 </div>
@@ -280,11 +284,16 @@
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>FECHA Y HORA</th>
+                    <th>MEDIO</th>
+                    <th>CAMPAÑA</th>
                     <th>CÓDIGO REFERIDO</th>
-                    <th>PLATAFORMA</th>
-                    <th>NUMERO DE TELÉFONO REFIRIENTE</th>
+                    <th>NUMERO DE TELÉFONO USUARIO</th>
+                    <th>NOMBRE USUARIO</th>
+                    <th>FECHA Y HORA</th>
+                    <th>TRANSACCION</th>
+                    <th>MONTO PREMIO</th>
                     <th>NUMERO DE TELÉFONO REFERIDO</th>
+                    <th>NOMBRE REFERIDO</th>
                   </tr>
                 </thead>
                 <tbody  id="TablaReporteReferidos" >

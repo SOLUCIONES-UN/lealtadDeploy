@@ -209,14 +209,14 @@
 }
 
 /* Estilo para fondo anaranjado y texto blanco */
-.anaranjado {
+.amarillo {
     background-color: rgb(255, 255, 255);
-    color:#FFFF66 ; /* Texto en blanco */
+    color:#FFCA28/* Texto en blanco */
 }
 
 /* Estilo para fondo verde y texto blanco */
 .verde {
     background-color: rgb(255, 255, 255);
-    color:  #28B463; /* Texto en blanco */
+    color: #43A047; /* Texto en blanco */
 }
 

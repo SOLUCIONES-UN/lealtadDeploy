@@ -1,4 +1,8 @@
 const url = "http://localhost:3000/";
+
+
+  
+
 $(function () {
 
     $("#ConsultarReferido" ).click(function() {
@@ -18,6 +22,7 @@ $(function () {
     var raw = JSON.stringify({
       fechaInicial: $("#FechaInicio").val(),
       fechaFinal: $("#FechaFin").val(),
+      campanas: $("campanas").val(),
     });
     var requestOptions = {
         method: "POST",
@@ -28,7 +33,7 @@ $(function () {
       $("#TablaReporteReferidos").html(null);
 
       var contador = 1
-      fetch(url + "reporteReferidos", requestOptions)
+      fetch(`${url}reporteReferidos`, requestOptions)
         .then((response) => response.json())
         .then((result) => {
 
@@ -38,7 +43,8 @@ $(function () {
             //let fecha = element.fecha.split("T");
             //let anio = fecha[0].split("-");
             //let hora = fecha[1].split(":");
-            const { codigo } = element.codigosReferido;
+            const { codigo } = element.codigoReferidos;
+            const {campanas} = element.campanas;
             var listado = `
             <tr> 
               <th> 
