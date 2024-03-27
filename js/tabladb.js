@@ -113,7 +113,6 @@ $(function () {
     $('#formEdit').submit(function () {
 
         const descripcion = $('#descripcionEdit').val();
-        //const idProyectos = $('#rutaEdit').val();
 
         if (!validarDescripcion(descripcion)) {
             return false;

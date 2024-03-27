@@ -4,6 +4,7 @@ let token = localStorage.getItem("token");
 $(function () {
     let tabla = getColumnas();
     Usuario();
+    getSelect();
     // funcion para validar el nombre
     function validarNombre(nombre) {
         const nombreValido = /^[a-zA-Z0-9\s]+$/.test(nombre.trim());
@@ -21,7 +22,7 @@ $('#modalNew').on('show.bs.modal', function () {
 });
 
 $('#modalEdit').on('show.bs.modal', function () {
- 
+
 });
 
 $('#modalNew').on('hidden.bs.modal', function () {
@@ -57,7 +58,11 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
         myHeaders.append("Authorization", token);
 
         var raw = JSON.stringify({
-            "nombre": $('#nombre').val()
+            "nombre": $('#nombre').val(),
+            "fila_insertada": $('#fInsertada').val(),
+            "fila_actualizada": $('#fActualizada').val(),
+            "idProyectos": $('#proyecto').val(),
+            "idTablas": $('#tabla').val()
         });
 
         var requestOptions = {
@@ -83,6 +88,7 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
 
             })
             .catch(error => { Alert(error.errors, 'error') });
+
         return false;
     });
 
@@ -100,7 +106,11 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
         const id = $('#id').val();
 
         var raw = JSON.stringify({
-            "nombre": $('#nombreEdit').val()
+            "nombre": $('#nombreEdit').val(),
+            "fila_insertada": $('#fInsertadaEdit').val(),
+            "fila_actualizada": $('#fActualizadaEdit').val(),
+            "idProyectos": $('#proyectoEdit').val(),
+            "idTablas": $('#tablaEdit').val()
         });
 
         var requestOptions = {
@@ -191,6 +201,7 @@ const getColumnas = () => {
                     return meta.row + 1;
                 }
             },
+            { data: "idTablas" },
             { data: "nombre" },
             {
                 data: "id", render: function (data) {
@@ -250,6 +261,10 @@ const getColumnas = () => {
 
 function limpiarFormulario() {
     $('#formNew').trigger("reset");
+    $('#proyecto').val("");
+    $('#tabla').empty();
+    $('.tabla').removeClass('is-invalid');
+    $('.proyecto').removeClass('is-invalid');
     $('.nombre').removeClass('is-invalid');
     $('.nombre-error').empty().removeClass('text-danger');
 }
@@ -279,9 +294,17 @@ const OpenEdit = (id) => {
         .then(result => {
             console.log(result)
             $('#id').val(id);
+            $('#proyectoEdit').val(result.idProyectos);
+            $('#tablaEdit').val(result.idTablas);
             $('#nombreEdit').val(result.nombre);
+            getTablaDB(result.idProyectos);            
+            $('#fInsertadaEdit').val( result.fila_insertada);
+            console.log(result.fila_insertada)   
+            
+            
+            
             $('#modalEdit').modal('toggle');
-        })
+            })
         .catch(error => console.log('error', error));
 
 }
@@ -292,4 +315,66 @@ const OpenDelete = (id) => {
     $('#idDelete').val(id);
     $('#modalDelete').modal('toggle');
 
+}
+
+const getSelect = () => {
+    limpiarFormulario();
+    var requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+        headers: { "Authorization": token }
+    };
+    $('#proyecto').html('<option value="0" selected disabled>Selecciona una Opcion</option>');
+    fetch(`${url}projects`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            result.forEach(element => {
+                var option = `<option value="${element.id}">${element.descripcion}</option>`;
+                $('#proyecto').append(option);
+                $('#proyectoEdit').append(option);
+            });
+
+            var selectProyecto = document.getElementById('proyecto');
+            var selectProyectoEdit = document.getElementById('proyectoEdit');
+
+            selectProyecto.addEventListener('change', function() {
+                var selectedId = this.value; // Obtener el valor seleccionado del elemento select
+                getTablaDB(selectedId); // Llamar a la función getTablaDB con el ID seleccionado
+            });
+
+            selectProyectoEdit.addEventListener('change', function() {
+                var selectedId = this.value;
+                getTablaDB(selectedId); 
+            });
+        })
+        .catch(err => console.log('error', err));
+}
+
+
+const getTablaDB = (id) => {
+    console.log(id, "Eerrroorr");
+
+    var requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+        headers: { "Authorization": token }
+    };
+
+    // Limpiar completamente los selectores de tablas
+    $('#tabla').empty();
+
+    // Agregar la opción de seleccionar una opción
+    $('#tabla').append('<option value="0" selected disabled>Selecciona una Opción</option>');
+
+    fetch(`${url}tabla/${id}`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            console.log("resultado", result);
+            result.forEach(element => {
+                var opc = `<option value="${element.id}">${element.nombre_tabla}</option>`;
+                $('#tabla').append(opc);
+                $('#tablaEdit').append(opc);
+            });
+        })
+        .catch(err => console.log('error', err));
 }
