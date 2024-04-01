@@ -20,26 +20,30 @@ $(function() {
     });
 
 $('#modalEdit').on('show.bs.modal', function () {
- 
+    $("#btnSubmitEdit").attr("disabled", false);
 });
 
 $('#modalNew').on('hidden.bs.modal', function () {
     limpiarFormulario();
+    $("#btnSubmit").attr("disabled", false);
 });
 
 
 $('#modalEdit').on('hidden.bs.modal', function () {
     limpiarFormulario();
+    $("#btnSubmitEdit").attr("disabled", false);
 });
 
 
 $('#modalNew').find('[data-dismiss="modal"]').click(function () {
     limpiarFormulario();
+    $("#btnSubmit").attr("disabled", false);
 });
 
 
 $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
     limpiarFormulario();
+    $("#btnSubmitEdit").attr("disabled", false);
 });
     //evento submit del formulario
     $('#formNew').submit(function(){
@@ -48,12 +52,13 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
         if (!validarNombre(nombre)) {
             return false;
         }
+        $("#btnSubmit").attr("disabled", true);
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", token);
 
         var raw = JSON.stringify({
             "nombre": $('#nombre').val(),
-            "nemonico": $('#nemonico').val(),
             "token": $('#token').val()
         });
 
@@ -86,8 +91,11 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", token);
 
         const id = $('#id').val();
+
+        $("#btnSubmitEdit").attr("disabled", true);
 
         var raw = JSON.stringify({
             "nombre": $('#nombreEdit').val(),
@@ -123,6 +131,7 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", token);
 
         const id = $('#idDelete').val();
         var requestOptions = {
@@ -175,7 +184,7 @@ const getTerceros = () => {
                 return meta.row + 1; 
             }},
             {data: "nombre"},
-            {data: "nemonico"},
+            //{data: "nemonico"},
             {data: "token"},
             {
                 data: "id", render: function (data) {
@@ -253,9 +262,15 @@ const Alert = function(message, status){
 }
 
 const OpenEdit = (id) => {
+
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", token);
+
     var requestOptions = {
         method: 'GET',
-        redirect: 'follow'
+        redirect: 'follow',
+        headers: myHeaders
     };
 
     fetch(`${url}Tercero/${id}`, requestOptions)
