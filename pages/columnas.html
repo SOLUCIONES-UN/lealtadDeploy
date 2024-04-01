@@ -262,7 +262,7 @@
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>Nombre</th>
+                    <th>TablaDB</th>
                     <th>Nombre</th>
                     <th>Acciones</th>
                   </tr>
@@ -285,6 +285,7 @@
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
+            <input id="id" type="hidden">
             <label class="form-label" for="proyecto">Proyecto</label>
             <select type="text" class="form-control proyecto" id="proyecto" name="proyecto" required>
               <option selected disabled>Selecciona una Opcion</option>
@@ -301,7 +302,7 @@
           <div class=" d-flex align-items-center ">
             <div class="form-group "> 
               <div class="custom-control custom-checkbox">
-                <input class="custom-control-input fInsertada" type="checkbox" id="fInsertada" value="1"/>
+                <input class="custom-control-input fInsertada" type="checkbox" id="fInsertada" />
                 <label class="custom-control-label mr-4" for="fInsertada">
                   Fila insertada
                 </label>
@@ -309,7 +310,7 @@
             </div>
             <div class="form-group ">
               <div class="custom-control custom-checkbox ">
-                <input class="custom-control-input  fActualizada" type="checkbox" id="fActualizada" value="1" />
+                <input class="custom-control-input  fActualizada" type="checkbox" id="fActualizada"  />
                 <label class="custom-control-label " for="fActualizada">
                   Fila actualizada
                 </label>
@@ -351,15 +352,15 @@
           <div class=" d-flex align-items-center ">
             <div class="form-group "> 
               <div class="custom-control custom-checkbox">
-                <input class="custom-control-input fInsertadaEdit" type="checkbox" id="fInsertadaEdit" value="1"/>
-                <label class="custom-control-label mr-4" for="fInsertada">
+                <input class="custom-control-input fInsertadaEdit" type="checkbox" id="fInsertadaEdit"/>
+                <label class="custom-control-label mr-4" for="fInsertadaEdit">
                   Fila insertada
                 </label>
               </div>
             </div>
             <div class="form-group ">
               <div class="custom-control custom-checkbox ">
-                <input class="custom-control-input  fActualizadaEdit" type="checkbox" id="fActualizadaEdit" value="1" />
+                <input class="custom-control-input  fActualizadaEdit" type="checkbox" id="fActualizadaEdit" />
                 <label class="custom-control-label " for="fActualizadaEdit">
                   Fila actualizada
                 </label>

@@ -53,6 +53,9 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
             return false;
         }
 
+        $('#fInsertada').val($('#fInsertada').prop('checked') ? 1 : 0);
+        $('#fActualizada').val($('#fActualizada').prop('checked') ? 1 : 0);
+
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", token);
@@ -99,6 +102,10 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
         if (!validarNombre(nombre)) {
             return false;
         }
+
+        $('#fInsertadaEdit').val($('#fInsertadaEdit').prop('checked') ? 1 : 0);
+        $('#fActualizadaEdit').val($('#fActualizadaEdit').prop('checked') ? 1 : 0);
+
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", token);
@@ -109,9 +116,12 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
             "nombre": $('#nombreEdit').val(),
             "fila_insertada": $('#fInsertadaEdit').val(),
             "fila_actualizada": $('#fActualizadaEdit').val(),
-            "idProyectos": $('#proyectoEdit').val(),
-            "idTablas": $('#tablaEdit').val()
+            "idTablas": $('#tablaEdit').val(),
+            "idProyectos": $('#proyectoEdit').val()
+            
         });
+        console.log(id);
+        console.log(raw);
 
         var requestOptions = {
             method: 'PUT',
@@ -123,8 +133,6 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
         fetch(`${url}Columna/${id}`, requestOptions)
             .then(response => response.json())
             .then(result => {
-
-
                 if (result.code == "ok") {
                     limpiarFormulario();
                     tabla._fnAjaxUpdate();
@@ -201,7 +209,7 @@ const getColumnas = () => {
                     return meta.row + 1;
                 }
             },
-            { data: "idTablas" },
+            { data: "tabladb.nombre_tabla" },
             { data: "nombre" },
             {
                 data: "id", render: function (data) {
@@ -298,10 +306,18 @@ const OpenEdit = (id) => {
             $('#tablaEdit').val(result.idTablas);
             $('#nombreEdit').val(result.nombre);
             getTablaDB(result.idProyectos);            
-            $('#fInsertadaEdit').val( result.fila_insertada);
-            console.log(result.fila_insertada)   
+
+            if (result.fila_insertada === 1) {
+                $('#fInsertadaEdit').prop('checked', true);
+            } else {
+                $('#fInsertadaEdit').prop('checked', false);
+            }
             
-            
+            if (result.fila_actualizada === 1) {
+                $('#fActualizadaEdit').prop('checked', true);
+            } else {
+                $('#fActualizadaEdit').prop('checked', false);
+            }
             
             $('#modalEdit').modal('toggle');
             })
