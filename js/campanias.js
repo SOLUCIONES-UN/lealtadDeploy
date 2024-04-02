@@ -935,8 +935,6 @@ const getMunicipios = (id, isEdit = false) => {
 
 
 
-
-
 const getTransacciones = (id, isEdit = false) => {
   var requestOptions = {
     method: 'GET',
