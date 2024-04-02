@@ -426,7 +426,7 @@
 
 
                             </div>
-
+                            <!--Inicio del stepper -->
                             <div class="bs-stepper-content">
                                 <!--CONFIGURACION DE LA CAMPAÑA-->
                                 <div id="account-details-vertical" class="content" style="height: 800px;">
@@ -434,6 +434,7 @@
                                         <h5 class="mb-0">Configuración de Campaña</h5>
                                         <small class="text-muted">Ingresa los datos basicos de la Campaña.</small>
                                     </div>
+                                    <!--Pagina inicial-->
                                     <div class="row">
                                         <div class="form-group col-md-6">
                                             <label class="form-label" for="nombre">Campaña</label>
@@ -446,22 +447,19 @@
                                     </div>
                                     <div class="row">
                                         <div class="form-group form-password-toggle col-md-6">
-                                            <label class="form-label" for="tituloNotificacion">Título de la
-                                                Notificación</label>
+                                            <label class="form-label" for="tituloNotificacion">Título de la Notificación</label>
                                             <input type="text" id="tituloNotificacion" class="form-control" placeholder="Ingrese el titulo">
                                             </input>
                                         </div>
                                         <div class="form-group form-password-toggle col-md-6">
-                                            <label class="form-label" for="descripcion">Descripción De La
-                                                Notificación</label>
+                                            <label class="form-label" for="descripcion">Descripción De La Notificación</label>
                                             <textarea type="password" id="descripcionNotificacion" class="form-control" placeholder="Ingrese la descripcion" rows="2"></textarea>
                                         </div>
 
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-md-6">
-                                            <label class="form-label" for="limiteParticipacion">Límite
-                                                Participación</label>
+                                            <label class="form-label" for="limiteParticipacion">Límite Participación</label>
                                             <input type="number" id="limiteParticipacion" class="form-control" />
                                         </div>
                                         <div class="form-group col-md-6">
@@ -484,9 +482,8 @@
                                         </div>
                                     </div>
                                     <div class="row">
-
+                                        <!--Para que sirve el modulo de automatizar reportes-->
                                         <div class="form-group col-md-6">
-
                                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalFechas">
                                                 Automatizar reporte
                                             </button>
@@ -495,10 +492,12 @@
                                         <div class="modal fade" id="modalFechas" tabindex="-1" role="dialog" aria-labelledby="modalFechasLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
+                                                    <!--Modulo no encontrado-->
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="modalFechasLabel">Seleccionar Fechas</h5>
 
                                                     </div>
+                                                    <!--Modulo fechas-->
                                                     <div class="modal-body">
                                                         <div class="form-group">
                                                             <label class="form-label" for="fechaInicio">Fecha de Inicio</label>
@@ -509,6 +508,7 @@
                                                             <input type="date" id="fechaFin" class="form-control" />
                                                         </div>
 
+                                                        <!--modulo no encontrado-->
                                                         <div class="form-group">
                                                             <label class="form-label" for="dia">Día de Envío</label>
                                                             <select id="dia" class="form-control">
@@ -519,7 +519,7 @@
                                                                 <option value="31">31</option>
                                                             </select>
                                                         </div>
-
+                                                        <!--modulo no encontrado-->
                                                         <div class="form-group">
                                                             <label class="form-label" for="hora">Hora de Envío</label>
                                                             <input type="time" id="hora" class="form-control" />
@@ -534,17 +534,19 @@
                                         </div>
                                     </div>
                                     <div class="row">
+                                        <!--modulo de pagina 1-->
                                         <div class="form-group col-md-6">
                                             <label class="form-label" for="nombre">Edad Inicial</label>
                                             <input type="number" subtype="age" id="edadIni" class="form-control" placeholder="Ingresa la edad inicial" />
                                         </div>
-
+                                        <!--modulo de pagina 1-->
                                         <div class="form-group col-md-6">
                                             <label class="form-label" for="edadFini">Edad Final</label>
                                             <input type="number" subtype="age" id="edadFini" class="form-control" placeholder="Ingresa la edad Final" />
                                         </div>
                                     </div>
                                     <div class="row">
+                                        <!--modulo de pagina 1-->
                                         <div class="form-group col-md-6">
                                             <label class="form-label" for="tipoUsuario">Tipo De Usuario</label>
                                             <select type="text" id="tipoUsuario" class="form-control" placeholder="Tipo De Usuario">
@@ -552,6 +554,7 @@
                                                 <option value="1">Final</option>
                                             </select>
                                         </div>
+                                        <!--modulo de pagina 1-->
                                         <div class="form-group col-md-6">
                                             <label class="form-label" for="sexo">Sexo</label>
                                             <select type="text" id="sexo" class="form-control" placeholder="Sexo">
@@ -562,7 +565,7 @@
                                             </select>
                                         </div>
                                     </div>
-
+                                    <!--modulo de botones en la parte inferior-->
                                     <div class="d-flex justify-content-between">
                                         <div>
                                             <button class="btn btn-outline-secondary btn-prev" disabled>
@@ -583,15 +586,16 @@
                                     </div>
                                 </div>
                                 <!--CONFIGURACION DE LOS PARTICIPANTES-->
+                                <!--Pagina 2-->
                                 <div id="participantes-info-vertical" class="content" style="height: auto;">
                                     <div class="content-header">
                                         <h5 class="mb-0">Configuración de los participantes.</h5>
                                         <small>Configure los participantes.</small>
                                     </div>
                                     <div class="row" id="panelGenerar">
+                                        <!--modulo de seleccion de participantes-->
                                         <div class="form-group col-md-6">
-                                            <label class="form-label" for="tipoParticipante col-md-8">Tipo De
-                                                Participante</label>
+                                            <label class="form-label" for="tipoParticipante col-md-8">Tipo De Participante</label>
                                             <select type="text" id="tipoParticipante" class="form-control" onchange="tipoParticipante()" placeholder="Tipo De Participante">
                                                 <option value="0" selected disabled>Seleccione una Opcion</option>
                                                 <option value="1">Globales</option>
@@ -602,6 +606,8 @@
                                     <div class="mt-2 row col-md-6" id="container-tipo-participante">
                                         <input class="form-control" type="file" id="formFile" style="margin-left: 15px;">
                                     </div>
+
+                                    <!--modulo de tablas de participantes-->
                                     <div class="mt-3">
                                         <table class="datatables-basic table" id="tableParticipantes">
                                             <thead>
@@ -616,6 +622,8 @@
                                             </tbody>
                                         </table>
                                     </div>
+
+                                    <!--modulo de usuarios bloqueados-->
                                     <div class="content-header mt-5">
                                         <h5 class="mb-0">Configuración de Usuarios Bloqueados.</h5>
                                     </div>
@@ -628,6 +636,8 @@
                                         <button class="btn btn-outline-success mt-2 btn-block col-md-5 ml-5" type="button" onclick="agregarUsuarioBloqueado()" id="btnAgregar">Agregar</button>
 
                                     </div>
+
+                                    <!--modulo de tablas de participantes bloqueados-->
                                     <div class="mt-3">
                                         <table class="datatables-basic table" id="tableParticipantesBloqueados">
                                             <thead>
@@ -642,6 +652,8 @@
                                             </tbody>
                                         </table>
                                     </div>
+
+                                    <!--modulo de botones-->
                                     <div class="d-flex justify-content-between mt-5">
                                         <div>
                                             <button class="btn btn-primary btn-prev">
@@ -662,6 +674,7 @@
                                     </div>
                                 </div>
                                 <!--CONFIGURACION DE LAS ETAPAS-->
+                                <!--Pagina 3-->
                                 <div id="edith-detalle-Parametros" class="content">
                                     <div class="content-header">
                                         <h5 class="mb-0">Configuración de Etapas</h5>
@@ -695,6 +708,8 @@
                                                 <option value="6">Combinar Transacciones</option>
                                             </select>
                                         </div>
+
+                                        <!--Modulo desplegable segun opcion-->
                                         <div class="form-group col-md-6" id="transaccionesDinamicas">
 
                                         </div>
@@ -706,6 +721,8 @@
                                                 <span class="align-middle d-sm-inline-block d-none">AGREGAR</span>
                                             </button>
                                         </div>
+
+                                        <!--Tablas de lista de etapas-->
                                         <div class="col-md-12 mt-5">
                                             <h4>Lista de Etapas:</h4>
                                             <br />
@@ -726,6 +743,8 @@
                                             </table>
                                         </div>
                                     </div>
+
+                                    <!--modulo de botones-->
                                     <div class="d-flex justify-content-between mt-5">
                                         <div>
                                             <button class="btn btn-primary btn-prev">
