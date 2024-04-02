@@ -106,7 +106,7 @@ function mostrarDatosEnTabla(datos) {
   console.log("Datos para mostrar en la tabla:", datos); 
   $("#TablaReportePromo").empty(); 
   datos.forEach((element) => {
-    const fechaAcreditacion = formatearFechaHora(element.fecha);
+    const fecha = formatearFechaHora(element.fecha);
     const { cupon, esPremio, descripcion } =
       element.detallepromocion.premiopromocion;
     const monto = parseFloat(
@@ -117,7 +117,7 @@ function mostrarDatosEnTabla(datos) {
 
     const fila = `
       <tr> 
-        <td>${fechaAcreditacion}</td>
+        <td>${element.fecha}</td>
         <td>${element.numeroTelefono}</td>
         <td>${element.descripcion}</td>
         <td>${element.id}</td>
@@ -126,7 +126,7 @@ function mostrarDatosEnTabla(datos) {
         <td>${element.detallepromocion.premiopromocion.idPromocion}</td>
         <td>${element.detallepromocion.cupon}</td>
         <td>${montoTransaccion}</td>
-        <td>${element.fecha}</td>
+        <td>${fecha}</td>
       </tr>
     `;
     $("#TablaReportePromo").append(fila);
@@ -136,7 +136,6 @@ function mostrarDatosEnTabla(datos) {
   $("#btnDescargarExcel").prop("disabled", false);
 }
 
-// Función para formatear la fecha y hora
 function formatearFechaHora(fechaHora) {
   const fecha = new Date(fechaHora);
   const dia = fecha.getDate().toString().padStart(2, "0");
@@ -144,7 +143,7 @@ function formatearFechaHora(fechaHora) {
   const año = fecha.getFullYear();
   const horas = fecha.getHours().toString().padStart(2, "0");
   const minutos = fecha.getMinutes().toString().padStart(2, "0");
-  return `${dia}/${mes}/${año} ${horas}:${minutos}`;
+  return `${dia}/${mes}/${año}`;
 }
 
 const Alert = function (message, status) {
