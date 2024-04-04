@@ -1,0 +1,42 @@
+.step-progress{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 39px;
+    padding: 20px 27px;
+    gap: 10px;
+    border: none;
+    border-radius: 5px;
+    background: rgba(217, 217, 217, 0.50);
+
+    color: rgba(98, 95, 110, 0.70);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.form-step{
+    margin: 0 1.5rem;
+}
+
+.divider-step{
+    width: 650px;
+    height: 2px;
+    background: rgba(217, 217, 217, 0.70);
+}
+
+.imagen-step{
+    display: flex;
+    width: 291px;
+    height: 40px;
+    padding: 11px 58px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    color: #978EF3;
+    border-radius: 5px;
+    border: 2px solid #978EF3;
+}

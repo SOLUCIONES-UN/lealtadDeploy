@@ -1171,7 +1171,7 @@ const getAllCampanias = () => {
 };
 
 
-
+//entendido
 const table = (table, data) => {
 
 
@@ -1322,6 +1322,8 @@ function saveLocal() {
   idData + 1;
 }
 
+
+//entendido
 const saveData = (data) => {
 
   var requestOptions = {
@@ -1347,6 +1349,7 @@ const saveData = (data) => {
     });
 };
 
+//entendido
 const Limpiar = (isEdith) => {
   if (isEdith) {
     $("#PreviewEtapsEdit").html(null);

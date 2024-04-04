@@ -16,32 +16,32 @@ $(function () {
         return true;
     }
 
-$('#modalNew').on('show.bs.modal', function () {
-    limpiarFormulario();
-});
+    $('#modalNew').on('show.bs.modal', function () {
+        limpiarFormulario();
+    });
 
-$('#modalEdit').on('show.bs.modal', function () {
- 
-});
+    $('#modalEdit').on('show.bs.modal', function () {
+    
+    });
 
-$('#modalNew').on('hidden.bs.modal', function () {
-    limpiarFormulario();
-});
-
-
-$('#modalEdit').on('hidden.bs.modal', function () {
-    limpiarFormulario();
-});
+    $('#modalNew').on('hidden.bs.modal', function () {
+        limpiarFormulario();
+    });
 
 
-$('#modalNew').find('[data-dismiss="modal"]').click(function () {
-    limpiarFormulario();
-});
+    $('#modalEdit').on('hidden.bs.modal', function () {
+        limpiarFormulario();
+    });
 
 
-$('#modalEdit').find('[data-dismiss="modal"]').click(function () {
-    limpiarFormulario();
-});
+    $('#modalNew').find('[data-dismiss="modal"]').click(function () {
+        limpiarFormulario();
+    });
+
+
+    $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
+        limpiarFormulario();
+    });
 
 
     //evento submit del formulario
