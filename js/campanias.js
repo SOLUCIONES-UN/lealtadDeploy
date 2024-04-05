@@ -10,6 +10,8 @@ $(function () {
   getProjecs();
   getDepartamento();
   getMunicipio();
+  getTransaccion();
+  getPremio();
 
   //provisionalmente aqui 
   const containerArchivo = document.getElementById('containerArchivo');
@@ -134,7 +136,7 @@ function userValidator(event, container) {
   const input = event.target;
   const containerArchivo = document.getElementById(container);
 
-  const regexNumerico = /^[3-6]$/;
+  const regexNumerico = /^[2-4]$/;
   
   switch(container){
     case 'containerArchivo':
@@ -151,7 +153,6 @@ function userValidator(event, container) {
       } else {
         containerArchivo.style.display = 'none';
       }
-    
     break;
 
     default:
@@ -159,8 +160,6 @@ function userValidator(event, container) {
     break;
       
   }
-
-
 }
 
 /*FUNCIONES PARA TRAER DATOS A LOS SELECT*/
@@ -218,6 +217,104 @@ const getMunicipio = () =>{
       });
     })
 }
+
+//Funcion para traer los Transacciones
+const getTransaccion = () =>{
+  var requestOptions = {
+    method: 'GET',
+    redirect: 'follow',
+    headers: {"Authorization": token}
+  };
+
+  fetch(`${url}Transaccion`, requestOptions)
+    .then(response => response.json())
+    .then(result =>{
+      result.forEach(element => {
+        var opc  = `<option value="${element.id}">${element.nombre}</option>`;
+        $('#transaccion').append(opc);
+      });
+    })
+}
+
+//Funcion para traer los Transacciones
+const getPremio = () =>{
+  var requestOptions = {
+    method: 'GET',
+    redirect: 'follow',
+    headers: {"Authorization": token}
+  };
+
+  fetch(`${url}Premio`, requestOptions)
+    .then(response => response.json())
+    .then(result =>{
+      result.forEach(element => {
+        var opc  = `<option value="${element.id}">${element.descripcion}</option>`;
+        $('#premio').append(opc);
+      });
+    })
+}
+
+
+$(document).ready(function() {
+  var currentDate = new Date();
+  var currentYear = currentDate.getFullYear();
+  var currentMonth = currentDate.getMonth();
+  var selectedDate = null;
+
+  function generateCalendar(year, month) {
+    var daysInMonth = new Date(year, month + 1, 0).getDate();
+    var firstDayOfMonth = new Date(year, month, 1).getDay();
+    var calendar = '';
+
+    $('#current-month-year').text(getMonthName(month) + ' ' + year);
+
+    for (var i = 0; i < firstDayOfMonth; i++) {
+      calendar += '<div class="calendar-day"></div>';
+    }
+    for (var i = 1; i <= daysInMonth; i++) {
+      var date = new Date(year, month, i);
+      var dateString = date.toISOString().slice(0, 10);
+      var isSelected = selectedDate === dateString;
+      calendar += '<div class="calendar-day' + (isSelected ? ' selected' : '') + '" data-date="' + dateString + '">' + i + '</div>';
+    }
+
+    $('#calendar-days').html(calendar);
+
+    $('.calendar-day').click(function() {
+      var date = $(this).data('date');
+      if (date) {
+        selectedDate = date;
+        generateCalendar(year, month);
+      }
+    });
+  }
+
+  function getMonthName(month) {
+    var monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    return monthNames[month];
+  }
+
+  $('#prev-month').click(function() {
+    currentMonth--;
+    if (currentMonth < 0) {
+      currentMonth = 11;
+      currentYear--;
+    }
+    generateCalendar(currentYear, currentMonth);
+  });
+
+  $('#next-month').click(function() {
+    currentMonth++;
+    if (currentMonth > 11) {
+      currentMonth = 0;
+      currentYear++;
+    }
+    generateCalendar(currentYear, currentMonth);
+  });
+
+  generateCalendar(currentYear, currentMonth);
+});
 
 //Funcion Para limpiar el form
 const limpiarForm = ()=>{
