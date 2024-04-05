@@ -5,15 +5,19 @@ $(function () {
 $("#btnConsultar").click(function () {
  
   let phone= $("#phone").val();
-  if(phone !== ""){
-
-
+ 
   
+  if(phone !== ""){
+    
+
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
-
+ 
   var raw = JSON.stringify({
+
     phone:phone,
+    
+    
   });
 
   var requestOptions = {
@@ -24,6 +28,7 @@ $("#btnConsultar").click(function () {
   };
 
   fetch(`${url}codigoReferidos/getCodigoReferidoByPhone`, requestOptions)
+ 
     .then((response) => response.json())
     .then((result) => {
       let { id, codigo} = result[0];
@@ -32,9 +37,10 @@ $("#btnConsultar").click(function () {
       $("#codigo").val(codigo);
       
       $("#container1").show("fast");
+    
     })
     .catch((error) => {
-      Alert(error, "error");
+      Alert(error, "error ");
     });
 
   return false;
@@ -42,6 +48,7 @@ $("#btnConsultar").click(function () {
     
     Alert("Telefono es requerido", "error");
   }
+  
 });
 
 $("#btnCancelar").click(function () {

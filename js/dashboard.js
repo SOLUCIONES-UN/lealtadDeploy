@@ -5,13 +5,14 @@ const token = localStorage.getItem("token");
 
 $(function () {
   $('#datosGrafica').hide();
-
+  
   getAllCountCoustomeName();
   getAllSumValor();
   getAllCampanasActivasLastWeek();
   getAllPromocionesActivasLastWeek();
   getAllPromocionesActivas();
   getAllCampanasActivas();
+  mostrarGraficaCampañas();
 });
 
 //boton para volver a pagina anterior
@@ -27,21 +28,24 @@ $("#ver-detalles-btn").click(function () {
   // mostrarGraficaCampañas();
 
   $('#dataDashboard').hide();
-  mostrarGraficaCampañas();
+
   $('#datosGrafica').show();
-  mostrarGraficaCampañas1();
-  $('#datosGrafica1').show();
-  mostrarGraficaCampañas2();
-  $('#datosGrafica2').show();
+  // mostrarGraficaCampañas1();
+  // $('#datosGrafica1').show();
+  // mostrarGraficaCampañas2();
+  // $('#datosGrafica2').show();
   // myModal.show();
 });
 
 
 function mostrarGraficaCampañas() {
   // Obtener el canvas
-  const canvas = document.getElementById("graficaCampañas");
+  
+  const canvas = document.getElementById("graficaCampanas");
+  
+  console.log('graficaCampañas');
 
-  const token = localStorage.getItem("token");
+  // const token = localStorage.getItem("token");
   const headers = {
     Authorization: token,
     "Content-Type": "application/json",
@@ -58,26 +62,29 @@ function mostrarGraficaCampañas() {
     .then((data) => {
       console.log("Datos de campañas:", data);
 
-      const labels = data.map((campaña) => campaña.nombre);
-      const numClientes = data.map((campaña) => campaña.numero_clientes);
-
+      const labels = data.map((campana) => campana.nombre);
+      const numClientes = data.map((campana) => campana.numero_Clientes);
+   
       const chartData = {
         labels: labels,
         datasets: [
           {
             label: "Número de clientes",
-            data: [20, 10, 40, 33],
+            data: numClientes,
             backgroundColor: "rgba(54, 162, 235, 0.2)",
             borderColor: "rgba(54, 162, 235, 1)",
             borderWidth: 1,
           },
         ],
       };
-
       const chartOptions = {
         scales: {
-          yAxes: [{}],
-        },
+          yAxes: [{
+            ticks: {
+              beginAtZero: true // Esto asegura que la escala comience en cero
+            }
+          }]
+        }
       };
       console.log("Labels:", labels);
       console.log("NumClientes:", numClientes);

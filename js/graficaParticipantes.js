@@ -8,8 +8,8 @@ function getAnios() {
   fetch(`${url}ReporteParticipantes/aniosValidos`)
     .then((response) => response.json())
     .then((data) => {
-      console.log("Datos de aios:", data);
-      let options = `<option value="0">ANIO</option>`;
+      console.log("Datos de años:", data);
+      let options = `<option value="0">AÑO</option>`;
       data.forEach((d) => {
         options += `<option value="${d.anioValido}">${d.anioValido}</option>`;
       });
@@ -102,7 +102,7 @@ $("#btnConsultar").click(function () {
             {
               label: "Participantes",
               data: participantes,
-              backgroundColor: "rgba(54, 162, 235, 0.2)",
+              backgroundColor: "rgba(117, 85, 245)",
               borderColor: "rgba(54, 162, 235, 1)",
               borderWidth: 1,
             },
