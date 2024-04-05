@@ -45,7 +45,7 @@ $(function () {
               ${contador++}
               </th>
               <th>
-              ${element.fecha}
+              ${element.fecha}J
               </th>
               <th>
               ${codigo}
