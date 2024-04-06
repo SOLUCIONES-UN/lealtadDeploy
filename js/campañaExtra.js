@@ -1166,6 +1166,7 @@ const getAllCampanias = () => {
       let borrador = result.filter((x) => x.estado == 3);
       $("#textBorrador").text(borrador.length);
       table("tableBorrador", borrador);
+
     })
     .catch((error) => console.log("error", error));
 };
@@ -1200,6 +1201,8 @@ const table = (table, data) => {
               return `Pausada`;
             case 3:
               return `Borrador`;
+            case 4:
+              return `Archivada`;
             default:
               return ``;
           }

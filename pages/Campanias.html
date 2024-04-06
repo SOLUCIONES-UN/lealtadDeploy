@@ -38,7 +38,7 @@
     <link rel="stylesheet" type="text/css" href="../app-assets/css/pages/app-invoice-list.min.css">
     <link rel="stylesheet" type="text/css" href="../app-assets/css/plugins/forms/form-wizard.min.css" />
     <link rel="stylesheet" type="text/css" href="../app-assets/css/plugins/forms/form-file-uploader.css">
-    <link rel="stylesheet" href="ruta/a/bootstrap-timepicker.min.css">
+    <!--<link rel="stylesheet" href="ruta/a/bootstrap-timepicker.min.css">-->
 
     <link rel="stylesheet" href="../css/stepper.css">
 
@@ -284,10 +284,10 @@
                         <div class="card-body">
                             <div class="nav-tabs-shadow nav-align-top">
                                 <div class="row">
-                                    <div class="col-md-5">
+                                    <div class="col-md-4">
                                         <h5>Lista De Campañas</h5>
                                     </div>
-                                    <div class="col-md-7">
+                                    <div class="col-md-8">
                                         <ul class="nav nav-tabs" role="tablist" id="NavsOpc">
                                             <li class="nav-item">
                                                 <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#optTodas" aria-controls="optTodas" aria-selected="true">Todas(<span
@@ -307,7 +307,7 @@
                                             </li>
                                             <li class="nav-item">
                                                 <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#opcArchivadas" aria-controls="opcBorrador" aria-selected="false">Archivadas(<span
-                                                        id="textBorrador"></span>)</button>
+                                                        id="textArchivo"></span>)</button>
                                             </li>
                                         </ul>
                                     </div>
@@ -615,7 +615,7 @@
                                 </div>
                             </div>
                             <!--Tabla-->
-                            <table class="datatables-basic table mb-3 mt-2" id="tableTodas">
+                            <table class="datatables-basic table mb-3 mt-2" id="">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -658,7 +658,7 @@
                                     </select>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label class="form-label" for="limiteDia">Limite por Día</label>
+                                    <label class="form-label" for="limiteDia">Limite Diario</label>
                                     <input type="number" id="limiteDia" class="form-control" />
                                 </div>
                             </div>
@@ -672,8 +672,16 @@
                                     <input type="number" id="valorMaximo" class="form-control" />
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label class="form-label" for="RangoDias">Rango de Días</label>
+                                    <input type="number" id="RangoDias" class="form-control" />
+                                </div>
+                                <div class="form-group col-md-6">
+                                </div>
+                            </div>
                             <!--Tabla-->
-                            <table class="datatables-basic table mb-3 mt-2" id="tableTodas">
+                            <table class="datatables-basic table mb-3 mt-2" id="">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -734,7 +742,7 @@
                                 </div>
                             </div>
                             <!--Tabla-->
-                            <table class="datatables-basic table mb-3 mt-2" id="tableTodas">
+                            <table class="datatables-basic table mb-3 mt-2" id="">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -789,24 +797,31 @@
                                         <label class="form-label" for="FechaFinRecordatorio">Fecha Final</label>
                                         <input type="date" id="FechaFinRecordatorio" class="form-control" />
                                     </div>
-                                    <div class="row form-group">
-                                        <div class="">
-                                            <input class="custom-control-input" type="checkbox" id="me" />
-                                            <label class="custom-control-label" for="me">
-                                               Todo el Dia
-                                            </label>
+                                    <div class="form-group ">
+                                        <label class="form-label" for="HoraRecordatorio">Hora</label>
+                                        <input type="time" id="HoraRecordatorio" class="form-control" />
+                                    </div>
+                                    <div class="row ">
+                                        <div class="form-group ml-1"> 
+                                            <div class="custom-control custom-checkbox">
+                                              <input class="custom-control-input allday" type="checkbox" id="allday" />
+                                              <label class="custom-control-label mr-4" for="allday">
+                                                Todo el Día
+                                              </label>
+                                            </div>
                                         </div>
-                                        <div class="">
-                                            <input class="custom-control-input" type="checkbox" id="repet" />
-                                            <label class="custom-control-label" for="repet">
-                                                Repetir    
-                                            </label>
-
-                                        </div>
+                                        <div class="form-group "> 
+                                            <div class="custom-control custom-checkbox">
+                                              <input class="custom-control-input repeat" type="checkbox" id="repeat" />
+                                              <label class="custom-control-label " for="repeat">
+                                                Repetir
+                                              </label>
+                                            </div>
+                                          </div>
                                     </div>
                                     <div class="form-group ">
-                                        <label class="form-label" for="porcentajePremio">Porcentaje de Premio</label>
-                                        <input type="number" id="porcentajePremio" class="form-control" />
+                                        <label class="form-label" for="correo">Correo</label>
+                                        <input type="email" id="correo" class="form-control" />
                                     </div>
                                 </div>
                             </div>

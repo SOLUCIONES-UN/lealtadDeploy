@@ -83,6 +83,6 @@
     cursor: pointer;
 }
 .calendar-day.selected {
-    background-color: #4CAF50;
+    background-color:#978EF3;;
     color: white;
 }
