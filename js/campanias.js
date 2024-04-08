@@ -295,22 +295,45 @@ function Calendar () {
     }
 
     $('#calendar-days').html(calendar);
-
     $('.calendar-day').click(function() {
       var date = $(this).data('date');
-      
-      if ($('#FechaIniRecordatorio').val() == "") {
+  
+      // Si el input de fecha de inicio está vacío
+      if ($('#FechaIniRecordatorio').val() === '') {
         $('#FechaIniRecordatorio').val(date);
         selectedDateBegin = date;
-      } else {
-        if($('#FechaIniRecordatorio').val() < date || $('#FechaIniRecordatorio').val() === date){
+  
+        // Limpiar el input de fecha de fin
+        $('#FechaFinRecordatorio').val('');
+        selectedDateEnd = null;
+      }
+      // Si el input de fecha de inicio no está vacío
+      else {
+        // Si la fecha seleccionada es menor o igual a la fecha de inicio
+        if (date <= $('#FechaIniRecordatorio').val()) {
+          $('#FechaIniRecordatorio').val(date);
+          selectedDateBegin = date;
+  
+          // Limpiar el input de fecha de fin
+          $('#FechaFinRecordatorio').val('');
+          selectedDateEnd = null;
+        }
+        // Si la fecha seleccionada es mayor a la fecha de inicio
+        else {
           $('#FechaFinRecordatorio').val(date);
           selectedDateEnd = date;
         }
       }
-    
-      generateCalendar(year, month);
-      console.log(date, "Fecha");
+  
+      generateCalendar(currentYear, currentMonth);
+      console.log(date, 'Fecha');
+    });
+  
+    $('#FechaIniRecordatorio, #FechaFinRecordatorio').change(function() {
+      selectedDateBegin = $('#FechaIniRecordatorio').val();
+      selectedDateEnd = $('#FechaFinRecordatorio').val();
+      generateCalendar(currentYear, currentMonth);
+      console.log($(this).val(), 'Fecha');
     });
   }
 
