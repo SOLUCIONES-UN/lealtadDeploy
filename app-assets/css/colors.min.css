@@ -2000,7 +2000,7 @@ input:focus~.bg-secondary {
 
 .bg-success,
 .btn-success {
-    background-color: #28C76F !important
+    background-color: #7367F0 !important
 }
 
 .bg-success .card-footer,
@@ -2038,7 +2038,7 @@ input:focus~.bg-secondary {
 .bg-light-success .fc-daygrid-event-dot,
 .bg-light-success .fc-list-event-dot,
 .btn-success {
-    border-color: #28C76F !important
+    border-color: #7367F0 !important
 }
 
 .bg-light-success.fc-list-event:hover td {

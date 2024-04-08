@@ -9,8 +9,7 @@ $(function () {
   $('#selectpromo').multipleSelect({
     filter: true,
     selectAll: true, // Habilitar la opción de seleccionar todos los elementos
-    //placeholder: "Elige una promoción",
-
+    placeholder: "Elige una promoción",
   });
 
   getPromociones();
@@ -51,9 +50,9 @@ const getPromociones = () => {
       // Limpiar el select antes de agregar opciones
       $("#selectpromo").empty();
       // Agregar la opción por defecto
-      $("#selectpromo").append(
-        "<option disabled selected value='0'>Elige una promoción</option>"
-      );
+      // $("#selectpromo").append(
+      //   "<option disabled selected value='0'>Elige una promoción</option>"
+      // );
 
       result.forEach((element) => {
         // Agregar opciones al select
@@ -173,7 +172,6 @@ document.getElementById("btnDescargarExcel").addEventListener("click", function 
     { v: 'Fecha Participacion', t: 's', s: { font: { bold: true, color: { rgb: 'ffffff' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '595959' } } } },
   ];
   data.unshift(headerRow1, headerRow2, headerRow3, headerRow4);
-  
 
   // Agregar los datos y los nombres de las columnas a una hoja
   const ws = XLSX.utils.aoa_to_sheet(data);
