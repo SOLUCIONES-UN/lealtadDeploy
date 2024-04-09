@@ -30,6 +30,7 @@ $("#ver-detalles-btn").click(function () {
   $('#dataDashboard').hide();
 
   $('#datosGrafica').show();
+  mostrarGraficaCampañas();
   // mostrarGraficaCampañas1();
   // $('#datosGrafica1').show();
   // mostrarGraficaCampañas2();
@@ -43,8 +44,7 @@ function mostrarGraficaCampañas() {
   
   const canvas = document.getElementById("graficaCampanas");
   
-  console.log('graficaCampañas');
-
+  const token = localStorage.getItem("token");
   // const token = localStorage.getItem("token");
   const headers = {
     Authorization: token,
@@ -54,12 +54,18 @@ function mostrarGraficaCampañas() {
   var requestOptions = {
     method: "GET",
     headers: headers,
+    
     redirect: "follow",
+
   };
 
   fetch(`${url}Campania`, requestOptions)
     .then((response) => response.json())
     .then((data) => {
+      if (!data) {
+        console.error("La respuesta de la solicitud fetch es nula");
+        return;
+      }
       console.log("Datos de campañas:", data);
 
       const labels = data.map((campana) => campana.nombre);

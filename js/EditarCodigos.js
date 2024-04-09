@@ -10,6 +10,7 @@ $("#btnConsultar").click(function () {
   if(phone !== ""){
     
 
+
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
  
@@ -29,26 +30,32 @@ $("#btnConsultar").click(function () {
 
   fetch(`${url}codigoReferidos/getCodigoReferidoByPhone`, requestOptions)
  
-    .then((response) => response.json())
-    .then((result) => {
-      let { id, codigo} = result[0];
+  .then((response) => {
+    if (response.ok) {
+        return response.json();
+    } else {
+        throw new Error('La solicitud no fue exitosa');
+    }
+})
+.then((result) => {
+    if (result.length > 0) {
+        let { id, codigo } = result[0];
+        $("#id").val(id);
+        $("#codigo").val(codigo);
+        $("#container1").show("fast");
+    } else {
+        alert("El teléfono ingresado no es referido.");
+    }
+})
+.catch((error) => {
+    console.error('Error en la solicitud:', error);
+    Alert("El teléfono ingresado no es referido", "error");
+});
+} else {
+alert("El teléfono es requerido");
+}
 
-      $("#id").val(id);
-      $("#codigo").val(codigo);
-      
-      $("#container1").show("fast");
-    
-    })
-    .catch((error) => {
-      Alert(error, "error ");
-    });
-
-  return false;
-  }else{
-    
-    Alert("Telefono es requerido", "error");
-  }
-  
+return false;
 });
 
 $("#btnCancelar").click(function () {
