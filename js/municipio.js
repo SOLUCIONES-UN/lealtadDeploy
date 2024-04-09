@@ -6,7 +6,7 @@ $(function () {
     let tabla = getMunicipios();
     Usuario()
     function validarNombre(nombre) {
-        const nombreValido = /^[a-zA-Z0-9\s]+$/.test(nombre.trim());
+        const nombreValido = /^[a-zA-Z\s]+$/.test(nombre.trim());
     
         if (!nombreValido) {
           $('.nombre').addClass('is-invalid');
@@ -18,37 +18,54 @@ $(function () {
     
       $('#modalNew').on('show.bs.modal', function () {
         limpiarFormulario();
+        $("#btnSubmit").attr("disabled", false);
       });
     
       $('#modalEdit').on('show.bs.modal', function () {
-    
+        $("#btnSubmitEdit").attr("disabled", false);
       });
     
       $('#modalNew').on('hidden.bs.modal', function () {
         limpiarFormulario();
+        $("#btnSubmit").attr("disabled", false);
       });
       $('#modalEdit').on('hidden.bs.modal', function () {
         limpiarFormulario();
+        $("#btnSubmitEdit").attr("disabled", false);
       });
     
     
     
       $('#modalNew').find('[data-dismiss="modal"]').click(function () {
         limpiarFormulario();
+        $("#btnSubmit").attr("disabled", false);
       });
     
     
       $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
         limpiarFormulario();
+        $("#btnSubmitEdit").attr("disabled", false);
       });
     
     //evento submit del formulario
     $('#formNew').submit(function () {
         const nombre = $('#nombre').val();
+        const idDepartamento = $('#departamento').val();
+
+        
 
         if (!validarNombre(nombre)) {
             return false;
         }
+
+        if (idDepartamento == 0 || idDepartamento == null) {
+            
+            $('.departamento').addClass('is-invalid');
+            $('.depa-error').text('El campo departamento es obligatorio').addClass('text-danger');
+            return false;
+        }
+
+        $("#btnSubmit").attr("disabled", true);
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -56,7 +73,7 @@ $(function () {
 
         var raw = JSON.stringify({
             "nombre": $('#nombre').val(),
-            "departamento": $('#departamento').val(),
+            "departamento":idDepartamento,
         });
 
         var requestOptions = {
@@ -89,9 +106,12 @@ $(function () {
     $('#formEdit').submit(function () {
         const nombre = $('#nombreEdit').val();
 
-    if (!validarNombre(nombre)) {
-      return false;
-    }
+        if (!validarNombre(nombre)) {
+        return false;
+        }
+
+        $("#btnSubmitEdit").attr("disabled", true);
+
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", token);
@@ -163,13 +183,13 @@ $(function () {
     })
 });
 
-const Usuario = () => {
+// const Usuario = () => {
 
-    let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
-    console.log(usuario.nombre)
-    $('.user-name').text(usuario.nombre);
-    $('.user-status').text(usuario.rol.descripcion);
-}
+//     let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
+//     console.log(usuario.nombre)
+//     $('.user-name').text(usuario.nombre);
+//     $('.user-status').text(usuario.rol.descripcion);
+// }
 
 
 //obtiene los municipios
@@ -267,9 +287,15 @@ const Alert = function (message, status) // si se proceso correctamente la solic
 
 
 const OpenEdit = (id) => {
+
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", token);
+
     var requestOptions = {
         method: 'GET',
-        redirect: 'follow'
+        redirect: 'follow',
+        headers: myHeaders
     };
 
     fetch(`${url}Municipio/${id}`, requestOptions)

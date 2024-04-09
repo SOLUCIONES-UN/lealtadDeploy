@@ -198,7 +198,7 @@
     <div class="navbar-header">
       <ul class="nav navbar-nav flex-row">
         <li class="nav-item mr-auto"><a class="navbar-brand"
-            href="../../../html/ltr/vertical-menu-template/index.html"><span class="brand-logo">
+            href="./dashboard.html"><span class="brand-logo">
               <svg viewbox="0 0 139 95" version="1.1" xmlns="http://www.w3.org/2000/svg"
                 xmlns:xlink="http://www.w3.org/1999/xlink" height="24">
                 <defs>
@@ -313,6 +313,14 @@
             <input type="text" class="form-control " id="emailNotification" placeholder="E-mail"
               name="emailNotification" required />
           </div>
+         
+        <div class="form-group">
+          <label class="form-label" for="tipoUsuario">Tipo De Usuario</label>
+          <select type="text" class="form-control" id="tipoUsuario" name="tipoUsuario" required>
+            <option value="0" selected disabled>Seleccione una Opcion</option>
+            <option value="1">admin</option>
+          </select>
+        </div>
           <div class="form-group">
             <label class="form-label" for="rol">Roles</label>
             <select type="text" class="form-control" id="rol" name="rol" required></select>
@@ -335,7 +343,7 @@
           <div class="form-group">
             <label class="form-label" for="usernameEdit">Nombre Usuario</label>
             <input type="text" class="form-control" id="usernameEdit" placeholder="Nombre del usuario"
-              name="usernameEdit" required />
+              name="usernameEdit" required readonly/>
             <div id="usernameEditError" class="invalid-feedback"></div>
           </div>
           <div class="form-group">
@@ -348,13 +356,13 @@
           <div class="form-group">
             <label class="form-label" for="passwordEdit">Contraseña</label>
             <input type="password" alt="strongPass" class="form-control " id="passwordEdit" placeholder="Contraseña"
-              name="passwordEdit" required />
+              name="passwordEdit" required readonly />
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label class="form-label" for="passwordEdit2">Confirmar Contraseña</label>
             <input type="password" alt="strongPass" class="form-control " id="passwordEdit2" placeholder="Contraseña"
               name="passwordEdit2" required />
-          </div>
+          </div> -->
           <div class="form-group">
             <label class="form-label" for="telefonoEdit">Telefono</label>
             <input type="text" class="form-control " id="telefonoEdit" placeholder="# de telefono" name="telefonoEdit"
@@ -363,6 +371,13 @@
           <div class="form-group">
             <label class="form-label" for="emailEdit">E-mail</label>
             <input type="text" class="form-control " id="emailEdit" placeholder="E-mail" name="emailEdit" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="tipoUsuarioEdit">Tipo De Usuario</label>
+            <select type="text" class="form-control" id="tipoUsuarioEdit" name="tipoUsuarioEdit" required>
+              <option value="0" selected disabled>Seleccione una Opcion</option>
+              <option value="1">admin</option>
+            </select>
           </div>
           <div class="form-group">
             <label class="form-label" for="rolActualizar">Rol</label>

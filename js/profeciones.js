@@ -1,8 +1,10 @@
-const url = 'http://localhost:3000/';
+const url = 'http://localhost:3000/'
 let token = localStorage.getItem("token");
 
+
 $(function () {
-    let tabla = getRoles();
+    GetProjects();
+    let tabla = GetProfecion();
     Usuario();
     function validarDescripcion(descripcion) {
         const descripcionValida = /^[a-zA-Z0-9\s]+$/.test(descripcion.trim());
@@ -39,20 +41,27 @@ $(function () {
         limpiarFormulario();
     });
 
-    //evento submit del formulairo
+    //evento submit del formulario
     $('#formNew').submit(function () {
+
+       
+        $('#btnSubmit').prop('disabled', true);
         const descripcion = $('#descripcion').val();
+       
+        
+        
 
         if (!validarDescripcion(descripcion)) {
+            $('#btnSubmit').prop('disabled', false);
             return false;
         }
-
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", token);
 
         var raw = JSON.stringify({
-            "descripcion": $('#descripcion').val()
+            "descripcion": $('#descripcion').val(),
+            "proyecto": $('#proyecto').val()
         });
 
         var requestOptions = {
@@ -62,31 +71,43 @@ $(function () {
             redirect: 'follow'
         };
 
-        fetch(`${url}Rol`, requestOptions)
+        fetch(`${url}Profecion`, requestOptions)
             .then(response => response.json())
             .then(result => {
-                console.log(result)
+                $('#btnSubmit').prop('disabled', false);
+               
                 if (result.code == "ok") {
                     limpiarFormulario();
                     tabla._fnAjaxUpdate();
                     $('#modalNew').modal('toggle');
                     Alert(result.message, 'success')
                 } else {
-                    Alert(result.message, 'error');
+                    Alert(result.message, 'error')
                 }
             })
             .catch(error => {
-                Alert(error, 'error')
-            });
+                $('#btnSubmit').prop('disabled', false);
+
+                Alert(error.errors, 'error') });
         return false;
     });
 
-
-
+    //eventos de edicion para un menu
     $('#formEdit').submit(function () {
+
+        
+        $('#btnSubmitEdit').prop('disabled', true);
+
         const descripcion = $('#descripcionEdit').val();
+        
+       
+        
+        
+        
 
         if (!validarDescripcion(descripcion)) {
+            $('#btnSubmitEdit').prop('disabled', false);
+
             return false;
         }
         var myHeaders = new Headers();
@@ -94,54 +115,64 @@ $(function () {
         myHeaders.append("Authorization", token);
 
         const id = $('#id').val();
+        
+        console.log("ID del menú:", id);
 
         var raw = JSON.stringify({
-            "descripcion": $('#descripcionEdit').val()
+            "descripcion": $('#descripcionEdit').val(),
+            "proyecto": $('#proyectoEdit').val(),
         });
+
+        console.log(raw);
 
         var requestOptions = {
             method: 'PUT',
             headers: myHeaders,
             body: raw,
-            redirect: 'follow',
+            redirect: 'follow'
         };
 
-        fetch(`${url}Rol/${id}`, requestOptions)
+        fetch(`${url}Profecion/${id}`, requestOptions)
             .then(response => response.json())
             .then(result => {
+                $('#btnSubmitEdit').prop('disabled', false);
 
+              
                 if (result.code == "ok") {
                     limpiarFormulario();
                     tabla._fnAjaxUpdate();
                     $('#modalEdit').modal('toggle');
-                    Alert(result.message, 'success');
+                    Alert(result.message, 'success')
                 } else {
-
                     Alert(result.message, 'error')
                 }
             })
-            .catch(error => { Alert(error.errors, 'error') });
+            
+            .catch(error => { 
+                $('#btnSubmitEdit').prop('disabled', false);
+
+                
+                Alert(error.errors, 'error') });
         return false;
     });
 
+    //eventos para la inhabilitacion de un menu
     $('#BtnDelete').click(function () {
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("Authorization", token);
+
 
         const id = $('#idDelete').val();
         var requestOptions = {
             method: 'DELETE',
             headers: myHeaders,
-            redirect: 'follow',
-            headers: { "Authorization": token }
+            redirect: 'follow'
         };
 
-        fetch(`${url}Rol/${id}`, requestOptions)
+        fetch(`${url}Profecion/${id}`, requestOptions)
             .then(response => response.json())
             .then(result => {
-
                 if (result.code == "ok") {
                     limpiarFormulario();
                     tabla._fnAjaxUpdate();
@@ -150,11 +181,10 @@ $(function () {
                 } else {
                     Alert(result.message, 'error')
                 }
+
             })
-            .catch(error => {
-                Alert(error, 'error');
-            });
-    });
+            .catch(error => { Alert(error.errors, 'error') });
+    })
 });
 
 // const Usuario = () => {
@@ -165,12 +195,12 @@ $(function () {
 //     $('.user-status').text(usuario.rol.descripcion);
 // }
 
-//obtiene los roles
-const getRoles = () => {
 
+//obtiene la lista de menus
+const GetProfecion = () => {
     return $('#tableData').dataTable({
         ajax: {
-            url: `${url}Rol`,
+            url: `${url}Profecion`,
             type: "GET",
             datatype: "json",
             dataSrc: "",
@@ -187,8 +217,13 @@ const getRoles = () => {
                 }
             },
             { data: "descripcion" },
+            // { data: "proyecto" },
+
+
+            
             {
                 data: "id", render: function (data) {
+
                     return `
               <div class="btn-group">
                 <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
@@ -210,6 +245,7 @@ const getRoles = () => {
                 }
             }
         ],
+        // order: [[1, 'asc']],
         dom:
             '<"d-flex justify-content-between align-items-center header-actions mx-1 row mt-75"' +
             '<"col-lg-12 col-xl-6" l>' +
@@ -224,8 +260,7 @@ const getRoles = () => {
             search: 'Buscar',
             searchPlaceholder: 'Buscar...',
         },
-
-        //Buttons with Dropdown
+        // Buttons with Dropdown
         buttons: [
             {
                 text: 'Nuevo',
@@ -240,17 +275,32 @@ const getRoles = () => {
                 },
             },
         ],
-
     });
 }
+
 function limpiarFormulario() {
-    $('#formNew').trigger("reset");
+    $('#descripcion').val('');
+    $('#proyecto').val('');
     $('.descripcion').removeClass('is-invalid');
+    $('.proyecto').removeClass('is-invalid');
     $('.descripcion-error').empty().removeClass('text-danger');
-}
+  }
+  
+// function limpiarFormulario(formNew = false) {
+//     if (formNew) {
+//         $('#descripcion').val('');
+//         $('#proyecto, #proyectoEdit').val('');
+//     }
+//     $('.descripcion').removeClass('is-invalid');
+//     $('.descripcion-error').empty().removeClass('text-danger');
+//     // $('.icono').removeClass('is-invalid');
+//     // $('.icono-error').empty().removeClass('text-danger');
+// }
 
 
-const Alert = function (message, status) {
+
+const Alert = function (message, status) // si se proceso correctamente la solicitud
+{
     toastr[`${status}`](message, `${status}`, {
         closeButton: true,
         tapToDismiss: false,
@@ -259,28 +309,51 @@ const Alert = function (message, status) {
     });
 }
 
+
 const OpenEdit = (id) => {
+    var requestOptions = {
+        method: 'GET',
+        redirect: 'follow'
+    };
+
+    fetch(`${url}Profecion/${id}`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            console.log(result)
+            $('#id').val(id);
+            $('#descripcionEdit').val(result.descripcion);
+            $('#proyectoEdit').val(result.proyecto);
+            $('#modalEdit').modal('toggle');
+        })
+        .catch(error => console.log('error', error));
+
+}
+
+
+const OpenDelete = (id) => {
+    $('#idDelete').val(id);
+    $('#modalDelete').modal('toggle');
+}
+
+
+const GetProjects = () => {
     var requestOptions = {
         method: 'GET',
         redirect: 'follow',
         headers: { "Authorization": token }
     };
 
-    fetch(`${url}Rol/${id}`, requestOptions)
+    $('#proyecto').html('<option value="0" selected disabled>Selecciona una Opcion</option>');
+    $('#proyectoEdit').html('<option value="0" selected disabled>Selecciona una Opcion</option>');
+    fetch(`${url}projects`, requestOptions)
         .then(response => response.json())
         .then(result => {
-            console.log(result);
-            $('#id').val(id);
-            $('#descripcionEdit').val(result.descripcion);
-            $('#modalEdit').modal('toggle');
+            result.forEach(element => {
+                var opc = `<option value="${element.id}">${element.descripcion}</option>`;
+                $('#proyecto').append(opc);
+                $('#proyectoEdit').append(opc);
+            });
         })
         .catch(error => console.log('error', error));
-}
-
-const OpenDelete = (id) => {
-
-    $('#idDelete').val(id);
-    $('#modalDelete').modal('toggle');
 
 }
-

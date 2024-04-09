@@ -1,6 +1,7 @@
 const url = 'http://localhost:3000/'
 let token = localStorage.getItem("token");
 
+
 $(function () {
     let tabla = getMenus();
     Usuario();
@@ -40,18 +41,25 @@ $(function () {
     });
 
     //evento submit del formulario
-    $('#formNew').submit(function () {
+    $('#formNew').submit(function (event) {
 
+        event.preventDefault();
+        $('#btnSubmit').prop('disabled', true);
         const descripcion = $('#descripcion').val();
+       
+        
+        
 
         if (!validarDescripcion(descripcion)) {
             return false;
         }
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", token);
 
         var raw = JSON.stringify({
-            "descripcion": $('#descripcion').val()
+            "descripcion": $('#descripcion').val(),
+            "icono": $('#icono').val()
         });
 
         var requestOptions = {
@@ -64,6 +72,7 @@ $(function () {
         fetch(`${url}Menu`, requestOptions)
             .then(response => response.json())
             .then(result => {
+               
                 if (result.code == "ok") {
                     limpiarFormulario();
                     tabla._fnAjaxUpdate();
@@ -73,25 +82,40 @@ $(function () {
                     Alert(result.message, 'error')
                 }
             })
-            .catch(error => { Alert(error.errors, 'error') });
+            .catch(error => {
+                Alert(error.errors, 'error') });
         return false;
     });
 
     //eventos de edicion para un menu
-    $('#formEdit').submit(function () {
+    $('#formEdit').submit(function (event) {
 
+        event.preventDefault();
+        $('#btnSubmitEdit').prop('disabled', true);
         const descripcion = $('#descripcionEdit').val();
+        
+       
+        
+        
+        
 
         if (!validarDescripcion(descripcion)) {
             return false;
         }
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", token);
+
         const id = $('#id').val();
+        
+        console.log("ID del menú:", id);
 
         var raw = JSON.stringify({
-            "descripcion": $('#descripcionEdit').val()
+            "descripcion": $('#descripcionEdit').val(),
+            "icono": $('#iconoEdit').val(),
         });
+
+        console.log(raw);
 
         var requestOptions = {
             method: 'PUT',
@@ -103,6 +127,7 @@ $(function () {
         fetch(`${url}Menu/${id}`, requestOptions)
             .then(response => response.json())
             .then(result => {
+              
                 if (result.code == "ok") {
                     limpiarFormulario();
                     tabla._fnAjaxUpdate();
@@ -112,7 +137,10 @@ $(function () {
                     Alert(result.message, 'error')
                 }
             })
-            .catch(error => { Alert(error.errors, 'error') });
+            
+            .catch(error => { 
+                
+                Alert(error.errors, 'error') });
         return false;
     });
 
@@ -147,13 +175,13 @@ $(function () {
     })
 });
 
-const Usuario = () => {
+// const Usuario = () => {
 
-    let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
-    console.log(usuario.nombre)
-    $('.user-name').text(usuario.nombre);
-    $('.user-status').text(usuario.rol.descripcion);
-}
+//     let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
+//     console.log(usuario.nombre)
+//     $('.user-name').text(usuario.nombre);
+//     $('.user-status').text(usuario.rol.descripcion);
+// }
 
 
 //obtiene la lista de menus
@@ -177,6 +205,10 @@ const getMenus = () => {
                 }
             },
             { data: "descripcion" },
+            { data: "icono" },
+
+
+            
             {
                 data: "id", render: function (data) {
 
@@ -237,9 +269,12 @@ const getMenus = () => {
 function limpiarFormulario(formNew = false) {
     if (formNew) {
         $('#descripcion, #descripcionEdit').val('');
+        $('#icono, #iconoEdit').val('');
     }
     $('.descripcion').removeClass('is-invalid');
     $('.descripcion-error').empty().removeClass('text-danger');
+    // $('.icono').removeClass('is-invalid');
+    // $('.icono-error').empty().removeClass('text-danger');
 }
 
 
@@ -267,6 +302,7 @@ const OpenEdit = (id) => {
             console.log(result)
             $('#id').val(id);
             $('#descripcionEdit').val(result.descripcion);
+            $('#iconoEdit').val(result.icono);
             $('#modalEdit').modal('toggle');
         })
         .catch(error => console.log('error', error));

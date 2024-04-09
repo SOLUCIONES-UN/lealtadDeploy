@@ -3,8 +3,8 @@ const url = "http://localhost:3000/";
 let token = localStorage.getItem("token");
 
 const headers = {
-  'Authorization': token,
-  'Content-Type': 'application/json'
+    'Authorization': token,
+    'Content-Type': 'application/json'
 };
 
 
@@ -20,8 +20,8 @@ let index = 1;
 let indexB = 1;
 var isAddLimited = true;
 var bsStepper = document.querySelectorAll(".bs-stepper"),
-  select = $(".select2"),
-  verticalWizard = document.querySelector(".vertical-wizard-example");
+    select = $(".select2"),
+    verticalWizard = document.querySelector(".vertical-wizard-example");
 
 var numConfigButtons = 4;
 const inputFile = document.getElementById('formFile');
@@ -38,64 +38,120 @@ const getBlob = file => file.slice(0, file.size, file.type)
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  initDateInputs();
-  removeLettersAndSC();
-  removeSpecialCharacters();
+    initDateInputs();
+    removeLettersAndSC();
+    removeSpecialCharacters();
 
-  const nombre = document.querySelector('#nombre');
-  validate(nombre, 'Campaña');
+    const nombre = document.querySelector('#nombre');
+    validate(nombre, 'Campaña');
 
-  const tituloNotificacion = document.querySelector('#tituloNotificacion');
-  validate(tituloNotificacion, 'Campaña');
+    const tituloNotificacion = document.querySelector('#tituloNotificacion');
+    validate(tituloNotificacion, 'Campaña');
 
-  const limiteParticipacion = document.querySelector('#limiteParticipacion');
-  validate(limiteParticipacion, 'Límite de Participación');
+    const limiteParticipacion = document.querySelector('#limiteParticipacion');
+    validate(limiteParticipacion, 'Límite de Participación');
 
-  const imgAkisi = document.querySelector('#imgAkisi');
-  validate(imgAkisi, 'Ícono de la campaña');
+    const imgAkisi = document.querySelector('#imgAkisi');
+    validate(imgAkisi, 'Ícono de la campaña');
 
-  const fechaInicio = document.querySelector('#fechaInicio');
-  validate(fechaInicio, 'Fecha Inicio');
+    const fechaInicio = document.querySelector('#fechaInicio');
+    validate(fechaInicio, 'Fecha Inicio');
 
-  const fechaRegistro = document.querySelector('#fechaRegistro');
-  validate(fechaRegistro, 'Fecha Inicio');
+    const fechaRegistro = document.querySelector('#fechaRegistro');
+    validate(fechaRegistro, 'Fecha Inicio');
 
-  const edadIni = document.querySelector('#edadIni');
-  validate(edadIni, 'Edad Inicial');
+    const edadIni = document.querySelector('#edadIni');
+    validate(edadIni, 'Edad Inicial');
 
-  const tipoUsuario = document.querySelector('#tipoUsuario');
-  validate(tipoUsuario, 'Tipo De Usuario');
+    const tipoUsuario = document.querySelector('#tipoUsuario');
+    validate(tipoUsuario, 'Tipo De Usuario');
 
-  const descripcionCampania = document.querySelector('#descripcionCampania');
-  validate(descripcionCampania, 'Descripción');
+    const descripcionCampania = document.querySelector('#descripcionCampania');
+    validate(descripcionCampania, 'Descripción');
 
-  const descripcionNotificacion = document.querySelector('#descripcionNotificacion');
-  validate(descripcionNotificacion, 'Descripción De La Notificación');
+    const descripcionNotificacion = document.querySelector('#descripcionNotificacion');
+    validate(descripcionNotificacion, 'Descripción De La Notificación');
 
-  const imgPush = document.querySelector('#imgPush');
-  validate(imgPush, 'Imagen de Notificación');
+    const imgPush = document.querySelector('#imgPush');
+    validate(imgPush, 'Imagen de Notificación');
 
-  const fechaFin = document.querySelector('#fechaFin');
-  validate(fechaFin, 'Fecha Fin');
+    const fechaFin = document.querySelector('#fechaFin');
+    validate(fechaFin, 'Fecha Fin');
 
-  const edadFini = document.querySelector('#edadFini');
-  validate(edadFini, 'Edad Final');
+    const edadFini = document.querySelector('#edadFini');
+    validate(edadFini, 'Edad Final');
 
-  const sexo = document.querySelector('#sexo');
-  validate(sexo, 'Sexo');
+    const sexo = document.querySelector('#sexo');
+    validate(sexo, 'Sexo');
+
+    const diaReporte = document.querySelector('#dia');
+    validate(diaReporte, 'diaReporte');
+
+    const horaReporte = document.querySelector('#hora');
+    validate(horaReporte, 'horaReporte');
+    $(document).ready(function() {
+        // Generar opciones de hora en incrementos de 1 hora
+        for (var hour = 0; hour < 24; hour++) {
+            $('#hora').append($('<option>', {
+                value: (hour < 10 ? '0' : '') + hour + ':00', // Formato HH:00
+                text: (hour < 10 ? '0' : '') + hour + ':00'
+            }));
+        }
+
+        // Escuchar el evento de cambio en el select de hora
+        $('#hora').on('change', function() {
+            var selectedHour = $(this).val();
+            // Aquí puedes hacer algo con la hora seleccionada, como enviarla al backend
+            console.log(selectedHour);
+        });
 
 
-  /* allFormVal['nombre'] = false;
-  allFormVal['tituloNotificacion'] = false;
-  allFormVal['limiteParticipacion'] = false;
-  allFormVal['imgAkisi'] = false; */
+        const emails = document.querySelector('#correosElectrónicos');
+        validate(emails, 'emails');
 
-  const inputs = document.querySelectorAll('input');
-  inputs.forEach(input => {
-    if (input.id != '' && input.type != 'hidden') {
-      allFormVal[input.id] = false;
+
+
+    });
+
+
+
+    $(document).ready(function() {
+        $('#fechaHoraInicioPicker').datetimepicker({
+            format: 'YYYY-MM-DD' // Formato de fecha
+        });
+        $('#fechaHoraFinPicker').datetimepicker({
+            format: 'YYYY-MM-DD' // Formato de fecha
+        });
+        // Llenar opciones de hora
+        for (let i = 0; i < 24; i++) {
+            $('#horaInicio').append(`<option value="${i}">${i}:00</option>`);
+        }
+    });
+
+
+
+    function guardarDia() {
+        var diaSeleccionado = document.getElementById('dia').value;
+        // Aquí puedes hacer lo que necesites con el día seleccionado
+        console.log("Día seleccionado:", diaSeleccionado);
+        // Por ejemplo, podrías enviarlo a través de una solicitud AJAX a tu servidor
     }
-  });
+
+
+
+
+
+    /* allFormVal['nombre'] = false;
+    allFormVal['tituloNotificacion'] = false;
+    allFormVal['limiteParticipacion'] = false;
+    allFormVal['imgAkisi'] = false; */
+
+    const inputs = document.querySelectorAll('input');
+    inputs.forEach(input => {
+        if (input.id != '' && input.type != 'hidden') {
+            allFormVal[input.id] = false;
+        }
+    });
 
 
   const img1 = document.querySelector('#imgAkisi');
@@ -107,7 +163,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const reader = new FileReader();
     reader.onload = event => {
       imgAkisi = `data:image/${fileExtension};base64,${btoa(event.target.result)}`;
-      console.log(imgAkisi)
     };
     reader.readAsBinaryString(file);
   }
@@ -121,33 +176,77 @@ document.addEventListener('DOMContentLoaded', () => {
     const reader = new FileReader();
     reader.onload = event => {
       imgPush = `data:image/${fileExtension};base64,${btoa(event.target.result)}`;
-      console.log(imgPush)
     };
     reader.readAsBinaryString(file);
   }
 })
 
-$(function () {
-  loadMenu();
-  ("use strict");
-  ChangePanel(1);
-  getAllCampanias();
-  $("#formFile").hide();
-  $("#tableParticipantes").hide();
-  $("#btnActualizarParametros").hide();
-  $("#btnActualizarPremios").hide();
-  $("#btnActualizarPresupuesto").hide();
+$(document).ready(function() {
+    $('#fechaHoraInicioPicker').datetimepicker({
+        format: 'YYYY-MM-DD' // Formato de fecha
+    });
+    $('#fechaHoraFinPicker').datetimepicker({
+        format: 'YYYY-MM-DD' // Formato de fecha
+    });
+    // Llenar opciones de hora
+    for (let i = 0; i < 24; i++) {
+        $('#horaInicio').append(`<option value="${i}">${i}:00</option>`);
+    }
+});
 
-  Usuario();
 
-  //Inicializacion de Navs
-  $("#NavsOpc button").on("click", function (event) {
-    let data = $(this).attr("data-bs-target");
-    event.preventDefault();
-    $(this).tab("show");
-    $(".opcLista").removeClass("show active");
-    $(data).addClass("show active");
-  });
+
+function guardarDia() {
+    var diaSeleccionado = document.getElementById('diaEnvio').value;
+    // Aquí puedes hacer lo que necesites con el día seleccionado
+    console.log("Día seleccionado:", diaSeleccionado);
+    // Por ejemplo, podrías enviarlo a través de una solicitud AJAX a tu servidor
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// esto es para la hora cuando es input individual 
+
+
+// $(document).ready(function() {
+//     $('#hora').timepicker({
+//         showMeridian: false, // Esto evita que se muestren AM/PM
+//         minuteStep: 1 // Esto establece el paso del minuto a 1
+//     });
+// });
+
+
+
+$(function() {
+    loadMenu();
+    ("use strict");
+    ChangePanel(1);
+    getAllCampanias();
+    $("#formFile").hide();
+    $("#tableParticipantes").hide();
+    $("#btnActualizarParametros").hide();
+    $("#btnActualizarPremios").hide();
+    $("#btnActualizarPresupuesto").hide();
+
+    Usuario();
+
+    //Inicializacion de Navs
+    $("#NavsOpc button").on("click", function(event) {
+        let data = $(this).attr("data-bs-target");
+        event.preventDefault();
+        $(this).tab("show");
+        $(".opcLista").removeClass("show active");
+        $(data).addClass("show active");
+    });
 
   $(".BtnBottador").click(function () {
     var data = {
@@ -160,16 +259,15 @@ $(function () {
       fechaCreacion: $("#fechaRegistro").val(),
       estado: 3,
     };
-    console.log(data);
     saveData(data);
     Limpiar();
   });
 
-  $("#submitData").click(function () {
+    $("#submitData").click(function() {
 
-    //checkFormVals();
+        //checkFormVals();
 
-    //if (!allFormIsOK) return invalidFormData()
+        //if (!allFormIsOK) return invalidFormData()
 
     var data = {
       nombre: $("#nombre").val(),
@@ -190,68 +288,65 @@ $(function () {
       Bloqueados: bloqueados,
       maximoParticipaciones: $("#limiteParticipacion").val(),
     };
-    console.log(data);
     saveData(data);
     $("#addConfig").html(null);
     $("#addFormConfig").html(null);
   });
 
-  $("#btnAddEtapa").click(function () {
-    var nombre = $("#nombreEtapa");
-    var orden = $("#ordenEtapa");
-    var descripcion = $("#descEtapa");
-    var tipoTransaccion = $("#TipoTransaccion option:selected");
-    var intervalo;
-    $("#intervalo") ? (intervalo = $("#intervalo").val()) : (intervalo = "");
-    var periodo;
-    $("#periodo") ? (periodo = $("#periodo").val()) : (periodo = "");
-    var valor;
-    $("#valor") ? (valor = $("#valor").val()) : (valor = "");
+    $("#btnAddEtapa").click(function() {
+        var nombre = $("#nombreEtapa");
+        var orden = $("#ordenEtapa");
+        var descripcion = $("#descEtapa");
+        var tipoTransaccion = $("#TipoTransaccion option:selected");
+        var intervalo;
+        $("#intervalo") ? (intervalo = $("#intervalo").val()) : (intervalo = "");
+        var periodo;
+        $("#periodo") ? (periodo = $("#periodo").val()) : (periodo = "");
+        var valor;
+        $("#valor") ? (valor = $("#valor").val()) : (valor = "");
 
-    var nombreParticipacion;
+        var nombreParticipacion;
 
-    etapas.push({
-      nombre: nombre.val(),
-      orden: orden.val(),
-      descripcion: descripcion.val(),
-      tipoParticipacion: tipoTransaccion.val(),
-      intervalo: typeof intervalo != "undefined" ? intervalo : "",
-      periodo: typeof periodo != "undefined" ? periodo : "",
-      valorAcumulado: typeof valor != "undefined" ? valor : "",
+        etapas.push({
+            nombre: nombre.val(),
+            orden: orden.val(),
+            descripcion: descripcion.val(),
+            tipoParticipacion: tipoTransaccion.val(),
+            intervalo: typeof intervalo != "undefined" ? intervalo : "",
+            periodo: typeof periodo != "undefined" ? periodo : "",
+            valorAcumulado: typeof valor != "undefined" ? valor : "",
 
-      estado: 1,
-      premios: "",
-      parametros: "",
-      presupuestos: "",
-    });
+            estado: 1,
+            premios: "",
+            parametros: "",
+            presupuestos: "",
+        });
 
-    console.log(etapas);
 
-    $("#tbetapas").html(null);
-    $(".etapaSelect").html(null);
-    $("#descEtapa").html(null);
+        $("#tbetapas").html(null);
+        $(".etapaSelect").html(null);
+        $("#descEtapa").html(null);
 
-    addConfig(index++, nombre.val());
+        addConfig(index++, nombre.val());
 
     etapas.forEach((element, index) => {
-      console.log(element.tipoParticipacion);
       var opc = `<option>${element.nombre}</option>`;
 
-      if (element.tipoParticipacion == 1) {
-        nombreParticipacion = "Por Transaccion";
-      } else if (element.tipoParticipacion == 2) {
-        nombreParticipacion = "Recurrente";
-      } else if (element.tipoParticipacion == 3) {
-        nombreParticipacion = "Acumular Transacciones";
-      } else if (element.tipoParticipacion == 4) {
-        nombreParticipacion = "Acumular Recurrente";
-      } else if (element.tipoParticipacion == 5) {
-        nombreParticipacion = "Acumular Valor";
-      } else if (element.tipoParticipacion == 6) {
-        nombreParticipacion = "Combinar Transacciones";
-      }
+            if (element.tipoParticipacion == 1) {
+                nombreParticipacion = "Por Transaccion";
+            } else if (element.tipoParticipacion == 2) {
+                nombreParticipacion = "Recurrente";
+            } else if (element.tipoParticipacion == 3) {
+                nombreParticipacion = "Acumular Transacciones";
+            } else if (element.tipoParticipacion == 4) {
+                nombreParticipacion = "Acumular Recurrente";
+            } else if (element.tipoParticipacion == 5) {
+                nombreParticipacion = "Acumular Valor";
+            } else if (element.tipoParticipacion == 6) {
+                nombreParticipacion = "Combinar Transacciones";
+            }
 
-      var tr = `<tr id='fila${index + 1}'>
+            var tr = `<tr id='fila${index + 1}'>
           <th>${index + 1}</th>
           <th>${element.nombre}</th>
           <th>${nombreParticipacion}</th>
@@ -278,27 +373,26 @@ $(function () {
         </div> </th>
       </tr>`;
 
-      $("#tbetapas").append(tr);
-      //console.log(index);
-      $(".etapaSelect").append(opc);
-      //$('#EtapaPremio').append(opc);
-    });
+            $("#tbetapas").append(tr);
+            //console.log(index);
+            $(".etapaSelect").append(opc);
+            //$('#EtapaPremio').append(opc);
+        });
 
-    nombre.val(null);
-    orden.val(null);
-    descripcion.val(null);
-    $("#TipoTransaccion").val(0);
-    $("#intervalo").val(0);
-  });
+        nombre.val(null);
+        orden.val(null);
+        descripcion.val(null);
+        $("#TipoTransaccion").val(0);
+        $("#intervalo").val(0);
+    });
 });
 
 $("#TipoTransaccion").on("change", function () {
   var addConfig;
   let val = $("#TipoTransaccion").val();
-  console.log(val);
 
-  if (val == 3 || val == 4) {
-    addConfig = `
+    if (val == 3 || val == 4) {
+        addConfig = `
       <label class="form-label" for="intervalo">Intervalo</label>
       <select class="form-control" id="intervalo">
       <option value="0" default selected disabled>Seleccione Un Intervalo</option>
@@ -309,46 +403,45 @@ $("#TipoTransaccion").on("change", function () {
       </select>
     `;
 
-    addPeriodo = `
+        addPeriodo = `
       <label for="periodo">Periodo</label>
       <input class="form-control" id="periodo"/>
     `;
 
-    $("#transaccionesDinamicas").html(addConfig);
-    $("#Periodo").html(addPeriodo);
+        $("#transaccionesDinamicas").html(addConfig);
+        $("#Periodo").html(addPeriodo);
 
-    isAddLimited = false;
-  } else if (val == 5) {
-    addConfig = `
+        isAddLimited = false;
+    } else if (val == 5) {
+        addConfig = `
       <label class="form-label" for="valor">Valor</label>
       <input class="form-control" id="valor" />
     
     `;
 
-    $("#transaccionesDinamicas").html(addConfig);
-    isAddLimited = false;
-  } else if (val == 2) {
-    addConfig = `
+        $("#transaccionesDinamicas").html(addConfig);
+        isAddLimited = false;
+    } else if (val == 2) {
+        addConfig = `
       <label class="form-label" for="valor">Valor</label>
       <input class="form-control" id="valor" />
       
     `;
-    $("#transaccionesDinamicas").html(addConfig);
-    isAddLimited = true;
-  } else {
-    $("#transaccionesDinamicas").html(null);
-    $("#Periodo").html(null);
-    isAddLimited = true;
-  }
+        $("#transaccionesDinamicas").html(addConfig);
+        isAddLimited = true;
+    } else {
+        $("#transaccionesDinamicas").html(null);
+        $("#Periodo").html(null);
+        isAddLimited = true;
+    }
 });
 
-const Usuario = () => {
+/*const Usuario = () => {
 
   let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
-  console.log(usuario.nombre)
   $('.user-name').text(usuario.nombre);
   $('.user-status').text(usuario.rol.descripcion);
-}
+}*/
 
 function loadMenu(isEtapa) {
   // Adds crossed class
@@ -358,74 +451,73 @@ function loadMenu(isEtapa) {
         var index = event.detail.indexStep;
         var numberOfSteps = $(event.target).find(".step").length - 1;
         var line = $(event.target).find(".step");
-        console.log(line);
         // The first for loop is for increasing the steps,
         // the second is for turning them off when going back
         // and the third with the if statement because the last line
         // can't seem to turn off when I press the first item. ¯\_(ツ)_/¯
 
-        for (var i = 0; i < index; i++) {
-          line[i].classList.add("crossed");
+                for (var i = 0; i < index; i++) {
+                    line[i].classList.add("crossed");
 
-          for (var j = index; j < numberOfSteps; j++) {
-            line[j].classList.remove("crossed");
-          }
+                    for (var j = index; j < numberOfSteps; j++) {
+                        line[j].classList.remove("crossed");
+                    }
+                }
+                if (event.detail.to == 0) {
+                    for (var k = index; k < numberOfSteps; k++) {
+                        line[k].classList.remove("crossed");
+                    }
+                    line[0].classList.remove("crossed");
+                }
+            });
         }
-        if (event.detail.to == 0) {
-          for (var k = index; k < numberOfSteps; k++) {
-            line[k].classList.remove("crossed");
-          }
-          line[0].classList.remove("crossed");
-        }
-      });
     }
-  }
 
-  // select2
-  select.each(function () {
-    var $this = $(this);
-    $this.wrap('<div class="position-relative"></div>');
-    $this.select2({
-      placeholder: "Select value",
-      dropdownParent: $this.parent(),
+    // select2
+    select.each(function() {
+        var $this = $(this);
+        $this.wrap('<div class="position-relative"></div>');
+        $this.select2({
+            placeholder: "Select value",
+            dropdownParent: $this.parent(),
+        });
     });
-  });
 
-  // Vertical Wizard
-  // --------------------------------------------------------------------
-  if (typeof verticalWizard !== undefined && verticalWizard !== null) {
-    var verticalStepper = new Stepper(verticalWizard, {
-      linear: false,
-    });
-    $(verticalWizard)
-      .find(".btn-next")
-      .on("click", function () {
-        verticalStepper.next();
-      });
-    $(verticalWizard)
-      .find(".btn-prev")
-      .on("click", function () {
-        verticalStepper.previous();
-      });
+    // Vertical Wizard
+    // --------------------------------------------------------------------
+    if (typeof verticalWizard !== undefined && verticalWizard !== null) {
+        var verticalStepper = new Stepper(verticalWizard, {
+            linear: false,
+        });
+        $(verticalWizard)
+            .find(".btn-next")
+            .on("click", function() {
+                verticalStepper.next();
+            });
+        $(verticalWizard)
+            .find(".btn-prev")
+            .on("click", function() {
+                verticalStepper.previous();
+            });
 
-    $(verticalWizard)
-      .find(".btn-submit")
-      .on("click", function () {
-        //Alert("Campaña Creada con Exito", "success");
-        ChangePanel(1);
-      });
-  }
+        $(verticalWizard)
+            .find(".btn-submit")
+            .on("click", function() {
+                //Alert("Campaña Creada con Exito", "success");
+                ChangePanel(1);
+            });
+    }
 
-  if (isEtapa) {
-    verticalStepper.reset();
-    verticalStepper.to(3);
-  }
+    if (isEtapa) {
+        verticalStepper.reset();
+        verticalStepper.to(3);
+    }
 }
 
 function addConfig(id, nombreEtapa) {
-  console.log(isAddLimited);
+    console.log(isAddLimited);
 
-  var configbuttons = `<div id="opc${id}" class="step" data-target="#social-links-vertical-${id}">
+    var configbuttons = `<div id="opc${id}" class="step" data-target="#social-links-vertical-${id}">
     <button type="button" class="step-trigger">
         <span class="bs-stepper-box">${numConfigButtons + 1}</span>
         <span class="bs-stepper-label">
@@ -435,7 +527,7 @@ function addConfig(id, nombreEtapa) {
     </button>
   </div>`;
 
-  var configForm = `<div id="social-links-vertical-${id}" class="content" style="height: auto;">
+    var configForm = `<div id="social-links-vertical-${id}" class="content" style="height: auto;">
   <div class="content-header">
       <h5 class="mb-0">Parametros De La Campaña</h5>
       <small></small>
@@ -561,13 +653,13 @@ function addConfig(id, nombreEtapa) {
                                     <div class="row">
                                         <div class="form-group col-md-6">
                                             <label class="form-label" for="departamento">Departamento</label>
-                                            <select class="form-control" id="departamento${id}">
+                                            <select class="form-control" id="departamento${id}" onchange="getMunicipios(this.value)">
                                                 <option value="0">Todos los departamentos</option>
                                             </select>
                                         </div>
                                         <div class="form-group col-md-6">
-                                            <label class="form-label" for="municipio">Municipio</label>
-                                            <select class="form-control" id="municipio${id}">
+                                            <label class="form-label" for="municipioSelect">Municipio</label>
+                                            <select class="form-control" id="municipioSelect">
                                                 <option value="0">Todos los Municipios</option>
                                             </select>
                                         </div>
@@ -781,46 +873,69 @@ const getDepartamentos = (id, isEdith = false) => {
     fetch(`${url}Departamento`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
+        console.log("esto biene en departamentos",result);
         result.forEach((element) => {
           var opc = `<option value="${element.id}">${element.nombre}</option>`;
           $("#departamento" + id).append(opc);
+        });
+        $("#departamento" + id).on("change", function() {
+          var id = $(this).val();
+          console.log("Departamento seleccionado con jquery:", id);
+          getMunicipios(id);
         });
       })
       .catch((error) => console.log("error", error));
   }
 };
 
+
+
+
+
+
 const getMunicipios = (id, isEdit = false) => {
+  const departamentoId = isEdit ? document.querySelector('#departamentoActualizar').value : id;
 
-  const departamento = document.querySelector(`#departamento${id}`);
-  const departamentoActualizar = document.querySelector('#departamentoActualizar');
-
-  fetch(`${url}Municipio/by/${isEdit ? departamentoActualizar.value : 1}`, {
+  fetch(`${url}Municipio/by/${departamentoId}`, {
     method: 'GET',
     redirect: 'follow',
     headers: headers
   })
     .then((response) => response.json())
     .then((result) => {
-      if (isEdit) {
-        result.forEach((element) => {
-          const option = document.createElement('option');
-          option.value = element.id;
-          option.textContent = element.nombre;
-          document.querySelector('#municipioEdit').append(option);
-        });
-      } else {
-        result.forEach((element) => {
-          const option = document.createElement('option');
-          option.value = element.id;
-          option.textContent = element.nombre;
-          document.querySelector(`#municipio${id}`).append(option);
-        });
+      console.log("esto biene en munisipios",result);
+      const selectId = isEdit ? '#municipioEdit' : `#municipioSelect`;
+      
+      const municipioSelect = document.querySelector(selectId);
+      if (!municipioSelect) {
+        console.error(`No se pudo encontrar el elemento select con el ID ${selectId}`);
+        return;
       }
+      
+      // Limpiar el select de municipios
+      // $("#selectId").empty();
+      municipioSelect.innerHTML = '';
+
+      const defaultOption = document.createElement('option');
+      defaultOption.value = '0';
+      defaultOption.textContent = 'Todos los Municipios';
+      municipioSelect.appendChild(defaultOption);
+
+
+      result.forEach((municipio) => {
+        const option = document.createElement('option');
+        option.value = municipio.id;
+        option.textContent = municipio.nombre;
+        municipioSelect.appendChild(option);
+      });
+      console.log("Select de municipios después de llenar:", municipioSelect);
     })
     .catch((error) => console.log("error", error));
-
 }
+
+
+
+
 
 const getTransacciones = (id, isEdit = false) => {
   var requestOptions = {
@@ -1054,6 +1169,9 @@ const getAllCampanias = () => {
     })
     .catch((error) => console.log("error", error));
 };
+
+
+
 const table = (table, data) => {
 
 
@@ -1212,6 +1330,7 @@ const saveData = (data) => {
     body: JSON.stringify(data),
     redirect: 'follow'
   };
+  console.log(data)
 
   fetch(`${url}Campania`, requestOptions)
     .then((response) => response.json())
@@ -1242,6 +1361,9 @@ const Limpiar = (isEdith) => {
     $("#fechaRegistro").val(null);
     $("#edadIni").val(null);
     $("#sexo").val(0);
+    $("#hora").val(0);
+    $("#dia").val(0);
+    $("#correosElectrónicos").val(0);
     $("#tipoUsuario").val(0);
     ChangePanel(1);
   }
@@ -1511,83 +1633,151 @@ const getPresupuesto = (idEtapa) => {
     });
 };
 
+// const getEtapas = (id) => {
+//   var requestOptions = {
+//     method: "GET",
+//     redirect: 'follow',
+//     headers: headers,
+//   };
+//   console.log("ID de la camapaña" + id);
+//   fetch(`${url}Campania/${id}`, requestOptions)
+//     .then((response) => response.json())
+//     .then((result) => {
+//       result.etapas.forEach((element, index) => {
+//         console.log("bienen estas cosas aqui",response);
+//         var opcTableEtapas = `<tr>
+//               <td>${index + 1}</td>
+//               <td>${element.nombre}</td>
+//               <td>${element.descripcion}</td>
+//               <td>
+//                 <div class="btn-group">
+//                   <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
+//                       ${feather.icons["more-vertical"].toSvg({
+//           class: "font-small-4",
+//         })}
+//                   </a>
+//                   <div class="dropdown-menu dropdown-menu-right">
+//                       <a href="#" onclick="OpenEdit(${data}, ${data}, ${data
+//           } , ${true})" class="borrar btn_edit dropdown-item">
+//                           ${feather.icons["archive"].toSvg({
+//             class: "font-small-4 mr-50",
+//           })} Actualizar
+//                       </a>
+                  
+//                   <div class="dropdown-menu dropdown-menu-right">
+//                       <a href="#" onclick="eliminarFila(${index})" class="btn_delete dropdown-item">
+//                         ${feather.icons["trash-2"].toSvg({
+//             class: "font-small-4 mr-50",
+//           })} Inhabilitar
+//                       </a>
+//                   </div>
+//                   </div>
+//                 </div> 
+//               </td>
+//               </tr>`;
+
+//         $("#PreviewEtapsEdit").append(opcTableEtapas);
+//       });
+//     })
+//     .catch((error) => console.log("error", error));
+// };
+
+
+
 const getEtapas = (id) => {
   var requestOptions = {
     method: "GET",
     redirect: 'follow',
     headers: headers,
   };
-  console.log("ID de la camapaña" + id);
+  console.log("ID de la campaña: " + id);
   fetch(`${url}Campania/${id}`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
-      result.etapas.forEach((element, index) => {
-        console.log(index);
-        var opcTableEtapas = `<tr>
-              <td>${index + 1}</td>
-              <td>${element.nombre}</td>
-              <td>${element.descripcion}</td>
-              <td>
-                <div class="btn-group">
-                  <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
-                      ${feather.icons["more-vertical"].toSvg({
-          class: "font-small-4",
-        })}
+      if (result.etapas && result.etapas.length > 0) {
+        result.etapas.forEach((element, index) => {
+          var opcTableEtapas = `<tr>
+            <td>${index + 1}</td>
+            <td>${element.nombre}</td>
+            <td>${element.descripcion}</td>
+            <td>
+              <div class="btn-group">
+                <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
+                  ${feather.icons["more-vertical"].toSvg({
+                    class: "font-small-4",
+                  })}
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                <a href="#" onclick="ChangePanel(1)" class="borrar btn_edit dropdown-item">
+                    ${feather.icons["archive"].toSvg({
+                      class: "font-small-4 mr-50",
+                    })} Actualizar
                   </a>
-                  <div class="dropdown-menu dropdown-menu-right">
-                      <a href="#" onclick="OpenEdit(${id}, ${index}, ${element.id
-          } , ${true})" class="borrar btn_edit dropdown-item">
-                          ${feather.icons["archive"].toSvg({
-            class: "font-small-4 mr-50",
-          })} Actualizar
-                      </a>
-                  
-                  <div class="dropdown-menu dropdown-menu-right">
-                      <a href="#" onclick="eliminarFila(${index})" class="btn_delete dropdown-item">
-                        ${feather.icons["trash-2"].toSvg({
-            class: "font-small-4 mr-50",
-          })} Inhabilitar
-                      </a>
-                  </div>
-                  </div>
-                </div> 
-              </td>
-              </tr>`;
+                  <a href="#" onclick="eliminarFila(${index})" class="btn_delete dropdown-item">
+                    ${feather.icons["trash-2"].toSvg({
+                      class: "font-small-4 mr-50",
+                    })} Inhabilitar
+                  </a>
+                </div>
+              </div> 
+            </td>
+          </tr>`;
 
-        $("#PreviewEtapsEdit").append(opcTableEtapas);
-      });
+          $("#PreviewEtapsEdit").append(opcTableEtapas);
+          $("#nombreEtapaEdith").val(element.nombre);
+          $("#ordenEtapaEdith").val(element.orden);
+          $("#descEtapaEdith").val(element.descripcion);
+          $("#TipoTransaccionEdith").val(element.tipoParticipacion);
+        });
+      } else {
+        console.log("No se encontraron etapas para la campaña con ID: " + id);
+      }
     })
-    .catch((error) => console.log("error", error));
+    .catch((error) => console.log("Error al obtener las etapas:", error));
 };
+
+
+
 
 const OpenEdit = (id, index, idEtapa, isEtapa = false) => {
   if (isEtapa) {
     console.log("aca ira el formulario de etapas " + id, idEtapa);
+    
 
     var requestOptions = {
       method: "GET",
       redirect: 'follow',
       headers: headers
     };
-    console.log(id);
+    // $("#modaletapas").modal("toggle");
+
     fetch(`${url}Campania/${id}`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result.index);
-        $("#idEtapa").val(result.etapas[index].id);
-        $("#nombreEtapaEdith").val(result.etapas[index].nombre);
-        $("#ordenEtapaEdith").val(result.etapas[index].orden);
-        $("#descEtapaEdith").val(result.etapas[index].descripcion);
-        $("#TipoTransaccionEdith").val(result.etapas[index].tipoParticipacion);
+        const etapa = result.etapas.find((etapa) => etapa.id === idEtapa);
+        if (!etapa) {
+          console.error(`No se encontró la etapa con ID ${idEtapa}`);
+          return;
+        }
+        
+        $("#idEtapa").val(etapa.id);
+        $("#nombreEtapaEdith").val(etapa.nombre);
+        console.log('esta es el nombre de esta cosa',etapa.name)
+        $("#ordenEtapaEdith").val(etapa.orden);
+        $("#descEtapaEdith").val(etapa.descripcion);
+        $("#TipoTransaccionEdith").val(etapa.tipoParticipacion);
 
         getParametros(idEtapa);
         getPremiosEtapa(idEtapa);
         getPresupuesto(idEtapa);
         getPremios(0, true);
-        getDepartamentos(0, true);
-        getMunicipios(0, true);
+        getDepartamentos(id, true);
+        getMunicipios(id, true);
 
-        $("#modalEditEtapas").modal("toggle");
+        $("#modalEdit").modal("toggle");
+        
+
+        
       })
       .catch((error) => console.log("error", error));
 
@@ -1615,12 +1805,16 @@ const OpenEdit = (id, index, idEtapa, isEtapa = false) => {
         $("#edadFiniEdith").val(result.edadFinal);
         $("#tipoUsuarioEdith").val(result.tipoUsuario);
         $("#sexoEdith").val(result.sexo);
+        $("#horaEdith").val(result.horaReporte);
+        $("#diaEdith").val(result.diaReporte);
+        $("#correosElectrónicosEdith").val(result.emails);
 
-        getEtapas(id);
+        getEtapas(id); // Llama a getEtapas solo una vez
         getParticipantes(id);
         getBloqueados(id);
 
         $("#modalEdit").modal("toggle");
+        console.log("aqui biene todo esto ",result)
       })
       .catch((error) => console.log("error", error));
     loadMenuEdit();
@@ -1643,7 +1837,10 @@ const tipoDeTransaccion = (id) => {
 
     $('#Transacciones' + id).html(null);
 
+    console.log("biene")
+    console.log("biene")
     fetch(`${url}categoria`, requestOptions)
+    
       .then(response => response.json())
       .then(result => {
         result.forEach(element => {
@@ -1909,7 +2106,7 @@ $("#formEditEtapas").submit(function () {
       if (result.code == "ok") {
         $("#PreviewEtapsEdit").html(null);
         getEtapas(idCamp);
-        $("#modalEditEtapas").modal("toggle");
+        $("#modalEdit").modal("toggle");
         Alert(result.message, "success");
       } else {
         Alert(result.message, "error");
@@ -1935,6 +2132,9 @@ $("#formEdit").submit(function () {
     edadInicial: $("#edadIniEdith").val(),
     edadFinal: $("#edadFiniEdith").val(),
     sexo: $("#sexoEdith option:selected").val(),
+    horaReporte: $("#horaEdith option:selected").val(),
+    diaReporte: $("#diaEdith option:selected").val(),
+    emails: $("#correosElectrónicosEdith option:selected").val(),
     tipoUsuario: $("#tipoUsuarioEdith option:selected").val(),
     tituloNotificacion: $("#tituloNotificacionEdith").val(),
     descripcionNotificacion: $("#descripcionNotificacionEdith").val(),
