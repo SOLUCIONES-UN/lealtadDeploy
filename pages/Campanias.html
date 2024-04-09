@@ -458,14 +458,14 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="proyecto">Proyecto</label>
-                                    <select name="proyecto" aria-describedby="proyectoError" required id="proyecto" class="form-control">
+                                    <select name="proyecto" aria-describedby="proyectoError" required id="proyecto" class="form-control proyecto">
                                         <option disabled selected>Selecciona una opción</option>
                                     </select>
                                     <div id="proyectoError" class="invalid-feedback proyecto-error"></div>
                                 </div>
-                                <div class="form-group form-password-toggle col-md-6">
+                                <div class="form-group col-md-6">
                                     <label class="form-label" for="tercerosCampania">Campaña de Terceros</label>
-                                    <select name="" aria-describedby="tercerosCampaniaError" required id="tercerosCampania" class="form-control">
+                                    <select name="" aria-describedby="tercerosCampaniaError" required id="tercerosCampania" class="form-control tercerosCampania">
                                         <option disabled selected>Selecciona una opción</option>
                                         <option value="1">Sí</option>
                                         <option value="0">No</option>
@@ -492,12 +492,12 @@
                                 <div class="row">
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="campania">Campaña</label>
-                                        <input type="text" aria-describedby="CampaniaError" required  id="campania" class="form-control" placeholder="Ingresa el Nombre" />
+                                        <input type="text" aria-describedby="CampaniaError" required  id="campania" class="form-control campania" placeholder="Ingresa el Nombre" />
                                         <div id="CampaniaError" class="invalid-feedback Campania-error"></div>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="notificacion">Titulo de Notificación</label>
-                                        <input type="text" id="notificacion" aria-describedby="notificacionError" required  class="form-control" placeholder="Ingresa el Nombre" />
+                                        <input type="text" id="notificacion" aria-describedby="notificacionError" required  class="form-control notificacion" placeholder="Ingresa el Nombre" />
                                         <div id="notificacionError" class="invalid-feedback notificacion-error"></div>
                                     </div>
                                 </div>
@@ -509,14 +509,14 @@
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="descripcionNotificacion">Descripción de Notificación</label>
-                                        <textarea type="text" id="descripcionNotificacion" aria-describedby="descripcionNotificacionError" required  class="form-control" placeholder="Ingrese la descripcion" rows="2"></textarea>
+                                        <textarea type="text" id="descripcionNotificacion" aria-describedby="descripcionNotificacionError" required  class="form-control descripcionNotificacion" placeholder="Ingrese la descripcion" rows="2"></textarea>
                                         <div id="descripcionNotificacionError" class="invalid-feedback descripcionNotificacion-error"></div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="fechaRegistro">Fecha de Registro</label>
-                                        <input type="date" id="fechaRegistro" aria-describedby="fechaRegistroError" required  class="form-control" placeholder="Ingresa el Nombre" />
+                                        <input type="date" id="fechaRegistro" aria-describedby="fechaRegistroError" required  class="form-control fechaRegistro" placeholder="Ingresa el Nombre" />
                                         <div id="fechaRegistroError" class="invalid-feedback fechaRegistro-error"></div>
                                     </div>
                                     <div class="form-group col-md-6">
@@ -707,7 +707,7 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="tipoPremio">Tipo de Premio</label>
-                                    <select name="tipoPremio" aria-describedby="tipoPremioError" required id="tipoPremio" class="form-control">
+                                    <select name="tipoPremio" aria-describedby="tipoPremioError"  id="tipoPremio" class="form-control">
                                         <option disabled selected>Selecciona una opción</option>
                                         <option value="0">Unico Premio</option>
                                         <option value="1">Premio Random</option>
@@ -717,7 +717,7 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="linkPremio">Links de Premio</label>
-                                    <select name="linkPremio" aria-describedby="linkPremioError" required id="linkPremio" class="form-control">
+                                    <select name="linkPremio" aria-describedby="linkPremioError"  id="linkPremio" class="form-control">
                                         <option disabled selected>Selecciona una opción</option>
                                         <option value="si">Sí</option>
                                         <option value="no">No</option>
@@ -728,21 +728,21 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="premio">Premio</label>
-                                    <select name="premio" id="premio" aria-describedby="premioError" required class="form-control">
+                                    <select name="premio" id="premio" aria-describedby="premioError"  class="form-control">
                                         <option disabled selected>Selecciona una opción</option>
                                     </select>
                                     <div id="premioError" class="invalid-feedback premio-error"></div>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="valor">Valor</label>
-                                    <input type="number" id="valor" aria-describedby="valorError" required class="form-control" />
+                                    <input type="number" id="valor" aria-describedby="valorError"  class="form-control" />
                                     <div id="valorError" class="invalid-feedback valor-error"></div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="porcentajePremio">Porcentaje de Premio</label>
-                                    <input type="number" id="porcentajePremio" aria-describedby="porcentajePremioError" required class="form-control" />
+                                    <input type="number" id="porcentajePremio" aria-describedby="porcentajePremioError"  class="form-control" />
                                     <div id="porcentajePremioError" class="invalid-feedback porcentajePremio-error"></div>
                                 </div>
                                 <div class="form-group col-md-6">

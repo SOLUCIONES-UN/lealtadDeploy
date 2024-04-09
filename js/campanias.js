@@ -847,6 +847,8 @@ function validarCamposStep(stepIndex) {
 
     case 'step5':
       {
+        var isValid = true;
+        /*
         var fields = [
           'tipoPremio',
           'linkPremio',
@@ -855,7 +857,7 @@ function validarCamposStep(stepIndex) {
           'porcentajePremio'
         ];
 
-        var isValid = true;
+        
         
         fields.forEach(function(field) {
           var value = $('#' + field).val();
@@ -867,6 +869,11 @@ function validarCamposStep(stepIndex) {
           }
         });
 
+        */
+        return isValid;
+      }
+      case 'step6':{
+        var isValid = true;
         return isValid;
       }
   }
