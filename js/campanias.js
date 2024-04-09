@@ -1,6 +1,50 @@
 const url = 'http://localhost:3000/'
 let token = localStorage.getItem("token");
 var actualStep = 0;
+var saveDataParams = [];
+// Arreglo para almacenar los datos guardados de la tabla
+var datosTablaLocalidad = [];
+var datosTablaPremio = [];
+var datosTablaParametro = [];
+var indexLocalidad = 0;
+var datosTablaParticipacion= [];
+var datosBloqueados = [];
+//variables de imagenes
+let imgCampania = null;
+
+//vacios de para ver si pasan a db
+var etapa= [
+  {
+    nombre: '',
+    descripcion: '',
+    orden: 1,
+    idCampania: 1,
+    tipoParticipacion: 52,
+    intervalo: 5,
+    periodo: 5,
+    valorAcumulado: 5,
+    estado: 1
+  },
+];
+
+var Participacion = [
+  {
+    numero: 52,
+    idCampania: 1,
+    estado: 1
+  },
+];
+
+var Participacion = [
+  {
+    numero: 266,
+    idCampania: 522,
+    estado: 1
+  },
+];
+
+
+
 
 $(function () {
 
@@ -51,8 +95,26 @@ $(function () {
     myHeaders.append("Authorization", token);
 
     var raw = JSON.stringify({
-
+      nombre: $("#campania").val(),
+      descripcion: $("#descripcionCampania").val(),
+      tituloNotificacion: $("#notificacion").val(),
+      fechaRegistro: $("#fechaRegistro").val(),
+      fechaInicio: $("#fechaInicial").val(),
+      fechaFin: $("#fechaFinal").val(),
+      edadInicial: $("#edadInicial").val(),
+      edadFinal: $("#edadFinal").val(),
+      sexo: $("#sexo").val(),
+      tipoUsuario: $("#tipoUsuario").val(),
+      descripcionNotificacion: $("#descripcionNotificacion").val(),
+      imgPush: $('#imgCampania').val(),
+      imgAkisi: $('#imgNotificacion').val(),
+      etapas: etapa,
+      Participacion: Participacion,
+      Bloqueados: Bloqueados,
+      //maximoParticipaciones: $("#limiteParticipacion").val(),
     });
+
+    console.log(raw);
 
     var requestOptions = {
         method: 'POST',
@@ -69,7 +131,9 @@ $(function () {
                 //tabla._fnAjaxUpdate();
                 $('#modalNew').modal('toggle');
                 Alert(result.message, 'success');
+                console.log(result);
             } else {
+              console.log("Verifica datos");
                 Alert(result.message, 'error');
             }
 
@@ -85,18 +149,22 @@ function initStepper() {
   actualStep=0;
   var steps = $('#stepper').children(); // Obtener todos los elementos hijos del contenedor #stepper
   var totalSteps = steps.length;
-  
+ 
   showStep(actualStep);
-  
   console.log(steps);
 
   $('.next-btn').click(function(e) {
     e.preventDefault(); // Detener el comportamiento predeterminado
 
     if (actualStep < totalSteps - 1) {
-      hideStep(actualStep);
-      actualStep++;
-      showStep(actualStep);
+      
+      if(validarCamposStep(actualStep)){
+        hideStep(actualStep);
+        actualStep++;
+        showStep(actualStep);  
+      }else{
+        console.log("Error")
+      }
     }
   });
 
@@ -117,30 +185,347 @@ function initStepper() {
   function hideStep(stepIndex) {
     steps.eq(stepIndex).hide();
   }
+
+
+  // Stepp de los parametros de la campaña segun esta una etapa
+  $('#add-step-btn').click(function() {
+    addStep(`<div class="form-step ">
+    <div class="content-header mt-2 mb-1">
+        <h4 class="mb-0">Configuración de Parametros de Etapa</h4>
+        <small class="text-muted">Ingresa los datos basicos de la Campaña.</small>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label class="form-label" for="maximoParticipantes">Maximo de Participaciones</label>
+            <input type="number" id="maximoParticipantes" class="form-control" />
+        </div>
+        <div class="form-group col-md-6" id="totalMinimo-container">
+            <label class="form-label" for="totalMinimo">Total Minimo</label>
+            <input type="number" id="totalMinimo" class="form-control"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label class="form-label" for="transaccion">Transacción</label>
+            <select name="" id="transaccion" class="form-control">
+                <option disabled selected>Selecciona una opción</option>
+            </select>
+        </div>
+        <div class="form-group col-md-6">
+            <label class="form-label" for="limiteDia">Limite Diario</label>
+            <input type="number" id="limiteDia" class="form-control" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label class="form-label" for="valorMinimo">Valor Minimo</label>
+            <input type="number" id="valorMinimo" class="form-control" />
+        </div>
+        <div class="form-group col-md-6">
+            <label class="form-label" for="valorMaximo">Valor Maximo</label>
+            <input type="number" id="valorMaximo" class="form-control" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label class="form-label" for="RangoDias">Rango de Días</label>
+            <input type="number" id="RangoDias" class="form-control" />
+        </div>
+        <div class="form-group col-md-6">
+          <div class="btn-crear d-flex justify-content-end mt-2" >
+            <button type="button" class="btn btn-outline-primary" id="addParamas">Agregar</button>
+          </div>
+        </div>
+    </div>
+    <table class="datatables-basic table mb-3 mt-2" id="TablaParametros">
+      <thead>
+        <tr>
+          <th>Etapa</th>
+          <th>Transaccion</th>
+          <th>Valor Minimo</th>
+          <th>Valor Maximo</th>
+        </tr>
+      </thead>
+    </table>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" id="removeStepp" >Borrar</button>
+        <button type="button" id="GuardarEtapa" class="btn btn-primary" >Guardar</button>
+    </div>
+  </div>`);
+  });
+
+  function addStep(content) {
+    var newStep = $(`<div class="step"></div>`).html(content);
+    $('#stepper').append(newStep);
+    totalSteps++;
+    hideStep(actualStep);
+    actualStep = totalSteps - 1;
+    showStep(actualStep);
+
+    // Agregar evento de clic al botón "Borrar" del nuevo paso
+    newStep.find('#removeStepp').click(function(e) {
+      e.preventDefault();
+      if (totalSteps > 1) {
+        hideStep(actualStep)
+        actualStep = actualStep-3;
+        showStep(actualStep);
+        newStep.html('');     
+        stepData = null;
+      }
+    });
+
+    newStep.find('#transaccion').click(function(e){
+      e.preventDefault();
+      getTransaccion();
+      $(this).off(e);  
+    });
+
+    newStep.find('#GuardarEtapa').click(function(e){
+      e.preventDefault();
+      var stepData ={
+          MaxParticipantes: $('#maximoParticipantes').val(), 
+          TotalMin: $('#totalMinimo').val(),
+          Transaccion: $('#transaccion').val(),
+          LimiteDiario: $('#limiteDia').val(),
+          ValMinimo: $('#valorMinimo').val(),
+          ValMaximo: $('#valorMaximo').val(),
+          RangoDias: $('#RangoDias').val()
+      };
+      console.log(stepData);
+      saveDataParams.push(stepData);
+
+      hideStep(actualStep)
+      actualStep = actualStep-3;
+      showStep(actualStep);
+      newStep.html('');     
+      stepData = null;
+
+    });
+
+    $('#addParamas').click(function(){
+      var index = 0;
+      var MaximoParticipaciones = $('#maximoParticipantes').val();
+      var totalMinimo = $('#totalMinimo').val();
+      var Transaccion = $('#transaccion').val();
+      var limiteDiario = $('#limiteDia').val();
+      var valorMinimo = $('#valorMinimo').val();
+      var valorMaximo = $('#valorMaximo').val();
+      var RangoDias = $('#RangoDias').val();
+    
+      if(MaximoParticipaciones && totalMinimo  && limiteDiario && valorMinimo && valorMaximo && RangoDias){
+        index++;
+        var nuevoParametro= {
+          id: index,
+          MaximoParticipaciones: MaximoParticipaciones,
+          totalMinimo: totalMinimo,
+          transaccion: Transaccion,
+          limiteDiario: limiteDiario,
+          valorMaximo: valorMaximo,
+          valorMinimo: valorMinimo,
+          rangoDias: RangoDias 
+        }
+    
+        datosTablaParametro.push(nuevoParametro);
+        console.log(nuevoParametro);
+        $('#maximoParticipantes').val('');
+        $('#totalMinimo').val('');
+        $('#transaccion').val('');
+        $('#limiteDia').val('');
+        $('#valorMinimo').val('');
+        $('#valorMaximo').val('');
+        $('#RangoDias').val('');
+        
+        mostrarDatosParametro();
+      }else{
+    
+      }
+      
+      function mostrarDatosParametro() {
+        // Limpiar la tabla antes de insertar nuevas filas
+        $('#TablaParametros').DataTable().clear().destroy();
+      
+        // Inicializar el DataTables con los datos de datosTablaParametro
+        $('#TablaParametros').DataTable({
+          data: datosTablaParametro,
+          searching: false, // Deshabilitar la funcionalidad de búsqueda
+          paging: false,
+          columns: [
+            { data: 'id' },
+            { data: 'transaccion' },
+            { data: 'valorMinimo' },
+            { data: 'valorMaximo' }
+          ]
+        });
+      }
+    });
+  }
+
 }
 
-//funcion para la visualizacion previa de las imagenes
+// Función para agregar datos a la tabla y al arreglo
+$('#addLocalidad').click(function() {
+  // Obtener los valores de los campos de entrada
+  var departamento = $('#departamento').val();
+  var municipio = $('#municipio').val();
+  var limiteGanador = $('#limiteGanador').val();
+  var presupuesto = $('#presupuesto').val();
+
+  // Validar que los campos no estén vacíos
+  if (departamento && municipio && limiteGanador && presupuesto) {
+    // Crear un objeto con los datos
+    var nuevoDato = {
+      id: indexLocalidad,
+      departamento: departamento,
+      municipio: municipio,
+      limiteGanador: limiteGanador,
+      presupuesto: presupuesto
+    };
+
+    // Agregar el nuevo dato al arreglo
+    datosTablaLocalidad.push(nuevoDato);
+
+    // Limpiar los campos de entrada
+    $('#departamento').val('');
+    $('#municipio').val('');
+    $('#limiteGanador').val('');
+    $('#presupuesto').val('');
+
+    // Mostrar los datos en la tabla
+    mostrarDatosTabla('#tableLocalidad');
+
+    // Incrementar el índice
+    indexLocalidad++;
+  } else {
+    alert('Por favor complete todos los campos.');
+  }
+});
+
+$('#addPremio').click(function(){
+  var index =0;
+  var tipoPremio = $('#tipoPremio').val();
+  var linkPremio = $('#linkPremio').val();
+  var premio = $('#premio').val();
+  var valor = $('#valor').val();
+  var porcentaje = $('#porcentajePremio').val();
+
+  if( tipoPremio && linkPremio  && valor && porcentaje){
+    index++;
+    var nuevoPremio ={
+      id: index,
+      tipoPremio: tipoPremio,
+      linkPremio: linkPremio,
+      premio: premio,
+      valor: valor,
+      porcentajePremio : porcentaje
+    }
+    datosTablaPremio.push(nuevoPremio);
+
+    $('#tipoPremio').val('');
+    $('#linkPremio').val('');
+    $('#premio').val('');
+    $('#valor').val('');
+    $('#porcentajePremio').val('');
+
+    mostrarDatosTabla('#TablaPremio');
+    console.log(nuevoPremio);
+    
+  }else{
+    //Colocar una alerta 
+  }
+});
+
+function mostrarDatosTabla(tabla) {
+
+  switch(tabla)
+  {
+    case '#tableLocalidad':
+        // Limpiar la tabla antes de insertar nuevas filas
+      $('#tableLocalidad').DataTable().clear().destroy();
+
+      // Inicializar el DataTables con los datos de datosTablaLocalidad
+      $('#tableLocalidad').DataTable({
+        searching: false, // Deshabilitar la funcionalidad de búsqueda
+        paging: false,
+        data: datosTablaLocalidad,
+        columns: [
+          { data: 'id' },
+          { data: 'departamento' },
+          { data: 'municipio' },
+          { data: 'limiteGanador' },
+          { data: 'presupuesto' }
+        ]
+      });
+    break;
+  
+    case '#EtapasTable':
+        // Limpiar la tabla antes de insertar nuevas filas
+      $('#EtapasTable').DataTable().clear().destroy();
+
+      // Inicializar el DataTables con los datos de datosTablaLocalidad
+      $('#EtapasTable').DataTable({
+        searching: false, // Deshabilitar la funcionalidad de búsqueda
+        paging: false,
+        data: datosTablaLocalidad,
+        columns: [
+          { data: 'id' },
+          { data: 'transaccion' },
+          { data: 'valorMinimo' },
+          { data: 'valorMaximo' }
+        ]
+      });
+    break;
+
+    case '#TablaPremio':
+       // Limpiar la tabla antes de insertar nuevas filas
+       $('#TablaPremio').DataTable().clear().destroy();
+
+       // Inicializar el DataTables con los datos de datosTablaLocalidad
+       $('#TablaPremio').DataTable({
+         searching: false, // Deshabilitar la funcionalidad de búsqueda
+         paging: false,
+         data: datosTablaPremio,
+         columns: [
+           { data: 'id' },
+           { data: 'premio' },
+           { data: 'valor' },
+           { data: 'porcentajePremio' }
+         ]
+       });
+    break;
+
+    default:
+      break;
+  }
+
+}
+
+//funcion para la visualizacion previa de las imagenes (VER FUNCIONALIDAD) Error en reutilizar variable img
 function previewImage(event, textImg, textContent) {
   const input = event.target;
   const preview = document.getElementById(textImg);
-  const imgCampania = document.getElementById(textContent);
+  let imgCampania = document.getElementById(textContent);
   
-  if (input.files && input.files[0]) {
-    const reader = new FileReader();
-  
-    reader.onload = function (e) {
-      preview.src = e.target.result;
-      preview.style.display = 'block';
-      imgCampania.style.display = 'none'; 
-    }
-  
-    reader.readAsDataURL(input.files[0]);
+  if (imgCampania) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      
+      reader.onload = function (e) {
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+        imgCampania.style.display = 'none'; 
+      }
     
+      reader.readAsDataURL(input.files[0]);
+      
+    } else {
+      preview.src = '#';
+      preview.style.display = 'none';
+    }
   } else {
-    preview.src = '#';
-    preview.style.display = 'none';
+    console.error('Elemento con ID ' + textContent + ' no encontrado en el documento.');
   }
 }
+
 
 //Funcion para validar la restriccion de usuarios (Primeros cambios)
 function userValidator(event, container) {
@@ -365,6 +750,129 @@ function Calendar () {
 
   generateCalendar(currentYear, currentMonth);
 };
+
+//Validacion de form
+function validarCamposStep(stepIndex) {
+  var config = `step${stepIndex+1}`;
+  console.log(config)
+
+  switch(config){
+    case 'step1':{
+      var fields = ['imgCampania', 'imgNotificacion', 'restriccionUsuarios', 'proyecto', 'tercerosCampania'];
+      var isValid = true;
+      
+      fields.forEach(function(field) {
+        var value = $('#' + field).val();
+        if (!value) {
+          $('#' + field).addClass('is-invalid');
+          isValid = false;
+        } else {
+          $('#' + field).removeClass('is-invalid');
+          isValid = true;
+        }
+      });
+      
+      return isValid;
+    }
+
+    case 'step2':{
+      var fields = [
+        'campania', 
+        'notificacion', 
+        'descripcionCampania', 
+        'descripcionNotificacion',
+        'fechaRegistro',
+        'usuarioPermitido',
+        'fechaInicial',
+        'fechaFinal',
+        'edadInicial',
+        'edadFinal',
+        'tipoUsuarios',
+        'sexo'
+      ];
+
+      var isValid = true;
+
+      fields.forEach(function(field) {
+        var value = $('#' + field).val();
+        if (!value) {
+          $('#' + field).addClass('is-invalid');
+          isValid = false;
+        } else {
+          $('#' + field).removeClass('is-invalid');
+          isValid = true;
+        }
+
+
+      });
+      return isValid;
+    }
+
+    case 'step3':{
+      if(datosTablaLocalidad !== null){
+        return true;
+      }else{
+        return false;
+      }
+    
+    }
+      
+
+    case 'step4':
+      {
+        var fields = [
+          'NombreEtapa',
+          'orden',
+          'descripcionEtapa',
+          'tipoParticipacion'
+        ];
+
+        var isValid = true;
+
+        fields.forEach(function(field) {
+          var value = $('#' + field).val();
+          if (!value) {
+            $('#' + field).addClass('is-invalid');
+            isValid = false;
+          } else {
+            $('#' + field).removeClass('is-invalid');
+          }
+        });
+
+        return isValid;
+  
+      }
+
+
+
+    case 'step5':
+      {
+        var fields = [
+          'tipoPremio',
+          'linkPremio',
+          'premio',
+          'valor',
+          'porcentajePremio'
+        ];
+
+        var isValid = true;
+        
+        fields.forEach(function(field) {
+          var value = $('#' + field).val();
+          if (!value) {
+            $('#' + field).addClass('is-invalid');
+            isValid = false;
+          } else {
+            $('#' + field).removeClass('is-invalid');
+          }
+        });
+
+        return isValid;
+      }
+  }
+  
+
+}
 
 //Funcion Para limpiar el form
 const limpiarForm = ()=>{
