@@ -80,6 +80,7 @@ const generarExcel = (datos) => {
     const wb = XLSX.utils.book_new();
     // Convertir los datos de la tabla en una matriz
     const data = [
+        ['Reporte General de Referidos'],
         ['NUMERO DE TELÉFONO', 'Nombre Referidor', 'CÓDIGO REFERIDO', 'NUMERO DE REFERIDO', 'Nombre de referido', 'FECHA Y HORA']
     ];
     datos.forEach(array => {
@@ -96,7 +97,6 @@ const generarExcel = (datos) => {
     // Descargar el archivo Excel
     saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), 'Reporte_Referidos.xlsx');
 };
-
 // Función auxiliar para convertir datos en binario
 const s2ab = (s) => {
     const buf = new ArrayBuffer(s.length);
