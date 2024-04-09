@@ -286,16 +286,6 @@ function limpiarFormulario() {
     $('.descripcion-error').empty().removeClass('text-danger');
   }
   
-// function limpiarFormulario(formNew = false) {
-//     if (formNew) {
-//         $('#descripcion').val('');
-//         $('#proyecto, #proyectoEdit').val('');
-//     }
-//     $('.descripcion').removeClass('is-invalid');
-//     $('.descripcion-error').empty().removeClass('text-danger');
-//     // $('.icono').removeClass('is-invalid');
-//     // $('.icono-error').empty().removeClass('text-danger');
-// }
 
 
 

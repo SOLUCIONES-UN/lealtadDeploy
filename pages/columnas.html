@@ -262,6 +262,7 @@
                 <thead>
                   <tr>
                     <th>#</th>
+                    <th>TablaDB</th>
                     <th>Nombre</th>
                     <th>Acciones</th>
                   </tr>
@@ -284,13 +285,45 @@
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
+            <input id="id" type="hidden">
+            <label class="form-label" for="proyecto">Proyecto</label>
+            <select type="text" class="form-control proyecto" id="proyecto" name="proyecto" required>
+              <option selected disabled>Selecciona una Opcion</option>
+            </select>
+            <div id="proyectoEditError" class="invalid-feedback proyecto-error"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="tabla">TablaDB</label>
+            <select type="text" class="form-control tabla" id="tabla" name="tabla" required>
+              <option selected disabled>Selecciona una Opcion</option>
+            </select>
+            <div id="tablaError" class="invalid-feedback tabla-error"></div>
+          </div>
+          <div class=" d-flex align-items-center ">
+            <div class="form-group "> 
+              <div class="custom-control custom-checkbox">
+                <input class="custom-control-input fInsertada" type="checkbox" id="fInsertada" />
+                <label class="custom-control-label mr-4" for="fInsertada">
+                  Fila insertada
+                </label>
+              </div>
+            </div>
+            <div class="form-group ">
+              <div class="custom-control custom-checkbox ">
+                <input class="custom-control-input  fActualizada" type="checkbox" id="fActualizada"  />
+                <label class="custom-control-label " for="fActualizada">
+                  Fila actualizada
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
             <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
             <input type="text" class="form-control dt-full-name nombre" id="nombre" placeholder="Nombre de la Columna"
               name="nombre" aria-label="" aria-describedby="nombreError" required />
             <div id="nombreError" class="invalid-feedback nombre-error"></div>
           </div>
-
-
+  
           <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
         </div>
@@ -307,13 +340,39 @@
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
-            <input id="id" type="hidden">
-            <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
-            <input type="text" class="form-control dt-full-name nombre" id="nombreEdit"
-              placeholder="Nombre de la Columna" name="nombreEdit" aria-label="" aria-describedby="nombreEditError"
-              required />
-            <div id="nombreEditError" class="invalid-feedback nombre-error"></div>
+            <label class="form-label" for="proyectoEdit">Proyecto</label>
+            <select type="text" class="form-control proyectoEdit" id="proyectoEdit" name="proyectoEdit" required></select>
+            <div id="proyectoEditError" class="invalid-feedback proyectoEdit-error"></div>
           </div>
+          <div class="form-group">
+            <label class="form-label" for="tablaEdit">TablaDB</label>
+            <select type="text" class="form-control tablaEdit" id="tablaEdit" name="tablaEdit" required></select>
+            <div id="tablaEditError" class="invalid-feedback tablaEdit-error"></div>
+          </div>
+          <div class=" d-flex align-items-center ">
+            <div class="form-group "> 
+              <div class="custom-control custom-checkbox">
+                <input class="custom-control-input fInsertadaEdit" type="checkbox" id="fInsertadaEdit"/>
+                <label class="custom-control-label mr-4" for="fInsertadaEdit">
+                  Fila insertada
+                </label>
+              </div>
+            </div>
+            <div class="form-group ">
+              <div class="custom-control custom-checkbox ">
+                <input class="custom-control-input  fActualizadaEdit" type="checkbox" id="fActualizadaEdit" />
+                <label class="custom-control-label " for="fActualizadaEdit">
+                  Fila actualizada
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
+            <input type="text" class="form-control dt-full-name nombreEdit" id="nombreEdit" placeholder="Nombre de la Columna"
+              name="nombreEdit" aria-label="" aria-describedby="nombreEditError" required />
+            <div id="nombreEditError" class="invalid-feedback nombreEdit-error"></div>
+          </div>      
 
           <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
