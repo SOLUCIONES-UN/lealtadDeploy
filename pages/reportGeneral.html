@@ -163,32 +163,29 @@
                             <input id="fecha2" class="form-control" type="date">
                         </div>
                         <div class="col-md-2">
-                            <button id="MostrarTabla" class="btn btn-primary mt-2 btn-block">Mostrar Tabla</button>
+                            <button id="MostrarTabla" class="btn btn-primary mt-2 btn-block" style="display: none;">Mostrar Tabla</button>
                         </div>
                         <div class="col-md-2">
-                            <button id="excel" class="btn btn-primary mt-2 btn-block">Excel</button>
+                            <button id="excel" class="btn btn-primary mt-2 btn-block" style="display: none;">Excel</button>
                         </div>
                     </div>
                     <div class="form-group col-8">
-                        <button id="ConsultarReferido" class="btn btn-info mt-2 btn-block"> Consultar </button>
+                        <button id="ConsultarReferido" class="btn btn-info mt-2 btn-block">Consultar</button>
                     </div>
 
-                    <div class="card-datatable table-responsive">
+                    <div class="card-datatable table-responsive" style="display: none;">
                         <table class="datatables-basic table" id="tableData">
                             <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>FECHA Y HORA</th>
+                                    <th>NUMERO DE TELÉFONO</th>
+                                    <th>Nombre Referidor</th>
                                     <th>CÓDIGO REFERIDO</th>
-                                    <th>DESCRIPCION</th>
-                                    <th>Nombre Referido</th>
-                                    <th>NUMERO DE TELÉFONO REFIRIENTE</th>
-                                    <th>NUMERO DE TELÉFONO REFERIDO</th>
+                                    <th>NUMERO DE REFERIDO</th>
+                                    <th>Nombre de referido</th>
+                                    <th>FECHA Y HORA</th>
                                 </tr>
                             </thead>
-                            <tbody id="TablaReporteReferidos">
-
-                            </tbody>
+                            <tbody id="TablaReporteReferidos"></tbody>
                         </table>
                     </div>
             </div>
@@ -213,6 +210,8 @@
 
     <!-- BEGIN: Vendor JS-->
     <script src="../app-assets/vendors/js/vendors.min.js"></script>
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <!-- BEGIN Vendor JS-->
 
     <!-- BEGIN: Page Vendor JS-->
