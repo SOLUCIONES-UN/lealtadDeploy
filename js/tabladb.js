@@ -21,12 +21,8 @@ $(function () {
         $('.descripcion-error').empty().removeClass('text-danger');
         return true;
     }
-<<<<<<< HEAD
-    
-=======
 
   
->>>>>>> feature-tablaDB
     $('#modalNew').on('show.bs.modal', function () {
         limpiarFormulario();
         $("#btnSubmit").attr("disabled",false);
@@ -177,10 +173,6 @@ $(function () {
                 if (result.code == "ok") {
                     limpiarFormulario();
                     tabla._fnAjaxUpdate();
-<<<<<<< HEAD
-                    // getSelect();
-=======
->>>>>>> feature-tablaDB
                     $('#modalDelete').modal('toggle');
                     Alert(result.message, 'success')
                 } else {
