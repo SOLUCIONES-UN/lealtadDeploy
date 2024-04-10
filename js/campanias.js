@@ -809,12 +809,13 @@ function validarCamposStep(stepIndex) {
     }
 
     case 'step3':{
-      if(datosTablaLocalidad !== null){
-        return true;
+      var isValid = true;
+      if(datosTablaLocalidad.length === 0){
+        isValid = false;
       }else{
-        return false;
+        isValid=  true;
       }
-    
+      return isValid;
     }
       
 
@@ -848,34 +849,18 @@ function validarCamposStep(stepIndex) {
     case 'step5':
       {
         var isValid = true;
-        /*
-        var fields = [
-          'tipoPremio',
-          'linkPremio',
-          'premio',
-          'valor',
-          'porcentajePremio'
-        ];
-
-        
-        
-        fields.forEach(function(field) {
-          var value = $('#' + field).val();
-          if (!value) {
-            $('#' + field).addClass('is-invalid');
-            isValid = false;
-          } else {
-            $('#' + field).removeClass('is-invalid');
-          }
-        });
-
-        */
+        if(datosTablaLocalidad.length === 0){
+          isValid = false;
+        }else{
+          isValid=  true;
+        }
         return isValid;
       }
-      case 'step6':{
-        var isValid = true;
-        return isValid;
-      }
+
+    case 'step6':{
+      var isValid = true;
+      return isValid;
+    }
   }
   
 
