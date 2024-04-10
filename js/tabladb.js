@@ -20,7 +20,7 @@ $(function () {
         return true;
     }
 
-
+  
     $('#modalNew').on('show.bs.modal', function () {
         limpiarFormulario();
         $("#btnSubmit").attr("disabled",false);
