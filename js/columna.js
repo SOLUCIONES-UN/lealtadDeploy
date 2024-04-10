@@ -19,29 +19,34 @@ $(function () {
 
 $('#modalNew').on('show.bs.modal', function () {
     limpiarFormulario();
-});
+    $("#btnSubmit").attr("disabled", false);
+});  
 
 $('#modalEdit').on('show.bs.modal', function () {
-
+    $("#btnSubmitEdit").attr("disabled", false);
 });
 
 $('#modalNew').on('hidden.bs.modal', function () {
     limpiarFormulario();
+    $("#btnSubmit").attr("disabled", false);
 });
 
 
 $('#modalEdit').on('hidden.bs.modal', function () {
     limpiarFormulario();
+    $("#btnSubmitEdit").attr("disabled", false);
 });
 
 
 $('#modalNew').find('[data-dismiss="modal"]').click(function () {
     limpiarFormulario();
+    $("#btnSubmit").attr("disabled", false);
 });
 
 
 $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
     limpiarFormulario();
+    $("#btnSubmitEdit").attr("disabled", false);
 });
 
 
@@ -52,6 +57,8 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
         if (!validarNombre(nombre)) {
             return false;
         }
+
+        $("#btnSubmit").attr("disabled", true);
 
         $('#fInsertada').val($('#fInsertada').prop('checked') ? 1 : 0);
         $('#fActualizada').val($('#fActualizada').prop('checked') ? 1 : 0);
@@ -103,6 +110,8 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
             return false;
         }
 
+        $("#btnSubmitEdit").attr("disabled", true);
+
         $('#fInsertadaEdit').val($('#fInsertadaEdit').prop('checked') ? 1 : 0);
         $('#fActualizadaEdit').val($('#fActualizadaEdit').prop('checked') ? 1 : 0);
 
@@ -120,8 +129,6 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
             "idProyectos": $('#proyectoEdit').val()
             
         });
-        console.log(id);
-        console.log(raw);
 
         var requestOptions = {
             method: 'PUT',
@@ -164,8 +171,6 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
         fetch(`${url}Columna/${id}`, requestOptions)
             .then(response => response.json())
             .then(result => {
-
-
                 if (result.code == "ok") {
                     limpiarFormulario();
                     tabla._fnAjaxUpdate();
@@ -368,7 +373,6 @@ const getSelect = () => {
 
 
 const getTablaDB = (id) => {
-    console.log(id, "Eerrroorr");
 
     var requestOptions = {
         method: 'GET',

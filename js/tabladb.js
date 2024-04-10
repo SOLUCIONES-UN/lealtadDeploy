@@ -6,6 +6,7 @@ const headers = {
     'Content-Type': 'application/json'
 };
 
+
 $(function () {
     let tabla = getTablaDb();
     getSelect();
@@ -20,44 +21,46 @@ $(function () {
         $('.descripcion-error').empty().removeClass('text-danger');
         return true;
     }
+<<<<<<< HEAD
     
+=======
+
+  
+>>>>>>> feature-tablaDB
     $('#modalNew').on('show.bs.modal', function () {
         limpiarFormulario();
-
+        $("#btnSubmit").attr("disabled",false);
     });
 
     $('#modalEdit').on('show.bs.modal', function () {
-
+        limpiarFormulario();
     });
 
     $('#modalNew').on('hidden.bs.modal', function () {
         limpiarFormulario();     
-
-
+        $("#btnSubmit").attr("disabled",false);
     });
 
     $('#modalEdit').on('hidden.bs.modal', function () {
         limpiarFormulario();
-
+        $("#btnSubmitEdit").attr("disabled",false);
     });
 
     $('#modalNew').find('[data-dismiss="modal"]').click(function () {
         limpiarFormulario();
-
+        $("#btnSubmit").attr("disabled",false);
     });
 
     $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
         limpiarFormulario();
-
+        $("#btnSubmitEdit").attr("disabled",false);
     });
 
     $('#modalNew').find('[data-dismiss="modal"]').click(function () {
         limpiarFormulario();
+        $("#btnSubmit").attr("disabled",false);
     });
 
-    $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
-        limpiarFormulario();
-    });
 
     $('#formNew').submit(function () {
 
@@ -74,7 +77,7 @@ $(function () {
             return false;   
         }
 
-        //$("#btnSubmit").attr("disabled",true);
+        $("#btnSubmit").attr("disabled",true);
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -118,7 +121,7 @@ $(function () {
         if (!validarDescripcion(descripcion)) {
             return false;
         }
-       // $("#btnSubmitEdit").attr("disabled", true);
+        $("#btnSubmitEdit").attr("disabled", true);
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -174,7 +177,10 @@ $(function () {
                 if (result.code == "ok") {
                     limpiarFormulario();
                     tabla._fnAjaxUpdate();
+<<<<<<< HEAD
                     // getSelect();
+=======
+>>>>>>> feature-tablaDB
                     $('#modalDelete').modal('toggle');
                     Alert(result.message, 'success')
                 } else {
@@ -186,8 +192,7 @@ $(function () {
             })
             .catch(error => { 
                 console.log("Error",error);
-                Alert(error.errors, 'error') });
-            
+                Alert(error.errors, 'error') });            
     })
 });
 
@@ -311,6 +316,7 @@ const OpenEdit = (id) => {
 
 
 const OpenDelete = (id) => { 
+    limpiarFormulario();
     $("#idDelete").val(id);
   $("#modalDelete").modal("toggle");
 }
