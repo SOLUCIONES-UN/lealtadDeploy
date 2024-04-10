@@ -128,14 +128,11 @@
         transform: rotate(0deg);
     }
     100% {
-        -webkit-transform: rotate(135deg);
-        transform: rotate(135deg);
+      -webkit-transform: rotate(135deg);
+      transform: rotate(135deg);
     }
+  }
+  #graficaCampañas {
+    width: 400px;
+    height: 400px;
 }
-
-
-/* 
-#MostrarTabla,
-#tableData {
-    display: none;
-} */

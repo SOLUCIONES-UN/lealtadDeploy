@@ -1,6 +1,6 @@
 const url = 'http://localhost:3000/';
-
 let token = localStorage.getItem("token");
+
 const headers = {
     'Authorization': token,
     'Content-Type': 'application/json'
