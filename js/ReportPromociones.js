@@ -2,34 +2,37 @@ const url = "http://localhost:3000/";
 let token = localStorage.getItem("token");
 
 $(function () {
+
+  // Deshabilitar el botón al inicio
+  $("#btnDescargarExcel").prop("disabled", true);
   getPromociones();
 
   $("#ConsultarPromo").on("click", function () {
     if (
-      $("#selectpromo").val() !== 0 &&
+      $("#selectpromo").val() !== "0" &&
       $("#FechaInicio").val() !== "" &&
       $("#FechaFin").val() !== ""
     ) {
-      GetReport();
+      getReport();
     } else {
-      Alert("Debe de llenar todos los campos", "error");
+      Alert("Debe llenar todos los campos", "error");
     }
   });
 });
 
-//funcion para llenar las promociones
 const getPromociones = () => {
   var requestOptions = {
     method: "GET",
     redirect: "follow",
-    headers: {"Authorization": token}
+    headers: { Authorization: token },
   };
 
   fetch(url + "Promocion", requestOptions)
     .then((response) => response.json())
     .then((result) => {
+      console.log("Promociones obtenidas:", result); // Agregar console.log para ver las promociones obtenidas
       $("#selectpromo").html(
-        "<option disabled selected value='0'>Elige una promocion</option>"
+        "<option disabled selected value='0'>Elige una promoción</option>"
       );
 
       result.forEach((element) => {
@@ -38,10 +41,10 @@ const getPromociones = () => {
         );
       });
     })
-    .catch((error) => Alert(error, "error"));
+    .catch((error) => alert(error, "error"));
 };
 
-const GetReport = () => {
+const getReport = () => {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
 
@@ -57,51 +60,93 @@ const GetReport = () => {
     body: raw,
     redirect: "follow",
   };
-  $("#TablaReportePromo").html(null);
+
   fetch(url + "reportePromocion", requestOptions)
     .then((response) => response.json())
     .then((result) => {
-      console.log(result);
-
-      result.forEach((element) => {
-        let fecha = element.fecha.split("T");
-        let fecha2 = fecha[0].split("-");
-        let hora = fecha[1].split(":");
-        const { cupon, esPremio } = element.detallePromocion;
-        const { descripcion } = element.detallePromocion.premioPromocion.premio;
-        var listado = `
-        <tr> 
-          <th> 
-          ${element.id}
-          </th>
-          <th>
-          ${cupon}
-          </th>
-          <th>
-          ${fecha2[2]}/${fecha2[1]}/${fecha2[0]} ${hora[0]}:${hora[1]}
-          </th>
-          <th>
-          ${element.numeroTelefono}
-          </th>
-          <th>
-          ${esPremio === 1 ? "SI" : "NO"}
-          </th>
-          <th>
-          ${descripcion}
-          </th>
-        </tr>
-        `;
-        $("#TablaReportePromo").append(listado);
-      });
+      console.log("Datos del informe de promociones:", result); 
+      mostrarDatosEnTabla(result);
     })
-    .catch((error) => Alert(error, "error"));
+    .catch((error) => alert(error, "error"));
 };
 
+document.getElementById("btnDescargarExcel").addEventListener("click", function () {
+  const table = document.getElementById("tableData"); // Obtener la tabla
+  const wb = XLSX.utils.book_new(); // Crear un nuevo libro de Excel
 
-const Alert = function (
-  message,
-  status // si se proceso correctamente la solicitud
-) {
+  // Obtener los datos de la tabla
+  const data = [];
+  const headers = [];
+  for (let i = 0; i < table.rows.length; i++) {
+    const row = [];
+    for (let j = 0; j < table.rows[i].cells.length; j++) {
+      if (i === 0) {
+        // Obtener los nombres de las columnas de la primera fila
+        headers.push(table.rows[i].cells[j].innerText);
+      } else {
+        row.push(table.rows[i].cells[j].innerText);
+      }
+    }
+    if (i !== 0) {
+      data.push(row);
+    }
+  }
+
+  // Agregar los datos y los nombres de las columnas a una hoja
+  const ws = XLSX.utils.aoa_to_sheet([headers, ...data]);
+
+  // Agregar la hoja al libro
+  XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+  // Descargar el archivo Excel
+  XLSX.writeFile(wb, "reporte_promociones.xlsx");
+});
+
+function mostrarDatosEnTabla(datos) {
+  console.log("Datos para mostrar en la tabla:", datos); 
+  $("#TablaReportePromo").empty(); 
+  datos.forEach((element) => {
+    const fecha = formatearFechaHora(element.fecha);
+    const { cupon, esPremio, descripcion } =
+      element.detallepromocion.premiopromocion;
+    const monto = parseFloat(
+      element.detallepromocion.premiopromocion.valor
+    ).toFixed(2);
+    const montoTransaccion =
+      element.detallepromocion.premiopromocion.cantidad * monto;
+
+    const fila = `
+      <tr> 
+        <td>${element.fecha}</td>
+        <td>${element.numeroTelefono}</td>
+        <td>${element.descripcion}</td>
+        <td>${element.id}</td>
+        <td>${element.detallepromocion.premiopromocion.premio.descripcion}</td>
+        <td>${monto}</td>
+        <td>${element.detallepromocion.premiopromocion.idPromocion}</td>
+        <td>${element.detallepromocion.cupon}</td>
+        <td>${montoTransaccion}</td>
+        <td>${fecha}</td>
+      </tr>
+    `;
+    $("#TablaReportePromo").append(fila);
+  });
+
+  // Habilitar el botón de descarga de Excel una vez que se muestra la tabla
+  $("#btnDescargarExcel").prop("disabled", false);
+}
+
+function formatearFechaHora(fechaHora) {
+  const fecha = new Date(fechaHora);
+  const dia = fecha.getDate().toString().padStart(2, "0");
+  const mes = (fecha.getMonth() + 1).toString().padStart(2, "0");
+  const año = fecha.getFullYear();
+  const horas = fecha.getHours().toString().padStart(2, "0");
+  const minutos = fecha.getMinutes().toString().padStart(2, "0");
+  return `${dia}/${mes}/${año}`;
+}
+
+const Alert = function (message, status) {
   toastr[`${status}`](message, `${status}`, {
     closeButton: true,
     tapToDismiss: false,
