@@ -62,7 +62,7 @@
         <ul class="nav navbar-nav">
           <li class="nav-item">
             <a class="nav-link menu-toggle" href="javascript:void(0);">
-              <b>Administración de Columnas</b>
+              <b>Emulador de Usuario</b>
             </a>
           </li>
         </ul>
@@ -254,151 +254,43 @@
     <div class="content-wrapper container-xxl p-0">
       <div class="content-header row">
       </div>
-      <div class="content-body">
-        <section class="invoice-list-wrapper">
-          <div class="card">
-            <div class="card-datatable table-responsive">
-              <table class="datatables-basic table" id="tableData">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>TablaDB</th>
-                    <th>Nombre</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-              </table>
+      <div class="content-body p-1">
+        <section class="card">
+            <div class="row p-2">
+                <div class="modal-body flex-grow-1">
+                    <div class="col-md-6">
+                        <label for="selectNumber">NUMERO*: (EJEMPLO: 50254145890)</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control dt-full-name numero" id="numero"
+                                placeholder="Ingrese el Numero a consultar" name="numero" aria-label=""
+                                aria-describedby="basic-icon-default-fullname2" required  />
+                            <div class="input-group-append">
+                                <button id="ConsultaNUmber" class="btn btn-info  ml-2 " type="button">Consultar Numero</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-datatable table-responsive">
+                    <table class="datatables-basic table" id="tableData">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>CAMPAÑAS</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody id="TablaReportePromo">
+        
+                        </tbody>
+                    </table>
+                </div>
             </div>
-          </div>
         </section>
 
-      </div>
     </div>
   </div>
-  <!-- modal de creacion or Update -->
-  <div class="modal modal-slide-in new-user-modal fade" id="modalNew">
-    <div class="modal-dialog">
-      <form id="formNew" class="add-new-user modal-content pt-0" autocomplete="off">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-        <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Agregar Nueva Columna</h5>
-        </div>
-        <div class="modal-body flex-grow-1">
-          <div class="form-group">
-            <input id="id" type="hidden">
-            <label class="form-label" for="proyecto">Proyecto</label>
-            <select type="text" class="form-control proyecto" id="proyecto" name="proyecto" required>
-              <option selected disabled>Selecciona una Opcion</option>
-            </select>
-            <div id="proyectoEditError" class="invalid-feedback proyecto-error"></div>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="tabla">TablaDB</label>
-            <select type="text" class="form-control tabla" id="tabla" name="tabla" required>
-              <option selected disabled>Selecciona una Opcion</option>
-            </select>
-            <div id="tablaError" class="invalid-feedback tabla-error"></div>
-          </div>
-          <div class=" d-flex align-items-center ">
-            <div class="form-group "> 
-              <div class="custom-control custom-checkbox">
-                <input class="custom-control-input fInsertada" type="checkbox" id="fInsertada" />
-                <label class="custom-control-label mr-4" for="fInsertada">
-                  Fila insertada
-                </label>
-              </div>
-            </div>
-            <div class="form-group ">
-              <div class="custom-control custom-checkbox ">
-                <input class="custom-control-input  fActualizada" type="checkbox" id="fActualizada"  />
-                <label class="custom-control-label " for="fActualizada">
-                  Fila actualizada
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
-            <input type="text" class="form-control dt-full-name nombre" id="nombre" placeholder="Nombre de la Columna"
-              name="nombre" aria-label="" aria-describedby="nombreError" required />
-            <div id="nombreError" class="invalid-feedback nombre-error"></div>
-          </div>
-  
-          <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
-          <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-        </div>
-      </form>
-    </div>
   </div>
 
-  <div class="modal modal-slide-in new-user-modal fade" id="modalEdit">
-    <div class="modal-dialog">
-      <form id="formEdit" class="add-new-user modal-content pt-0" autocomplete="off">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-        <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Actualizar La Columna</h5>
-        </div>
-        <div class="modal-body flex-grow-1">
-          <div class="form-group">
-            <label class="form-label" for="proyectoEdit">Proyecto</label>
-            <select type="text" class="form-control proyectoEdit" id="proyectoEdit" name="proyectoEdit" required></select>
-            <div id="proyectoEditError" class="invalid-feedback proyectoEdit-error"></div>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="tablaEdit">TablaDB</label>
-            <select type="text" class="form-control tablaEdit" id="tablaEdit" name="tablaEdit" required></select>
-            <div id="tablaEditError" class="invalid-feedback tablaEdit-error"></div>
-          </div>
-          <div class=" d-flex align-items-center ">
-            <div class="form-group "> 
-              <div class="custom-control custom-checkbox">
-                <input class="custom-control-input fInsertadaEdit" type="checkbox" id="fInsertadaEdit"/>
-                <label class="custom-control-label mr-4" for="fInsertadaEdit">
-                  Fila insertada
-                </label>
-              </div>
-            </div>
-            <div class="form-group ">
-              <div class="custom-control custom-checkbox ">
-                <input class="custom-control-input  fActualizadaEdit" type="checkbox" id="fActualizadaEdit" />
-                <label class="custom-control-label " for="fActualizadaEdit">
-                  Fila actualizada
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
-            <input type="text" class="form-control dt-full-name nombreEdit" id="nombreEdit" placeholder="Nombre de la Columna"
-              name="nombreEdit" aria-label="" aria-describedby="nombreEditError" required />
-            <div id="nombreEditError" class="invalid-feedback nombreEdit-error"></div>
-          </div>      
-
-          <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
-          <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <div class="modal modal-slide-in new-user-modal fade" id="modalDelete">
-    <div class="modal-dialog">
-      <form id="formDelete" class="add-new-user modal-content pt-0" autocomplete="off">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-        <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Inhabilitar La Columna</h5>
-        </div>
-        <div class="modal-body flex-grow-1">
-          <div class="form-group">
-            <input id="idDelete" type="hidden">
-            <p>¿Esta seguro que desea <b>Inhabilitar esta Columna?</b></p>
-          </div>
-          <button id="BtnDelete" type="button" class="btn btn-danger mr-1 data-submit">Confirmar </button>
-          <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-        </div>
-      </form>
-    </div>
-  </div>
   <!-- END: Content-->
   </div>
   <!-- End: Customizer-->
@@ -431,9 +323,8 @@
   <script src="../app-assets/js/core/app.min.js"></script>
   <script src="../app-assets/js/scripts/customizer.min.js"></script>
   <!-- END: Theme JS-->
-
+  <script src="../js/emuladorUsuario.js"></script>
   <!-- BEGIN: Page JS-->
-  <script src="../js/columna.js"></script>
   <script src="../js/menuDinamico.js"></script>
   <!-- END: Page JS-->
 
