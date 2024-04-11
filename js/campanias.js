@@ -107,7 +107,7 @@ $(function () {
     var raw = JSON.stringify({
       nombre: $('#campania').val(),
       descripcion: $('#descripcionCampania').val(),
-      fechaCreacion: new Date,
+      fechaCreacion: "2024-08-02",
       fechaRegistro: $("#fechaRegistro").val(),
       fechaInicio: $("#fechaInicial").val(),
       fechaFin: $("#fechaFinal").val(),
