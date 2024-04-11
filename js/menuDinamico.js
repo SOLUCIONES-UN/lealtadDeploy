@@ -8,9 +8,7 @@ $(function () {
   Usuario();
 });
 
-// document.addEventListener('DOMContentLoaded', () => {
-//   validateSesion();
-// });
+
 
 const Usuario = () => {
   let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
