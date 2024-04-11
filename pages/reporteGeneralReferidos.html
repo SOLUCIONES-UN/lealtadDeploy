@@ -6,8 +6,10 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimal-ui">
-  <meta name="description" content="Plataforma de lealtad a usuarios.">
-  <meta name="keywords" content="Lealtad, fidelidad, préstamos.">
+  <meta name="description"
+    content="Plataforma de lealtad a usuarios.">
+  <meta name="keywords"
+    content="Lealtad, fidelidad, préstamos.">
   <meta name="author" content="SOLUCIONES-UN">
   <title>Invoice List - Lealtad V2</title>
   <link rel="apple-touch-icon" href="../app-assets/images/ico/apple-icon-120.png">
@@ -42,6 +44,9 @@
   <!-- END: Custom CSS-->
 
 </head>
+<!-- END: Head-->
+
+<!-- BEGIN: Body-->
 
 <body class="vertical-layout vertical-menu-modern  navbar-floating footer-static  " data-open="click"
   data-menu="vertical-menu-modern" data-col="">
@@ -59,7 +64,7 @@
         <ul class="nav navbar-nav">
           <li class="nav-item">
             <a class="nav-link menu-toggle" href="javascript:void(0);">
-              <b>Administración de Campañas  Terceros</b>
+              <b>Reporte de Referidos</b>
             </a>
           </li>
         </ul>
@@ -238,7 +243,7 @@
     <div class="shadow-bottom"></div>
     <div class="main-menu-content">
       <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-
+        
       </ul>
     </div>
   </div>
@@ -251,20 +256,44 @@
     <div class="content-wrapper container-xxl p-0">
       <div class="content-header row">
       </div>
-      <div class="content-body">
-        <section class="invoice-list-wrapper">
-          <div class="card">
+      <div class="content-body p-1">
+        <section class="card">
+            <div class="row p-2">
+                
+                <div class="col-md-4">
+                    <label for="FechaInicio">Fecha Inicio</label>
+                    <input  id="FechaInicio" class="form-control"  type="date" >
+                </div>
+                <div class="col-md-4">
+                    <label for="FechaFin">Fecha Final</label>
+                    <input  id="FechaFin" class="form-control"  type="date" >
+                </div>
+                <div class="form-group col-8">
+                    <button id="ConsultarReferido" class="btn btn-info mt-2 btn-block" > Consultar </button>  
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-success mt-2 btn-block" > Excel </button>  
+                </div>
+                <div class="col-md-2">
+                  <button class="btn btn-primary mt-2 btn-block" id="PantallaInfo"> Mostar en Pantalla </button>
+                </div>
+            </div>
             <div class="card-datatable table-responsive">
               <table class="datatables-basic table" id="tableData">
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>Nombre</th>
-                    <!-- <th>NEMONICO</th> -->
-                    <th>TOKEN</th>
-                    <th>Acciones</th>
+                    <th>CODIGO</th>
+                    <th>REFERIDOR</th>
+                    <th>PLATAFORMA</th>
+                    <th>NUMERO DE TELÉFONO REFERIDOR</th>
+                    <th>NUMERO DE TELÉFONO REFERIDO</th>
+                    <th>FECHA</th>
                   </tr>
                 </thead>
+                <tbody  id="tbParticipantes" >
+                
+                </tbody>
               </table>
             </div>
           </div>
@@ -273,99 +302,16 @@
       </div>
     </div>
   </div>
-  <!-- modal de creacion or Update -->
-  <div class="modal modal-slide-in new-user-modal fade" id="modalNew">
-    <div class="modal-dialog">
-      <form id="formNew" class="add-new-user modal-content pt-0" autocomplete="off">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-        <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Agregar Nuevo Cliente</h5>
-        </div>
-        <div class="modal-body flex-grow-1">
-          <div class="form-group">
-            <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
-            <input type="text" class="form-control dt-full-name nombre" id="nombre"
-              placeholder="Nombre del cliente" name="nombre" aria-label=""
-              aria-describedby="basic-icon-default-fullname2" required />
-            <div id="nombreError" class="invalid-feedback nombre-error"></div>
-          </div>
-          <!-- <div class="form-group">
-            <label class="form-label" for="basic-icon-default-fullname">Nemonico</label>
-            <input type="text" class="form-control dt-full-name" id="nemonico" placeholder="Nemonico" name="nemonico"
-              aria-label="" aria-describedby="basic-icon-default-fullname2" required />
-          </div> -->
-          <div class="form-group">
-            <label class="form-label" for="basic-icon-default-fullname">Token</label>
-            <input type="text" class="form-control dt-full-name" id="token" placeholder="Token" name="token"
-              aria-label="" aria-describedby="basic-icon-default-fullname2" required />
-          </div>
-          <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
-          <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-        </div>
-      </form>
-    </div>
-  </div>
 
-  <div class="modal modal-slide-in new-user-modal fade" id="modalEdit">
-    <div class="modal-dialog">
-      <form id="formEdit" class="add-new-user modal-content pt-0" autocomplete="off">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-        <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Actualizar El Cliente</h5>
-        </div>
-        <div class="modal-body flex-grow-1">
-          <div class="form-group">
-            <input id="id" type="hidden">
-            <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
-            <input type="text" class="form-control dt-full-name nombre" id="nombreEdit"
-              placeholder="Nombre del cliente" name="nombreEdit" aria-label=""
-              aria-describedby="basic-icon-default-fullname2" required />
-            <div id="nombreError" class="invalid-feedback nombre-error"></div>
-          </div>
-          <!-- <div class="form-group">
-            <label class="form-label" for="basic-icon-default-fullname">Nemonico</label>
-            <input type="text" class="form-control dt-full-name" id="nemonicoEdit" placeholder="Nemonico"
-              name="nemonicoEdit" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
-          </div> -->
-          <div class="form-group">
-            <label class="form-label" for="basic-icon-default-fullname">Token</label>
-            <input type="text" class="form-control dt-full-name" id="tokenEdit" placeholder="Token" name="tokenEdit"
-              aria-label="" aria-describedby="basic-icon-default-fullname2" required />
-          </div>
-          <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
-          <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <div class="modal modal-slide-in new-user-modal fade" id="modalDelete">
-    <div class="modal-dialog">
-      <form id="formDelete" class="add-new-user modal-content pt-0" autocomplete="off">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-        <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Inhabilitar la Campaña de terceros</h5>
-        </div>
-        <div class="modal-body flex-grow-1">
-          <div class="form-group">
-            <input id="idDelete" type="hidden">
-            <p>¿Esta seguro que desea <b>Inhabilitar esta Campaña de terceros?</b></p>
-          </div>
-          <button id="BtnDelete" type="button" class="btn btn-danger mr-1 data-submit">Confirmar </button>
-          <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-        </div>
-      </form>
-    </div>
-  </div>
   <!-- END: Content-->
   </div>
   <!-- End: Customizer-->
   <!-- BEGIN: Footer-->
   <footer class="footer footer-static footer-light">
-    <p class="clearfix mb-0"><span class="float-md-left d-block d-md-inline-block mt-25">&copy; 2024<a class="ml-25"
-          href="#" target="_blank">LEALTAD</a><span class="d-none d-sm-inline-block">, Reservados todos los
-          derechos.</span></span><span class="float-md-right d-none d-md-block">Desarrollado por: SOLUCIONES-UN<i
-          data-feather="code"></i></span></p>
+    <p class="clearfix mb-0"><span class="float-md-left d-block d-md-inline-block mt-25">&copy; 2024<a
+          class="ml-25" href="#" target="_blank">LEALTAD</a><span
+          class="d-none d-sm-inline-block">, Reservados todos los derechos.</span></span><span
+        class="float-md-right d-none d-md-block">Desarrollado por: SOLUCIONES-UN<i data-feather="code"></i></span></p>
   </footer>
   <button class="btn btn-primary btn-icon scroll-top" type="button"><i data-feather="arrow-up"></i></button>
   <!-- END: Footer-->
@@ -389,9 +335,8 @@
   <script src="../app-assets/js/core/app.min.js"></script>
   <script src="../app-assets/js/scripts/customizer.min.js"></script>
   <!-- END: Theme JS-->
-
+  <script src="../js/reportReferidos.js"></script>
   <!-- BEGIN: Page JS-->
-  <script src="../js/terceros.js"></script>
   <script src="../js/menuDinamico.js"></script>
   <!-- END: Page JS-->
 

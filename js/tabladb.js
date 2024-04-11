@@ -15,12 +15,14 @@ $(function () {
     getSelect();
 
     function validarDescripcion(descripcion) {
-        const descripcionValida =/^[a-zA-Z]+(?:\s[a-zA-Z]+)*$/.test(descripcion);
+        const descripcionValida = /^[a-zA-Z0-9\s_\-<>()!.,;:;"']+$/g.test(descripcion);
         if (!descripcionValida) {
             $('.descripcion').addClass('is-invalid');
-            $('.descripcion-error').text('La descripción no admite caracteres especiales ni espacios en blanco solo debe contener letras').addClass('text-danger');
+            $('.descripcion-error').text('La descripción no debe contener caracteres especiales inesperados').addClass('text-danger');
             return false;
         }
+        $('.descripcion').removeClass('is-invalid');
+        $('.descripcion-error').empty().removeClass('text-danger');
         return true;
     }
 
@@ -294,18 +296,25 @@ const OpenDelete = (id) => {
 
 
 const getSelect = ()=>{
-    limpiarFormulario();
+    // $('#ruta').empty();
+    // $('#rutaEdit').empty();
+    // limpiarFormulario();
     var requestOptions ={
         method: 'GET',
         redirect: 'follow',
         headers: myHeaders
     };
-
+    $('#ruta').html('<option value="0" selected disabled>Selecciona una Opcion</option>');
     fetch(`${url}projects`,requestOptions)
         .then(response => response.json())
         .then(result =>{
+            console.log(result);
+      
+    
             result.forEach(element=>{
-                var opc = `<option value="${element.id}">${element.descripcion}</option>`; 
+                 
+                var  opc = `<option value="${element.id}">${element.descripcion}</option>`; 
+    
                 $('#ruta').append(opc);
                 $('#rutaEdit').append(opc);
             });

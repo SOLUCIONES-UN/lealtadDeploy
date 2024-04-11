@@ -42,6 +42,9 @@
   <!-- END: Custom CSS-->
 
 </head>
+<!-- END: Head-->
+
+<!-- BEGIN: Body-->
 
 <body class="vertical-layout vertical-menu-modern  navbar-floating footer-static  " data-open="click"
   data-menu="vertical-menu-modern" data-col="">
@@ -59,7 +62,7 @@
         <ul class="nav navbar-nav">
           <li class="nav-item">
             <a class="nav-link menu-toggle" href="javascript:void(0);">
-              <b>Administración de Campañas  Terceros</b>
+              <b>Emulador de Usuario</b>
             </a>
           </li>
         </ul>
@@ -251,112 +254,43 @@
     <div class="content-wrapper container-xxl p-0">
       <div class="content-header row">
       </div>
-      <div class="content-body">
-        <section class="invoice-list-wrapper">
-          <div class="card">
-            <div class="card-datatable table-responsive">
-              <table class="datatables-basic table" id="tableData">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Nombre</th>
-                    <!-- <th>NEMONICO</th> -->
-                    <th>TOKEN</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-              </table>
+      <div class="content-body p-1">
+        <section class="card">
+            <div class="row p-2">
+                <div class="modal-body flex-grow-1">
+                    <div class="col-md-6">
+                        <label for="selectNumber">NUMERO*: (EJEMPLO: 50254145890)</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control dt-full-name numero" id="numero"
+                                placeholder="Ingrese el Numero a consultar" name="numero" aria-label=""
+                                aria-describedby="basic-icon-default-fullname2" required  />
+                            <div class="input-group-append">
+                                <button id="ConsultaNUmber" class="btn btn-info  ml-2 " type="button">Consultar Numero</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-datatable table-responsive">
+                    <table class="datatables-basic table" id="tableData">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>CAMPAÑAS</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody id="TablaReportePromo">
+        
+                        </tbody>
+                    </table>
+                </div>
             </div>
-          </div>
         </section>
 
-      </div>
     </div>
   </div>
-  <!-- modal de creacion or Update -->
-  <div class="modal modal-slide-in new-user-modal fade" id="modalNew">
-    <div class="modal-dialog">
-      <form id="formNew" class="add-new-user modal-content pt-0" autocomplete="off">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-        <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Agregar Nuevo Cliente</h5>
-        </div>
-        <div class="modal-body flex-grow-1">
-          <div class="form-group">
-            <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
-            <input type="text" class="form-control dt-full-name nombre" id="nombre"
-              placeholder="Nombre del cliente" name="nombre" aria-label=""
-              aria-describedby="basic-icon-default-fullname2" required />
-            <div id="nombreError" class="invalid-feedback nombre-error"></div>
-          </div>
-          <!-- <div class="form-group">
-            <label class="form-label" for="basic-icon-default-fullname">Nemonico</label>
-            <input type="text" class="form-control dt-full-name" id="nemonico" placeholder="Nemonico" name="nemonico"
-              aria-label="" aria-describedby="basic-icon-default-fullname2" required />
-          </div> -->
-          <div class="form-group">
-            <label class="form-label" for="basic-icon-default-fullname">Token</label>
-            <input type="text" class="form-control dt-full-name" id="token" placeholder="Token" name="token"
-              aria-label="" aria-describedby="basic-icon-default-fullname2" required />
-          </div>
-          <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
-          <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-        </div>
-      </form>
-    </div>
   </div>
 
-  <div class="modal modal-slide-in new-user-modal fade" id="modalEdit">
-    <div class="modal-dialog">
-      <form id="formEdit" class="add-new-user modal-content pt-0" autocomplete="off">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-        <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Actualizar El Cliente</h5>
-        </div>
-        <div class="modal-body flex-grow-1">
-          <div class="form-group">
-            <input id="id" type="hidden">
-            <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
-            <input type="text" class="form-control dt-full-name nombre" id="nombreEdit"
-              placeholder="Nombre del cliente" name="nombreEdit" aria-label=""
-              aria-describedby="basic-icon-default-fullname2" required />
-            <div id="nombreError" class="invalid-feedback nombre-error"></div>
-          </div>
-          <!-- <div class="form-group">
-            <label class="form-label" for="basic-icon-default-fullname">Nemonico</label>
-            <input type="text" class="form-control dt-full-name" id="nemonicoEdit" placeholder="Nemonico"
-              name="nemonicoEdit" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
-          </div> -->
-          <div class="form-group">
-            <label class="form-label" for="basic-icon-default-fullname">Token</label>
-            <input type="text" class="form-control dt-full-name" id="tokenEdit" placeholder="Token" name="tokenEdit"
-              aria-label="" aria-describedby="basic-icon-default-fullname2" required />
-          </div>
-          <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
-          <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <div class="modal modal-slide-in new-user-modal fade" id="modalDelete">
-    <div class="modal-dialog">
-      <form id="formDelete" class="add-new-user modal-content pt-0" autocomplete="off">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-        <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Inhabilitar la Campaña de terceros</h5>
-        </div>
-        <div class="modal-body flex-grow-1">
-          <div class="form-group">
-            <input id="idDelete" type="hidden">
-            <p>¿Esta seguro que desea <b>Inhabilitar esta Campaña de terceros?</b></p>
-          </div>
-          <button id="BtnDelete" type="button" class="btn btn-danger mr-1 data-submit">Confirmar </button>
-          <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-        </div>
-      </form>
-    </div>
-  </div>
   <!-- END: Content-->
   </div>
   <!-- End: Customizer-->
@@ -389,9 +323,8 @@
   <script src="../app-assets/js/core/app.min.js"></script>
   <script src="../app-assets/js/scripts/customizer.min.js"></script>
   <!-- END: Theme JS-->
-
+  <script src="../js/emuladorUsuario.js"></script>
   <!-- BEGIN: Page JS-->
-  <script src="../js/terceros.js"></script>
   <script src="../js/menuDinamico.js"></script>
   <!-- END: Page JS-->
 

@@ -116,3 +116,7 @@
       transform: rotate(135deg);
     }
   }
+  #graficaCampañas {
+    width: 400px;
+    height: 400px;
+}

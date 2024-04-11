@@ -1,47 +1,76 @@
 const url = "http://localhost:3000/";
 let token = localStorage.getItem("token");
+let datosObtenidos = null; // Variable global para almacenar los datos obtenidos
 
 $(function () {
+  $("#btnDescargarExcel, #PantallaInfo").hide(); // Ocultar botones al inicio
+
+  // Inicializar el plugin multiple-select
+  $('#selectpromo').multipleSelect({
+    filter: true,
+    selectAll: true, // Habilitar la opción de seleccionar todos los elementos
+    placeholder: "Elige una promoción",
+  });
+
   getPromociones();
 
   $("#ConsultarPromo").on("click", function () {
     if (
-      $("#selectpromo").val() !== 0 &&
+      $("#selectpromo").val() !== null && // Verificar si se ha seleccionado al menos una opción
+      $("#selectpromo").val().length > 0 && // Verificar si se ha seleccionado al menos una opción
       $("#FechaInicio").val() !== "" &&
       $("#FechaFin").val() !== ""
     ) {
-      GetReport();
+      getReport();
     } else {
-      Alert("Debe de llenar todos los campos", "error");
+      Alert("Debe llenar todos los campos", "error");
+    }
+  });
+
+  $("#PantallaInfo").on("click", function () {
+    if (datosObtenidos) {
+      mostrarDatosEnTabla(datosObtenidos);
+    } else {
+      Alert("Primero debes obtener los datos", "error");
     }
   });
 });
 
-//funcion para llenar las promociones
 const getPromociones = () => {
   var requestOptions = {
     method: "GET",
     redirect: "follow",
-    headers: {"Authorization": token}
+    headers: { Authorization: token },
   };
 
   fetch(url + "Promocion", requestOptions)
     .then((response) => response.json())
     .then((result) => {
-      $("#selectpromo").html(
-        "<option disabled selected value='0'>Elige una promocion</option>"
-      );
+      console.log("Promociones obtenidas:", result);
+      // Limpiar el select antes de agregar opciones
+      $("#selectpromo").empty();
+      // Agregar la opción por defecto
+      // $("#selectpromo").append(
+      //   "<option disabled selected value='0'>Elige una promoción</option>"
+      // );
 
       result.forEach((element) => {
+        // Agregar opciones al select
         $("#selectpromo").append(
-          '<option value="' + element.id + '">' + element.nombre + "</option>"
+          // '<option value="' + element.id + '">' + element.nombre + "</option>"
+          `<option value="${element.id}">[${element.fechaInicio} - ${element.fechaFin}] ${element.nombre}</option>`
         );
       });
+      // Actualizar el select múltiple después de agregar opciones
+      $('#selectpromo').multipleSelect('refresh');
     })
-    .catch((error) => Alert(error, "error"));
+    .catch((error) => {
+      console.error("Error al obtener promociones:", error);
+      alert(error, "error");
+    });
 };
 
-const GetReport = () => {
+const getReport = () => {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
 
@@ -57,51 +86,125 @@ const GetReport = () => {
     body: raw,
     redirect: "follow",
   };
-  $("#TablaReportePromo").html(null);
+
   fetch(url + "reportePromocion", requestOptions)
     .then((response) => response.json())
     .then((result) => {
-      console.log(result);
-
-      result.forEach((element) => {
-        let fecha = element.fecha.split("T");
-        let fecha2 = fecha[0].split("-");
-        let hora = fecha[1].split(":");
-        const { cupon, esPremio } = element.detallePromocion;
-        const { descripcion } = element.detallePromocion.premioPromocion.premio;
-        var listado = `
-        <tr> 
-          <th> 
-          ${element.id}
-          </th>
-          <th>
-          ${cupon}
-          </th>
-          <th>
-          ${fecha2[2]}/${fecha2[1]}/${fecha2[0]} ${hora[0]}:${hora[1]}
-          </th>
-          <th>
-          ${element.numeroTelefono}
-          </th>
-          <th>
-          ${esPremio === 1 ? "SI" : "NO"}
-          </th>
-          <th>
-          ${descripcion}
-          </th>
-        </tr>
-        `;
-        $("#TablaReportePromo").append(listado);
-      });
+      console.log("Datos del informe de promociones:", result);
+      datosObtenidos = result;
+      $("#btnDescargarExcel, #PantallaInfo").show(); // Mostrar botones después de obtener los datos
     })
-    .catch((error) => Alert(error, "error"));
+    .catch((error) => {
+      console.error("Error al obtener el informe de promociones:", error);
+      alert(error, "error");
+    });
 };
 
+function mostrarDatosEnTabla(datos) {
+  console.log("Datos para mostrar en la tabla:", datos);
+  $("#TablaReportePromo").empty();
+  datos.forEach((element) => {
+    const fecha = formatearFechaHora(element.fecha);
+    const { valor, } =
+      element.detallepromocion.premiopromocion;
+    const monto = parseFloat(
+      element.detallepromocion.premiopromocion.valor
+    ).toFixed(2);
+    const montoTransaccion =
+      element.detallepromocion.premiopromocion.cantidad * monto;
 
-const Alert = function (
-  message,
-  status // si se proceso correctamente la solicitud
-) {
+    const fila = `
+      <tr> 
+        <td>${fecha}</td>
+        <td>${element.numeroTelefono}</td>
+        <td>${element.descripcion}</td>
+        <td>${element.id}</td>
+        <td>${element.detallepromocion.premiopromocion.premio.descripcion}</td>
+        <td>${monto}</td>
+        <td></td>
+        <td>${element.detallepromocion.cupon}</td>
+        <td>-</td>
+        <td>${fecha}</td>
+      </tr>
+    `;
+    $("#TablaReportePromo").append(fila);
+  });
+}
+
+document.getElementById("btnDescargarExcel").addEventListener("click", function () {
+  console.log("Descargar Excel");
+
+  const table = document.getElementById("TablaReportePromo"); // Obtener la tabla
+  const wb = XLSX.utils.book_new(); // Crear un nuevo libro de Excel
+
+  // Obtener los datos de la tabla
+  const data = [];
+  for (let i = 0; i < table.rows.length; i++) {
+    const row = [];
+    for (let j = 0; j < table.rows[i].cells.length; j++) {
+      row.push(table.rows[i].cells[j].innerText);
+    }
+    // Insertar una celda vacía al principio del array para iniciar desde la columna "A"
+    row.unshift("");
+    data.push(row);
+  }
+
+  // Agregar el encabezado
+  // Agregar el encabezado
+  const headerRow1 = [
+    { v: '', t: 's', s: { font: { name: 'Courier', sz: 18 } } },
+    { v: '', t: 's', s: { font: { sz: 18 }, alignment: { horizontal: 'center' } } },
+    { v: '', t: 's', s: { font: { sz: 18 }, alignment: { horizontal: 'center' } } },
+    { v: '', t: 's', s: { font: { sz: 18 }, alignment: { horizontal: 'center' } } },
+    { v: 'REPORTE DE PROMOCIONES', t: 's', s: { font: { sz: 18 }, alignment: { horizontal: 'center' } } },
+  ];
+  const headerRow2 = [
+    { v: '', t: 's', s: { font: { name: 'Courier', sz: 12 } } },
+    { v: '', t: 's', s: { font: { sz: 12 }, alignment: { horizontal: 'center' } } },
+  ];
+  const headerRow3 = [''];
+  const headerRow4 = [
+    '',
+    { v: 'Fecha Acreditacion', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
+    { v: 'Telefono', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
+    { v: 'Nombre', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
+    { v: 'Campaña', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
+    { v: 'Premio', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
+    { v: 'Monto Premio', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
+    { v: 'Transaccion', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
+    { v: 'Codigo', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
+    { v: 'Monto Transaccion', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
+    { v: 'Fecha Participacion', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
+  ];
+  data.unshift(headerRow1, headerRow2, headerRow3, headerRow4);
+
+  const ws = XLSX.utils.aoa_to_sheet(data);
+
+  // Ajustar el ancho de las columnas al contenido
+  ws['!cols'] = [{wch:15}, {wch:15}, {wch:12}, {wch:25}, {wch:20}, {wch:15}, {wch:15}, {wch:15}, {wch:12}, {wch:20}, {wch:20}];
+
+  // Combinar las celdas E1, F1 y G1
+  if(!ws['!merges']) ws['!merges'] = [];
+  ws['!merges'].push({s:{r:0,c:4}, e:{r:0,c:6}});
+
+  // Agregar la hoja al libro
+  XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+  // Descargar el archivo Excel
+  XLSX.writeFile(wb, "reporte_promociones.xlsx");
+});
+
+function formatearFechaHora(fechaHora) {
+  const fecha = new Date(fechaHora);
+  const dia = fecha.getDate().toString().padStart(2, "0");
+  const mes = (fecha.getMonth() + 1).toString().padStart(2, "0");
+  const año = fecha.getFullYear();
+  const horas = fecha.getHours().toString().padStart(2, "0");
+  const minutos = fecha.getMinutes().toString().padStart(2, "0");
+  return `${dia}/${mes}/${año}`;
+}
+
+const Alert = function (message, status) {
   toastr[`${status}`](message, `${status}`, {
     closeButton: true,
     tapToDismiss: false,
