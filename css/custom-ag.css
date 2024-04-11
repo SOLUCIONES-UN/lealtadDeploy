@@ -179,7 +179,6 @@
     box-shadow: 0 0 10px rgba(255, 234, 234, 0.2);
     cursor: pointer;
 }
-
 /* estilos para scrollbar */
 .custom-scroll{
     max-height: 400px; 
