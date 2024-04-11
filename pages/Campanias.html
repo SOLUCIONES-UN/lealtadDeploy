@@ -306,7 +306,7 @@
                                                         id="textBorrador"></span>)</button>
                                             </li>
                                             <li class="nav-item">
-                                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#opcArchivadas" aria-controls="opcBorrador" aria-selected="false">Archivadas(<span
+                                                <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#opcArchivadas" aria-controls="opcArchivadas" aria-selected="false">Archivadas(<span
                                                         id="textArchivo"></span>)</button>
                                             </li>
                                         </ul>
@@ -441,22 +441,6 @@
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-6">
-                                    <label class="form-label" for="restriccionUsuarios">Restricción de Usuarios</label>
-                                    <select name="restriccionUsuarios" aria-describedby="restriccionUsuariosError" required  id="restriccionUsuarios" class="form-control restriccionUsuarios" onchange="userValidator(event, 'containerArchivo')">
-                                        <option disabled selected>Selecciona una opción</option>
-                                        <option value="0">Todos los Usuarios</option>
-                                        <option value="1">Usuarios Permitidos</option>
-                                        <option value="2">Usuarios Restringidos</option>
-                                    </select>
-                                    <div id="restriccionUsuariosError" class="invalid-feedback restriccionUsuarios-error"></div>
-                                </div>
-                                <div class="form-group col-md-6" id="containerArchivo">
-                                    <label class="form-label" for="Archivo">Archivo</label>
-                                    <input type="file" class="form-control" id="Archivo"/>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6">
                                     <label class="form-label" for="proyecto">Proyecto</label>
                                     <select name="proyecto" aria-describedby="proyectoError" required id="proyecto" class="form-control proyecto">
                                         <option disabled selected>Selecciona una opción</option>
@@ -473,8 +457,44 @@
                                     <div id="tercerosCampaniaError" class="invalid-feedback tercerosCampania-error"></div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label class="form-label" for="restriccionUsuarios">Restricción de Usuarios</label>
+                                    <select name="restriccionUsuarios" aria-describedby="restriccionUsuariosError" required  id="restriccionUsuarios" class="form-control restriccionUsuarios" onchange="userValidator(event, 'containerArchivo')">
+                                        <option disabled selected>Selecciona una opción</option>
+                                        <option value="0">Todos los Usuarios</option>
+                                        <option value="1">Usuarios Permitidos</option>
+                                        <option value="2">Usuarios Restringidos</option>
+                                    </select>
+                                    <div id="restriccionUsuariosError" class="invalid-feedback restriccionUsuarios-error"></div>
+                                </div>
+                                <div class="form-group col-md-6" id="containerArchivo">
+                                    <label class="form-label" for="Archivo">Archivo</label>
+                                    <input type="file" class="form-control" id="Archivo"/>
+                                </div>
+                            </div>
+                            <div class="row" id="Bloqueo">
+                                <div class="form-group col-md-6" >
+                                    <label class="form-label" for="usuarioBloqueo">Bloqueo de usuarios</label>
+                                    <input type="number" class="form-control" id="usuarioBloqueo"/>
+                                </div>
+                                <div class="form-group col-md-6" id="btnBloqueo">
+                                    <div class="btn-crear d-flex justify-content-end mt-1" >
+                                        <button type="button" class="btn btn-outline-primary" id="addBloqueo">Agregar</button>
+                                    </div>
+                                </div>
+                                <!--Tabla-->
+                                <table class="datatables-basic col-md-12 table  mb-3 mt-2" id="tablaBloqueo">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>NUMERO</th>
+                                            <th>ACCIONES</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
 
-                            <!--Agregar inputs de notificacion con correos y el tiempo estimado-->
                             <div class="modal-footer">
                                 <button type="button" id="btnSiguiente" class="btn btn-primary next-btn">Siguiente</button>
                             </div>
@@ -515,10 +535,17 @@
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-6">
+                                        <label class="form-label" for="terminosCondiciones">Terminos y Condiciones</label>
+                                        <textarea type="text" id="terminosCondiciones"  aria-describedby="terminosCondicionesError" required class="form-control" placeholder="Ingrese la descripcion" rows="2"></textarea>
+                                        <div id="terminosCondicionesError" class="invalid-feedback terminosCondiciones-error"></div>
+                                    </div>
+                                    <div class="form-group col-md-6">
                                         <label class="form-label" for="fechaRegistro">Fecha de Registro</label>
                                         <input type="date" id="fechaRegistro" aria-describedby="fechaRegistroError" required  class="form-control fechaRegistro" placeholder="Ingresa el Nombre" />
                                         <div id="fechaRegistroError" class="invalid-feedback fechaRegistro-error"></div>
                                     </div>
+                                </div>
+                                <div class="row">  
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="usuarioPermitido">Usuarios Permitidos</label>
                                         <select name="" id="usuarioPermitido" aria-describedby="usuarioPermitidoError" required  class="form-control">
@@ -527,6 +554,16 @@
                                             <option value="0">Usuarios Antiguos</option>
                                         </select>
                                         <div id="usuarioPermitidoError" class="invalid-feedback usuarioPermitido-error"></div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label" for="tipoUsuarios">Tipo de Usuario</label>
+                                        <select name="" id="tipoUsuarios" aria-describedby="tipoUsuariosError" required  class="form-control">
+                                            <option disabled selected>Selecciona una opción</option>
+                                            <option value="0">Todos los Usuarios</option>
+                                            <option value="1">Comercio Afiliado</option>
+                                            <option value="2">Final</option>
+                                        </select>
+                                        <div id="tipoUsuariosError" class="invalid-feedback tipoUsuarios-error"></div>
                                     </div>
 
                                 </div>
@@ -556,26 +593,17 @@
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-6">
-                                        <label class="form-label" for="tipoUsuarios">Tipo de Usuario</label>
-                                        <select name="" id="tipoUsuarios" aria-describedby="tipoUsuariosError" required  class="form-control">
-                                            <option disabled selected>Selecciona una opción</option>
-                                            <option value="0">Todos los Usuarios</option>
-                                            <option value="1">Comercio Afiliado</option>
-                                            <option value="2">Final</option>
-                                        </select>
-                                        <div id="tipoUsuariosError" class="invalid-feedback tipoUsuarios-error"></div>
-                                    </div>
-                                    <div class="form-group col-md-6">
                                         <label class="form-label" for="sexo">Sexo</label>
                                         <select name="" id="sexo" aria-describedby="sexoError" required  class="form-control">
                                             <option disabled selected>Selecciona una opción</option>
-                                            <option value="indefinido">Indefinido</option>
-                                            <option value="femenino">Femenino</option>
-                                            <option value="masculino">Masculino</option>
+                                            <option value="0">Indefinido</option>
+                                            <option value="1">Femenino</option>
+                                            <option value="2">Masculino</option>
                                         </select>
                                         <div id="sexoError" class="invalid-feedback sexo-error"></div>
                                     </div>
                                 </div>
+                                
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-outline-secondary prev-btn">Anterior</button>
                                     <button type="button" id="btnSiguiente" class="btn btn-primary next-btn">Siguiente</button>

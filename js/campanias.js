@@ -43,7 +43,7 @@ var Participacion = [
   },
 ];
 
-
+var bloqueadosUsuarios =[];
 
 
 $(function () {
@@ -58,14 +58,23 @@ $(function () {
   getPremio();
 
   Calendar();
-
-  //provisionalmente aqui 
   const containerArchivo = document.getElementById('containerArchivo');
-  containerArchivo.style.display = 'none';
-  const containerTotal = document.getElementById('totalMinimo-container');
-  containerTotal.style.display = 'none';
+  if (containerArchivo) {
+    containerArchivo.style.display = 'none';
+  }
 
-     //Inicializacion de Navs
+  // Ocultar el contenedor del total mínimo
+  const containerTotal = document.getElementById('totalMinimo-container');
+  if (containerTotal) {
+    containerTotal.style.display = 'none';
+  }
+
+  // Ocultar el contenedor de bloqueo
+  const containerBloqueo = document.querySelector('#Bloqueo');
+  if (containerBloqueo) {
+    containerBloqueo.style.display = 'none';
+  }
+  //Inicializacion de Navs
   $("#NavsOpc button").on("click", function(event) {
     let data = $(this).attr("data-bs-target");
     event.preventDefault();
@@ -88,30 +97,34 @@ $(function () {
   });
 
   $('#formNew').submit(function(){
-
+    var imgPushFile = $('#imgCampania')[0].files[0];
+    var imgAkisiFile = $('#imgNotificacion')[0].files[0];
     
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Authorization", token);
 
     var raw = JSON.stringify({
-      nombre: $("#campania").val(),
-      descripcion: $("#descripcionCampania").val(),
-      tituloNotificacion: $("#notificacion").val(),
+      nombre: $('#campania').val(),
+      descripcion: $('#descripcionCampania').val(),
+      fechaCreacion: new Date,
       fechaRegistro: $("#fechaRegistro").val(),
       fechaInicio: $("#fechaInicial").val(),
       fechaFin: $("#fechaFinal").val(),
-      edadInicial: $("#edadInicial").val(),
-      edadFinal: $("#edadFinal").val(),
-      sexo: $("#sexo").val(),
-      tipoUsuario: $("#tipoUsuario").val(),
-      descripcionNotificacion: $("#descripcionNotificacion").val(),
-      imgPush: $('#imgCampania').val(),
-      imgAkisi: $('#imgNotificacion').val(),
-      etapas: etapa,
-      Participacion: Participacion,
-      Bloqueados: Bloqueados,
-      //maximoParticipaciones: $("#limiteParticipacion").val(),
+      diaReporte: 3,
+      horaReporte: $('#HoraRecordatorio').val(),
+      emails: $('#correo').val(),
+      edadInicial:parseInt($('#edadInicial').val()),
+      edadFinal: parseInt($('#edadFinal').val()),
+      sexo: parseInt($('#sexo').val()),
+      tipoUsuario: parseInt($('#tipoUsuario').val()),
+      tituloNotificacion: $('#notificacion').val() ,
+      descripcionNotificacion:  $('#descripcionNotificacion').val(),
+      imgPush:  imgPushFile ? imgPushFile.name : null, 
+      imgAkisi:  imgAkisiFile ? imgAkisiFile.name : null,
+      estado: 1,
+      maximoParticipaciones:  15
+      //verificar el paso de datos de maximoParticipantes
     });
 
     console.log(raw);
@@ -149,7 +162,12 @@ function initStepper() {
   actualStep=0;
   var steps = $('#stepper').children(); // Obtener todos los elementos hijos del contenedor #stepper
   var totalSteps = steps.length;
- 
+  getTransaccion();
+
+  //provisional
+  const containerBloqueo = document.querySelector('#Bloqueo');
+  containerBloqueo.style.display = 'none';
+
   showStep(actualStep);
   console.log(steps);
 
@@ -158,13 +176,13 @@ function initStepper() {
 
     if (actualStep < totalSteps - 1) {
       
-      if(validarCamposStep(actualStep)){
+      //if(validarCamposStep(actualStep)){
         hideStep(actualStep);
         actualStep++;
         showStep(actualStep);  
-      }else{
+      //}else{
         console.log("Error")
-      }
+      //}
     }
   });
 
@@ -266,17 +284,16 @@ function initStepper() {
     newStep.find('#removeStepp').click(function(e) {
       e.preventDefault();
       if (totalSteps > 1) {
-        hideStep(actualStep)
+        hideStep(actualStep);
         actualStep = actualStep-3;
         showStep(actualStep);
-        newStep.html('');     
+        newStep.html('');
         stepData = null;
       }
     });
 
     newStep.find('#transaccion').click(function(e){
       e.preventDefault();
-      getTransaccion();
       $(this).off(e);  
     });
 
@@ -293,13 +310,12 @@ function initStepper() {
       };
       console.log(stepData);
       saveDataParams.push(stepData);
-
-      hideStep(actualStep)
+    
+      hideStep(actualStep);
       actualStep = actualStep-3;
       showStep(actualStep);
-      newStep.html('');     
+      newStep.html('');
       stepData = null;
-
     });
 
     $('#addParamas').click(function(){
@@ -434,6 +450,23 @@ $('#addPremio').click(function(){
   }
 });
 
+$('#addBloqueo').click(function(){
+  var usuarioBloqueo = $('#usuarioBloqueo').val();
+  var index = 0;
+
+  if(usuarioBloqueo){
+    var block ={
+      id: index,
+      usuarioBloqueo: usuarioBloqueo
+    }
+
+    bloqueadosUsuarios.push(block);
+    $('#usuarioBloqueo').val("");
+
+    mostrarDatosTabla('#tablaBloqueo');
+  }
+});
+
 function mostrarDatosTabla(tabla) {
 
   switch(tabla)
@@ -493,6 +526,33 @@ function mostrarDatosTabla(tabla) {
        });
     break;
 
+    case '#tablaBloqueo':
+      // Limpiar la tabla antes de insertar nuevas filas
+      $('#tablaBloqueo').DataTable().clear().destroy();
+
+      // Inicializar el DataTables con los datos de datosTablaLocalidad
+      $('#tablaBloqueo').DataTable({
+        searching: false, // Deshabilitar la funcionalidad de búsqueda
+        paging: false,
+        data: bloqueadosUsuarios,
+        columns: [
+          { data: 'id' },
+          { data: 'usuarioBloqueo' },
+          {
+            data: "id",
+            render: function(data) {
+              var opcAdd = `
+                <a href="#" class=" dropdown-item">
+                  ${feather.icons["trash-2"].toSvg({ class: "font-small-4 mr-50" })} Eliminar
+                </a>
+              `;
+              return opcAdd;
+            }
+          }
+        ]
+      });
+   break;
+
     default:
       break;
   }
@@ -531,15 +591,21 @@ function previewImage(event, textImg, textContent) {
 function userValidator(event, container) {
   const input = event.target;
   const containerArchivo = document.getElementById(container);
+  const containerBloqueo = document.getElementById('Bloqueo');
 
   const regexNumerico = /^[2-4]$/;
   
   switch(container){
     case 'containerArchivo':
+
       if (input.value === '0' || input.value === 0 || input.value === null) {
         containerArchivo.style.display = 'none';
+        containerBloqueo.style.display = 'none';
       } else {
         containerArchivo.style.display = 'block';
+        if(input.value === 2 || input.value === '2'){
+          containerBloqueo.style.display = 'flex';
+        } 
       }
     break;
     
@@ -751,6 +817,7 @@ function Calendar () {
   generateCalendar(currentYear, currentMonth);
 };
 
+/*
 //Validacion de form
 function validarCamposStep(stepIndex) {
   var config = `step${stepIndex+1}`;
@@ -781,6 +848,7 @@ function validarCamposStep(stepIndex) {
         'notificacion', 
         'descripcionCampania', 
         'descripcionNotificacion',
+        'terminosCondiciones',
         'fechaRegistro',
         'usuarioPermitido',
         'fechaInicial',
@@ -809,8 +877,27 @@ function validarCamposStep(stepIndex) {
     }
 
     case 'step3':{
+      var fields = [
+        'departamento', 
+        'municipio', 
+        'limiteGanador', 
+        'presupuesto'
+      ];
+
       var isValid = true;
       if(datosTablaLocalidad.length === 0){
+        fields.forEach(function(field) {
+          var value = $('#' + field).val();
+          if (!value) {
+            $('#' + field).addClass('is-invalid');
+            isValid = false;
+          } else {
+            $('#' + field).removeClass('is-invalid');
+            isValid = true;
+          }
+  
+  
+        });
         isValid = false;
       }else{
         isValid=  true;
@@ -865,7 +952,7 @@ function validarCamposStep(stepIndex) {
   
 
 }
-
+*/
 //Funcion Para limpiar el form
 const limpiarForm = ()=>{
   actualStep = 0;
@@ -903,8 +990,6 @@ const getAllCampanias = () => {
       let pausadas = result.filter((x) => x.estado == 2);
       $("#textPausadas").text(pausadas.length);
       table("tablePausada", pausadas);
-
-      console.log(pausadas);
 
       let borrador = result.filter((x) => x.estado == 3);
       $("#textBorrador").text(borrador.length);
