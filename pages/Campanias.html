@@ -430,7 +430,7 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="imgCampania ">Icono de Campaña</label>
-                                    <input type="file" class="form-control " required id="imgCampania" onchange="previewImage(event, 'previewImg','imgCampania')" >
+                                    <input type="file" class="form-control " id="imgCampania" onchange="previewImage(event, 'previewImg','imgCampania')" >
                                     <img id="previewImg" src="#" alt="Preview" style="display: none; max-width: 270px; max-height: 270px;" />
                                 </div>
                                 <div class="form-group col-md-6">
@@ -442,14 +442,14 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="proyecto">Proyecto</label>
-                                    <select name="proyecto" aria-describedby="proyectoError" required id="proyecto" class="form-control proyecto">
+                                    <select name="proyecto" aria-describedby="proyectoError"  id="proyecto" class="form-control proyecto">
                                         <option disabled selected>Selecciona una opción</option>
                                     </select>
                                     <div id="proyectoError" class="invalid-feedback proyecto-error"></div>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="tercerosCampania">Campaña de Terceros</label>
-                                    <select name="" aria-describedby="tercerosCampaniaError" required id="tercerosCampania" class="form-control tercerosCampania">
+                                    <select name="" aria-describedby="tercerosCampaniaError"  id="tercerosCampania" class="form-control tercerosCampania">
                                         <option disabled selected>Selecciona una opción</option>
                                         <option value="1">Sí</option>
                                         <option value="0">No</option>
@@ -460,7 +460,7 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="restriccionUsuarios">Restricción de Usuarios</label>
-                                    <select name="restriccionUsuarios" aria-describedby="restriccionUsuariosError" required  id="restriccionUsuarios" class="form-control restriccionUsuarios" onchange="userValidator(event, 'containerArchivo')">
+                                    <select name="restriccionUsuarios" aria-describedby="restriccionUsuariosError"  id="restriccionUsuarios" class="form-control restriccionUsuarios" onchange="userValidator(event, 'containerArchivo')">
                                         <option disabled selected>Selecciona una opción</option>
                                         <option value="0">Todos los Usuarios</option>
                                         <option value="1">Usuarios Permitidos</option>
@@ -512,43 +512,43 @@
                                 <div class="row">
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="campania">Campaña</label>
-                                        <input type="text" aria-describedby="CampaniaError" required  id="campania" class="form-control campania" placeholder="Ingresa el Nombre" />
+                                        <input type="text" aria-describedby="CampaniaError"   id="campania" class="form-control campania" placeholder="Ingresa el Nombre" />
                                         <div id="CampaniaError" class="invalid-feedback Campania-error"></div>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="notificacion">Titulo de Notificación</label>
-                                        <input type="text" id="notificacion" aria-describedby="notificacionError" required  class="form-control notificacion" placeholder="Ingresa el Nombre" />
+                                        <input type="text" id="notificacion" aria-describedby="notificacionError"  class="form-control notificacion" placeholder="Ingresa el Nombre" />
                                         <div id="notificacionError" class="invalid-feedback notificacion-error"></div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="descripcionCampania">Descripción de Campaña</label>
-                                        <textarea type="text" id="descripcionCampania"  aria-describedby="descripcionCampaniaError" required class="form-control" placeholder="Ingrese la descripcion" rows="2"></textarea>
+                                        <textarea type="text" id="descripcionCampania"  aria-describedby="descripcionCampaniaError"  class="form-control" placeholder="Ingrese la descripcion" rows="2"></textarea>
                                         <div id="descripcionCampaniaError" class="invalid-feedback descripcionCampania-error"></div>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="descripcionNotificacion">Descripción de Notificación</label>
-                                        <textarea type="text" id="descripcionNotificacion" aria-describedby="descripcionNotificacionError" required  class="form-control descripcionNotificacion" placeholder="Ingrese la descripcion" rows="2"></textarea>
+                                        <textarea type="text" id="descripcionNotificacion" aria-describedby="descripcionNotificacionError"   class="form-control descripcionNotificacion" placeholder="Ingrese la descripcion" rows="2"></textarea>
                                         <div id="descripcionNotificacionError" class="invalid-feedback descripcionNotificacion-error"></div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="terminosCondiciones">Terminos y Condiciones</label>
-                                        <textarea type="text" id="terminosCondiciones"  aria-describedby="terminosCondicionesError" required class="form-control" placeholder="Ingrese la descripcion" rows="2"></textarea>
+                                        <textarea type="text" id="terminosCondiciones"  aria-describedby="terminosCondicionesError"  class="form-control" placeholder="Ingrese la descripcion" rows="2"></textarea>
                                         <div id="terminosCondicionesError" class="invalid-feedback terminosCondiciones-error"></div>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="fechaRegistro">Fecha de Registro</label>
-                                        <input type="date" id="fechaRegistro" aria-describedby="fechaRegistroError" required  class="form-control fechaRegistro" placeholder="Ingresa el Nombre" />
+                                        <input type="date" id="fechaRegistro" aria-describedby="fechaRegistroError"   class="form-control fechaRegistro" placeholder="Ingresa el Nombre" />
                                         <div id="fechaRegistroError" class="invalid-feedback fechaRegistro-error"></div>
                                     </div>
                                 </div>
                                 <div class="row">  
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="usuarioPermitido">Usuarios Permitidos</label>
-                                        <select name="" id="usuarioPermitido" aria-describedby="usuarioPermitidoError" required  class="form-control">
+                                        <select name="" id="usuarioPermitido" aria-describedby="usuarioPermitidoError"   class="form-control">
                                             <option disabled selected>Selecciona una opción</option>
                                             <option value="1">Usuarios Nuevos</option>
                                             <option value="0">Usuarios Antiguos</option>
@@ -557,7 +557,7 @@
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="tipoUsuarios">Tipo de Usuario</label>
-                                        <select name="" id="tipoUsuarios" aria-describedby="tipoUsuariosError" required  class="form-control">
+                                        <select name="" id="tipoUsuarios" aria-describedby="tipoUsuariosError"   class="form-control">
                                             <option disabled selected>Selecciona una opción</option>
                                             <option value="0">Todos los Usuarios</option>
                                             <option value="1">Comercio Afiliado</option>
@@ -570,31 +570,31 @@
                                 <div class="row">
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="fechaInicial">Fecha Inicial</label>
-                                        <input type="date" id="fechaInicial" aria-describedby="fechaInicialError" required  class="form-control" />
+                                        <input type="date" id="fechaInicial" aria-describedby="fechaInicialError"   class="form-control" />
                                         <div id="fechaInicialError" class="invalid-feedback fechaInicial-error"></div>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="fechaFinal">Fecha Final</label>
-                                        <input type="date" id="fechaFinal" aria-describedby="fechaFinalError" required  class="form-control"/>
+                                        <input type="date" id="fechaFinal" aria-describedby="fechaFinalError"   class="form-control"/>
                                         <div id="fechaFinalError" class="invalid-feedback fechaFinal-error"></div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="edadInicial">Edad Inicial</label>
-                                        <input type="number" id="edadInicial" aria-describedby="edadInicialError" required  class="form-control" />
+                                        <input type="number" id="edadInicial" aria-describedby="edadInicialError"   class="form-control" />
                                         <div id="edadInicialError" class="invalid-feedback edadInicial-error"></div>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="edadFinal">Edad Final</label>
-                                        <input type="number" id="edadFinal" aria-describedby="edadFinalError" required  class="form-control"/>
+                                        <input type="number" id="edadFinal" aria-describedby="edadFinalError"  class="form-control"/>
                                         <div id="edadFinalError" class="invalid-feedback edadFinal-error"></div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="sexo">Sexo</label>
-                                        <select name="" id="sexo" aria-describedby="sexoError" required  class="form-control">
+                                        <select name="" id="sexo" aria-describedby="sexoError"   class="form-control">
                                             <option disabled selected>Selecciona una opción</option>
                                             <option value="0">Indefinido</option>
                                             <option value="1">Femenino</option>
@@ -621,25 +621,25 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="NombreEtapa">Nombre</label>
-                                    <input type="text" id="NombreEtapa" aria-describedby="NombreEtapaError" required class="form-control" />
+                                    <input type="text" id="NombreEtapa" aria-describedby="NombreEtapaError"  class="form-control" />
                                     <div id="NombreEtapaError" class="invalid-feedback NombreEtapa-error"></div>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="orden">Orden</label>
-                                    <input type="text" id="orden" class="form-control" aria-describedby="ordenError" required />
+                                    <input type="text" id="orden" class="form-control" aria-describedby="ordenError"  />
                                     <div id="ordenError" class="invalid-feedback orden-error"></div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group  col-md-6">
                                     <label class="form-label" for="descripcionEtapa">Descripcion de las Etapas</label>
-                                    <textarea type="text" id="descripcionEtapa" aria-describedby="descripcionEtapaError" required class="form-control" placeholder="Ingrese la descripcion" rows="2"></textarea>
+                                    <textarea type="text" id="descripcionEtapa" aria-describedby="descripcionEtapaError"  class="form-control" placeholder="Ingrese la descripcion" rows="2"></textarea>
                                     <div id="descripcionEtapaError" class="invalid-feedback descripcionEtapa-error"></div>
                                 </div>
                   
                                 <div class="form-group col-md-6">
                                     <label class="form-label" for="tipoParticipacion">Tipo de Participación</label>
-                                    <select name="tipoParticipacion" aria-describedby="tipoParticipacionError" required id="tipoParticipacion" class="form-control" onchange="userValidator(event, 'totalMinimo-container')">
+                                    <select name="tipoParticipacion" aria-describedby="tipoParticipacionError"  id="tipoParticipacion" class="form-control" onchange="userValidator(event, 'totalMinimo-container')">
                                         <option disabled selected>Selecciona una opción</option>
                                         <option value="0">Transacciones</option>
                                         <option value="1">Recurrentes</option>

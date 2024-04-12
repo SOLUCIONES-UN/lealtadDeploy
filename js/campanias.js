@@ -100,7 +100,7 @@ $(function () {
   $('#formNew').submit(function(){
     var imgPushFile = $('#imgCampania')[0].files[0];
     var imgAkisiFile = $('#imgNotificacion')[0].files[0];
-    
+    const valor = $('#tipoUsuarios').val();
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Authorization", token);
@@ -108,7 +108,7 @@ $(function () {
     var raw = JSON.stringify({
       nombre: $('#campania').val(),
       descripcion: $('#descripcionCampania').val(),
-      fechaCreacion: "2024-08-02",
+      fechaCreacion: "2024-12-02",
       fechaRegistro: $("#fechaRegistro").val(),
       fechaInicio: $("#fechaInicial").val(),
       fechaFin: $("#fechaFinal").val(),
@@ -118,7 +118,7 @@ $(function () {
       edadInicial:parseInt($('#edadInicial').val()),
       edadFinal: parseInt($('#edadFinal').val()),
       sexo: parseInt($('#sexo').val()),
-      tipoUsuario: parseInt($('#tipoUsuario').val()),
+      tipoUsuario: valor,
       tituloNotificacion: $('#notificacion').val() ,
       descripcionNotificacion:  $('#descripcionNotificacion').val(),
       imgPush:  imgPushFile ? imgPushFile.name : null, 
@@ -129,6 +129,7 @@ $(function () {
     });
 
     console.log(raw);
+    
 
     var requestOptions = {
         method: 'POST',
