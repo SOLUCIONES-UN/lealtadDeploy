@@ -60,11 +60,7 @@ $(function () {
         myHeaders.append("Authorization", token);
 
         var raw = JSON.stringify({
-            "nombre": $('#nombre').val(),
-            "fila_insertada": $('#fInsertada').val(),
-            "fila_actualizada": $('#fActualizada').val(),
-            "idProyectos": $('#proyecto').val(),
-            "idTablas": $('#tabla').val()
+            "nombre": $('#nombre').val()
         });
 
         var requestOptions = {
@@ -92,7 +88,6 @@ $(function () {
 
             })
             .catch(error => { Alert(error.errors, 'error') });
-
         return false;
     });
 
@@ -115,12 +110,7 @@ $(function () {
         const id = $('#id').val();
 
         var raw = JSON.stringify({
-            "nombre": $('#nombreEdit').val(),
-            "fila_insertada": $('#fInsertadaEdit').val(),
-            "fila_actualizada": $('#fActualizadaEdit').val(),
-            "idTablas": $('#tablaEdit').val(),
-            "idProyectos": $('#proyectoEdit').val()
-            
+            "nombre": $('#nombreEdit').val()
         });
 
         var requestOptions = {
@@ -137,6 +127,8 @@ $(function () {
             }
             return response.json();})
             .then(result => {
+
+
                 if (result.code == "ok") {
                     limpiarFormulario();
                     tabla._fnAjaxUpdate();
@@ -210,7 +202,6 @@ const getColumnas = () => {
                     return meta.row + 1;
                 }
             },
-            { data: "tabladb.nombre_tabla" },
             { data: "nombre" },
             {
                 data: "id", render: function (data) {
@@ -269,10 +260,6 @@ const getColumnas = () => {
 
 function limpiarFormulario() {
     $('#formNew').trigger("reset");
-    $('#proyecto').val("");
-    $('#tabla').empty();
-    $('.tabla').removeClass('is-invalid');
-    $('.proyecto').removeClass('is-invalid');
     $('.nombre').removeClass('is-invalid');
     $('.nombre-error').empty().removeClass('text-danger');
 }
@@ -311,25 +298,9 @@ const OpenEdit = (id) => {
       .then(result => {
         if (!isPageOpen) return;
             $('#id').val(id);
-            $('#proyectoEdit').val(result.idProyectos);
-            $('#tablaEdit').val(result.idTablas);
             $('#nombreEdit').val(result.nombre);
-            getTablaDB(result.idProyectos);            
-
-            if (result.fila_insertada === 1) {
-                $('#fInsertadaEdit').prop('checked', true);
-            } else {
-                $('#fInsertadaEdit').prop('checked', false);
-            }
-            
-            if (result.fila_actualizada === 1) {
-                $('#fActualizadaEdit').prop('checked', true);
-            } else {
-                $('#fActualizadaEdit').prop('checked', false);
-            }
-            
             $('#modalEdit').modal('toggle');
-            })
+        })
         .catch(error => console.log('error', error));
         return false;
 
