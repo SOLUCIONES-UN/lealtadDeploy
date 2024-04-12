@@ -611,71 +611,8 @@
                             </div>
                         </div>
                     </div>
-
                     <!--Stepper 3-->
                     <div id="step3" style="display: none;">
-                        <div class="form-step ">
-                            <div class="content-header mt-2 mb-1">
-                                <h4 class="mb-0">Configuración de Campaña</h4>
-                                <small class="text-muted">Ingresa los datos basicos de la Campaña.</small>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label class="form-label" for="departamento">Departamento</label>
-                                    <select name="" id="departamento" aria-describedby="departamentoError" required class="form-control">
-                                        <option disabled selected>Selecciona una opción</option>
-                                        <option value="0">Capital</option>
-                                        <option value="1">Santa Rosa</option>
-                                    </select>
-                                    <div id="departamentoError" class="invalid-feedback departamento-error"></div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="form-label" for="municipio">Municipio</label>
-                                    <select name="municipio" id="municipio" aria-describedby="municipioError" required class="form-control">
-                                        <option disabled selected>Selecciona una opción</option>
-                                        <option value="0">Santa Catarina Pinula</option>
-                                        <option value="1">Cuilapa</option>
-                                    </select>
-                                    <div id="municipioError" class="invalid-feedback municipio-error"></div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label class="form-label" for="limiteGanador">Limite de Ganadores</label>
-                                    <input type="text" id="limiteGanador" aria-describedby="limiteGanadorError" required class="form-control" />
-                                    <div id="limiteGanadorError" class="invalid-feedback limiteGanador-error"></div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="form-label" for="presupuesto">Presupuesto</label>
-                                    <input type="text" id="presupuesto" aria-describedby="presupuestoError" required class="form-control" />
-                                    <div id="presupuestoError" class="invalid-feedback presupuesto-error"></div>
-
-                                    <div class="btn-crear d-flex justify-content-end mt-1" >
-                                        <button type="button" class="btn btn-outline-primary" id="addLocalidad">Agregar</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--Tabla-->
-                            <table class="datatables-basic table mb-3 mt-2" id="tableLocalidad">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>DEPARTAMENTO</th>
-                                        <th>MUNICIPIO</th>
-                                        <th>LIMITE</th>
-                                        <th>PRESUPUESTO</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-secondary prev-btn" >Anterior</button>
-                                <button type="button" id="btnSiguiente" class="btn btn-primary next-btn">Siguiente</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!--Stepper 4-->
-                    <div id="step4" style="display: none;">
                         <div class="form-step ">
                             <div class="content-header mt-2 mb-1">
                                 <h4 class="mb-0">Configuración de Etapa</h4>
@@ -715,8 +652,18 @@
                                     <div class="btn-crear d-flex justify-content-end mt-2" >
                                         <button type="button" class="btn btn-outline-primary" id="add-step-btn">Crear</button>
                                     </div>
+                                    
                                 </div>
-
+                                <table class="datatables-basic table mb-3 mt-2" id="TablaEtapa">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>PREMIO</th>
+                                            <th>DESCRIPCION</th>
+                                            <th>ACCION</th>
+                                        </tr>
+                                    </thead>
+                                </table>
                             </div>
 
                             <div class="modal-footer">
@@ -725,8 +672,8 @@
                             </div>
                         </div>
                     </div>
-                    <!--Stepper 5-->
-                    <div id="step5" style="display: none;">
+                    <!--Stepper 4-->
+                    <div id="step4" style="display: none;">
                         <div class="form-step ">
                             <div class="content-header mt-2 mb-1">
                                 <h4 class="mb-0">Configuración de Premio</h4>
@@ -796,8 +743,8 @@
                             </div>
                         </div>
                     </div>
-                 <!--Stepper 6-->
-                    <div id="step6" style="display: none;">
+                 <!--Stepper 5-->
+                    <div id="step5" style="display: none;">
                         <div class="form-step ">
                             <div class="content-header mt-2 mb-1">
                                 <h4 class="mb-0">Configuración de Reportes</h4>
@@ -875,14 +822,8 @@
         </div>
       </div>
     </div>
-
-
     <!--END: FormNew-->
 
-
-
- 
-    
 
     <!-- BEGIN: Footer-->
     <footer class="footer footer-static footer-light">

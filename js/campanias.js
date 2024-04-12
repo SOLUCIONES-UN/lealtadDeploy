@@ -9,6 +9,7 @@ var datosTablaParametro = [];
 var indexLocalidad = 0;
 var datosTablaParticipacion= [];
 var datosBloqueados = [];
+var TEMP =[];
 //variables de imagenes
 let imgCampania = null;
 
@@ -265,11 +266,88 @@ function initStepper() {
         </tr>
       </thead>
     </table>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" id="removeStepp" >Borrar</button>
-        <button type="button" id="GuardarEtapa" class="btn btn-primary" >Guardar</button>
+    <div class="row">
+    <div class="form-group col-md-6">
+        <label class="form-label" for="departamento">Departamento</label>
+        <select name="" id="departamento" aria-describedby="departamentoError" required class="form-control">
+            <option disabled selected>Selecciona una opción</option>
+            <option value="0">Capital</option>
+            <option value="1">Santa Rosa</option>
+        </select>
+        <div id="departamentoError" class="invalid-feedback departamento-error"></div>
     </div>
-  </div>`);
+    <div class="form-group col-md-6">
+        <label class="form-label" for="municipio">Municipio</label>
+        <select name="municipio" id="municipio" aria-describedby="municipioError" required class="form-control">
+            <option disabled selected>Selecciona una opción</option>
+            <option value="0">Santa Catarina Pinula</option>
+            <option value="1">Cuilapa</option>
+        </select>
+        <div id="municipioError" class="invalid-feedback municipio-error"></div>
+    </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label class="form-label" for="limiteGanador">Limite de Ganadores</label>
+            <input type="text" id="limiteGanador" aria-describedby="limiteGanadorError" required class="form-control" />
+            <div id="limiteGanadorError" class="invalid-feedback limiteGanador-error"></div>
+        </div>
+        <div class="form-group col-md-6">
+            <label class="form-label" for="presupuesto">Presupuesto</label>
+            <input type="text" id="presupuesto" aria-describedby="presupuestoError" required class="form-control" />
+            <div id="presupuestoError" class="invalid-feedback presupuesto-error"></div>
+
+            <div class="btn-crear d-flex justify-content-end mt-1" >
+                <button type="button" class="btn btn-outline-primary" id="addLocalidad">Agregar</button>
+            </div>
+        </div>
+    </div>
+    <!--Tabla-->
+    <table class="datatables-basic table mb-3 mt-2" id="tableLocalidad">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>DEPARTAMENTO</th>
+                <th>MUNICIPIO</th>
+                <th>LIMITE</th>
+                <th>PRESUPUESTO</th>
+            </tr>
+        </thead>
+    </table>    
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" id="removeStepp" >Borrar</button>
+            <button type="button" id="GuardarEtapa" class="btn btn-primary" >Guardar</button>
+        </div>
+      </div>`);
+
+      var index =0;
+      var NombreEtapa = $('#NombreEtapa').val();
+      var orden = $('#orden').val();
+      var descripcionEtapa = $('#descripcionEtapa').val();
+      var tipoParticipacion = $('#tipoParticipacion').val();
+    
+      if( NombreEtapa && orden  && descripcionEtapa && tipoParticipacion){
+        index++;
+        var nuevo ={
+          id: index,
+          NombreEtapa: NombreEtapa,
+          orden: orden,
+          descripcionEtapa: descripcionEtapa,
+          tipoParticipacion: tipoParticipacion
+        }
+        TEMP.push(nuevo);
+    
+        $('#NombreEtapa').val('');
+        $('#orden').val('');
+        $('#descripcionEtapa').val('');
+        $('#tipoParticipacion').val('');
+    
+        mostrarDatosTabla('#TablaEtapa');
+        console.log(nuevoPremio);
+        
+      }else{
+        //Colocar una alerta 
+      }
   });
 
   function addStep(content) {
@@ -490,23 +568,22 @@ function mostrarDatosTabla(tabla) {
       });
     break;
   
-    case '#EtapasTable':
+    case '#TablaEtapa':
         // Limpiar la tabla antes de insertar nuevas filas
-      $('#EtapasTable').DataTable().clear().destroy();
+      $('#TablaEtapa').DataTable().clear().destroy();
 
       // Inicializar el DataTables con los datos de datosTablaLocalidad
-      $('#EtapasTable').DataTable({
+      $('#TablaEtapa').DataTable({
         searching: false, // Deshabilitar la funcionalidad de búsqueda
         paging: false,
         data: datosTablaLocalidad,
         columns: [
           { data: 'id' },
-          { data: 'transaccion' },
-          { data: 'valorMinimo' },
-          { data: 'valorMaximo' }
+          { data: 'NombreEtapa' },
+          { data: '' },
+          {  }
         ]
       });
-    break;
 
     case '#TablaPremio':
        // Limpiar la tabla antes de insertar nuevas filas
