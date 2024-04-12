@@ -16,32 +16,37 @@ $(function () {
         return true;
     }
 
-    $('#modalNew').on('show.bs.modal', function () {
-        limpiarFormulario();
-    });
+$('#modalNew').on('show.bs.modal', function () {
+    limpiarFormulario();
+    $("#btnSubmit").attr("disabled", false);
+});  
 
-    $('#modalEdit').on('show.bs.modal', function () {
-    
-    });
+$('#modalEdit').on('show.bs.modal', function () {
+    $("#btnSubmitEdit").attr("disabled", false);
+});
 
-    $('#modalNew').on('hidden.bs.modal', function () {
-        limpiarFormulario();
-    });
-
-
-    $('#modalEdit').on('hidden.bs.modal', function () {
-        limpiarFormulario();
-    });
+$('#modalNew').on('hidden.bs.modal', function () {
+    limpiarFormulario();
+    $("#btnSubmit").attr("disabled", false);
+});
 
 
-    $('#modalNew').find('[data-dismiss="modal"]').click(function () {
-        limpiarFormulario();
-    });
+$('#modalEdit').on('hidden.bs.modal', function () {
+    limpiarFormulario();
+    $("#btnSubmitEdit").attr("disabled", false);
+});
 
 
-    $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
-        limpiarFormulario();
-    });
+$('#modalNew').find('[data-dismiss="modal"]').click(function () {
+    limpiarFormulario();
+    $("#btnSubmit").attr("disabled", false);
+});
+
+
+$('#modalEdit').find('[data-dismiss="modal"]').click(function () {
+    limpiarFormulario();
+    $("#btnSubmitEdit").attr("disabled", false);
+});
 
 
     //evento submit del formulario
@@ -51,6 +56,11 @@ $(function () {
         if (!validarNombre(nombre)) {
             return false;
         }
+
+        $("#btnSubmit").attr("disabled", true);
+
+        $('#fInsertada').val($('#fInsertada').prop('checked') ? 1 : 0);
+        $('#fActualizada').val($('#fActualizada').prop('checked') ? 1 : 0);
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -93,6 +103,12 @@ $(function () {
         if (!validarNombre(nombre)) {
             return false;
         }
+
+        $("#btnSubmitEdit").attr("disabled", true);
+
+        $('#fInsertadaEdit').val($('#fInsertadaEdit').prop('checked') ? 1 : 0);
+        $('#fActualizadaEdit').val($('#fActualizadaEdit').prop('checked') ? 1 : 0);
+
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", token);
@@ -146,8 +162,6 @@ $(function () {
         fetch(`${url}Columna/${id}`, requestOptions)
             .then(response => response.json())
             .then(result => {
-
-
                 if (result.code == "ok") {
                     limpiarFormulario();
                     tabla._fnAjaxUpdate();
@@ -292,4 +306,65 @@ const OpenDelete = (id) => {
     $('#idDelete').val(id);
     $('#modalDelete').modal('toggle');
 
+}
+
+const getSelect = () => {
+    limpiarFormulario();
+    var requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+        headers: { "Authorization": token }
+    };
+    $('#proyecto').html('<option value="0" selected disabled>Selecciona una Opcion</option>');
+    fetch(`${url}projects`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            result.forEach(element => {
+                var option = `<option value="${element.id}">${element.descripcion}</option>`;
+                $('#proyecto').append(option);
+                $('#proyectoEdit').append(option);
+            });
+
+            var selectProyecto = document.getElementById('proyecto');
+            var selectProyectoEdit = document.getElementById('proyectoEdit');
+
+            selectProyecto.addEventListener('change', function() {
+                var selectedId = this.value; // Obtener el valor seleccionado del elemento select
+                getTablaDB(selectedId); // Llamar a la función getTablaDB con el ID seleccionado
+            });
+
+            selectProyectoEdit.addEventListener('change', function() {
+                var selectedId = this.value;
+                getTablaDB(selectedId); 
+            });
+        })
+        .catch(err => console.log('error', err));
+}
+
+
+const getTablaDB = (id) => {
+
+    var requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+        headers: { "Authorization": token }
+    };
+
+    // Limpiar completamente los selectores de tablas
+    $('#tabla').empty();
+
+    // Agregar la opción de seleccionar una opción
+    $('#tabla').append('<option value="0" selected disabled>Selecciona una Opción</option>');
+
+    fetch(`${url}tabla/${id}`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            console.log("resultado", result);
+            result.forEach(element => {
+                var opc = `<option value="${element.id}">${element.nombre_tabla}</option>`;
+                $('#tabla').append(opc);
+                $('#tablaEdit').append(opc);
+            });
+        })
+        .catch(err => console.log('error', err));
 }
