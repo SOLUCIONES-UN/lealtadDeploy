@@ -115,15 +115,16 @@ function mostrarDatosEnTabla(datos) {
 
     const fila = `
       <tr> 
-        <td>${fecha}</td>
-        <td>${element.numeroTelefono}</td>
+
         <td>${element.descripcion}</td>
-        <td>${element.id}</td>
+        <td>${element.numeroTelefono}</td>
+        <td>${element.detallepromocion.premiopromocion.premio.premiocampania && element.detallepromocion.premiopromocion.premio.premiocampania[0] ? element.detallepromocion.premiopromocion.premio.premiocampania[0].etapa.campanium.nombre : ''}</td>
         <td>${element.detallepromocion.premiopromocion.premio.descripcion}</td>
         <td>${monto}</td>
         <td></td>
         <td>${element.detallepromocion.cupon}</td>
         <td>-</td>
+        <td>${fecha}</td>
         <td>${fecha}</td>
       </tr>
     `;
@@ -165,15 +166,15 @@ document.getElementById("btnDescargarExcel").addEventListener("click", function 
   const headerRow3 = [''];
   const headerRow4 = [
     '',
-    { v: 'Fecha Acreditacion', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
-    { v: 'Telefono', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
     { v: 'Nombre', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
+    { v: 'Telefono', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
     { v: 'Campaña', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
     { v: 'Premio', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
     { v: 'Monto Premio', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
     { v: 'Transaccion', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
     { v: 'Codigo', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
     { v: 'Monto Transaccion', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
+    { v: 'Fecha Acreditacion', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
     { v: 'Fecha Participacion', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
   ];
   data.unshift(headerRow1, headerRow2, headerRow3, headerRow4);
@@ -181,7 +182,7 @@ document.getElementById("btnDescargarExcel").addEventListener("click", function 
   const ws = XLSX.utils.aoa_to_sheet(data);
 
   // Ajustar el ancho de las columnas al contenido
-  ws['!cols'] = [{wch:15}, {wch:15}, {wch:12}, {wch:25}, {wch:20}, {wch:15}, {wch:15}, {wch:15}, {wch:12}, {wch:20}, {wch:20}];
+  ws['!cols'] = [{wch:15}, {wch:15}, {wch:12}, {wch:25}, {wch:20}, {wch:15}, {wch:15}, {wch:15}, {wch:15}, {wch:20}, {wch:20}];
 
   // Combinar las celdas E1, F1 y G1
   if(!ws['!merges']) ws['!merges'] = [];
