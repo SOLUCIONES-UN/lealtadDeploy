@@ -13,36 +13,6 @@ var TEMP =[];
 //variables de imagenes
 let imgCampania = null;
 
-//vacios de para ver si pasan a db
-var etapa= [
-  {
-    nombre: '',
-    descripcion: '',
-    orden: 1,
-    idCampania: 1,
-    tipoParticipacion: 52,
-    intervalo: 5,
-    periodo: 5,
-    valorAcumulado: 5,
-    estado: 1
-  },
-];
-
-var Participacion = [
-  {
-    numero: 52,
-    idCampania: 1,
-    estado: 1
-  },
-];
-
-var Participacion = [
-  {
-    numero: 266,
-    idCampania: 522,
-    estado: 1
-  },
-];
 
 var bloqueadosUsuarios =[];
 
@@ -124,8 +94,13 @@ $(function () {
       imgPush:  imgPushFile ? imgPushFile.name : null, 
       imgAkisi:  imgAkisiFile ? imgAkisiFile.name : null,
       estado: 1,
-      maximoParticipaciones:  15
+      maximoParticipaciones:  15,
       //verificar el paso de datos de maximoParticipantes
+      //etapa
+      //participacion
+      //bloqueados
+      bloqueadosUsuarios: bloqueadosUsuarios
+
     });
 
     console.log(raw);
@@ -164,14 +139,13 @@ function initStepper() {
   actualStep=0;
   var steps = $('#stepper').children(); // Obtener todos los elementos hijos del contenedor #stepper
   var totalSteps = steps.length;
-  getTransaccion();
+
 
   //provisional
   const containerBloqueo = document.querySelector('#Bloqueo');
   containerBloqueo.style.display = 'none';
 
   showStep(actualStep);
-  console.log(steps);
 
   $('.next-btn').click(function(e) {
     e.preventDefault(); // Detener el comportamiento predeterminado
@@ -209,6 +183,7 @@ function initStepper() {
 
   // Stepp de los parametros de la campaña segun esta una etapa
   $('#add-step-btn').click(function() {
+    getTransaccion();
     addStep(`<div class="form-step ">
     <div class="content-header mt-2 mb-1">
         <h4 class="mb-0">Configuración de Parametros de Etapa</h4>
@@ -216,8 +191,8 @@ function initStepper() {
     </div>
     <div class="row">
         <div class="form-group col-md-6">
-            <label class="form-label" for="maximoParticipantes">Maximo de Participaciones</label>
-            <input type="number" id="maximoParticipantes" class="form-control" />
+            <label class="form-label" for="limiteParticipacion">Limite de Participaciones</label>
+            <input type="number" id="limiteParticipacion" class="form-control" />
         </div>
         <div class="form-group col-md-6" id="totalMinimo-container">
             <label class="form-label" for="totalMinimo">Total Minimo</label>
@@ -321,17 +296,14 @@ function initStepper() {
         </div>
       </div>`);
 
-      var index =0;
       var NombreEtapa = $('#NombreEtapa').val();
       var orden = $('#orden').val();
       var descripcionEtapa = $('#descripcionEtapa').val();
       var tipoParticipacion = $('#tipoParticipacion').val();
     
       if( NombreEtapa && orden  && descripcionEtapa && tipoParticipacion){
-        index++;
         var nuevo ={
-          id: index,
-          NombreEtapa: NombreEtapa,
+          nombre: NombreEtapa,
           orden: orden,
           descripcionEtapa: descripcionEtapa,
           tipoParticipacion: tipoParticipacion
@@ -398,8 +370,7 @@ function initStepper() {
     });
 
     $('#addParamas').click(function(){
-      var index = 0;
-      var MaximoParticipaciones = $('#maximoParticipantes').val();
+      var limiteParticipacion = $('#limiteParticipacion').val();
       var totalMinimo = $('#totalMinimo').val();
       var Transaccion = $('#transaccion').val();
       var limiteDiario = $('#limiteDia').val();
@@ -408,10 +379,9 @@ function initStepper() {
       var RangoDias = $('#RangoDias').val();
     
       if(MaximoParticipaciones && totalMinimo  && limiteDiario && valorMinimo && valorMaximo && RangoDias){
-        index++;
+        
         var nuevoParametro= {
-          id: index,
-          MaximoParticipaciones: MaximoParticipaciones,
+          limiteParticipacion: limiteParticipacion,
           totalMinimo: totalMinimo,
           transaccion: Transaccion,
           limiteDiario: limiteDiario,
@@ -531,12 +501,10 @@ $('#addPremio').click(function(){
 
 $('#addBloqueo').click(function(){
   var usuarioBloqueo = $('#usuarioBloqueo').val();
-  var index = 0;
 
   if(usuarioBloqueo){
     var block ={
-      id: index,
-      usuarioBloqueo: usuarioBloqueo
+      numero: usuarioBloqueo
     }
 
     bloqueadosUsuarios.push(block);
@@ -579,7 +547,12 @@ function mostrarDatosTabla(tabla) {
         paging: false,
         data: datosTablaLocalidad,
         columns: [
-          { data: 'id' },
+          { 
+            render: function(data, type, row, meta) {
+            // Aquí puedes usar `meta.row` para obtener el índice de la fila actual
+            return meta.row + 1;
+            } 
+          },
           { data: 'NombreEtapa' },
           { data: '' },
           {  }
@@ -596,10 +569,15 @@ function mostrarDatosTabla(tabla) {
          paging: false,
          data: datosTablaPremio,
          columns: [
-           { data: 'id' },
-           { data: 'premio' },
-           { data: 'valor' },
-           { data: 'porcentajePremio' }
+           { 
+            render: function(data, type, row, meta) {
+              // Aquí puedes usar `meta.row` para obtener el índice de la fila actual
+              return meta.row + 1;
+              }  
+          },
+          { data: 'premio' },
+          { data: 'valor' },
+          { data: 'porcentajePremio' }
          ]
        });
     break;
@@ -614,11 +592,15 @@ function mostrarDatosTabla(tabla) {
         paging: false,
         data: bloqueadosUsuarios,
         columns: [
-          { data: 'id' },
-          { data: 'usuarioBloqueo' },
+          {         
+            render: function(data, type, row, meta) {
+            // Aquí puedes usar `meta.row` para obtener el índice de la fila actual
+            return meta.row + 1;
+            } 
+          },
+          { data: 'numero' },
           {
-            data: "id",
-            render: function(data) {
+            render: function() {
               var opcAdd = `
                 <a href="#" class=" dropdown-item">
                   ${feather.icons["trash-2"].toSvg({ class: "font-small-4 mr-50" })} Eliminar
@@ -681,6 +663,7 @@ function userValidator(event, container) {
         containerBloqueo.style.display = 'none';
       } else {
         containerArchivo.style.display = 'block';
+        containerBloqueo.style.display = 'none';
         if(input.value === 2 || input.value === '2'){
           containerBloqueo.style.display = 'flex';
         } 
