@@ -413,8 +413,6 @@
                     <button class="step-progress mr-1 ">2</button>
                     <button class="step-progress mr-1 ">3</button>
                     <button class="step-progress mr-1 ">4</button>
-                    <button class="step-progress mr-1 ">5</button>
-                    <button class="step-progress mr-1 ">6</button>
                 </div>
                 <div class="divider">
                     <div class="divider-text"></div>
@@ -678,77 +676,6 @@
                     </div>
                     <!--Stepper 4-->
                     <div id="step4" style="display: none;">
-                        <div class="form-step ">
-                            <div class="content-header mt-2 mb-1">
-                                <h4 class="mb-0">Configuración de Premio</h4>
-                                <small class="text-muted">Ingresa los datos basicos de la Campaña.</small>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label class="form-label" for="tipoPremio">Tipo de Premio</label>
-                                    <select name="tipoPremio" aria-describedby="tipoPremioError"  id="tipoPremio" class="form-control">
-                                        <option disabled selected>Selecciona una opción</option>
-                                        <option value="0">Unico Premio</option>
-                                        <option value="1">Premio Random</option>
-                                        <option value="2">Todos los Premios</option>
-                                    </select>
-                                    <div id="tipoPremioError" class="invalid-feedback tipoPremio-error"></div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="form-label" for="linkPremio">Links de Premio</label>
-                                    <select name="linkPremio" aria-describedby="linkPremioError"  id="linkPremio" class="form-control">
-                                        <option disabled selected>Selecciona una opción</option>
-                                        <option value="si">Sí</option>
-                                        <option value="no">No</option>
-                                    </select>
-                                    <div id="linkPremioError" class="invalid-feedback linkPremio-error"></div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label class="form-label" for="premio">Premio</label>
-                                    <select name="premio" id="premio" aria-describedby="premioError"  class="form-control">
-                                        <option disabled selected>Selecciona una opción</option>
-                                    </select>
-                                    <div id="premioError" class="invalid-feedback premio-error"></div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="form-label" for="valor">Valor</label>
-                                    <input type="number" id="valor" aria-describedby="valorError"  class="form-control" />
-                                    <div id="valorError" class="invalid-feedback valor-error"></div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label class="form-label" for="porcentajePremio">Porcentaje de Premio</label>
-                                    <input type="number" id="porcentajePremio" aria-describedby="porcentajePremioError"  class="form-control" />
-                                    <div id="porcentajePremioError" class="invalid-feedback porcentajePremio-error"></div>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <div class="btn-crear d-flex justify-content-end mt-2" >
-                                        <button type="button" class="btn btn-outline-primary" id="addPremio">Agregar</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--Tabla-->
-                            <table class="datatables-basic table mb-3 mt-2" id="TablaPremio">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>PREMIO</th>
-                                        <th>VALOR</th>
-                                        <th>PORCENTAJE</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                            <div class="modal-footer">
-                                     <button type="button" class="btn btn-outline-secondary prev-btn">Anterior</button>
-                                    <button type="button" id="btnSiguiente" class="btn btn-primary next-btn">Siguiente</button>
-                            </div>
-                        </div>
-                    </div>
-                 <!--Stepper 5-->
-                    <div id="step5" style="display: none;">
                         <div class="form-step ">
                             <div class="content-header mt-2 mb-1">
                                 <h4 class="mb-0">Configuración de Reportes</h4>

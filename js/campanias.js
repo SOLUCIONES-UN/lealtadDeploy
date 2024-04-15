@@ -94,12 +94,11 @@ $(function () {
       imgPush:  imgPushFile ? imgPushFile.name : null, 
       imgAkisi:  imgAkisiFile ? imgAkisiFile.name : null,
       estado: 1,
-      maximoParticipaciones:  15,
-      //verificar el paso de datos de maximoParticipantes
-      //etapa
-      //participacion
-      //bloqueados
-      bloqueadosUsuarios: bloqueadosUsuarios
+      maximoParticipaciones:  15
+      /*
+      etapas: getEtapasData(),
+      participacion: getParticipacionData(),
+      bloqueados: getBloqueoData()*/
 
     });
 
@@ -242,6 +241,10 @@ function initStepper() {
         </tr>
       </thead>
     </table>
+    <div class="content-header mt-2 mb-1">
+            <h4 class="mb-0">Configuración de Premio</h4>
+            <small class="text-muted">Ingresa los datos basicos de la Campaña.</small>
+    </div>
     <div class="row">
     <div class="form-group col-md-6">
         <label class="form-label" for="departamento">Departamento</label>
@@ -289,7 +292,70 @@ function initStepper() {
                 <th>PRESUPUESTO</th>
             </tr>
         </thead>
-    </table>    
+    </table>
+    <div class="form-step ">
+        <div class="content-header mt-2 mb-1">
+            <h4 class="mb-0">Configuración de Premio</h4>
+            <small class="text-muted">Ingresa los datos basicos de la Campaña.</small>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label class="form-label" for="tipoPremio">Tipo de Premio</label>
+                <select name="tipoPremio" aria-describedby="tipoPremioError"  id="tipoPremio" class="form-control">
+                    <option disabled selected>Selecciona una opción</option>
+                    <option value="0">Unico Premio</option>
+                    <option value="1">Premio Random</option>
+                    <option value="2">Todos los Premios</option>
+                </select>
+                <div id="tipoPremioError" class="invalid-feedback tipoPremio-error"></div>
+            </div>
+            <div class="form-group col-md-6">
+                <label class="form-label" for="linkPremio">Links de Premio</label>
+                <select name="linkPremio" aria-describedby="linkPremioError"  id="linkPremio" class="form-control">
+                    <option disabled selected>Selecciona una opción</option>
+                    <option value="si">Sí</option>
+                    <option value="no">No</option>
+                </select>
+                <div id="linkPremioError" class="invalid-feedback linkPremio-error"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label class="form-label" for="premio">Premio</label>
+                <select name="premio" id="premio" aria-describedby="premioError"  class="form-control">
+                    <option disabled selected>Selecciona una opción</option>
+                </select>
+                <div id="premioError" class="invalid-feedback premio-error"></div>
+            </div>
+            <div class="form-group col-md-6">
+                <label class="form-label" for="valor">Valor</label>
+                <input type="number" id="valor" aria-describedby="valorError"  class="form-control" />
+                <div id="valorError" class="invalid-feedback valor-error"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label class="form-label" for="porcentajePremio">Porcentaje de Premio</label>
+                <input type="number" id="porcentajePremio" aria-describedby="porcentajePremioError"  class="form-control" />
+                <div id="porcentajePremioError" class="invalid-feedback porcentajePremio-error"></div>
+            </div>
+            <div class="form-group col-md-6">
+                <div class="btn-crear d-flex justify-content-end mt-2" >
+                    <button type="button" class="btn btn-outline-primary" id="addPremio">Agregar</button>
+                </div>
+            </div>
+        </div>
+        <!--Tabla-->
+        <table class="datatables-basic table mb-3 mt-2" id="TablaPremio">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>PREMIO</th>
+                    <th>VALOR</th>
+                    <th>PORCENTAJE</th>
+                </tr>
+            </thead>
+        </table>  
         <div class="modal-footer">
             <button type="button" class="btn btn-outline-secondary" id="removeStepp" >Borrar</button>
             <button type="button" id="GuardarEtapa" class="btn btn-primary" >Guardar</button>
@@ -301,12 +367,17 @@ function initStepper() {
       var descripcionEtapa = $('#descripcionEtapa').val();
       var tipoParticipacion = $('#tipoParticipacion').val();
     
+
       if( NombreEtapa && orden  && descripcionEtapa && tipoParticipacion){
         var nuevo ={
           nombre: NombreEtapa,
-          orden: orden,
           descripcionEtapa: descripcionEtapa,
-          tipoParticipacion: tipoParticipacion
+          orden: orden,
+          tipoParticipacion: tipoParticipacion,
+          //datos sin explicacion(Intestigar)
+          intervalo: 0,
+          periodo: 0,
+          valorAcumulado: null
         }
         TEMP.push(nuevo);
     
@@ -378,20 +449,22 @@ function initStepper() {
       var valorMaximo = $('#valorMaximo').val();
       var RangoDias = $('#RangoDias').val();
     
-      if(MaximoParticipaciones && totalMinimo  && limiteDiario && valorMinimo && valorMaximo && RangoDias){
+      if( totalMinimo  && limiteDiario && valorMinimo && valorMaximo && RangoDias){
         
         var nuevoParametro= {
           limiteParticipacion: limiteParticipacion,
-          totalMinimo: totalMinimo,
           transaccion: Transaccion,
-          limiteDiario: limiteDiario,
+          //tipo de transaccion Que es?
+          tipoTransaccion: 0,
+          totalMinimo: totalMinimo,
+          //limiteDiario: limiteDiario,
           valorMaximo: valorMaximo,
-          valorMinimo: valorMinimo,
-          rangoDias: RangoDias 
+          valorAnterior: 0,
+          //rangoDias: RangoDias 
         }
     
         datosTablaParametro.push(nuevoParametro);
-        console.log(nuevoParametro);
+        console.log(datosTablaParametro);
         $('#maximoParticipantes').val('');
         $('#totalMinimo').val('');
         $('#transaccion').val('');
@@ -400,104 +473,167 @@ function initStepper() {
         $('#valorMaximo').val('');
         $('#RangoDias').val('');
         
-        mostrarDatosParametro();
+        mostrarDatosParametro('#TablaParametros');
       }else{
     
       }
-      
-      function mostrarDatosParametro() {
-        // Limpiar la tabla antes de insertar nuevas filas
-        $('#TablaParametros').DataTable().clear().destroy();
-      
-        // Inicializar el DataTables con los datos de datosTablaParametro
-        $('#TablaParametros').DataTable({
-          data: datosTablaParametro,
-          searching: false, // Deshabilitar la funcionalidad de búsqueda
-          paging: false,
-          columns: [
-            { data: 'id' },
-            { data: 'transaccion' },
-            { data: 'valorMinimo' },
-            { data: 'valorMaximo' }
-          ]
-        });
+    
+    });
+
+    $('#addLocalidad').click(function() {
+      // Obtener los valores de los campos de entrada
+      var departamento = $('#departamento').val();
+      var municipio = $('#municipio').val();
+      var limiteGanador = $('#limiteGanador').val();
+      var presupuesto = $('#presupuesto').val();
+    
+      // Validar que los campos no estén vacíos
+      if (departamento && municipio && limiteGanador && presupuesto) {
+        // Crear un objeto con los datos
+        var nuevoDato = {
+          departamento: departamento,
+          municipio: municipio,
+          limiteGanador: limiteGanador,
+          presupuesto: presupuesto
+        };
+    
+        // Agregar el nuevo dato al arreglo
+        datosTablaLocalidad.push(nuevoDato);
+    
+        // Limpiar los campos de entrada
+        $('#departamento').val('');
+        $('#municipio').val('');
+        $('#limiteGanador').val('');
+        $('#presupuesto').val('');
+    
+        // Mostrar los datos en la tabla
+        mostrarDatosParametro('#tableLocalidad');
+    
+        // Incrementar el índice
+        indexLocalidad++;
+      } else {
+        alert('Por favor complete todos los campos.');
       }
     });
+    
+    $('#addPremio').click(function(){
+      var index =0;
+      var tipoPremio = $('#tipoPremio').val();
+      var linkPremio = $('#linkPremio').val();
+      var premio = $('#premio').val();
+      var valor = $('#valor').val();
+      var porcentaje = $('#porcentajePremio').val();
+    
+      if( tipoPremio && linkPremio  && valor && porcentaje){
+        index++;
+        var nuevoPremio ={
+          tipoPremio: tipoPremio,
+          linkPremio: linkPremio,
+          premio: premio,
+          valor: valor,
+          porcentajePremio : porcentaje
+        }
+        datosTablaPremio.push(nuevoPremio);
+    
+        $('#tipoPremio').val('');
+        $('#linkPremio').val('');
+        $('#premio').val('');
+        $('#valor').val('');
+        $('#porcentajePremio').val('');
+    
+        mostrarDatosParametro('#TablaPremio');
+        console.log(nuevoPremio);
+        
+      }else{
+        //Colocar una alerta 
+      }
+    });
+
+    function mostrarDatosParametro(tabla) {
+      switch(tabla)
+      {
+        case '#tableLocalidad':
+            // Limpiar la tabla antes de insertar nuevas filas
+          $('#tableLocalidad').DataTable().clear().destroy();
+    
+          // Inicializar el DataTables con los datos de datosTablaLocalidad
+          $('#tableLocalidad').DataTable({
+            searching: false, // Deshabilitar la funcionalidad de búsqueda
+            paging: false,
+            data: datosTablaLocalidad,
+            columns: [
+              { 
+                render: function(data, type, row, meta) {
+                // Aquí puedes usar `meta.row` para obtener el índice de la fila actual
+                return meta.row + 1;
+                }   
+              },
+              { data: 'departamento' },
+              { data: 'municipio' },
+              { data: 'limiteGanador' },
+              { data: 'presupuesto' }
+            ]
+          });
+        break;
+
+        case'#TablaParametros':
+          // Limpiar la tabla antes de insertar nuevas filas
+          $('#TablaParametros').DataTable().clear().destroy();
+        
+          // Inicializar el DataTables con los datos de datosTablaParametro
+          $('#TablaParametros').DataTable({
+            data: datosTablaParametro,
+            searching: false, // Deshabilitar la funcionalidad de búsqueda
+            paging: false,
+            columns: [
+              { 
+                render: function(data, type, row, meta) {
+                  // Aquí puedes usar `meta.row` para obtener el índice de la fila actual
+                  return meta.row + 1;
+                }  
+              },
+              { data: 'transaccion' },
+              { data: 'valorMinimo' },
+              { data: 'valorMaximo' }
+            ]
+          });
+        break;
+    
+        case '#TablaPremio':
+           // Limpiar la tabla antes de insertar nuevas filas
+           $('#TablaPremio').DataTable().clear().destroy();
+    
+           // Inicializar el DataTables con los datos de datosTablaLocalidad
+           $('#TablaPremio').DataTable({
+             searching: false, // Deshabilitar la funcionalidad de búsqueda
+             paging: false,
+             data: datosTablaPremio,
+             columns: [
+               { 
+                render: function(data, type, row, meta) {
+                  // Aquí puedes usar `meta.row` para obtener el índice de la fila actual
+                  return meta.row + 1;
+                  }  
+              },
+              { data: 'premio' },
+              { data: 'valor' },
+              { data: 'porcentajePremio' }
+             ]
+           });
+        break;
+    
+        default:
+          break;
+      }
+
+    }
+
   }
 
 }
 
+
 // Función para agregar datos a la tabla y al arreglo
-$('#addLocalidad').click(function() {
-  // Obtener los valores de los campos de entrada
-  var departamento = $('#departamento').val();
-  var municipio = $('#municipio').val();
-  var limiteGanador = $('#limiteGanador').val();
-  var presupuesto = $('#presupuesto').val();
-
-  // Validar que los campos no estén vacíos
-  if (departamento && municipio && limiteGanador && presupuesto) {
-    // Crear un objeto con los datos
-    var nuevoDato = {
-      id: indexLocalidad,
-      departamento: departamento,
-      municipio: municipio,
-      limiteGanador: limiteGanador,
-      presupuesto: presupuesto
-    };
-
-    // Agregar el nuevo dato al arreglo
-    datosTablaLocalidad.push(nuevoDato);
-
-    // Limpiar los campos de entrada
-    $('#departamento').val('');
-    $('#municipio').val('');
-    $('#limiteGanador').val('');
-    $('#presupuesto').val('');
-
-    // Mostrar los datos en la tabla
-    mostrarDatosTabla('#tableLocalidad');
-
-    // Incrementar el índice
-    indexLocalidad++;
-  } else {
-    alert('Por favor complete todos los campos.');
-  }
-});
-
-$('#addPremio').click(function(){
-  var index =0;
-  var tipoPremio = $('#tipoPremio').val();
-  var linkPremio = $('#linkPremio').val();
-  var premio = $('#premio').val();
-  var valor = $('#valor').val();
-  var porcentaje = $('#porcentajePremio').val();
-
-  if( tipoPremio && linkPremio  && valor && porcentaje){
-    index++;
-    var nuevoPremio ={
-      id: index,
-      tipoPremio: tipoPremio,
-      linkPremio: linkPremio,
-      premio: premio,
-      valor: valor,
-      porcentajePremio : porcentaje
-    }
-    datosTablaPremio.push(nuevoPremio);
-
-    $('#tipoPremio').val('');
-    $('#linkPremio').val('');
-    $('#premio').val('');
-    $('#valor').val('');
-    $('#porcentajePremio').val('');
-
-    mostrarDatosTabla('#TablaPremio');
-    console.log(nuevoPremio);
-    
-  }else{
-    //Colocar una alerta 
-  }
-});
 
 $('#addBloqueo').click(function(){
   var usuarioBloqueo = $('#usuarioBloqueo').val();
@@ -528,7 +664,12 @@ function mostrarDatosTabla(tabla) {
         paging: false,
         data: datosTablaLocalidad,
         columns: [
-          { data: 'id' },
+          {             
+            render: function(data, type, row, meta) {
+            // Aquí puedes usar `meta.row` para obtener el índice de la fila actual
+            return meta.row + 1;
+            } 
+          },
           { data: 'departamento' },
           { data: 'municipio' },
           { data: 'limiteGanador' },
