@@ -20,6 +20,9 @@
   <link rel="stylesheet" type="text/css"
     href="../app-assets/vendors/css/tables/datatable/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" type="text/css" href="../app-assets/vendors/css/tables/datatable/responsive.bootstrap.min.css">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+
   <!-- END: Vendor CSS-->
 
   <!-- BEGIN: Theme CSS-->
@@ -40,6 +43,7 @@
 
   <!-- BEGIN: Custom CSS-->
   <link rel="stylesheet" type="text/css" href="../../../assets/css/style.css">
+  
   <!-- END: Custom CSS-->
 
 </head>
@@ -177,6 +181,12 @@
                 <select id="selecCampania" multiple="multiple" class="form-control">
                 </select>
               </div>
+              <div class="form-group col-md-8 d-flex justify-content-end" >
+                <label class="checkbox-personalizado">Incluir campañas archivadas
+                  <input type="checkbox">
+                  <span class="checkmarcado"></span>
+              </label>
+            </div>
 
             <div class="form-group col-8">
               <button id="ConsultarPromo" class="btn btn-info mt-2 btn-block"> Consultar </button>

@@ -65,7 +65,7 @@ const getCampanias = () => {
       $('#selecCampania').multipleSelect('refresh');
     })
     .catch((error) => {
-      console.error("Error al obtener promociones:", error);
+      console.error("Error al obtener Campania:", error);
       alert(error, "error");
     });
 };
@@ -231,84 +231,3 @@ const Alert = function (message, status) {
 };
 
 
-// document.getElementById("btnDescargarExcel").addEventListener("click", function () {
-//   console.log("Descargar Excel");
-
-//   const table = document.getElementById("TablaReportePromo"); // Obtener la tabla
-//   const wb = XLSX.utils.book_new(); // Crear un nuevo libro de Excel
-
-//   // Obtener los datos de la tabla
-//   const data = [];
-//   for (let i = 0; i < table.rows.length; i++) {
-//     const row = [];
-//     for (let j = 0; j < table.rows[i].cells.length; j++) {
-//       row.push(table.rows[i].cells[j].innerText);
-//     }
-//     // Insertar una celda vacía al principio del array para iniciar desde la columna "A"
-//     row.unshift("");
-//     data.push(row);
-//   }
-
-//   // Agregar el encabezado
-//   // Agregar el encabezado
-//   const headerRow1 = [
-//     { v: '', t: 's', s: { font: { name: 'Courier', sz: 18 } } },
-//     { v: '', t: 's', s: { font: { sz: 18 }, alignment: { horizontal: 'center' } } },
-//     { v: '', t: 's', s: { font: { sz: 18 }, alignment: { horizontal: 'center' } } },
-//     { v: '', t: 's', s: { font: { sz: 18 }, alignment: { horizontal: 'center' } } },
-//     { v: 'Reporte Ofercraft', t: 's', s: { font: { sz: 18 }, alignment: { horizontal: 'center' } } },
-//   ];
-//   const headerRow2 = [
-//     { v: '', t: 's', s: { font: { name: 'Courier', sz: 12 } } },
-//     { v: '', t: 's', s: { font: { sz: 12 }, alignment: { horizontal: 'center' } } },
-//   ];
-//   const headerRow3 = [''];
-//   const headerRow4 = [
-//     '',
-//     { v: 'Fecha Acreditacion', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
-//     { v: 'Telefono', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
-//     { v: 'Nombre', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
-//     { v: 'Campaña', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
-//     { v: 'Premio', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
-//     { v: 'Monto Premio', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
-//     { v: 'Transaccion', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
-//     { v: 'Codigo', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
-//     { v: 'Monto Transaccion', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
-//     { v: 'Fecha Participacion', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
-//   ];
-//   data.unshift(headerRow1, headerRow2, headerRow3, headerRow4);
-
-//   const ws = XLSX.utils.aoa_to_sheet(data);
-
-//   // Ajustar el ancho de las columnas al contenido
-//   ws['!cols'] = [{wch:15}, {wch:15}, {wch:12}, {wch:25}, {wch:20}, {wch:15}, {wch:15}, {wch:15}, {wch:12}, {wch:20}, {wch:20}];
-
-//   // Combinar las celdas E1, F1 y G1
-//   if(!ws['!merges']) ws['!merges'] = [];
-//   ws['!merges'].push({s:{r:0,c:4}, e:{r:0,c:6}});
-
-//   // Agregar la hoja al libro
-//   XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-
-//   // Descargar el archivo Excel
-//   XLSX.writeFile(wb, "reporte_promociones.xlsx");
-// });
-
-// function formatearFechaHora(fechaHora) {
-//   const fecha = new Date(fechaHora);
-//   const dia = fecha.getDate().toString().padStart(2, "0");
-//   const mes = (fecha.getMonth() + 1).toString().padStart(2, "0");
-//   const año = fecha.getFullYear();
-//   const horas = fecha.getHours().toString().padStart(2, "0");
-//   const minutos = fecha.getMinutes().toString().padStart(2, "0");
-//   return `${dia}/${mes}/${año}`;
-// }
-
-// const Alert = function (message, status) {
-//   toastr[`${status}`](message, `${status}`, {
-//     closeButton: true,
-//     tapToDismiss: false,
-//     positionClass: "toast-top-right",
-//     rtl: false,
-//   });
-// };

@@ -282,9 +282,16 @@
       <form id="formNew" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Agregar Nuevo Menu</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Agregar Nueva Profesion</h5>
         </div>
         <div class="modal-body flex-grow-1">
+
+
+          <div class="form-group">
+            <label class="form-label" for="proyecto">Proyecto</label>
+            <select type="text" class="form-control" id="proyecto" name="proyecto" required></select>
+          </div>
+          
           <div class="form-group">
             <label class="form-label" for="basic-icon-default-fullname">Descripción</label>
             <input type="text" class="form-control dt-full-name descripcion" id="descripcion"
@@ -293,12 +300,7 @@
             <div id="descripcionError" class="descripcion-error invalid-feedback"></div>
           </div>
 
-          <div class="form-group">
-            <label class="form-label" for="proyecto">proyecto</label>
-            <select type="text" class="form-control" id="proyecto" name="proyecto" required></select>
-          </div>
-          
-
+         
 
           <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar</button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
@@ -312,15 +314,16 @@
       <form id="formEdit" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Actualizar el Menu</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Actualizar el Profesion</h5>
         </div>
         <div class="modal-body flex-grow-1">
-          <!-- <div class="form-group">
-            <label class="form-label" for="descripcionEdit">Descripción</label>
-            <textarea class="form-control descripcion" id="descripcionEdit" placeholder="Descripción del menú"
-              name="descripcion" required rows="3"></textarea>
-            <div class="invalid-feedback descripcion-error"></div>
-          </div> -->
+         
+
+          <div class="form-group">
+            <label class="form-label" for="proyectoEdit">proyecto</label>
+            <select type="text" class="form-control" id="proyectoEdit" name="proyectoEdit" required></select>
+          </div>
+          
 
           <div class="form-group">
             <input id="id" type="hidden">
@@ -330,14 +333,6 @@
               aria-describedby="basic-icon-default-fullname2" required />
             <div id="descripcionedError" class="descripcion-error invalid-feedback"></div>
           </div>
-
-          <div class="form-group">
-            <label class="form-label" for="proyectoEdit">proyecto</label>
-            <select type="text" class="form-control" id="proyectoEdit" name="proyectoEdit" required></select>
-          </div>
-          
-
-
 
           <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Actualizar</button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
@@ -351,7 +346,7 @@
       <form id="formDelete" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Inhabilitar un Menu</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Inhabilitar una Profesion</h5>
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
