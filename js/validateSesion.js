@@ -16,20 +16,18 @@ const verifyLogin = () => {
         // La fecha de expiración está en el campo "exp"
         if (payload.exp) {
             const expiracion = new Date(payload.exp * 1000); // El tiempo está en segundos, convertir a milisegundos
-            const currentTime = new Date();
+            const currentTime = new Date(); //obtenemos la fecha y hora actual
 
-            console.log("diferencia de tiempo: " + ((expiracion - currentTime) / 1000) / 60);
+            let tiempoRestante = ((expiracion - currentTime) / 1000) / 60; //obtenemos la diferencia en minutos entre la fecha de expiración y la fecha actual
 
-            let tiempoRestante = ((expiracion - currentTime) / 1000) / 60;
-
-            if (tiempoRestante <= 14) {
+            if (tiempoRestante <= 0) { //si el tiempo restante es menor o igual a 0 (token expiro), la sesión ha caducado
 
                 Alert('Session Caducada', 'error');
 
                 setTimeout(() => {
                     localStorage.removeItem('token');
                     window.location.href = 'login.html';
-                }, 1000 * 8);
+                }, 1000 * 5);
             }else{
                 console.log('El token es válido');
             }
