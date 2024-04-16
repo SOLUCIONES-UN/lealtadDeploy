@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100px;
+    width: 200px;
     height: 39px;
     padding: 20px 27px;
     gap: 10px;
@@ -83,6 +83,11 @@
     cursor: pointer;
 }
 .calendar-day.selected {
-    background-color:#978EF3;;
+    background-color:#978EF3;
     color: white;
+}
+
+.step-progress.active {
+    background-color: #978EF3;
+    color: whitesmoke;
 }

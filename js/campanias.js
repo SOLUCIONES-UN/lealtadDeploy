@@ -22,6 +22,7 @@ $(function () {
   initStepper();
   getAllCampanias();
   //select
+  
   getProjecs();
   getDepartamento();
   getMunicipio();
@@ -94,9 +95,9 @@ $(function () {
       imgPush:  imgPushFile ? imgPushFile.name : null, 
       imgAkisi:  imgAkisiFile ? imgAkisiFile.name : null,
       estado: 1,
-      maximoParticipaciones:  15
-      /*
+      maximoParticipaciones:  15,
       etapas: getEtapasData(),
+      /*
       participacion: getParticipacionData(),
       bloqueados: getBloqueoData()*/
 
@@ -173,7 +174,40 @@ function initStepper() {
 
   function showStep(stepIndex) {
     steps.eq(stepIndex).show();
+  
+    // Cambiar el color del botón correspondiente al paso actual
+    $('.step-progress').removeClass('active');
+    $('.step-btn-' + (stepIndex + 1)).addClass('active');
   }
+  
+  // Agregar evento de clic a los botones de la parte superior
+  $('.step-btn-1').click(function(e) {
+    e.preventDefault();
+    hideStep(actualStep);
+    actualStep = 0;
+    showStep(actualStep);
+  });
+  
+  $('.step-btn-2').click(function(e) {
+    e.preventDefault();
+    hideStep(actualStep);
+    actualStep = 1;
+    showStep(actualStep);
+  });
+  
+  $('.step-btn-3').click(function(e) {
+    e.preventDefault();
+    hideStep(actualStep);
+    actualStep = 2;
+    showStep(actualStep);
+  });
+  
+  $('.step-btn-4').click(function(e) {
+    e.preventDefault();
+    hideStep(actualStep);
+    actualStep = 3;
+    showStep(actualStep);
+  });
 
   function hideStep(stepIndex) {
     steps.eq(stepIndex).hide();
@@ -182,7 +216,7 @@ function initStepper() {
 
   // Stepp de los parametros de la campaña segun esta una etapa
   $('#add-step-btn').click(function() {
-    getTransaccion();
+    //getTransaccion();
     addStep(`<div class="form-step ">
     <div class="content-header mt-2 mb-1">
         <h4 class="mb-0">Configuración de Parametros de Etapa</h4>
@@ -393,21 +427,22 @@ function initStepper() {
         //Colocar una alerta 
       }
   });
-
+  
   function addStep(content) {
     var newStep = $(`<div class="step"></div>`).html(content);
     $('#stepper').append(newStep);
     totalSteps++;
+    var previousStep = actualStep; // Guardar el valor actual de actualStep
     hideStep(actualStep);
     actualStep = totalSteps - 1;
     showStep(actualStep);
-
+  
     // Agregar evento de clic al botón "Borrar" del nuevo paso
     newStep.find('#removeStepp').click(function(e) {
       e.preventDefault();
       if (totalSteps > 1) {
         hideStep(actualStep);
-        actualStep = actualStep-3;
+        actualStep = previousStep; // Establecer actualStep al valor guardado
         showStep(actualStep);
         newStep.html('');
         stepData = null;
@@ -421,24 +456,28 @@ function initStepper() {
 
     newStep.find('#GuardarEtapa').click(function(e){
       e.preventDefault();
-      var stepData ={
-          MaxParticipantes: $('#maximoParticipantes').val(), 
-          TotalMin: $('#totalMinimo').val(),
-          Transaccion: $('#transaccion').val(),
-          LimiteDiario: $('#limiteDia').val(),
-          ValMinimo: $('#valorMinimo').val(),
-          ValMaximo: $('#valorMaximo').val(),
-          RangoDias: $('#RangoDias').val()
+      var stepData = {
+        MaxParticipantes: $('#maximoParticipantes').val(), 
+        TotalMin: $('#totalMinimo').val(),
+        Transaccion: $('#transaccion').val(),
+        LimiteDiario: $('#limiteDia').val(),
+        ValMinimo: $('#valorMinimo').val(),
+        ValMaximo: $('#valorMaximo').val(),
+        RangoDias: $('#RangoDias').val(),
+        parametros: datosTablaParametro,
+        localidades: datosTablaLocalidad,
+        premio: datosTablaPremio
       };
       console.log(stepData);
-      saveDataParams.push(stepData);
-    
+      etapasData[stepNumber] = stepData; // Guardar los datos de la etapa en el objeto correspondiente
+  
       hideStep(actualStep);
-      actualStep = actualStep-3;
+      actualStep = previousStep; // Establecer actualStep al valor guardado
       showStep(actualStep);
       newStep.html('');
       stepData = null;
     });
+  
 
     $('#addParamas').click(function(){
       var limiteParticipacion = $('#limiteParticipacion').val();
@@ -630,6 +669,26 @@ function initStepper() {
 
   }
 
+}
+
+// Modificar la función getEtapasData para recorrer el objeto de etapas
+function getEtapasData() {
+  const etapas = Object.entries(etapasData).map(([stepNumber, stepData]) => {
+    return {
+      nombre: TEMP[stepNumber].nombre,
+      descripcionEtapa: TEMP[stepNumber].descripcionEtapa,
+      orden: TEMP[stepNumber].orden,
+      tipoParticipacion: TEMP[stepNumber].tipoParticipacion,
+      intervalo: TEMP[stepNumber].intervalo,
+      periodo: TEMP[stepNumber].periodo,
+      valorAcumulado: TEMP[stepNumber].valorAcumulado,
+      parametros: stepData.parametros,
+      localidades: stepData.localidades,
+      premio: stepData.premio
+    };
+  });
+
+  return etapas;
 }
 
 
