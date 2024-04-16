@@ -60,7 +60,8 @@ const verifyLogin = () => {
 
       let tiempoRestante = ((expiracion - currentTime) / 1000) / 60;
 
-      if (tiempoRestante <= 3 && !addListeners ) 
+      console.log(tiempoRestante);
+      if (tiempoRestante <= 4 && !addListeners ) 
       {
         AlertSession('Su sesión está a punto de caducar', 'warning');
         addListeners = true;
@@ -68,8 +69,6 @@ const verifyLogin = () => {
         $(document).on("mousedown", scrollHandler);
         $(document).on("keydown", scrollHandler);
         $(document).on("scroll", scrollHandler);
-        
-        
           
       }
 
