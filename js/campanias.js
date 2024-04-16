@@ -10,9 +10,11 @@ var indexLocalidad = 0;
 var datosTablaParticipacion= [];
 var datosBloqueados = [];
 var TEMP =[];
+var etapasData=[]
 //variables de imagenes
 let imgCampania = null;
 
+var DataEtapa=[];
 
 var bloqueadosUsuarios =[];
 
@@ -24,10 +26,7 @@ $(function () {
   //select
   
   getProjecs();
-  getDepartamento();
-  getMunicipio();
-  getTransaccion();
-  getPremio();
+
 
   Calendar();
   const containerArchivo = document.getElementById('containerArchivo');
@@ -95,7 +94,16 @@ $(function () {
       imgPush:  imgPushFile ? imgPushFile.name : null, 
       imgAkisi:  imgAkisiFile ? imgAkisiFile.name : null,
       estado: 1,
-      maximoParticipaciones:  15,
+      maximoParticipaciones:  $('#maximoParticipantes').val(),//
+      campaniaTerceros: $('#tercerosCampania').val(),
+      allDay: $('#allday').val(),
+      repetir: $('#repeat').val(),
+      fechaRecordatorioIni: $('#FechaIniRecordatorio').val(),
+      fechaRecordatorioFin: $('#FechaFinRecordatorio').val(),
+      terminosCondiciones: $('#terminosCondiciones').val(),
+      observaciones: $('#Observaciones').val(),
+      esArchivada: 0,
+      idProyecto: $('').val(),
       etapas: getEtapasData(),
       /*
       participacion: getParticipacionData(),
@@ -152,13 +160,13 @@ function initStepper() {
 
     if (actualStep < totalSteps - 1) {
       
-      //if(validarCamposStep(actualStep)){
+      if(validarCamposStep(actualStep)){
         hideStep(actualStep);
         actualStep++;
         showStep(actualStep);  
-      //}else{
+      }else{
         console.log("Error")
-      //}
+      }
     }
   });
 
@@ -217,6 +225,10 @@ function initStepper() {
   // Stepp de los parametros de la campaña segun esta una etapa
   $('#add-step-btn').click(function() {
     //getTransaccion();
+    getDepartamento();
+    getMunicipio();
+    getTransaccion();
+    getPremio();
     addStep(`<div class="form-step ">
     <div class="content-header mt-2 mb-1">
         <h4 class="mb-0">Configuración de Parametros de Etapa</h4>
@@ -284,8 +296,6 @@ function initStepper() {
         <label class="form-label" for="departamento">Departamento</label>
         <select name="" id="departamento" aria-describedby="departamentoError" required class="form-control">
             <option disabled selected>Selecciona una opción</option>
-            <option value="0">Capital</option>
-            <option value="1">Santa Rosa</option>
         </select>
         <div id="departamentoError" class="invalid-feedback departamento-error"></div>
     </div>
@@ -293,8 +303,6 @@ function initStepper() {
         <label class="form-label" for="municipio">Municipio</label>
         <select name="municipio" id="municipio" aria-describedby="municipioError" required class="form-control">
             <option disabled selected>Selecciona una opción</option>
-            <option value="0">Santa Catarina Pinula</option>
-            <option value="1">Cuilapa</option>
         </select>
         <div id="municipioError" class="invalid-feedback municipio-error"></div>
     </div>
@@ -420,7 +428,7 @@ function initStepper() {
         $('#descripcionEtapa').val('');
         $('#tipoParticipacion').val('');
     
-        mostrarDatosTabla('#TablaEtapa');
+       
         console.log(nuevoPremio);
         
       }else{
@@ -457,20 +465,18 @@ function initStepper() {
     newStep.find('#GuardarEtapa').click(function(e){
       e.preventDefault();
       var stepData = {
-        MaxParticipantes: $('#maximoParticipantes').val(), 
-        TotalMin: $('#totalMinimo').val(),
-        Transaccion: $('#transaccion').val(),
-        LimiteDiario: $('#limiteDia').val(),
-        ValMinimo: $('#valorMinimo').val(),
-        ValMaximo: $('#valorMaximo').val(),
-        RangoDias: $('#RangoDias').val(),
+        etapa: TEMP,
         parametros: datosTablaParametro,
         localidades: datosTablaLocalidad,
         premio: datosTablaPremio
       };
-      console.log(stepData);
-      etapasData[stepNumber] = stepData; // Guardar los datos de la etapa en el objeto correspondiente
-  
+      // Guardar los datos de la etapa en el objeto correspondiente
+      DataEtapa.push(stepData);
+      getEtapasData() 
+      console.log(getEtapasData() );
+
+      mostrarDatosTabla('#TablaEtapa');
+      //Funciones del stepp
       hideStep(actualStep);
       actualStep = previousStep; // Establecer actualStep al valor guardado
       showStep(actualStep);
@@ -495,7 +501,7 @@ function initStepper() {
           transaccion: Transaccion,
           //tipo de transaccion Que es?
           tipoTransaccion: 0,
-          totalMinimo: totalMinimo,
+          valorMinimo: valorMinimo,
           //limiteDiario: limiteDiario,
           valorMaximo: valorMaximo,
           valorAnterior: 0,
@@ -504,7 +510,6 @@ function initStepper() {
     
         datosTablaParametro.push(nuevoParametro);
         console.log(datosTablaParametro);
-        $('#maximoParticipantes').val('');
         $('#totalMinimo').val('');
         $('#transaccion').val('');
         $('#limiteDia').val('');
@@ -673,24 +678,17 @@ function initStepper() {
 
 // Modificar la función getEtapasData para recorrer el objeto de etapas
 function getEtapasData() {
-  const etapas = Object.entries(etapasData).map(([stepNumber, stepData]) => {
+  const etapas = DataEtapa.map((stepData) => {
     return {
-      nombre: TEMP[stepNumber].nombre,
-      descripcionEtapa: TEMP[stepNumber].descripcionEtapa,
-      orden: TEMP[stepNumber].orden,
-      tipoParticipacion: TEMP[stepNumber].tipoParticipacion,
-      intervalo: TEMP[stepNumber].intervalo,
-      periodo: TEMP[stepNumber].periodo,
-      valorAcumulado: TEMP[stepNumber].valorAcumulado,
-      parametros: stepData.parametros,
-      localidades: stepData.localidades,
-      premio: stepData.premio
+      ...stepData.etapa[0],
+      parametros: stepData.parametros || [],
+      localidades: stepData.localidades || [],
+      premio: stepData.premio || []
     };
   });
 
   return etapas;
 }
-
 
 // Función para agregar datos a la tabla y al arreglo
 
@@ -745,7 +743,7 @@ function mostrarDatosTabla(tabla) {
       $('#TablaEtapa').DataTable({
         searching: false, // Deshabilitar la funcionalidad de búsqueda
         paging: false,
-        data: datosTablaLocalidad,
+        data: TEMP,
         columns: [
           { 
             render: function(data, type, row, meta) {
@@ -753,7 +751,7 @@ function mostrarDatosTabla(tabla) {
             return meta.row + 1;
             } 
           },
-          { data: 'NombreEtapa' },
+          { data: 'nombre' },
           { data: '' },
           {  }
         ]
@@ -1078,7 +1076,7 @@ function Calendar () {
   generateCalendar(currentYear, currentMonth);
 };
 
-/*
+
 //Validacion de form
 function validarCamposStep(stepIndex) {
   var config = `step${stepIndex+1}`;
@@ -1213,7 +1211,7 @@ function validarCamposStep(stepIndex) {
   
 
 }
-*/
+
 //Funcion Para limpiar el form
 const limpiarForm = ()=>{
   actualStep = 0;
