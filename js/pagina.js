@@ -148,13 +148,13 @@ $(function () {
     })
 });
 
-const Usuario = () => {
+// const Usuario = () => {
 
-    let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
-    console.log(usuario.nombre)
-    $('.user-name').text(usuario.nombre);
-    $('.user-status').text(usuario.rol.descripcion);
-}
+//     let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
+//     console.log(usuario.nombre)
+//     $('.user-name').text(usuario.nombre);
+//     $('.user-status').text(usuario.rol.descripcion);
+// }
 
 //obtiene la lista de menus
 const getPaginas = () => {

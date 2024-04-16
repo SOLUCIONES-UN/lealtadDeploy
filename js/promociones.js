@@ -406,12 +406,12 @@ const limpiarForm = () => {
   $("#formNew").trigger("reset");
 };
 
-const Usuario = () => {
+/*const Usuario = () => {
 
   let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
   $('.user-name').text(usuario.nombre);
   $('.user-status').text(usuario.rol.descripcion);
-}
+}*/
 
 const getAllPromociones = () => {
   var requestOptions = {

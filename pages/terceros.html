@@ -59,7 +59,7 @@
         <ul class="nav navbar-nav">
           <li class="nav-item">
             <a class="nav-link menu-toggle" href="javascript:void(0);">
-              <b>Administración de Clientes Terceros</b>
+              <b>Administración de Campañas  Terceros</b>
             </a>
           </li>
         </ul>
@@ -195,7 +195,7 @@
     <div class="navbar-header">
       <ul class="nav navbar-nav flex-row">
         <li class="nav-item mr-auto"><a class="navbar-brand"
-            href="../../../html/ltr/vertical-menu-template/index.html"><span class="brand-logo">
+            href="./dashboard.html"><span class="brand-logo">
               <svg viewbox="0 0 139 95" version="1.1" xmlns="http://www.w3.org/2000/svg"
                 xmlns:xlink="http://www.w3.org/1999/xlink" height="24">
                 <defs>
@@ -260,7 +260,7 @@
                   <tr>
                     <th>#</th>
                     <th>Nombre</th>
-                    <th>NEMONICO</th>
+                    <!-- <th>NEMONICO</th> -->
                     <th>TOKEN</th>
                     <th>Acciones</th>
                   </tr>
@@ -289,11 +289,11 @@
               aria-describedby="basic-icon-default-fullname2" required />
             <div id="nombreError" class="invalid-feedback nombre-error"></div>
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label class="form-label" for="basic-icon-default-fullname">Nemonico</label>
             <input type="text" class="form-control dt-full-name" id="nemonico" placeholder="Nemonico" name="nemonico"
               aria-label="" aria-describedby="basic-icon-default-fullname2" required />
-          </div>
+          </div> -->
           <div class="form-group">
             <label class="form-label" for="basic-icon-default-fullname">Token</label>
             <input type="text" class="form-control dt-full-name" id="token" placeholder="Token" name="token"
@@ -322,11 +322,11 @@
               aria-describedby="basic-icon-default-fullname2" required />
             <div id="nombreError" class="invalid-feedback nombre-error"></div>
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label class="form-label" for="basic-icon-default-fullname">Nemonico</label>
             <input type="text" class="form-control dt-full-name" id="nemonicoEdit" placeholder="Nemonico"
               name="nemonicoEdit" aria-label="" aria-describedby="basic-icon-default-fullname2" required />
-          </div>
+          </div> -->
           <div class="form-group">
             <label class="form-label" for="basic-icon-default-fullname">Token</label>
             <input type="text" class="form-control dt-full-name" id="tokenEdit" placeholder="Token" name="tokenEdit"
@@ -344,12 +344,12 @@
       <form id="formDelete" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Inhabilitar el Departamento</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Inhabilitar la Campaña de terceros</h5>
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
             <input id="idDelete" type="hidden">
-            <p>¿Esta seguro que desea <b>Inhabilitar este Departamento?</b></p>
+            <p>¿Esta seguro que desea <b>Inhabilitar esta Campaña de terceros?</b></p>
           </div>
           <button id="BtnDelete" type="button" class="btn btn-danger mr-1 data-submit">Confirmar </button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
