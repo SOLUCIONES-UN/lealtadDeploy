@@ -257,7 +257,7 @@ span{
 textarea {
 	resize: none;
 }
-
+/* 
 .checkbox-personalizado {
 	display: block;
 	position: relative;
@@ -307,4 +307,4 @@ textarea {
 	border: solid white;
 	border-width: 0 3px 3px 0;
 	transform: rotate(45deg);
-}
+} */

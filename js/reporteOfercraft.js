@@ -220,7 +220,7 @@ document.getElementById("btnDescargarExcel").addEventListener("click", function(
     XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
 
     // Descargar el archivo Excel
-    XLSX.writeFile(wb, "reporte_promociones.xlsx");
+    XLSX.writeFile(wb, "reporte_OfferCraft.xlsx");
 });
 
 function formatearFechaHora(fechaHora) {
