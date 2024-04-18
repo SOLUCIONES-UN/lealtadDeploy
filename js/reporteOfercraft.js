@@ -112,9 +112,50 @@ const getReport = () => {
         });
 };
 
+// function mostrarDatosEnTabla(datos) {
+//     console.log("Datos para mostrar en la tabla:", datos);
+//     $("#TablaReportePromo").empty();
+//     datos.forEach((element) => {
+//         element.participaciones.forEach((participacion) => {
+//             const fecha = formatearFechaHora(participacion.fecha);
+//             const telefono = participacion.customerInfo ? participacion.customerInfo.telno : "Desconocido";
+//             const descripcionTrx = participacion.descripcionTrx || "Sin descripción";
+//             const valor = participacion.valor || "Sin valor";
+//             const nombre = participacion.customerInfo ? participacion.customerInfo.fname : "Sin nombre";
+//             const codigo = participacion.customerInfo ? participacion.customerInfo.customer_reference : "Sin código";
+//             const nombreCampania = participacion.campanium ? participacion.campanium.nombre : "Sin campaña";
+//             const fechaCreacion = participacion.campanium ? participacion.campanium.fechaCreacion : "Sin fecha";
+//             const premioDescripcion = participacion.premioDescripcion || "Sin premio";
+//             const premioMonto = participacion.detallepromocion && participacion.detallepromocion.premiopromocion ? parseFloat(participacion.detallepromocion.premiopromocion.valor).toFixed(2) : "0.00";
+//             const cupon = participacion.detallepromocion ? participacion.detallepromocion.cupon : "Sin cupón";
+
+//             const fila = `
+//         <tr> 
+//           <td>${fechaCreacion}</td>
+//           <td>${telefono}</td>
+//           <td>${nombre}</td>
+//           <td>${nombreCampania}</td>
+//           <td>${premioDescripcion}</td>
+//           <td>${valor}</td>
+//           <td>${descripcionTrx}</td>
+//           <td>${codigo}</td>
+//           <td>${premioMonto}</td>
+//           <td>${fecha}</td>
+//         </tr>
+//       `;
+//             $("#TablaReportePromo").append(fila);
+//         });
+//     });
+
+// }
+
 function mostrarDatosEnTabla(datos) {
     console.log("Datos para mostrar en la tabla:", datos);
     $("#TablaReportePromo").empty();
+    if ($.fn.dataTable.isDataTable('.datatables-basic')) {
+        $('.datatables-basic').DataTable().destroy();
+    }
+    let tabla = '';
     datos.forEach((element) => {
         element.participaciones.forEach((participacion) => {
             const fecha = formatearFechaHora(participacion.fecha);
@@ -129,7 +170,7 @@ function mostrarDatosEnTabla(datos) {
             const premioMonto = participacion.detallepromocion && participacion.detallepromocion.premiopromocion ? parseFloat(participacion.detallepromocion.premiopromocion.valor).toFixed(2) : "0.00";
             const cupon = participacion.detallepromocion ? participacion.detallepromocion.cupon : "Sin cupón";
 
-            const fila = `
+            tabla += `
         <tr> 
           <td>${fechaCreacion}</td>
           <td>${telefono}</td>
@@ -143,10 +184,18 @@ function mostrarDatosEnTabla(datos) {
           <td>${fecha}</td>
         </tr>
       `;
-            $("#TablaReportePromo").append(fila);
         });
     });
-
+    $('.datatables-basic tbody').html(tabla);
+    $('.datatables-basic').DataTable({
+        order: [[0, 'asc']],
+        ordering: true,
+        language: {
+            search: "Buscar:",
+            searchPlaceholder: "Buscar",
+            lengthMenu: "Mostrar _MENU_",
+        },
+    });
 }
 
 
@@ -158,8 +207,11 @@ document.getElementById("btnDescargarExcel").addEventListener("click", function(
 
     // Obtener los datos de la tabla
     const data = [];
+    let lineNumber = 1;
+
     for (let i = 0; i < table.rows.length; i++) {
         const row = [];
+        row.push({ v: lineNumber++ });
         for (let j = 0; j < table.rows[i].cells.length; j++) {
             row.push(table.rows[i].cells[j].innerText);
         }
@@ -183,6 +235,7 @@ document.getElementById("btnDescargarExcel").addEventListener("click", function(
     const headerRow3 = [''];
     const headerRow4 = [
         '',
+        { v: '#', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
         { v: 'Fecha Acreditacion', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
         { v: 'Telefono', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },
         { v: 'Nombre', t: 's', s: { font: { bold: true, color: { rgb: 'FFFFFF' } }, alignment: { horizontal: 'center' }, fill: { fgColor: { rgb: '808080' } } } },

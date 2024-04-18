@@ -1,7 +1,8 @@
+
+
 const url = "http://localhost:3000/";
 let token = localStorage.getItem("token");
-
-
+let globalData = [];
 
 
 
@@ -15,7 +16,11 @@ $(function() {
             console.error('Por favor, ingresa ambas fechas.');
         }
     });
+    
+
 });
+
+
 
 const getParticipacionesFechasGeneral = (fecha1, fecha2) => {
     var requestOptions = {
@@ -33,14 +38,15 @@ const getParticipacionesFechasGeneral = (fecha1, fecha2) => {
             return response.json();
         })
         .then(datos => {
-            $("#MostrarTabla").show();
-            $("#excel").show();
-            $(".card-datatable").show();
-
-            $("#MostrarTabla").click(function() {
+          
+            $("#MostrarTabla").css("display", "block");
+            $("#excel").css("display", "block");
+            $(".card-datatable").css("display", "block");
+      
+            $("#MostrarTabla").unbind().click(function() {
                 mostrarDatosEnTabla(datos);
             });
-            $("#excel").click(function() {
+            $("#excel").unbind().click(function() {
                 generarExcel(datos);
             });
         })
@@ -51,6 +57,9 @@ const getParticipacionesFechasGeneral = (fecha1, fecha2) => {
 };
 
 const mostrarDatosEnTabla = (datos) => {
+    if ($.fn.dataTable.isDataTable('.datatables-basic')) {
+        $('.datatables-basic').DataTable().destroy();
+    }
     let tabla = '';
     datos.forEach(array => {
         array.forEach(dato => {
@@ -66,7 +75,16 @@ const mostrarDatosEnTabla = (datos) => {
             `;
         });
     });
-    $("#TablaReporteReferidos").html(tabla);
+    $('.datatables-basic tbody').html(tabla);
+    $('.datatables-basic').DataTable({
+        order: [[0, 'asc']],
+        ordering: true,
+        language: {
+            search: "Buscar:",
+            searchPlaceholder: "Buscar",
+            lengthMenu: "Mostrar _MENU_",
+        },
+    });
 };
 
 
@@ -82,8 +100,8 @@ const generarExcel = (datos) => {
     };
 
     const columnTitleStyle = {
-        font: { sz: 12, bold: true, color: { rgb: "FFFFFF" } }, // Blanco
-        fill: { fgColor: { rgb: "808080" } }, // Gris
+        font: { sz: 12, bold: true, color: { rgb: "FFFFFF" } }, 
+        fill: { fgColor: { rgb: "808080" } }, 
         alignment: { horizontal: "center" }
     };
 
@@ -97,9 +115,8 @@ const generarExcel = (datos) => {
         }
     };
 
-    const titles = ['               ','NUMERO DE TELÉFONO  ', 'NOMBRE DE REFERIDOR ', 'CÓDIGO REFERIDO ', 'NUMERO DE REFERIDO ', 'NOMBRE DE REFERIDO ', 'FECHA Y HORA    '];
+    const titles = ['               ','#', 'CÓDIGO REFERIDO ','NOMBRE DE REFERIDOR ','NUMERO DE TELÉFONO  ','NOMBRE DE REFERIDO ', 'NUMERO DE REFERIDO ',  'FECHA Y HORA    '];
     
-    // Mantener la primera columna sin estilo ni color
     const data = [
         [{ v: ' ' }, { v: 'REPORTE GENERAL DE REFERIDOS', s: {} }],
         [],
@@ -107,15 +124,18 @@ const generarExcel = (datos) => {
         titles.map(title => ({ v: title, s: title.trim() === '' ? {} : columnTitleStyle, headerStyle }))
     ];
 
+    let lineNumber = 1;
+
     datos.forEach(array => {
         array.forEach(dato => {
             data.push([
-                { v: ' ' },
+                { v: ' '},
+                { v: lineNumber++, s: dataCellStyle },
+                { v: dato.codigo, s: dataCellStyle },
+                { v: dato.nombreReferidor, s: dataCellStyle },  
                 { v: dato.userno, s: dataCellStyle },
-                { v: dato.nombreReferidor, s: dataCellStyle },
-                { v: dato.codigo, s: dataCellStyle }, 
-                { v: dato.noReferido, s: dataCellStyle },
                 { v: dato.nombreReferido, s: dataCellStyle },
+                { v: dato.noReferido, s: dataCellStyle },             
                 { v: dato.fecha, s: dataCellStyle }
             ]);
         });

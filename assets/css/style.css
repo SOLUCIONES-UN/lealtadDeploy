@@ -257,54 +257,15 @@ span{
 textarea {
 	resize: none;
 }
-/* 
-.checkbox-personalizado {
-	display: block;
-	position: relative;
-	padding-left: 35px;
-	cursor: pointer;
-	font-size: 22px;
+.dataTables_wrapper .dataTables_filter {
+    margin-right: 22px; /* Ajusta el margen derecho según sea necesario */
+    margin-left: 10px; /* Ajusta el margen izquierdo según sea necesario */
+	
+}
+.dataTables_wrapper .dataTables_filter input {
+    width: 165px !important; /* Ajusta el ancho del input según sea necesario */
+}
+.dataTables_wrapper .dataTables_length {
+    margin-left: 16px; /* Ajusta el margen izquierdo según sea necesario */
 }
 
-.checkbox-personalizado input {
-	position: absolute;
-	opacity: 0;
-	cursor: pointer;
-}
-
-.checkmarcado {
-	position: absolute;
-	top: 0;
-	left: 0;
-	height: 25px;
-	width: 25px;
-	background-color: #eee;
-}
-
-.checkbox-personalizado:hover input ~ .checkmarcado {
-	background-color: #ccc;
-}
-
-.checkbox-personalizado input:checked ~ .checkmarcado {
-	background-color: #2196F3;
-}
-
-.checkmarcado:after {
-	content: "";
-	position: absolute;
-	display: none;
-}
-
-.checkbox-personalizado input:checked ~ .checkmarcado:after {
-	display: block;
-}
-
-.checkbox-personalizado .checkmarcado:after {
-	left: 9px;
-	top: 5px;
-	width: 5px;
-	height: 10px;
-	border: solid white;
-	border-width: 0 3px 3px 0;
-	transform: rotate(45deg);
-} */
