@@ -61,15 +61,17 @@ const mostrarDatosEnTabla = (datos) => {
         $('.datatables-basic').DataTable().destroy();
     }
     let tabla = '';
+    let contador = 1;
     datos.forEach(array => {
         array.forEach(dato => {
             tabla += `
                 <tr>
+                <td>${contador++}</td>
+                <td>${dato.codigo}</td>
+                <td>${dato.nombreReferidor}</td>
                     <td>${dato.userno}</td>
-                    <td>${dato.nombreReferidor}</td>
-                    <td>${dato.codigo}</td>
-                    <td>${dato.noReferido}</td>
                     <td>${dato.nombreReferido}</td>
+                    <td>${dato.noReferido}</td>
                     <td>${dato.fecha}</td>
                 </tr>
             `;
@@ -107,15 +109,10 @@ const generarExcel = (datos) => {
 
     const dataCellStyle = {
         font: { sz: 11, color: { rgb: "000000" } },
-        border: {
-            top: { style: "thin", color: { rgb: "000000" } },
-            bottom: { style: "thin", color: { rgb: "000000" } },
-            left: { style: "thin", color: { rgb: "000000" } },
-            right: { style: "thin", color: { rgb: "000000" } }
-        }
+        
     };
 
-    const titles = ['               ','#', 'CÓDIGO REFERIDO ','NOMBRE DE REFERIDOR ','NUMERO DE TELÉFONO  ','NOMBRE DE REFERIDO ', 'NUMERO DE REFERIDO ',  'FECHA Y HORA    '];
+    const titles = ['               ','#','  CÓDIGO   ','   REFERIDOR   ','   NUMERO TEL.REFERIDOR  ','   REFERIDO  ', 'NUMERO TEL.REFERIDO ',  '   FECHA    '];
     
     const data = [
         [{ v: ' ' }, { v: 'REPORTE GENERAL DE REFERIDOS', s: {} }],
