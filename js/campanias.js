@@ -78,7 +78,7 @@ $(function () {
     var raw = JSON.stringify({
       nombre: $('#campania').val(),
       descripcion: $('#descripcionCampania').val(),
-      fechaCreacion: "2024-12-02",
+      fechaCreacion: "2024-02-04",
       fechaRegistro: $("#fechaRegistro").val(),
       fechaInicio: $("#fechaInicial").val(),
       fechaFin: $("#fechaFinal").val(),
@@ -94,16 +94,16 @@ $(function () {
       imgPush:  imgPushFile ? imgPushFile.name : null, 
       imgAkisi:  imgAkisiFile ? imgAkisiFile.name : null,
       estado: 1,
-      maximoParticipaciones:  $('#maximoParticipantes').val(),//
-      campaniaTerceros: $('#tercerosCampania').val(),
-      allDay: $('#allday').val(),
-      repetir: $('#repeat').val(),
+      maximoParticipaciones:  parseInt($('#maximoParticipantes').val()),
+      campaniaTerceros: parseInt($('#tercerosCampania').val()),
+      allDay: parseInt($('#allday').val()),
+      repetir: parseInt($('#repeat').val()),
       fechaRecordatorioIni: $('#FechaIniRecordatorio').val(),
       fechaRecordatorioFin: $('#FechaFinRecordatorio').val(),
       terminosCondiciones: $('#terminosCondiciones').val(),
       observaciones: $('#Observaciones').val(),
       esArchivada: 0,
-      idProyecto: $('').val(),
+      idProyecto: parseInt($('#proyecto').val()),
       etapas: getEtapasData(),
       /*
       participacion: getParticipacionData(),
@@ -160,13 +160,13 @@ function initStepper() {
 
     if (actualStep < totalSteps - 1) {
       
-      if(validarCamposStep(actualStep)){
+      //if(validarCamposStep(actualStep)){
         hideStep(actualStep);
         actualStep++;
         showStep(actualStep);  
-      }else{
+      //}else{
         console.log("Error")
-      }
+      //}
     }
   });
 
@@ -355,8 +355,8 @@ function initStepper() {
                 <label class="form-label" for="linkPremio">Links de Premio</label>
                 <select name="linkPremio" aria-describedby="linkPremioError"  id="linkPremio" class="form-control">
                     <option disabled selected>Selecciona una opción</option>
-                    <option value="si">Sí</option>
-                    <option value="no">No</option>
+                    <option value="1">Sí</option>
+                    <option value="0">No</option>
                 </select>
                 <div id="linkPremioError" class="invalid-feedback linkPremio-error"></div>
             </div>
@@ -413,13 +413,14 @@ function initStepper() {
       if( NombreEtapa && orden  && descripcionEtapa && tipoParticipacion){
         var nuevo ={
           nombre: NombreEtapa,
-          descripcionEtapa: descripcionEtapa,
+          descripcion: descripcionEtapa,
           orden: orden,
           tipoParticipacion: tipoParticipacion,
           //datos sin explicacion(Intestigar)
           intervalo: 0,
           periodo: 0,
-          valorAcumulado: null
+          valorAcumulado: null,
+          estado: 1,
         }
         TEMP.push(nuevo);
     
@@ -444,7 +445,11 @@ function initStepper() {
     hideStep(actualStep);
     actualStep = totalSteps - 1;
     showStep(actualStep);
-  
+    
+        //borrar los arreglos para su reutilizacion
+        datosTablaParametro = [];
+        datosTablaLocalidad = [];
+        datosTablaPremio = [];
     // Agregar evento de clic al botón "Borrar" del nuevo paso
     newStep.find('#removeStepp').click(function(e) {
       e.preventDefault();
@@ -467,45 +472,48 @@ function initStepper() {
       var stepData = {
         etapa: TEMP,
         parametros: datosTablaParametro,
-        localidades: datosTablaLocalidad,
+        presupuesto: datosTablaLocalidad,
         premio: datosTablaPremio
       };
       // Guardar los datos de la etapa en el objeto correspondiente
       DataEtapa.push(stepData);
       getEtapasData() 
       console.log(getEtapasData() );
-
+      
       mostrarDatosTabla('#TablaEtapa');
+
       //Funciones del stepp
       hideStep(actualStep);
       actualStep = previousStep; // Establecer actualStep al valor guardado
       showStep(actualStep);
       newStep.html('');
       stepData = null;
+
     });
   
 
     $('#addParamas').click(function(){
-      var limiteParticipacion = $('#limiteParticipacion').val();
-      var totalMinimo = $('#totalMinimo').val();
-      var Transaccion = $('#transaccion').val();
+      var limiteParticipacion = parseInt($('#limiteParticipacion').val());
+      var totalMinimo = parseInt($('#totalMinimo').val());
+      var Transaccion = parseInt($('#transaccion').val());
       var limiteDiario = $('#limiteDia').val();
-      var valorMinimo = $('#valorMinimo').val();
-      var valorMaximo = $('#valorMaximo').val();
+      var ValorMinimo = parseFloat($('#valorMinimo').val());
+      var ValorMaximo = parseFloat($('#valorMaximo').val());
       var RangoDias = $('#RangoDias').val();
     
-      if( totalMinimo  && limiteDiario && valorMinimo && valorMaximo && RangoDias){
+      if( totalMinimo  && limiteDiario && ValorMinimo && ValorMaximo && RangoDias){
         
         var nuevoParametro= {
           limiteParticipacion: limiteParticipacion,
-          transaccion: Transaccion,
+          idTransaccion: Transaccion,
           //tipo de transaccion Que es?
           tipoTransaccion: 0,
-          valorMinimo: valorMinimo,
+          ValorMinimo: ValorMinimo,
           //limiteDiario: limiteDiario,
-          valorMaximo: valorMaximo,
+          ValorMaximo: ValorMaximo,
           valorAnterior: 0,
           //rangoDias: RangoDias 
+          estado: 1
         }
     
         datosTablaParametro.push(nuevoParametro);
@@ -526,24 +534,25 @@ function initStepper() {
 
     $('#addLocalidad').click(function() {
       // Obtener los valores de los campos de entrada
-      var departamento = $('#departamento').val();
-      var municipio = $('#municipio').val();
-      var limiteGanador = $('#limiteGanador').val();
-      var presupuesto = $('#presupuesto').val();
+      var departamento = parseInt($('#departamento').val());
+      var municipio = parseInt($('#municipio').val());
+      var limiteGanador = parseInt($('#limiteGanador').val());
+      var presupuesto = parseFloat($('#presupuesto').val());
     
       // Validar que los campos no estén vacíos
       if (departamento && municipio && limiteGanador && presupuesto) {
         // Crear un objeto con los datos
         var nuevoDato = {
-          departamento: departamento,
-          municipio: municipio,
-          limiteGanador: limiteGanador,
-          presupuesto: presupuesto
+          idDepartamento: departamento,
+          idMunicipio: municipio,
+          limiteGanadores: limiteGanador,
+          valor: presupuesto,
+          estado: 1
         };
     
         // Agregar el nuevo dato al arreglo
         datosTablaLocalidad.push(nuevoDato);
-    
+        console.log(datosTablaLocalidad)
         // Limpiar los campos de entrada
         $('#departamento').val('');
         $('#municipio').val('');
@@ -561,24 +570,25 @@ function initStepper() {
     });
     
     $('#addPremio').click(function(){
-      var index =0;
       var tipoPremio = $('#tipoPremio').val();
-      var linkPremio = $('#linkPremio').val();
-      var premio = $('#premio').val();
-      var valor = $('#valor').val();
-      var porcentaje = $('#porcentajePremio').val();
+      var linkPremio = parseInt($('#linkPremio').val());
+      var premio = parseInt($('#premio').val());
+      var valor = parseFloat($('#valor').val());
+      //var porcentaje = $('#porcentajePremio').val();
     
-      if( tipoPremio && linkPremio  && valor && porcentaje){
-        index++;
+      if( tipoPremio && linkPremio  && valor  ){
         var nuevoPremio ={
-          tipoPremio: tipoPremio,
-          linkPremio: linkPremio,
-          premio: premio,
+          idPremio : premio,
+          linkPremio: linkPremio, 
+          //premio: premio,
           valor: valor,
-          porcentajePremio : porcentaje
+          estado: 1
+          //porcentajePremio : porcentaje
         }
+
+        console.log(tipoPremio)
         datosTablaPremio.push(nuevoPremio);
-    
+        console.log(datosTablaPremio)
         $('#tipoPremio').val('');
         $('#linkPremio').val('');
         $('#premio').val('');
@@ -586,10 +596,10 @@ function initStepper() {
         $('#porcentajePremio').val('');
     
         mostrarDatosParametro('#TablaPremio');
-        console.log(nuevoPremio);
         
       }else{
         //Colocar una alerta 
+        alert("ERRORR")
       }
     });
 
@@ -612,10 +622,10 @@ function initStepper() {
                 return meta.row + 1;
                 }   
               },
-              { data: 'departamento' },
-              { data: 'municipio' },
-              { data: 'limiteGanador' },
-              { data: 'presupuesto' }
+              { data: 'idDepartamento' },
+              { data: 'idMunicipio' },
+              { data: 'limiteGanadores' },
+              { data: 'valor' }
             ]
           });
         break;
@@ -636,9 +646,9 @@ function initStepper() {
                   return meta.row + 1;
                 }  
               },
-              { data: 'transaccion' },
-              { data: 'valorMinimo' },
-              { data: 'valorMaximo' }
+              { data: 'idTransaccion' },
+              { data: 'ValorMinimo' },
+              { data: 'ValorMaximo' }
             ]
           });
         break;
@@ -659,9 +669,9 @@ function initStepper() {
                   return meta.row + 1;
                   }  
               },
-              { data: 'premio' },
+              { data: 'idPremio' },
               { data: 'valor' },
-              { data: 'porcentajePremio' }
+              { data: 'linkPremio' }
              ]
            });
         break;
@@ -682,7 +692,7 @@ function getEtapasData() {
     return {
       ...stepData.etapa[0],
       parametros: stepData.parametros || [],
-      localidades: stepData.localidades || [],
+      presupuesto: stepData.presupuesto || [],
       premio: stepData.premio || []
     };
   });
@@ -757,28 +767,6 @@ function mostrarDatosTabla(tabla) {
         ]
       });
 
-    case '#TablaPremio':
-       // Limpiar la tabla antes de insertar nuevas filas
-       $('#TablaPremio').DataTable().clear().destroy();
-
-       // Inicializar el DataTables con los datos de datosTablaLocalidad
-       $('#TablaPremio').DataTable({
-         searching: false, // Deshabilitar la funcionalidad de búsqueda
-         paging: false,
-         data: datosTablaPremio,
-         columns: [
-           { 
-            render: function(data, type, row, meta) {
-              // Aquí puedes usar `meta.row` para obtener el índice de la fila actual
-              return meta.row + 1;
-              }  
-          },
-          { data: 'premio' },
-          { data: 'valor' },
-          { data: 'porcentajePremio' }
-         ]
-       });
-    break;
 
     case '#tablaBloqueo':
       // Limpiar la tabla antes de insertar nuevas filas
@@ -1076,7 +1064,7 @@ function Calendar () {
   generateCalendar(currentYear, currentMonth);
 };
 
-
+/*
 //Validacion de form
 function validarCamposStep(stepIndex) {
   var config = `step${stepIndex+1}`;
@@ -1210,7 +1198,7 @@ function validarCamposStep(stepIndex) {
   }
   
 
-}
+}*/
 
 //Funcion Para limpiar el form
 const limpiarForm = ()=>{
