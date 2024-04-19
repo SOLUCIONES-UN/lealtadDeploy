@@ -712,10 +712,36 @@ $('#addBloqueo').click(function(){
 
     bloqueadosUsuarios.push(block);
     $('#usuarioBloqueo').val("");
-
-    mostrarDatosTabla('#tablaBloqueo');
   }
 });
+
+// Función para cargar usuarios bloqueados desde un archivo XLSX
+$('#Archivo').change(function(e) {
+  var inputFile = e.target;
+  var extPermitidas = /(.xlsx)$/;
+
+  if (!extPermitidas.exec(inputFile.value)) {
+    Alert("El archivo debe ser un excel", "error");
+    inputFile.value = "";
+  } else {
+    readXlsxFile(inputFile.files[0]).then(function(data) {
+      data.map((row, indexP) => {
+        var block = {
+          numero: row[0],
+          estado: 1
+        };
+
+        bloqueadosUsuarios.push(block);
+      });
+
+
+    });
+  }
+});
+
+$('#mostrar').click(function(){
+  mostrarDatosTabla('#tablaBloqueo');
+})
 
 function mostrarDatosTabla(tabla) {
 
