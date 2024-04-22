@@ -91,3 +91,7 @@
     background-color: #978EF3;
     color: whitesmoke;
 }
+
+.step-button.hidden {
+    visibility: hidden;
+}

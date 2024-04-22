@@ -8,27 +8,23 @@ var datosTablaPremio = [];
 var datosTablaParametro = [];
 var indexLocalidad = 0;
 var datosTablaParticipacion= [];
-var datosBloqueados = [];
+//var datosBloqueados = [];
 var TEMP =[];
 var etapasData=[]
 //variables de imagenes
 let imgCampania = null;
 
-var DataEtapa=[];
-
 var bloqueadosUsuarios =[];
-
+var DataEtapa =[];
 
 $(function () {
 
   initStepper();
   getAllCampanias();
   //select
-  
   getProjecs();
-
-
   Calendar();
+
   const containerArchivo = document.getElementById('containerArchivo');
   if (containerArchivo) {
     containerArchivo.style.display = 'none';
@@ -105,10 +101,10 @@ $(function () {
       esArchivada: 0,
       idProyecto: parseInt($('#proyecto').val()),
       etapas: getEtapasData(),
+      bloqueados: bloqueadosUsuarios
       /*
       participacion: getParticipacionData(),
-      bloqueados: getBloqueoData()*/
-
+      */
     });
 
     console.log(raw);
@@ -125,8 +121,8 @@ $(function () {
         .then(response => response.json())
         .then(result => {
             if (result.code == "ok") {
-                limpiarForm();
-                //tabla._fnAjaxUpdate();
+              limpiarFormulario();
+              //tabla._fnAjaxUpdate();
                 $('#modalNew').modal('toggle');
                 Alert(result.message, 'success');
                 console.log(result);
@@ -160,13 +156,13 @@ function initStepper() {
 
     if (actualStep < totalSteps - 1) {
       
-      //if(validarCamposStep(actualStep)){
+      if(validarCamposStep(actualStep)){
         hideStep(actualStep);
         actualStep++;
         showStep(actualStep);  
-      //}else{
+      }else{
         console.log("Error")
-      //}
+      }
     }
   });
 
@@ -226,7 +222,7 @@ function initStepper() {
   $('#add-step-btn').click(function() {
     //getTransaccion();
     getDepartamento();
-    getMunicipio();
+    //getMunicipio();
     getTransaccion();
     getPremio();
     addStep(`<div class="form-step ">
@@ -284,6 +280,7 @@ function initStepper() {
           <th>Transaccion</th>
           <th>Valor Minimo</th>
           <th>Valor Maximo</th>
+          <th>Accion</th>
         </tr>
       </thead>
     </table>
@@ -332,6 +329,7 @@ function initStepper() {
                 <th>MUNICIPIO</th>
                 <th>LIMITE</th>
                 <th>PRESUPUESTO</th>
+                <th>Accion</th>
             </tr>
         </thead>
     </table>
@@ -395,6 +393,7 @@ function initStepper() {
                     <th>PREMIO</th>
                     <th>VALOR</th>
                     <th>PORCENTAJE</th>
+                    <th>Accion</th>
                 </tr>
             </thead>
         </table>  
@@ -445,7 +444,9 @@ function initStepper() {
     hideStep(actualStep);
     actualStep = totalSteps - 1;
     showStep(actualStep);
-    
+
+    // Deshabilitar y ocultar los botones de la barra
+    $('.step-button').prop('disabled', true);
         //borrar los arreglos para su reutilizacion
         datosTablaParametro = [];
         datosTablaLocalidad = [];
@@ -459,6 +460,8 @@ function initStepper() {
         showStep(actualStep);
         newStep.html('');
         stepData = null;
+      // Habilitar los botones de la barra
+      $('.step-buttons button').prop('disabled', false);
       }
     });
 
@@ -488,7 +491,9 @@ function initStepper() {
       showStep(actualStep);
       newStep.html('');
       stepData = null;
-
+      
+      // Habilitar los botones de la barra
+      $('.step-buttons button').prop('disabled', false);
     });
   
 
@@ -518,6 +523,7 @@ function initStepper() {
     
         datosTablaParametro.push(nuevoParametro);
         console.log(datosTablaParametro);
+        $('#limiteParticipacion').val('');
         $('#totalMinimo').val('');
         $('#transaccion').val('');
         $('#limiteDia').val('');
@@ -622,10 +628,32 @@ function initStepper() {
                 return meta.row + 1;
                 }   
               },
-              { data: 'idDepartamento' },
-              { data: 'idMunicipio' },
+              {
+                data: 'idDepartamento',
+                render: function (data) {
+                  var departamento = $('#departamento option[value="' + data + '"]').text();
+                  return departamento;
+                }
+              },
+              {
+                data: 'idMunicipio',
+                render: function (data) {
+                  var municipio = $('#municipio option[value="' + data + '"]').text();
+                  return municipio;
+                }
+              },
               { data: 'limiteGanadores' },
-              { data: 'valor' }
+              { data: 'valor' },
+              {
+                render: function (data, type, row, meta) {
+                  var opcDelete = `
+                    <a href="#" class="dropdown-item" onclick="eliminarDato('${tabla}', ${meta.row})">
+                      ${feather.icons["trash-2"].toSvg({ class: "font-small-4 mr-50" })} Eliminar
+                    </a>
+                  `;
+                  return opcDelete;
+                }
+              }
             ]
           });
         break;
@@ -646,9 +674,25 @@ function initStepper() {
                   return meta.row + 1;
                 }  
               },
-              { data: 'idTransaccion' },
+              {
+                data: 'idTransaccion',
+                render: function (data) {
+                  var transaccion = $('#transaccion option[value="' + data + '"]').text();
+                  return transaccion;
+                }
+              },
               { data: 'ValorMinimo' },
-              { data: 'ValorMaximo' }
+              { data: 'ValorMaximo' },
+              {
+                render: function (data, type, row, meta) {
+                  var opcDelete = `
+                    <a href="#" class="dropdown-item" onclick="eliminarDato('${tabla}', ${meta.row})">
+                      ${feather.icons["trash-2"].toSvg({ class: "font-small-4 mr-50" })} Eliminar
+                    </a>
+                  `;
+                  return opcDelete;
+                }
+              }
             ]
           });
         break;
@@ -669,9 +713,30 @@ function initStepper() {
                   return meta.row + 1;
                   }  
               },
-              { data: 'idPremio' },
+              {
+                data: 'idPremio',
+                render: function (data) {
+                  var premio = $('#premio option[value="' + data + '"]').text();
+                  return premio;
+                }
+              },
               { data: 'valor' },
-              { data: 'linkPremio' }
+              {
+                data: 'linkPremio',
+                render: function (data) {
+                  return data === 1 ? 'Sí' : 'No';
+                }
+              },
+              {
+                render: function (data, type, row, meta) {
+                  var opcDelete = `
+                    <a href="#" class="dropdown-item" onclick="eliminarDato('${tabla}', ${meta.row})">
+                      ${feather.icons["trash-2"].toSvg({ class: "font-small-4 mr-50" })} Eliminar
+                    </a>
+                  `;
+                  return opcDelete;
+                }
+              }
              ]
            });
         break;
@@ -701,7 +766,6 @@ function getEtapasData() {
 }
 
 // Función para agregar datos a la tabla y al arreglo
-
 $('#addBloqueo').click(function(){
   var usuarioBloqueo = $('#usuarioBloqueo').val();
 
@@ -747,30 +811,6 @@ function mostrarDatosTabla(tabla) {
 
   switch(tabla)
   {
-    case '#tableLocalidad':
-        // Limpiar la tabla antes de insertar nuevas filas
-      $('#tableLocalidad').DataTable().clear().destroy();
-
-      // Inicializar el DataTables con los datos de datosTablaLocalidad
-      $('#tableLocalidad').DataTable({
-        searching: false, // Deshabilitar la funcionalidad de búsqueda
-        paging: false,
-        data: datosTablaLocalidad,
-        columns: [
-          {             
-            render: function(data, type, row, meta) {
-            // Aquí puedes usar `meta.row` para obtener el índice de la fila actual
-            return meta.row + 1;
-            } 
-          },
-          { data: 'departamento' },
-          { data: 'municipio' },
-          { data: 'limiteGanador' },
-          { data: 'presupuesto' }
-        ]
-      });
-    break;
-  
     case '#TablaEtapa':
         // Limpiar la tabla antes de insertar nuevas filas
       $('#TablaEtapa').DataTable().clear().destroy();
@@ -788,42 +828,51 @@ function mostrarDatosTabla(tabla) {
             } 
           },
           { data: 'nombre' },
-          { data: '' },
-          {  }
-        ]
-      });
-
-
-    case '#tablaBloqueo':
-      // Limpiar la tabla antes de insertar nuevas filas
-      $('#tablaBloqueo').DataTable().clear().destroy();
-
-      // Inicializar el DataTables con los datos de datosTablaLocalidad
-      $('#tablaBloqueo').DataTable({
-        searching: false, // Deshabilitar la funcionalidad de búsqueda
-        paging: false,
-        data: bloqueadosUsuarios,
-        columns: [
-          {         
-            render: function(data, type, row, meta) {
-            // Aquí puedes usar `meta.row` para obtener el índice de la fila actual
-            return meta.row + 1;
-            } 
-          },
-          { data: 'numero' },
+          { data: 'descripion' },
           {
-            render: function() {
-              var opcAdd = `
-                <a href="#" class=" dropdown-item">
+            render: function(data, type, row, meta) {
+              var opcDelete = `
+                <a href="#" class="dropdown-item" onclick="eliminarDato('${tabla}', ${meta.row})">
                   ${feather.icons["trash-2"].toSvg({ class: "font-small-4 mr-50" })} Eliminar
                 </a>
               `;
-              return opcAdd;
+              return opcDelete;
             }
           }
         ]
-      });
-   break;
+    });
+
+
+    case '#tablaBloqueo':
+        // Limpiar la tabla antes de insertar nuevas filas
+        $('#tablaBloqueo').DataTable().clear().destroy();
+      
+        // Inicializar el DataTables con los datos de datosTablaLocalidad
+        $('#tablaBloqueo').DataTable({
+          searching: false, // Deshabilitar la funcionalidad de búsqueda
+          paging: false,
+          data: bloqueadosUsuarios,
+          columns: [
+            {         
+              render: function(data, type, row, meta) {
+                // Aquí puedes usar `meta.row` para obtener el índice de la fila actual
+                return meta.row + 1;
+              } 
+            },
+            { data: 'numero' },
+            {
+              render: function(data, type, row, meta) {
+                var opcDelete = `
+                  <a href="#" class="dropdown-item" onclick="eliminarDato('${tabla}', ${meta.row})">
+                    ${feather.icons["trash-2"].toSvg({ class: "font-small-4 mr-50" })} Eliminar
+                  </a>
+                `;
+                return opcDelete;
+              }
+            }
+          ]
+        });
+    break;
 
     default:
       break;
@@ -831,6 +880,28 @@ function mostrarDatosTabla(tabla) {
 
 }
 
+function eliminarDato(tabla, index) {
+  switch (tabla) {
+    case '#tablaBloqueo':
+      bloqueadosUsuarios.splice(index, 1);
+      break;
+    case '#TablaEtapa':
+      TEMP.splice(index, 1);
+      break;
+    case '#tableLocalidad':
+      datosTablaLocalidad.splice(index, 1);
+      break;
+    case '#TablaParametros':
+      datosTablaParametro.splice(index, 1);
+      break;
+    case '#TablaPremio':
+      datosTablaPremio.splice(index, 1);
+      break;
+    default:
+      break;
+  }
+  mostrarDatosTabla(tabla);
+}
 //funcion para la visualizacion previa de las imagenes (VER FUNCIONALIDAD) Error en reutilizar variable img
 function previewImage(event, textImg, textContent) {
   const input = event.target;
@@ -852,12 +923,17 @@ function previewImage(event, textImg, textContent) {
     } else {
       preview.src = '#';
       preview.style.display = 'none';
+      imgCampania.style.display = 'block';
     }
+    
+    // Agregar evento de clic al elemento de preview
+    preview.addEventListener('click', function() {
+      input.click(); // Simular clic en el input de archivo
+    });
   } else {
     console.error('Elemento con ID ' + textContent + ' no encontrado en el documento.');
   }
 }
-
 
 //Funcion para validar la restriccion de usuarios (Primeros cambios)
 function userValidator(event, container) {
@@ -932,25 +1008,42 @@ const getDepartamento = () =>{
         var opc  = `<option value="${element.id}">${element.nombre}</option>`;
         $('#departamento').append(opc);
       });
+
+      var selectDepartamento = document.getElementById('departamento');
+
+      selectDepartamento.addEventListener('change', function() {
+          var selectedId = this.value; 
+          getMunicipioByDepto(selectedId); 
+      });
     })
+    .catch(err => console.log('error', err));
+    return false;
 }
 
-//Funcion para traer los municipios
-const getMunicipio = () =>{
+const getMunicipioByDepto = (idDepartamento) =>{
   var requestOptions = {
     method: 'GET',
     redirect: 'follow',
-    headers: {"Authorization": token}
+    headers: { "Authorization": token }
   };
 
-  fetch(`${url}Municipio`, requestOptions)
-    .then(response => response.json())
-    .then(result =>{
-      result.forEach(element => {
-        var opc  = `<option value="${element.id}">${element.nombre}</option>`;
-        $('#municipio').append(opc);
-      });
-    })
+  // Limpiar completamente los selectores de tablas
+  $('#municipio').empty();
+
+  fetch(`${url}Municipio/by/${idDepartamento}`, requestOptions)
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          return response.json();})
+      .then(result => {
+          result.forEach(element => {
+              var opc = `<option value="${element.id}">${element.nombre}</option>`;
+              $('#municipio').append(opc);
+          });
+      })
+      .catch(err => console.log('error', err));
+  return false;
 }
 
 //Funcion para traer los Transacciones
@@ -1090,7 +1183,7 @@ function Calendar () {
   generateCalendar(currentYear, currentMonth);
 };
 
-/*
+
 //Validacion de form
 function validarCamposStep(stepIndex) {
   var config = `step${stepIndex+1}`;
@@ -1121,6 +1214,7 @@ function validarCamposStep(stepIndex) {
         'notificacion', 
         'descripcionCampania', 
         'descripcionNotificacion',
+        'Observaciones',
         'terminosCondiciones',
         'fechaRegistro',
         'usuarioPermitido',
@@ -1129,7 +1223,8 @@ function validarCamposStep(stepIndex) {
         'edadInicial',
         'edadFinal',
         'tipoUsuarios',
-        'sexo'
+        'sexo',
+        'maximoParticipantes'
       ];
 
       var isValid = true;
@@ -1143,22 +1238,38 @@ function validarCamposStep(stepIndex) {
           $('#' + field).removeClass('is-invalid');
           isValid = true;
         }
-
-
       });
+
+      var edadInicial = parseInt($('#edadInicial').val());
+      var edadFinal = parseInt($('#edadFinal').val());
+      if (edadInicial > edadFinal) {
+        $('#edadInicial').addClass('is-invalid');
+        $('#edadFinal').addClass('is-invalid');
+        isValid = false;
+      }
+    
+      // Validar que la fecha inicial no sea mayor que la fecha fin
+      var fechaInicial = new Date($('#fechaInicial').val());
+      var fechaFinal = new Date($('#fechaFinal').val());
+      if (fechaInicial > fechaFinal) {
+        $('#fechaInicial').addClass('is-invalid');
+        $('#fechaFinal').addClass('is-invalid');
+        isValid = false;
+      }
+
       return isValid;
     }
 
     case 'step3':{
       var fields = [
-        'departamento', 
-        'municipio', 
-        'limiteGanador', 
-        'presupuesto'
+        'NombreEtapa', 
+        'orden', 
+        'descripcionEtapa', 
+        'tipoParticipacion'
       ];
 
       var isValid = true;
-      if(datosTablaLocalidad.length === 0){
+      if(TEMP.length === 0){
         fields.forEach(function(field) {
           var value = $('#' + field).val();
           if (!value) {
@@ -1177,32 +1288,6 @@ function validarCamposStep(stepIndex) {
       }
       return isValid;
     }
-      
-
-    case 'step4':
-      {
-        var fields = [
-          'NombreEtapa',
-          'orden',
-          'descripcionEtapa',
-          'tipoParticipacion'
-        ];
-
-        var isValid = true;
-
-        fields.forEach(function(field) {
-          var value = $('#' + field).val();
-          if (!value) {
-            $('#' + field).addClass('is-invalid');
-            isValid = false;
-          } else {
-            $('#' + field).removeClass('is-invalid');
-          }
-        });
-
-        return isValid;
-  
-      }
 
 
 
@@ -1224,23 +1309,52 @@ function validarCamposStep(stepIndex) {
   }
   
 
-}*/
-
-//Funcion Para limpiar el form
-const limpiarForm = ()=>{
-  actualStep = 0;
 }
 
-//Alertas
-/*
-const Alert = function (message, status) {
-  toastr[`${status}`](message, `${status}`, {
-      closeButton: true,
-      tapToDismiss: false,
-      positionClass: 'toast-top-right',
-      rtl: false
-  });
-}*/
+// Limpiar los campos de entrada
+function limpiarFormulario() {
+ 
+  $('#campania').val('');
+  $('#descripcionCampania').val('');
+  $('#fechaRegistro').val('');
+  $('#fechaInicial').val('');
+  $('#fechaFinal').val('');
+  $('#HoraRecordatorio').val('');
+  $('#correo').val('');
+  $('#edadInicial').val('');
+  $('#edadFinal').val('');
+  $('#sexo').val('');
+  $('#tipoUsuarios').val('');
+  $('#notificacion').val('');
+  $('#descripcionNotificacion').val('');
+  $('#imgCampania').val('');
+  $('#imgNotificacion').val('');
+  $('#maximoParticipantes').val('');
+  $('#tercerosCampania').val('');
+  $('#allday').prop('checked', false);
+  $('#repeat').prop('checked', false);
+  $('#FechaIniRecordatorio').val('');
+  $('#FechaFinRecordatorio').val('');
+  $('#terminosCondiciones').val('');
+  $('#Observaciones').val('');
+  $('#proyecto').val('');
+  $('#restriccionUsuarios').val('');
+  $('#Archivo').val('');
+  $('#usuarioBloqueo').val('');
+
+  // Limpiar las tablas
+  $('#TablaEtapa').DataTable().clear().destroy();
+  $('#tablaBloqueo').DataTable().clear().destroy();
+
+  // Limpiar los arreglos
+  TEMP = [];
+  DataEtapa = [];
+  bloqueadosUsuarios = [];
+
+  // Reiniciar el stepper
+  actualStep = 0;
+  showStep(actualStep);
+}
 
 
 const getAllCampanias = () => {
