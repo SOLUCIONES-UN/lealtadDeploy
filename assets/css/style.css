@@ -257,15 +257,8 @@ span{
 textarea {
 	resize: none;
 }
-.dataTables_wrapper .dataTables_filter {
-    margin-right: 22px; /* Ajusta el margen derecho según sea necesario */
-    margin-left: 10px; /* Ajusta el margen izquierdo según sea necesario */
-	
-}
-.dataTables_wrapper .dataTables_filter input {
-    width: 165px !important; /* Ajusta el ancho del input según sea necesario */
-}
-.dataTables_wrapper .dataTables_length {
-    margin-left: 16px; /* Ajusta el margen izquierdo según sea necesario */
-}
+
+
+
+
 
