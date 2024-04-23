@@ -22,9 +22,9 @@ $(function () {
   });
 
   $('#modalEdit').on('show.bs.modal', function () {
-    $("#btnSubmitEdit").attr("disabled", false);
+    $("#btnSubmitEdit").prop("disabled", false);
   });
-
+  
   $('#modalNew').on('hidden.bs.modal', function () {
     limpiarFormulario();
     $("#btnSubmit").attr("disabled", false);
@@ -32,7 +32,7 @@ $(function () {
 
   $('#modalEdit').on('hidden.bs.modal', function () {
     limpiarFormulario();
-    $("#btnSubmitEdit").attr("disabled", false);
+    $("#btnSubmitEdit").prop("disabled", false);
   });
 
 
@@ -45,7 +45,7 @@ $(function () {
 
   $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
     limpiarFormulario();
-    ("#btnSubmitEdit").attr("disabled", false);
+    $("#btnSubmitEdit").prop("disabled", false);
   });
 
   //evento submit del formulairo
@@ -174,13 +174,6 @@ $(function () {
       });
   });
 });
-
-// const Usuario = () => {
-//   let usuario = JSON.parse(localStorage.getItem("infoUsuario"));
-//   console.log(usuario);
-//   $(".user-name").text(usuario.nombre);
-//   $(".user-status").text(usuario.rol.descripcion);
-// };
 
 const getDepartamentos = () => {
   return $("#tableData").dataTable({
