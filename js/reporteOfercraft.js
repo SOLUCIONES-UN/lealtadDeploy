@@ -3,6 +3,7 @@ let token = localStorage.getItem("token");
 let datosObtenidos = null; // Variable global para almacenar los datos obtenidos
 let archivadas = 0;
 $(function() {
+    getCampanias();
     $("#btnDescargarExcel, #PantallaInfo").hide(); // Ocultar botones al inicio
 
     // Inicializar el plugin multiple-select
@@ -12,7 +13,7 @@ $(function() {
         placeholder: "Elige una promoción",
     });
 
-    getCampanias();
+
 
     $("#ConsultarPromo").on("click", function() {
         if (
@@ -52,7 +53,7 @@ const getCampanias = () => {
         headers: { Authorization: token },
     };
 
-    fetch(url + "Campania", requestOptions)
+    fetch(`${url}Campania`, requestOptions)
         .then((response) => response.json())
         .then((result) => {
             console.log("Campania obtenidas:", result);
@@ -112,42 +113,6 @@ const getReport = () => {
         });
 };
 
-// function mostrarDatosEnTabla(datos) {
-//     console.log("Datos para mostrar en la tabla:", datos);
-//     $("#TablaReportePromo").empty();
-//     datos.forEach((element) => {
-//         element.participaciones.forEach((participacion) => {
-//             const fecha = formatearFechaHora(participacion.fecha);
-//             const telefono = participacion.customerInfo ? participacion.customerInfo.telno : "Desconocido";
-//             const descripcionTrx = participacion.descripcionTrx || "Sin descripción";
-//             const valor = participacion.valor || "Sin valor";
-//             const nombre = participacion.customerInfo ? participacion.customerInfo.fname : "Sin nombre";
-//             const codigo = participacion.customerInfo ? participacion.customerInfo.customer_reference : "Sin código";
-//             const nombreCampania = participacion.campanium ? participacion.campanium.nombre : "Sin campaña";
-//             const fechaCreacion = participacion.campanium ? participacion.campanium.fechaCreacion : "Sin fecha";
-//             const premioDescripcion = participacion.premioDescripcion || "Sin premio";
-//             const premioMonto = participacion.detallepromocion && participacion.detallepromocion.premiopromocion ? parseFloat(participacion.detallepromocion.premiopromocion.valor).toFixed(2) : "0.00";
-//             const cupon = participacion.detallepromocion ? participacion.detallepromocion.cupon : "Sin cupón";
-
-//             const fila = `
-//         <tr> 
-//           <td>${fechaCreacion}</td>
-//           <td>${telefono}</td>
-//           <td>${nombre}</td>
-//           <td>${nombreCampania}</td>
-//           <td>${premioDescripcion}</td>
-//           <td>${valor}</td>
-//           <td>${descripcionTrx}</td>
-//           <td>${codigo}</td>
-//           <td>${premioMonto}</td>
-//           <td>${fecha}</td>
-//         </tr>
-//       `;
-//             $("#TablaReportePromo").append(fila);
-//         });
-//     });
-
-// }
 
 function mostrarDatosEnTabla(datos) {
     console.log("Datos para mostrar en la tabla:", datos);
@@ -188,13 +153,18 @@ function mostrarDatosEnTabla(datos) {
     });
     $('.datatables-basic tbody').html(tabla);
     $('.datatables-basic').DataTable({
-        order: [[0, 'asc']],
+
+        order: [
+            [0, 'asc']
+        ],
         ordering: true,
         language: {
             search: "Buscar:",
             searchPlaceholder: "Buscar",
             lengthMenu: "Mostrar _MENU_",
+
         },
+        scrollX: true
     });
 }
 
