@@ -30,12 +30,6 @@ $(function () {
     containerArchivo.style.display = 'none';
   }
 
-  // Ocultar el contenedor del total mínimo
-  const containerTotal = document.getElementById('totalMinimo-container');
-  if (containerTotal) {
-    containerTotal.style.display = 'none';
-  }
-
   // Ocultar el contenedor de bloqueo
   const containerBloqueo = document.querySelector('#Bloqueo');
   if (containerBloqueo) {
@@ -52,11 +46,14 @@ $(function () {
 
 
   $('#modalNew').on('show.bs.modal', function () {
-    
+
+  });
+
+  $('#modalEdit').on('shown.bs.modal', function () {
+    initStepperEdit();
   });
 
   $('#modalNew').on('hidden.bs.modal', function () {
-    
   });
 
   $('#modalNew').find('[data-dismiss="modal"]').click(function () {
@@ -273,10 +270,10 @@ function initStepper() {
           </div>
         </div>
     </div>
-    <table class="datatables-basic table mb-3 mt-2" id="TablaParametros">
+    <table class="datatables-basic table mb-3 mt-2 stepper-table" id="TablaParametros">
       <thead>
         <tr>
-          <th>Etapa</th>
+          <th>#</th>
           <th>Transaccion</th>
           <th>Valor Minimo</th>
           <th>Valor Maximo</th>
@@ -285,8 +282,8 @@ function initStepper() {
       </thead>
     </table>
     <div class="content-header mt-2 mb-1">
-            <h4 class="mb-0">Configuración de Premio</h4>
-            <small class="text-muted">Ingresa los datos basicos de la Campaña.</small>
+        <h4 class="mb-0">Configuración de Presupuesto</h4>
+        <small class="text-muted">Ingresa los datos basicos del presupuesto.</small>
     </div>
     <div class="row">
     <div class="form-group col-md-6">
@@ -321,7 +318,7 @@ function initStepper() {
         </div>
     </div>
     <!--Tabla-->
-    <table class="datatables-basic table mb-3 mt-2" id="tableLocalidad">
+    <table class="datatables-basic table mb-3 mt-2 stepper-table" id="tableLocalidad">
         <thead>
             <tr>
                 <th>#</th>
@@ -386,7 +383,7 @@ function initStepper() {
             </div>
         </div>
         <!--Tabla-->
-        <table class="datatables-basic table mb-3 mt-2" id="TablaPremio">
+        <table class="datatables-basic table mb-3 mt-2 stepper-table" id="TablaPremio">
             <thead>
                 <tr>
                     <th>#</th>
@@ -618,41 +615,50 @@ function initStepper() {
     
           // Inicializar el DataTables con los datos de datosTablaLocalidad
           $('#tableLocalidad').DataTable({
-            searching: false, // Deshabilitar la funcionalidad de búsqueda
+            searching: false,
             paging: false,
             data: datosTablaLocalidad,
             columns: [
-              { 
+              {
                 render: function(data, type, row, meta) {
-                // Aquí puedes usar `meta.row` para obtener el índice de la fila actual
-                return meta.row + 1;
-                }   
+                  return meta.row + 1;
+                },
+                width: '5%'
               },
               {
                 data: 'idDepartamento',
                 render: function (data) {
                   var departamento = $('#departamento option[value="' + data + '"]').text();
                   return departamento;
-                }
+                },
+                width: '25%'
               },
               {
                 data: 'idMunicipio',
                 render: function (data) {
                   var municipio = $('#municipio option[value="' + data + '"]').text();
                   return municipio;
-                }
+                },
+                width: '25%'
               },
-              { data: 'limiteGanadores' },
-              { data: 'valor' },
+              {
+                data: 'limiteGanadores',
+                width: '15%'
+              },
+              {
+                data: 'valor',
+                width: '15%'
+              },
               {
                 render: function (data, type, row, meta) {
                   var opcDelete = `
-                    <a href="#" class="dropdown-item" onclick="eliminarDato('${tabla}', ${meta.row})">
-                      ${feather.icons["trash-2"].toSvg({ class: "font-small-4 mr-50" })} Eliminar
+                    <a href="#" class="dropdown-item" onclick="eliminarDatoADD('#tableLocalidad', ${meta.row})">
+                      ${feather.icons["trash-2"].toSvg({ class: "font-small-4 mr-50" })} 
                     </a>
                   `;
                   return opcDelete;
-                }
+                },
+                width: '15%'
               }
             ]
           });
@@ -672,26 +678,30 @@ function initStepper() {
                 render: function(data, type, row, meta) {
                   // Aquí puedes usar `meta.row` para obtener el índice de la fila actual
                   return meta.row + 1;
-                }  
+                },
+                width: '5%' 
               },
               {
                 data: 'idTransaccion',
                 render: function (data) {
                   var transaccion = $('#transaccion option[value="' + data + '"]').text();
                   return transaccion;
-                }
+                },
+                width: '30%'
               },
-              { data: 'ValorMinimo' },
-              { data: 'ValorMaximo' },
+              { data: 'ValorMinimo', width: '20%' },
+              { data: 'ValorMaximo', width: '20%' },
               {
+                
                 render: function (data, type, row, meta) {
                   var opcDelete = `
-                    <a href="#" class="dropdown-item" onclick="eliminarDato('${tabla}', ${meta.row})">
-                      ${feather.icons["trash-2"].toSvg({ class: "font-small-4 mr-50" })} Eliminar
+                    <a href="#" class="dropdown-item" onclick="eliminarDatoADD('#TablaParametros', ${meta.row})">
+                      ${feather.icons["trash-2"].toSvg({ class: "font-small-4 mr-50" })} 
                     </a>
                   `;
                   return opcDelete;
-                }
+                },
+                width: '25%'
               }
             ]
           });
@@ -711,27 +721,30 @@ function initStepper() {
                 render: function(data, type, row, meta) {
                   // Aquí puedes usar `meta.row` para obtener el índice de la fila actual
                   return meta.row + 1;
-                  }  
+                },
+                width: '5%'  
               },
               {
                 data: 'idPremio',
                 render: function (data) {
                   var premio = $('#premio option[value="' + data + '"]').text();
                   return premio;
-                }
+                },
+                width: '30%'
               },
-              { data: 'valor' },
+              { data: 'valor', width: '30%' },
               {
                 data: 'linkPremio',
                 render: function (data) {
                   return data === 1 ? 'Sí' : 'No';
-                }
+                },
+                width: '30%'
               },
               {
                 render: function (data, type, row, meta) {
                   var opcDelete = `
-                    <a href="#" class="dropdown-item" onclick="eliminarDato('${tabla}', ${meta.row})">
-                      ${feather.icons["trash-2"].toSvg({ class: "font-small-4 mr-50" })} Eliminar
+                    <a href="#" class="dropdown-item" onclick="eliminarDatoADD('#TablaPremio', ${meta.row})">
+                      ${feather.icons["trash-2"].toSvg({ class: "font-small-4 mr-50" })}
                     </a>
                   `;
                   return opcDelete;
@@ -750,6 +763,75 @@ function initStepper() {
   }
 
 }
+
+//editar
+function initStepperEdit() {
+  var actualStepEdit = 0;
+  var stepsEdit = $('#stepperEdit').children();
+  var totalStepsEdit = stepsEdit.length;
+
+  showStepEdit(actualStepEdit);
+
+  $('.next-btn-edit').click(function(e) {
+    e.preventDefault();
+
+    if (actualStepEdit < totalStepsEdit - 1) {
+      hideStepEdit(actualStepEdit);
+      actualStepEdit++;
+      showStepEdit(actualStepEdit);
+    }
+  });
+
+  $('.prev-btn-edit').click(function(e) {
+    e.preventDefault();
+
+    if (actualStepEdit > 0) {
+      hideStepEdit(actualStepEdit);
+      actualStepEdit--;
+      showStepEdit(actualStepEdit);
+    }
+  });
+
+  function showStepEdit(stepIndex) {
+    stepsEdit.eq(stepIndex).show();
+
+    $('.step-progress').removeClass('active');
+    $('.step-btn-' + (stepIndex + 1)).addClass('active');
+  }
+
+  $('.step-btn-1').click(function(e) {
+    e.preventDefault();
+    hideStepEdit(actualStepEdit);
+    actualStepEdit = 0;
+    showStepEdit(actualStepEdit);
+  });
+
+  $('.step-btn-2').click(function(e) {
+    e.preventDefault();
+    hideStepEdit(actualStepEdit);
+    actualStepEdit = 1;
+    showStepEdit(actualStepEdit);
+  });
+
+  $('.step-btn-3').click(function(e) {
+    e.preventDefault();
+    hideStepEdit(actualStepEdit);
+    actualStepEdit = 2;
+    showStepEdit(actualStepEdit);
+  });
+
+  $('.step-btn-4').click(function(e) {
+    e.preventDefault();
+    hideStepEdit(actualStepEdit);
+    actualStepEdit = 3;
+    showStepEdit(actualStepEdit);
+  });
+
+  function hideStepEdit(stepIndex) {
+    stepsEdit.eq(stepIndex).hide();
+  }
+}
+
 
 // Modificar la función getEtapasData para recorrer el objeto de etapas
 function getEtapasData() {
@@ -828,7 +910,7 @@ function mostrarDatosTabla(tabla) {
             } 
           },
           { data: 'nombre' },
-          { data: 'descripion' },
+          { data: 'descripcion' },
           {
             render: function(data, type, row, meta) {
               var opcDelete = `
@@ -902,7 +984,7 @@ function eliminarDato(tabla, index) {
   }
   mostrarDatosTabla(tabla);
 }
-//funcion para la visualizacion previa de las imagenes (VER FUNCIONALIDAD) Error en reutilizar variable img
+
 function previewImage(event, textImg, textContent) {
   const input = event.target;
   const preview = document.getElementById(textImg);
@@ -926,9 +1008,9 @@ function previewImage(event, textImg, textContent) {
       imgCampania.style.display = 'block';
     }
     
-    // Agregar evento de clic al elemento de preview
-    preview.addEventListener('click', function() {
-      input.click(); // Simular clic en el input de archivo
+    // Agregar evento de clic al preview
+    preview.parentElement.addEventListener('click', function() {
+      input.click();
     });
   } else {
     console.error('Elemento con ID ' + textContent + ' no encontrado en el documento.');
@@ -940,37 +1022,18 @@ function userValidator(event, container) {
   const input = event.target;
   const containerArchivo = document.getElementById(container);
   const containerBloqueo = document.getElementById('Bloqueo');
-
-  const regexNumerico = /^[2-4]$/;
   
-  switch(container){
-    case 'containerArchivo':
-
-      if (input.value === '0' || input.value === 0 || input.value === null) {
-        containerArchivo.style.display = 'none';
-        containerBloqueo.style.display = 'none';
-      } else {
-        containerArchivo.style.display = 'block';
-        containerBloqueo.style.display = 'none';
-        if(input.value === 2 || input.value === '2'){
-          containerBloqueo.style.display = 'flex';
-        } 
-      }
-    break;
-    
-    case 'totalMinimo-container':
-      if (regexNumerico.test(input.value)) {
-        containerArchivo.style.display = 'block';
-      } else {
-        containerArchivo.style.display = 'none';
-      }
-    break;
-
-    default:
-      containerArchivo.style.display = 'none';
-    break;
-      
+  if (input.value === '0' || input.value === 0 || input.value === null) {
+    containerArchivo.style.display = 'none';
+    containerBloqueo.style.display = 'none';
+  } else {
+    containerArchivo.style.display = 'block';
+    containerBloqueo.style.display = 'none';
+    if(input.value === 2 || input.value === '2'){
+      containerBloqueo.style.display = 'flex';
+    } 
   }
+      
 }
 
 /*FUNCIONES PARA TRAER DATOS A LOS SELECT*/
@@ -1261,49 +1324,34 @@ function validarCamposStep(stepIndex) {
     }
 
     case 'step3':{
-      var fields = [
-        'NombreEtapa', 
-        'orden', 
-        'descripcionEtapa', 
-        'tipoParticipacion'
-      ];
-
       var isValid = true;
-      if(TEMP.length === 0){
-        fields.forEach(function(field) {
-          var value = $('#' + field).val();
-          if (!value) {
-            $('#' + field).addClass('is-invalid');
-            isValid = false;
-          } else {
-            $('#' + field).removeClass('is-invalid');
-            isValid = true;
-          }
-  
-  
-        });
-        isValid = false;
-      }else{
-        isValid=  true;
-      }
       return isValid;
+
     }
 
 
 
-    case 'step5':
-      {
-        var isValid = true;
-        if(datosTablaLocalidad.length === 0){
-          isValid = false;
-        }else{
-          isValid=  true;
-        }
-        return isValid;
-      }
-
-    case 'step6':{
+    case 'step4':
+    {
+      var fields = [
+        'FechaIniRecordatorio', 
+        'FechaFinRecordatorio', 
+        'HoraRecordatorio',
+        'correo'
+      ];
       var isValid = true;
+      
+      fields.forEach(function(field) {
+        var value = $('#' + field).val();
+        if (!value) {
+          $('#' + field).addClass('is-invalid');
+          isValid = false;
+        } else {
+          $('#' + field).removeClass('is-invalid');
+          isValid = true;
+        }
+      });
+      
       return isValid;
     }
   }
@@ -1311,7 +1359,7 @@ function validarCamposStep(stepIndex) {
 
 }
 
-// Limpiar los campos de entrada
+
 function limpiarFormulario() {
  
   $('#campania').val('');
@@ -1509,17 +1557,7 @@ const table = (table, data) => {
         init: function (api, node, config) {
             $(node).removeClass('btn-secondary');
             //Metodo para agregar un nuevo usuario
-        },
-        /*
-        text: "Nuevo",
-        className: "btn btn-primary mt-50",
-        action: function (e, dt, node, config) {
-         // ChangePanel(2);
-        },
-        init: function (api, node, config) {
-          $(node).removeClass("btn-secondary");
-          //Metodo para agregar un nuevo usuario
-        },*/
+        }
       },
     ],
   });
