@@ -1,7 +1,7 @@
 
 
 const url = "http://localhost:3000/";
-let token = localStorage.getItem("token");
+let tokenGeneral = localStorage.getItem("token");
 let globalData = [];
 
 
