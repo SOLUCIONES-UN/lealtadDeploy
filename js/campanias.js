@@ -45,19 +45,38 @@ $(function () {
   });
 
 
-  $('#modalNew').on('show.bs.modal', function () {
-
+    $('#modalNew').on('show.bs.modal', function () {
+      
+      $("#btnSubmit").attr("disabled",false);
   });
 
-  $('#modalEdit').on('shown.bs.modal', function () {
-    initStepperEdit();
+  $('#modalEdit').on('show.bs.modal', function () {
+    
   });
 
   $('#modalNew').on('hidden.bs.modal', function () {
+      limpiarFormulario();     
+  
+  });
+
+  $('#modalEdit').on('hidden.bs.modal', function () {
+      limpiarFormulario();
+      $("#btnSubmitEdit").attr("disabled",false);
   });
 
   $('#modalNew').find('[data-dismiss="modal"]').click(function () {
-    
+      limpiarFormulario();
+      $("#btnSubmit").attr("disabled",false);
+  });
+
+  $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
+      limpiarFormulario();
+      $("#btnSubmitEdit").attr("disabled",false);
+  });
+
+  $('#modalNew').find('[data-dismiss="modal"]').click(function () {
+      limpiarFormulario();
+      $("#btnSubmit").attr("disabled",false);
   });
 
   $('#formNew').submit(function(){
@@ -67,8 +86,8 @@ $(function () {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Authorization", token);
-
     var raw = JSON.stringify({
+      /*
       nombre: $('#campania').val(),
       descripcion: $('#descripcionCampania').val(),
       fechaCreacion: "2024-02-04",
@@ -102,11 +121,12 @@ $(function () {
       /*
       participacion: getParticipacionData(),
       */
+      
     });
 
     console.log(raw);
     
-
+    /*
     var requestOptions = {
         method: 'POST',
         headers: myHeaders,
@@ -115,22 +135,20 @@ $(function () {
     };
 
     fetch(`${url}Campania`, requestOptions)
-        .then(response => response.json())
-        .then(result => {
-            if (result.code == "ok") {
-              limpiarFormulario();
-              //tabla._fnAjaxUpdate();
-                $('#modalNew').modal('toggle');
-                Alert(result.message, 'success');
-                console.log(result);
-            } else {
-              console.log("Verifica datos");
-                Alert(result.message, 'error');
-            }
-
-        })
-        .catch(error => { Alert(error.errors, 'error') });
-      return false;
+    .then(response => response.json())
+    /*.then(result => {
+        if (result.code == "ok") {
+            limpiarFormulario();
+            $('#modalNew').modal('toggle'); // Mover esta línea aquí
+            Alert(result.message, 'success');
+            console.log(result);
+        } else {
+           // console.log("Verifica datos");
+           // Alert(result.message, 'error');
+        }
+    })*/
+    //.catch(error => { Alert(error.errors, 'error') });
+    return false;
   });
 });
 
@@ -579,7 +597,7 @@ function initStepper() {
       var valor = parseFloat($('#valor').val());
       //var porcentaje = $('#porcentajePremio').val();
     
-      if( tipoPremio && linkPremio  && valor  ){
+      if( tipoPremio   && valor  ){
         var nuevoPremio ={
           idPremio : premio,
           linkPremio: linkPremio, 
@@ -634,9 +652,19 @@ function initStepper() {
                 width: '25%'
               },
               {
+            
                 data: 'idMunicipio',
-                render: function (data) {
+                render: function (data, row) {
                   var municipio = $('#municipio option[value="' + data + '"]').text();
+                  if (!municipio) {
+                    // Si no se encuentra el nombre del municipio, buscarlo en el arreglo datosTablaLocalidad
+                    var registro = datosTablaLocalidad.find(function(item) {
+                      return item.idMunicipio === data;
+                    });
+                    if (registro) {
+                      municipio = registro.nombreMunicipio;
+                    }
+                  }
                   return municipio;
                 },
                 width: '25%'
@@ -1083,31 +1111,33 @@ const getDepartamento = () =>{
     return false;
 }
 
-const getMunicipioByDepto = (idDepartamento) =>{
+
+const getMunicipioByDepto = (idDepartamento) => {
   var requestOptions = {
     method: 'GET',
     redirect: 'follow',
     headers: { "Authorization": token }
   };
 
-  // Limpiar completamente los selectores de tablas
-  $('#municipio').empty();
 
   fetch(`${url}Municipio/by/${idDepartamento}`, requestOptions)
-      .then(response => {
-          if (!response.ok) {
-              throw new Error('Network response was not ok');
-          }
-          return response.json();})
-      .then(result => {
-          result.forEach(element => {
-              var opc = `<option value="${element.id}">${element.nombre}</option>`;
-              $('#municipio').append(opc);
-          });
-      })
-      .catch(err => console.log('error', err));
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(result => {
+      // Agregar las nuevas opciones de municipios
+      result.forEach(element => {
+        var opc = `<option value="${element.id}">${element.nombre}</option>`;
+        $('#municipio').append(opc);
+      });
+    })
+    .catch(err => console.log('error', err));
+
   return false;
-}
+};
 
 //Funcion para traer los Transacciones
 const getTransaccion = () =>{
@@ -1399,9 +1429,7 @@ function limpiarFormulario() {
   DataEtapa = [];
   bloqueadosUsuarios = [];
 
-  // Reiniciar el stepper
-  actualStep = 0;
-  showStep(actualStep);
+
 }
 
 
@@ -1486,14 +1514,14 @@ const table = (table, data) => {
 
           switch (row.estado) {
             case 1:
-              opcAdd += `<a href="#" onclick="pausarActualizarCampania(${data},2)" class="btn_pausar dropdown-item">
+              opcAdd += `<a href="#"  class="btn_pausar dropdown-item">
               ${feather.icons["pause-circle"].toSvg({
                 class: "font-small-4 mr-50",
               })} Pausar
             </a>`;
               break;
             case 2:
-              opcAdd += `<a href="#" onclick="pausarActualizarCampania(${data},1)" class="btn_activar dropdown-item">
+              opcAdd += `<a href="#"  class="btn_activar dropdown-item">
                 ${feather.icons["play"].toSvg({
                 class: "font-small-4 mr-50",
               })} Activar
