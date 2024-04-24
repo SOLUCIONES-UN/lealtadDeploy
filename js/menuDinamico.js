@@ -1,11 +1,11 @@
 // const url = "http://localhost:3000/";
 let usuario = JSON.parse(localStorage.getItem("infoUsuario"));
 let addListeners = false;
-let token;
+let tokenMenuMenu;
 
 $(function () {
   getMenuAccesible();
-  verifyToken();
+  verifytoken();
   validateSesion();
   Usuario();
 });
@@ -24,13 +24,13 @@ const Usuario = () => {
   }
 }
 
-const verifyToken = () => {
-  token = localStorage.getItem('token');
+const verifytoken = () => {
+  tokenMenu = localStorage.getItem('token');
 
-  if (token == null) {
+  if (tokenMenu == null) {
     window.location.href = 'login.html';
   } else {
-    const partes = token.split('.');
+    const partes = tokenMenu.split('.');
     if (partes.length !== 3) {
       window.location.href = 'login.html';
     }
@@ -40,14 +40,14 @@ const verifyToken = () => {
 
 const verifyLogin = () => {
 
-  token = localStorage.getItem('token');
+  tokenMenu = localStorage.getItem('token');
 
-  if (token == null) {
+  if (tokenMenu == null) {
     window.location.href = 'login.html';
   } 
   else{
 
-    const partes = token.split('.');
+    const partes = tokenMenu.split('.');
 
     // Decodificar el payload (parte intermedia en base64)
     const payloadBase64 = partes[1];
@@ -85,7 +85,7 @@ const verifyLogin = () => {
         return;
       }
     } else {
-      throw new Error('El token no tiene una fecha de expiración');
+      throw new Error('El tokenMenu no tiene una fecha de expiración');
     }
   }
 
@@ -105,10 +105,10 @@ const validateSesion = () => {
 
 function scrollHandler() {
   console.log("scroll");
-  refreshSession(token);
+  refreshSession(tokenMenu);
 }
 
-const refreshSession = async (token) => {
+const refreshSession = async (tokenMenu) => {
 
 
   $(document).off("mousedown", scrollHandler);
@@ -119,7 +119,7 @@ const refreshSession = async (token) => {
   var requestOptions = {
     method: "GET",
     redirect: "follow",
-    headers: { "Authorization": token }
+    headers: { "Authorization": tokenMenu }
   };
 
   fetch(`${url}loggin/getSession`, requestOptions)
@@ -150,11 +150,11 @@ const AlertSession = function (message, status) {
 const getMenuAccesible = () => {
   let menu;
   let pagina;
-  let token = localStorage.getItem("token");
+  let tokenMenu = localStorage.getItem("token");
   var requestOptions = {
     method: "GET",
     redirect: "follow",
-    headers: { "Authorization": token }
+    headers: { "Authorization": tokenMenu }
   };
 
   fetch(`${url}permisosUsuario/${usuario.username}`, requestOptions)

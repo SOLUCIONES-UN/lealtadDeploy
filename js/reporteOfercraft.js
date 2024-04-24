@@ -1,5 +1,5 @@
 const url = "http://localhost:3000/";
-let token = localStorage.getItem("token");
+let tokenOfercraft = localStorage.getItem("token");
 let datosObtenidos = null; // Variable global para almacenar los datos obtenidos
 let archivadas = 0;
 $(function() {
@@ -50,7 +50,7 @@ const getCampanias = () => {
     var requestOptions = {
         method: "GET",
         redirect: "follow",
-        headers: { Authorization: token },
+        headers: { Authorization: tokenOfercraft },
     };
 
     fetch(`${url}Campania`, requestOptions)
