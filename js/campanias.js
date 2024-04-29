@@ -17,9 +17,16 @@ let imgCampania = null;
 var bloqueadosUsuarios =[];
 var DataEtapa =[];
 
+var muestraEtapa=[];
+
+
+//valor para poder editar etapas
+var dataEditEtapa =[];
+
 $(function () {
 
   initStepper();
+  initStepperEdit();
   getAllCampanias();
   //select
   getProjecs();
@@ -45,8 +52,22 @@ $(function () {
   });
 
 
-    $('#modalNew').on('show.bs.modal', function () {
+  $('#modalNew').on('show.bs.modal', function () {
       
+  });
+
+  $('#modalNew').on('hidden.bs.modal', function () {
+    limpiarFormulario();     
+  
+  });
+
+  $('#modalNew').find('[data-dismiss="modal"]').click(function () {
+      limpiarFormulario();
+      $("#btnSubmit").attr("disabled",false);
+  });
+
+  $('#modalNew').find('[data-dismiss="modal"]').click(function () {
+      limpiarFormulario();
       $("#btnSubmit").attr("disabled",false);
   });
 
@@ -54,30 +75,18 @@ $(function () {
     
   });
 
-  $('#modalNew').on('hidden.bs.modal', function () {
-      limpiarFormulario();     
-  
-  });
-
   $('#modalEdit').on('hidden.bs.modal', function () {
       limpiarFormulario();
       $("#btnSubmitEdit").attr("disabled",false);
   });
 
-  $('#modalNew').find('[data-dismiss="modal"]').click(function () {
-      limpiarFormulario();
-      $("#btnSubmit").attr("disabled",false);
-  });
-
+  
   $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
       limpiarFormulario();
       $("#btnSubmitEdit").attr("disabled",false);
   });
 
-  $('#modalNew').find('[data-dismiss="modal"]').click(function () {
-      limpiarFormulario();
-      $("#btnSubmit").attr("disabled",false);
-  });
+  
 
   $('#formNew').submit(function(){
     var imgPushFile = $('#imgCampania')[0].files[0];
@@ -86,8 +95,9 @@ $(function () {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     myHeaders.append("Authorization", token);
+    
+    
     var raw = JSON.stringify({
-      /*
       nombre: $('#campania').val(),
       descripcion: $('#descripcionCampania').val(),
       fechaCreacion: "2024-02-04",
@@ -126,7 +136,6 @@ $(function () {
 
     console.log(raw);
     
-    /*
     var requestOptions = {
         method: 'POST',
         headers: myHeaders,
@@ -136,21 +145,54 @@ $(function () {
 
     fetch(`${url}Campania`, requestOptions)
     .then(response => response.json())
-    /*.then(result => {
+    .then(result => {
         if (result.code == "ok") {
-            limpiarFormulario();
-            $('#modalNew').modal('toggle'); // Mover esta línea aquí
-            Alert(result.message, 'success');
-            console.log(result);
+          limpiarFormulario();
+          $('#modalNew').modal('toggle'); // Mover esta línea aquí
+          Alert(result.message, 'success');
+          console.log(result);
         } else {
-           // console.log("Verifica datos");
-           // Alert(result.message, 'error');
+          console.log("Verifica datos");
+          Alert(result.message, 'error');
         }
-    })*/
-    //.catch(error => { Alert(error.errors, 'error') });
+    })
+    .catch(error => { Alert(error.errors, 'error') });
     return false;
   });
+
+  $('#formEdit').submit(function () {
+
+  
+    $("#btnSubmitEdit").attr("disabled", true);
+
+    const id = $('#id').val();
+    
+    var raw = JSON.stringify({
+       
+    });
+
+    var requestOptions = {
+        method: 'PUT',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+    };
+
+    fetch(`${url}Campania/${id}`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            if (result.code == "ok") {
+                $('#modalEdit').modal('toggle');
+                Alert(result.message, 'success')
+            } else {
+                Alert(result.message, 'error')
+            }
+        })
+        .catch(error => { Alert(error.errors, 'error') });
+    return false;
 });
+});
+
 
 
 //Funcion del stepper
@@ -437,6 +479,7 @@ function initStepper() {
           estado: 1,
         }
         TEMP.push(nuevo);
+        muestraEtapa.push(TEMP)
     
         $('#NombreEtapa').val('');
         $('#orden').val('');
@@ -488,7 +531,7 @@ function initStepper() {
     newStep.find('#GuardarEtapa').click(function(e){
       e.preventDefault();
       var stepData = {
-        etapa: TEMP,
+        etapa: [...TEMP], 
         parametros: datosTablaParametro,
         presupuesto: datosTablaLocalidad,
         premio: datosTablaPremio
@@ -497,8 +540,13 @@ function initStepper() {
       DataEtapa.push(stepData);
       getEtapasData() 
       console.log(getEtapasData() );
-      
       mostrarDatosTabla('#TablaEtapa');
+        // Limpiar los datos de la etapa actual
+        TEMP = [];
+        datosTablaParametro = [];
+        datosTablaLocalidad = [];
+        datosTablaPremio = [];
+
 
       //Funciones del stepp
       hideStep(actualStep);
@@ -680,7 +728,7 @@ function initStepper() {
               {
                 render: function (data, type, row, meta) {
                   var opcDelete = `
-                    <a href="#" class="dropdown-item" onclick="eliminarDatoADD('#tableLocalidad', ${meta.row})">
+                    <a href="#" class="dropdown-item" onclick="eliminarDato(${'#tableLocalidad'}, ${meta.row})">
                       ${feather.icons["trash-2"].toSvg({ class: "font-small-4 mr-50" })} 
                     </a>
                   `;
@@ -719,11 +767,10 @@ function initStepper() {
               },
               { data: 'ValorMinimo', width: '20%' },
               { data: 'ValorMaximo', width: '20%' },
-              {
-                
+              {      
                 render: function (data, type, row, meta) {
                   var opcDelete = `
-                    <a href="#" class="dropdown-item" onclick="eliminarDatoADD('#TablaParametros', ${meta.row})">
+                    <a href="#" class="dropdown-item" id="EliminarDato"  onclick="eliminarDato(${'#tableLocalidad'}, ${meta.row})">
                       ${feather.icons["trash-2"].toSvg({ class: "font-small-4 mr-50" })} 
                     </a>
                   `;
@@ -771,7 +818,7 @@ function initStepper() {
               {
                 render: function (data, type, row, meta) {
                   var opcDelete = `
-                    <a href="#" class="dropdown-item" onclick="eliminarDatoADD('#TablaPremio', ${meta.row})">
+                    <a href="#" class="dropdown-item"  onclick="eliminarDato(${'#tableLocalidad'}, ${meta.row})">
                       ${feather.icons["trash-2"].toSvg({ class: "font-small-4 mr-50" })}
                     </a>
                   `;
@@ -788,6 +835,26 @@ function initStepper() {
 
     }
 
+    $('#EliminarDato').click(function(){
+      
+    })
+
+    function eliminarDato(tabla, index) {
+      switch (tabla) {
+        case '#tableLocalidad':
+          datosTablaLocalidad.splice(index, 1);
+          break;
+        case '#TablaParametros':
+          datosTablaParametro.splice(index, 1);
+          break;
+        case '#TablaPremio':
+          datosTablaPremio.splice(index, 1);
+          break;
+        default:
+          break;
+      }
+      mostrarDatosTabla(tabla);
+    }
   }
 
 }
@@ -797,9 +864,8 @@ function initStepperEdit() {
   var actualStepEdit = 0;
   var stepsEdit = $('#stepperEdit').children();
   var totalStepsEdit = stepsEdit.length;
-
   showStepEdit(actualStepEdit);
-
+  
   $('.next-btn-edit').click(function(e) {
     e.preventDefault();
 
@@ -809,6 +875,7 @@ function initStepperEdit() {
       showStepEdit(actualStepEdit);
     }
   });
+
 
   $('.prev-btn-edit').click(function(e) {
     e.preventDefault();
@@ -820,11 +887,9 @@ function initStepperEdit() {
     }
   });
 
+
   function showStepEdit(stepIndex) {
     stepsEdit.eq(stepIndex).show();
-
-    $('.step-progress').removeClass('active');
-    $('.step-btn-' + (stepIndex + 1)).addClass('active');
   }
 
   $('.step-btn-1').click(function(e) {
@@ -858,6 +923,575 @@ function initStepperEdit() {
   function hideStepEdit(stepIndex) {
     stepsEdit.eq(stepIndex).hide();
   }
+
+  $('#TablaEtapaEdit').on('click', '.btn_edit', function() {
+    var id = $(this).data('id');
+    editarEtapa(id);
+  });
+
+  const stepEditEtapaContent = `
+    <div class="form-step">
+      <div class="content-header mt-2 mb-1">
+        <h4 class="mb-0">Etapa registradas</h4>
+        <small class="text-muted">Etapas registradas en esta campaña.</small>
+      </div>
+      <div class="row">
+        <div class="form-group col-md-6">
+            <input id="idEtapa" type="hidden">
+            <label class="form-label" for="NombreEtapaEdit">Nombre</label>
+            <input type="text" id="NombreEtapaEdit" aria-describedby="NombreEtapaErrorEdit"  class="form-control" />
+            <div id="NombreEtapaErrorEdit" class="invalid-feedback NombreEtapa-errorEdit"></div>
+        </div>
+        <div class="form-group col-md-6">
+            <label class="form-label" for="ordenEdit">Orden</label>
+            <input type="text" id="ordenEdit" class="form-control" aria-describedby="ordenErrorEdit"  />
+            <div id="ordenErrorEdit" class="invalid-feedback orden-errorEdit"></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group  col-md-6">
+            <label class="form-label" for="descripcionEtapaEdit">Descripcion de las Etapas</label>
+            <textarea type="text" id="descripcionEtapaEdit" aria-describedby="descripcionEtapaErrorEdit"  class="form-control" placeholder="Ingrese la descripcion" rows="2"></textarea>
+            <div id="descripcionEtapaErrorEdit" class="invalid-feedback descripcionEtapa-errorEdit"></div>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label class="form-label" for="tipoParticipacionEdit">Tipo de Participación</label>
+            <select name="tipoParticipacionEdit" aria-describedby="tipoParticipacionErrorEdit"  id="tipoParticipacionEdit" class="form-control" onchange="userValidator(event, 'totalMinimo-container')">
+                <option disabled selected>Selecciona una opción</option>
+                <option value="0">Transacciones</option>
+                <option value="1">Recurrentes</option>
+                <option value="2">Acumular Transacciones</option>
+                <option value="3">Acumular Transacciones Recurrentes</option>
+                <option value="4">Acumular Valor</option>
+                <option value="5">Combinar Transacciones</option>
+            </select>
+            <div id="tipoParticipacionErrorEdit" class="invalid-feedback tipoParticipacion-errorEdit"></div>
+            <div class="btn-crear d-flex justify-content-end mt-2" >
+                <button type="button" class="btn btn-outline-primary" id="add-step-btn-edit">Crear</button>
+            </div>
+        </div>
+    </div>
+  `;
+
+  const stepEditParametrosContent = `
+    <div class="form-step">
+      <div class="content-header mt-2 mb-1">
+        <h4 class="mb-0">Configuración de Parametros de Etapa</h4>
+        <small class="text-muted">Ingresa los datos basicos de la Campaña.</small>
+      </div>
+        <div class="row">
+          <div class="form-group col-md-6">
+              <input id="idParemetros" type="hidden">
+              <label class="form-label" for="limiteParticipacionEdit">Limite de Participaciones</label>
+              <input type="number" id="limiteParticipacionEdit" class="form-control" />
+          </div>
+          <div class="form-group col-md-6" id="totalMinimo-container">
+              <label class="form-label" for="totalMinimoEdit">Total Minimo</label>
+              <input type="number" id="totalMinimoEdit" class="form-control"/>
+          </div>
+      </div>
+      <div class="row">
+          <div class="form-group col-md-6">
+              <label class="form-label" for="transaccionEdit">Transacción</label>
+              <select name="" id="transaccionEdit" class="form-control">
+                  <option disabled selected>Selecciona una opción</option>
+              </select>
+          </div>
+          <div class="form-group col-md-6">
+              <label class="form-label" for="limiteDiaEdit">Limite Diario</label>
+              <input type="number" id="limiteDiaEdit" class="form-control" />
+          </div>
+      </div>
+      <div class="row">
+          <div class="form-group col-md-6">
+              <label class="form-label" for="valorMinimoEdit">Valor Minimo</label>
+              <input type="number" id="valorMinimoEdit" class="form-control" />
+          </div>
+          <div class="form-group col-md-6">
+              <label class="form-label" for="valorMaximoEdit">Valor Maximo</label>
+              <input type="number" id="valorMaximoEdit" class="form-control" />
+          </div>
+      </div>
+      <div class="row">
+          <div class="form-group col-md-6">
+              <label class="form-label" for="RangoDiasEdit">Rango de Días</label>
+              <input type="number" id="RangoDiasEdit" class="form-control" />
+          </div>
+          <div class="form-group col-md-6">
+            <div class="btn-crear d-flex justify-content-end mt-2" >
+              <button type="button" class="btn btn-outline-primary" id="addParamas">Agregar</button>
+            </div>
+          </div>
+      </div>
+      <table class="datatables-basic table mb-3 mt-2 stepper-table" id="TablaParametrosEdit">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Transaccion</th>
+            <th>Valor Minimo</th>
+            <th>Valor Maximo</th>
+            <th>Accion</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  `;
+
+  const stepEditPresupuestoContent = `
+    <div class="form-step">
+      <div class="content-header mt-2 mb-1">
+        <h4 class="mb-0">Configuración de Presupuesto</h4>
+        <small class="text-muted">Ingresa los datos basicos del presupuesto.</small>
+      </div>
+      <div class="row">
+      <div class="form-group col-md-6">
+          <input id="idPresupuesto" type="hidden">
+          <label class="form-label" for="departamentoEdit">Departamento</label>
+          <select name="" id="departamentoEdit" aria-describedby="departamentoError" required class="form-control">
+              <option disabled selected>Selecciona una opción</option>
+          </select>
+          <div id="departamentoError" class="invalid-feedback departamento-error"></div>
+      </div>
+      <div class="form-group col-md-6">
+          <label class="form-label" for="municipioEdit">Municipio</label>
+          <select name="municipioEdit" id="municipioEdit" aria-describedby="municipioError" required class="form-control">
+              <option disabled selected>Selecciona una opción</option>
+          </select>
+          <div id="municipioError" class="invalid-feedback municipio-error"></div>
+      </div>
+      </div>
+      <div class="row">
+          <div class="form-group col-md-6">
+              <label class="form-label" for="limiteGanadorEdit">Limite de Ganadores</label>
+              <input type="text" id="limiteGanadorEdit" aria-describedby="limiteGanadorError" required class="form-control" />
+              <div id="limiteGanadorErrorEdit" class="invalid-feedback limiteGanador-error"></div>
+          </div>
+          <div class="form-group col-md-6">
+              <label class="form-label" for="presupuestoEdit">Presupuesto</label>
+              <input type="text" id="presupuesto" aria-describedby="presupuestoError" required class="form-control" />
+              <div id="presupuestoError" class="invalid-feedback presupuesto-error"></div>
+  
+              <div class="btn-crear d-flex justify-content-end mt-1" >
+                  <button type="button" class="btn btn-outline-primary" id="addLocalidad">Agregar</button>
+              </div>
+          </div>
+      </div>
+      <!--Tabla-->
+      <table class="datatables-basic table mb-3 mt-2 stepper-table" id="tableLocalidadEdit">
+          <thead>
+              <tr>
+                  <th>#</th>
+                  <th>DEPARTAMENTO</th>
+                  <th>MUNICIPIO</th>
+                  <th>LIMITE</th>
+                  <th>PRESUPUESTO</th>
+                  <th>Accion</th>
+              </tr>
+          </thead>
+      </table>
+      
+    </div>
+  `;
+
+  const stepEditPremioContent = `
+    <div class="form-step">
+      <div class="content-header mt-2 mb-1">
+        <h4 class="mb-0">Configuración de Premio</h4>
+        <small class="text-muted">Ingresa los datos basicos de la Campaña.</small>
+      </div>
+          <div class="row">
+              <div class="form-group col-md-6">
+                  <input id="idPremio" type="hidden">
+                  <label class="form-label" for="tipoPremioEdit">Tipo de Premio</label>
+                  <select name="tipoPremioEdit" aria-describedby="tipoPremioError"  id="tipoPremio" class="form-control">
+                      <option disabled selected>Selecciona una opción</option>
+                      <option value="0">Unico Premio</option>
+                      <option value="1">Premio Random</option>
+                      <option value="2">Todos los Premios</option>
+                  </select>
+                  <div id="tipoPremioErrorEdit" class="invalid-feedback tipoPremio-error"></div>
+              </div>
+              <div class="form-group col-md-6">
+                  <label class="form-label" for="linkPremioEdit">Links de Premio</label>
+                  <select name="linkPremioEdit" aria-describedby="linkPremioError"  id="linkPremio" class="form-control">
+                      <option disabled selected>Selecciona una opción</option>
+                      <option value="1">Sí</option>
+                      <option value="0">No</option>
+                  </select>
+                  <div id="linkPremioErrorEdit" class="invalid-feedback linkPremio-error"></div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="form-group col-md-6">
+                  <label class="form-label" for="premio">Premio</label>
+                  <select name="premioEdit" id="premioEdit" aria-describedby="premioError"  class="form-control">
+                      <option disabled selected>Selecciona una opción</option>
+                  </select>
+                  <div id="premioErrorEdit" class="invalid-feedback premio-error"></div>
+              </div>
+              <div class="form-group col-md-6">
+                  <label class="form-label" for="valor">Valor</label>
+                  <input type="number" id="valorEdit" aria-describedby="valorError"  class="form-control" />
+                  <div id="valorErrorEdit" class="invalid-feedback valor-error"></div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="form-group col-md-6">
+                  <label class="form-label" for="porcentajePremioEdit">Porcentaje de Premio</label>
+                  <input type="number" id="porcentajePremioEdit" aria-describedby="porcentajePremioError"  class="form-control" />
+                  <div id="porcentajePremioError" class="invalid-feedback porcentajePremio-error"></div>
+              </div>
+              <div class="form-group col-md-6">
+                  <div class="btn-crear d-flex justify-content-end mt-2" >
+                      <button type="button" class="btn btn-outline-primary" id="addPremio">Agregar</button>
+                  </div>
+              </div>
+          </div>
+          <!--Tabla-->
+          <table class="datatables-basic table mb-3 mt-2 stepper-table" id="TablaPremioEdit">
+              <thead>
+                  <tr>
+                      <th>#</th>
+                      <th>PREMIO</th>
+                      <th>VALOR</th>
+                      <th>PORCENTAJE</th>
+                      <th>Accion</th>
+                  </tr>
+              </thead>
+          </table>  
+    </div>
+  `;
+
+  const stepButtonsContent = `<div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" id="removeStepp" >Cancelar</button>
+      <button type="button" id="GuardarEtapa" class="btn btn-primary" >Guardar</button>
+    </div>`;
+
+  $('#TablaEtapaEdit').on('click', '.btn_edit', function(event) {
+    var id = $(this).data('id');
+    editarEtapa(id);
+    event.stopPropagation();
+  });
+
+  function addStepEdit(content) {
+    var newStep = $(`<div class="step"></div>`).html(content);
+    $('#stepperEdit').append(newStep);
+    totalStepsEdit++;
+    var previousStep = actualStepEdit;
+    hideStepEdit(actualStepEdit);
+    actualStepEdit = totalStepsEdit - 1;
+    showStepEdit(actualStepEdit);
+  }
+  
+  function createStepEditEtapa() {
+    addStepEdit(stepEditEtapaContent);
+  }
+  
+  function createStepEditParametros() {
+    addStepEdit(stepEditParametrosContent);
+  }
+  
+  function createStepEditPresupuesto() {
+    addStepEdit(stepEditPresupuestoContent);
+  }
+  
+  function createStepEditPremio() {
+    addStepEdit(stepEditPremioContent);
+  }
+  function createStepButtons() {
+    addStepEdit(stepButtonsContent);
+  }
+  // Función para editar una etapa
+  function editarEtapa(id) {
+    var etapa = dataEditEtapa.find(function(item) {
+      return item.id === id;
+    });
+  
+    if (etapa) {
+      console.log(etapa, 'la etapa es')
+      // Limpiar el stepper de edición antes de agregar nuevos pasos
+      $('#stepperEdit').empty();
+      totalStepsEdit = 0;
+      actualStepEdit = 0;
+  
+      // Crear los pasos de edición
+      createStepEditEtapa();
+      createStepEditParametros();
+      createStepEditPresupuesto();
+      createStepEditPremio();
+      createStepButtons();
+  
+      // Asignar los valores de la etapa a los campos de edición
+      $('#idEtapa').val(etapa.id);
+      $('#NombreEtapaEdit').val(etapa.nombre);
+      $('#ordenEdit').val(etapa.orden);
+      $('#descripcionEtapaEdit').val(etapa.descripcion);
+      $('#tipoParticipacionEdit').val(etapa.tipoParticipacion);
+      $('#idParemetros').val(etapa.parametros.id);
+      //Mostrar los datos en las tablas correspondientes
+      mostrarDatosEdit('#TablaParametrosEdit')
+      mostrarDatosEdit('#tableLocalidadEdit')
+      mostrarDatosEdit('#TablaPremioEdit')
+      
+      
+     
+    }
+    
+    function mostrarDatosEdit(tabla) {
+      switch(tabla)
+      {
+        case '#tableLocalidadEdit':
+            // Limpiar la tabla antes de insertar nuevas filas
+          $('#tableLocalidadEdit').DataTable().clear().destroy();
+    
+          // Inicializar el DataTables con los datos de datosTablaLocalidad
+          $('#tableLocalidadEdit').DataTable({
+            searching: false,
+            paging: false,
+            data: etapa.presupuestos,
+            columns: [
+              {
+                render: function(data, type, row, meta) {
+                  return meta.row + 1;
+                },
+                width: '5%'
+              },
+              {
+                data: 'idDepartamento',
+                // render: function (data) {
+                //   var departamento = $('#departamento option[value="' + data + '"]').text();
+                //   return departamento;
+                // },
+                width: '25%'
+              },
+              {
+            
+                data: 'idMunicipio',
+                // render: function (data, row) {
+                //   var municipio = $('#municipio option[value="' + data + '"]').text();
+                //   if (!municipio) {
+                //     // Si no se encuentra el nombre del municipio, buscarlo en el arreglo datosTablaLocalidad
+                //     var registro = datosTablaLocalidad.find(function(item) {
+                //       return item.idMunicipio === data;
+                //     });
+                //     if (registro) {
+                //       municipio = registro.nombreMunicipio;
+                //     }
+                //   }
+                //   return municipio;
+                // },
+                width: '25%'
+              },
+              {
+                data: 'limiteGanadores',
+                width: '15%'
+              },
+              {
+                data: 'valor',
+                width: '15%'
+              },
+              {
+                data: "id",
+                render: function (data) {
+                  return '<div class="btn-group">' +
+                    '<a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">' +
+                    feather.icons['more-vertical'].toSvg({ class: 'font-small-4' }) +
+                    '</a>' +
+                    '<div class="dropdown-menu dropdown-menu-right">' +
+                    '<a href="#" data-id="' + data + '" class="btn_edit_localidad dropdown-item">' +
+                    feather.icons['edit'].toSvg({ class: 'font-small-4 mr-50' }) + ' Editar' +
+                    '</a>' +
+                    '</div>' +
+                    '</div>';
+                },
+                width: '15%'
+              }
+            ]
+          });
+        break;
+  
+        case'#TablaParametrosEdit':
+          // Limpiar la tabla antes de insertar nuevas filas
+          $('#TablaParametrosEdit').DataTable().clear().destroy();
+        
+          // Inicializar el DataTables con los datos de datosTablaParametro
+          $('#TablaParametrosEdit').DataTable({
+            data: etapa.parametros,
+            searching: false, // Deshabilitar la funcionalidad de búsqueda
+            paging: false,
+            columns: [
+              { 
+                render: function(data, type, row, meta) {
+                  // Aquí puedes usar `meta.row` para obtener el índice de la fila actual
+                  return meta.row + 1;
+                },
+                width: '5%' 
+              },
+              {
+                data: 'idTransaccion',
+                // render: function (data) {
+                //   var transaccion = $('#transaccion option[value="' + data + '"]').text();
+                //   return transaccion;
+                // },
+                width: '30%'
+              },
+              { data: 'ValorMinimo', width: '20%' },
+              { data: 'ValorMaximo', width: '20%' },
+              {
+                data: "id",
+                render: function (data) {
+                  return '<div class="btn-group">' +
+                    '<a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">' +
+                    feather.icons['more-vertical'].toSvg({ class: 'font-small-4' }) +
+                    '</a>' +
+                    '<div class="dropdown-menu dropdown-menu-right">' +
+                    '<a href="#" data-id="' + data + '" class="btn_edit_parametro dropdown-item">' +
+                    feather.icons['edit'].toSvg({ class: 'font-small-4 mr-50' }) + ' Editar' +
+                    '</a>' +
+                    '</div>' +
+                    '</div>';
+                },
+                width: '25%'
+              }
+            ]
+          });
+        break;
+    
+        case '#TablaPremioEdit':
+           // Limpiar la tabla antes de insertar nuevas filas
+           $('#TablaPremioEdit').DataTable().clear().destroy();
+    
+           // Inicializar el DataTables con los datos de datosTablaLocalidad
+           $('#TablaPremioEdit').DataTable({
+             searching: false, // Deshabilitar la funcionalidad de búsqueda
+             paging: false,
+             data: etapa.premiocampania,
+             columns: [
+               { 
+                render: function(data, type, row, meta) {
+                  // Aquí puedes usar `meta.row` para obtener el índice de la fila actual
+                  return meta.row + 1;
+                },
+                width: '5%'  
+              },
+              {
+                data: 'idPremio',
+                // render: function (data) {
+                //   var premio = $('#premio option[value="' + data + '"]').text();
+                //   return premio;
+                // },
+                width: '30%'
+              },
+              { data: 'valor', width: '30%' },
+              {
+                data: 'linkPremio',
+                // render: function (data) {
+                //   return data === 1 ? 'Sí' : 'No';
+                // },
+                width: '30%'
+              },
+              {
+                data: "id",
+                render: function (data) {
+                  return '<div class="btn-group">' +
+                    '<a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">' +
+                    feather.icons['more-vertical'].toSvg({ class: 'font-small-4' }) +
+                    '</a>' +
+                    '<div class="dropdown-menu dropdown-menu-right">' +
+                    '<a href="#" data-id="' + data + '" class="btn_edit_premio dropdown-item">' +
+                    feather.icons['edit'].toSvg({ class: 'font-small-4 mr-50' }) + ' Editar' +
+                    '</a>' +
+                    '</div>' +
+                    '</div>';
+                },
+                width: '15%'
+              }
+             ]
+           });
+        break;
+    
+        default:
+          break;
+      }
+  
+    }
+
+    $('#tableLocalidadEdit').on('click', '.btn_edit_localidad', function(event) {
+      event.preventDefault();
+      var id = $(this).data('id');
+      editarLocalidad(id);
+    });
+  
+    $('#TablaParametrosEdit').on('click', '.btn_edit_parametro', function(event) {
+      event.preventDefault();
+      var id = $(this).data('id');
+      editarParametro(id);
+    });
+  
+    $('#TablaPremioEdit').on('click', '.btn_edit_premio', function(event) {
+      event.preventDefault();
+      var id = $(this).data('id');
+      editarPremio(id);
+      console.log(id)
+    });
+
+    function editarLocalidad(id) {
+      var presupuesto = etapa.presupuestos.find(function(item) {
+        return item.id === id;
+      });
+    
+      console.log(presupuesto)
+      if(presupuesto){
+        $('#idPresupuesto').val(presupuesto.id);
+        $('#departamentoEdit').val(presupuesto.idDepartamento);
+        $('#municipioEdit').val(presupuesto.idMunicipio);
+        $('#limiteGanadorEdit').val(presupuesto.limiteGanadores);
+        $('#presupuesto').val(presupuesto.valor);
+        // Asignar otros campos según corresponda
+      }
+    }
+    
+    function editarParametro(id) {
+    
+    }
+    
+    function editarPremio(id) {
+   
+    }
+
+  }
+
+
+
+    // Evento de clic para el botón de guardar
+  $('#stepperEdit').on('click', '#guardarEdicion', function() {
+    // Obtener los valores actualizados de los campos de edición
+    var id = $('#idEtapa').val();
+    var nombre = $('#NombreEtapaEdit').val();
+    // Obtener los demás valores actualizados de los campos de edición
+
+    // Buscar la etapa en el arreglo dataEditEtapa y actualizarla
+    var etapaIndex = dataEditEtapa.findIndex(function(item) {
+      return item.id === id;
+    });
+
+    if (etapaIndex !== -1) {
+      dataEditEtapa[etapaIndex].nombre = nombre;
+      // Actualizar los demás valores de la etapa en el arreglo
+
+      // Cerrar el modal de edición
+      $('#modalEdit').modal('hide');
+
+      // Actualizar la tabla de etapas
+      mostrarDatosTabla("#TablaEtapaEdit");
+    }
+  });
+    // Evento de clic para el botón de cancelar
+  $('#stepperEdit').on('click', '#cancelarEdicion', function() {
+    // Cerrar el modal de edición sin realizar ninguna acción adicional
+    $('#modalEdit').modal('hide');
+  });
 }
 
 
@@ -929,7 +1563,7 @@ function mostrarDatosTabla(tabla) {
       $('#TablaEtapa').DataTable({
         searching: false, // Deshabilitar la funcionalidad de búsqueda
         paging: false,
-        data: TEMP,
+        data: muestraEtapa,
         columns: [
           { 
             render: function(data, type, row, meta) {
@@ -984,9 +1618,49 @@ function mostrarDatosTabla(tabla) {
         });
     break;
 
-    default:
+    case '#TablaEtapaEdit':
+      // Limpiar la tabla antes de insertar nuevas filas
+      $('#TablaEtapaEdit').DataTable().clear().destroy();
+
+      // Inicializar el DataTables con los datos de dataEditEtapa
+      $('#TablaEtapaEdit').DataTable({
+        searching: false,
+        paging: false,
+        data: dataEditEtapa,
+        columns: [
+          {
+            render: function (data, type, row, meta) {
+              return meta.row + 1;
+            }
+          },
+          { data: 'nombre' },
+          { data: 'descripcion' },
+          {
+            data: "id",
+            render: function (data) {
+              return '<div class="btn-group">' +
+                '<a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">' +
+                feather.icons['more-vertical'].toSvg({ class: 'font-small-4' }) +
+                '</a>' +
+                '<div class="dropdown-menu dropdown-menu-right">' +
+                '<a href="#" data-id="' + data + '" class="btn_edit dropdown-item">' +
+                feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' }) + ' Actualizar' +
+                '</a>' +
+                '<a href="#" onclick="OpenDelete(' + data + ')" class="btn_delete dropdown-item">' +
+                feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' }) + ' Inhabilitar' +
+                '</a>' +
+                '</div>' +
+                '</div>';
+            }
+          }
+        ]
+      });
+      break;
+
+      default:
       break;
   }
+
 
 }
 
@@ -1007,6 +1681,12 @@ function eliminarDato(tabla, index) {
     case '#TablaPremio':
       datosTablaPremio.splice(index, 1);
       break;
+      
+    case '#TablaEtapaEdit':
+      dataEditEtapa.splice(index, 1);
+      mostrarDatosTabla(tabla);
+      break;  
+      
     default:
       break;
   }
@@ -1080,6 +1760,7 @@ const getProjecs = () =>{
       result.forEach(element => {
         var opc  = `<option value="${element.id}">${element.descripcion}</option>`;
         $('#proyecto').append(opc);
+        $('#proyectoEdit').append(opc);
       });
     })
 }
@@ -1113,6 +1794,7 @@ const getDepartamento = () =>{
 
 
 const getMunicipioByDepto = (idDepartamento) => {
+  $('#municipio').empty();
   var requestOptions = {
     method: 'GET',
     redirect: 'follow',
@@ -1424,13 +2106,105 @@ function limpiarFormulario() {
   $('#TablaEtapa').DataTable().clear().destroy();
   $('#tablaBloqueo').DataTable().clear().destroy();
 
+
+  $('#campaniaEdit').val('');
+  $('#descripcionCampaniaEdit').val('');
+  $('#fechaRegistroEdit').val('');
+  $('#fechaInicialEdit').val('');
+  $('#fechaFinalEdit').val('');
+  $('#HoraRecordatorioEdit').val('');
+  $('#correoEdit').val('');
+  $('#edadInicialEdit').val('');
+  $('#edadFinalEdit').val('');
+  $('#sexoEdit').val('');
+  $('#tipoUsuariosEdit').val('');
+  $('#notificacionEdit').val('');
+  $('#descripcionNotificacionEdit').val('');
+  $('#imgCampaniaEdit').val('');
+  $('#imgNotificacionEdit').val('');
+  $('#maximoParticipantesEdit').val('');
+  $('#tercerosCampaniaEdit').val('');
+  $('#alldayEdit').prop('checked', false);
+  $('#repeatEdit').prop('checked', false);
+  $('#FechaIniRecordatorioEdit').val('');
+  $('#FechaFinRecordatorioEdit').val('');
+  $('#terminosCondicionesEdit').val('');
+  $('#ObservacionesEdit').val('');
+  $('#proyectoEdit').val('');
+  $('#restriccionUsuariosEdit').val('');
+  $('#ArchivoEdit').val('');
+  $('#usuarioBloqueoEdit').val('');
+
+  // Limpiar las tablas
+  $('#TablaEtapaEdit').DataTable().clear().destroy();
+  $('#tablaBloqueoEdit').DataTable().clear().destroy();
+
   // Limpiar los arreglos
   TEMP = [];
   DataEtapa = [];
   bloqueadosUsuarios = [];
-
+  dataEditEtapa=[]
 
 }
+
+const OpenEdit = (id) => {
+  limpiarFormulario();
+  console.log(id)
+  var requestOptions = {
+    method: 'GET',
+    redirect: 'follow',
+    headers: {"Authorization": token}
+  };
+
+  fetch(`${url}Campania/${id}`, requestOptions)
+    .then(response => response.json())
+    .then(result => {
+      // Asignar los datos del registro a los campos del formulario
+      $('#idCampania').val(id);
+      $('#campaniaEdit').val(result.nombre);
+      $('#descripcionCampaniaEdit').val(result.descripcion);
+      $('#fechaRegistroEdit').val(result.fechaRegistro);
+      $('#fechaInicialEdit').val(result.fechaInicio);
+      $('#fechaFinalEdit').val(result.fechaFin);
+      $('#HoraRecordatorioEdit').val(result.horaReporte);
+      $('#correoEdit').val(result.emails);
+      $('#edadInicialEdit').val(result.edadInicial);
+      $('#edadFinalEdit').val(result.edadFinal);
+      $('#sexoEdit').val(result.sexo);
+      $('#tipoUsuariosEdit').val(result.tipoUsuario);
+      $('#notificacionEdit').val(result.tituloNotificacion);
+       $('#descripcionNotificacionEdit').val(result.descripcionNotificacion);
+      //Asignar las imágenes si existen
+      // if (result.imgPush) {
+      //   $('#previewImgEdit').attr('src', `ruta/a/la/imagen/${result.imgPush}`);
+      //   $('#previewImgEdit').show();
+      // }
+      // if (result.imgAkisi) {
+      //   $('#previewNotificacionEdit').attr('src', `ruta/a/la/imagen/${result.imgAkisi}`);
+      //   $('#previewNotificacionEdit').show();
+      // }
+
+      $('#maximoParticipanteEdits').val(result.maximoParticipaciones);
+      $('#tercerosCampaniaEdit').val(result.campaniaTerceros);
+      $('#alldayEdit').prop('checked', result.allDay === 1);
+      $('#repeatEdit').prop('checked', result.repetir === 1);
+      $('#FechaIniRecordatorioEdit').val(result.fechaRecordatorioIni);
+      $('#FechaFinRecordatorioEdit').val(result.fechaRecordatorioFin);
+      $('#terminosCondicionesEdit').val(result.terminosCondiciones);
+      $('#ObservacionesEdit').val(result.observaciones);
+      $('#proyectoEdit').val(result.idProyecto);
+      dataEditEtapa = result.etapas;
+      console.log(dataEditEtapa, "asignacion")
+
+      // Mostrar las etapas en la tabla
+      mostrarDatosTabla("#TablaEtapaEdit");
+      // Mostrar el modal
+      $('#modalEdit').modal('toggle');
+
+
+    })
+    .catch(error => console.log('error', error));
+};
 
 
 const getAllCampanias = () => {
@@ -1511,7 +2285,7 @@ const table = (table, data) => {
         data: "id",
         render: function (data, type, row) {
           var opcAdd = ``;
-
+      
           switch (row.estado) {
             case 1:
               opcAdd += `<a href="#"  class="btn_pausar dropdown-item">
@@ -1528,21 +2302,20 @@ const table = (table, data) => {
               </a>`;
               break;
           }
-
-          //console.log(`row_id: ${data} estado: ${row.estado}`)
-
+      
           if (row.estado != 0) {
-            opcAdd += `<a href="#" onclick="OpenEdit(${data})" class="btn_edit dropdown-item">
+            opcAdd += `<a href="#" class="btn_edit dropdown-item"  onclick="OpenEdit(${data})" data-toggle="modal" data-target="#modalEdit">
             ${feather.icons["archive"].toSvg({
               class: "font-small-4 mr-50",
             })} Actualizar
-            </a><a href="#" onclick="eliminarFila(${data})" class="btn_delete dropdown-item">
+            </a>  
+            <a href="#" onclick="eliminarFila(${data})" class="btn_delete dropdown-item">
                 ${feather.icons["trash-2"].toSvg({
               class: "font-small-4 mr-50",
             })} Inhabilitar
                     </a>`;
           }
-
+      
           return `
           <div class="btn-group">
             <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
@@ -1590,3 +2363,4 @@ const table = (table, data) => {
     ],
   });
 };
+
