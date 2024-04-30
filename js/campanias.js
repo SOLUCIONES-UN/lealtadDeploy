@@ -6,8 +6,9 @@ var saveDataParams = [];
 var datosTablaLocalidad = [];
 var datosTablaPremio = [];
 var datosTablaParametro = [];
-var indexLocalidad = 0;
 var datosTablaParticipacion= [];
+var permitidoUsuario =[];
+
 //var datosBloqueados = [];
 var TEMP =[];
 var etapasData=[]
@@ -274,6 +275,19 @@ function initStepper() {
     steps.eq(stepIndex).hide();
   }
 
+  $('#tipoParticipacion').change(function() {
+    var tipoSeleccionado = $(this).val();
+    
+    // Ocultar todos los inputs
+    $('#inputsContainer > div').hide();
+    
+    // Mostrar los inputs correspondientes al tipo seleccionado
+     if (tipoSeleccionado === '2' || tipoSeleccionado === '3') {
+      $('#inputsTipo0').show();
+    } else if (tipoSeleccionado === '4') {
+      $('#inputsTipo1').show();
+    }
+  });
 
   // Stepp de los parametros de la campaña segun esta una etapa
   $('#add-step-btn').click(function() {
@@ -292,21 +306,11 @@ function initStepper() {
             <label class="form-label" for="limiteParticipacion">Limite de Participaciones</label>
             <input type="number" id="limiteParticipacion" class="form-control" />
         </div>
-        <div class="form-group col-md-6" id="totalMinimo-container">
-            <label class="form-label" for="totalMinimo">Total Minimo</label>
-            <input type="number" id="totalMinimo" class="form-control"/>
-        </div>
-    </div>
-    <div class="row">
         <div class="form-group col-md-6">
             <label class="form-label" for="transaccion">Transacción</label>
             <select name="" id="transaccion" class="form-control">
                 <option disabled selected>Selecciona una opción</option>
             </select>
-        </div>
-        <div class="form-group col-md-6">
-            <label class="form-label" for="limiteDia">Limite Diario</label>
-            <input type="number" id="limiteDia" class="form-control" />
         </div>
     </div>
     <div class="row">
@@ -321,11 +325,13 @@ function initStepper() {
     </div>
     <div class="row">
         <div class="form-group col-md-6">
-            <label class="form-label" for="RangoDias">Rango de Días</label>
-            <input type="number" id="RangoDias" class="form-control" />
+            <label class="form-label" for="limiteDia">Limite Diario</label>
+            <input type="number" id="limiteDia" class="form-control" />
         </div>
-        <div class="form-group col-md-6">
-          <div class="btn-crear d-flex justify-content-end mt-2" >
+    </div>
+    <div class="row">
+        <div class="form-group col-md-12">
+          <div class="btn-crear d-flex justify-content-end mt-2">
             <button type="button" class="btn btn-outline-primary" id="addParamas">Agregar</button>
           </div>
         </div>
@@ -568,9 +574,23 @@ function initStepper() {
       var ValorMinimo = parseFloat($('#valorMinimo').val());
       var ValorMaximo = parseFloat($('#valorMaximo').val());
       var RangoDias = $('#RangoDias').val();
-    
-      if( totalMinimo  && limiteDiario && ValorMinimo && ValorMaximo && RangoDias){
-        
+      
+      var fields = ['limiteParticipacion', 'transaccion', 'limiteDia', 'valorMinimo', 'valorMaximo'];
+      var isValid = true;
+      
+      fields.forEach(function(field) {
+        var value = $('#' + field).val();
+        if (!value) {
+          $('#' + field).addClass('is-invalid');
+          isValid = false;
+        } else {
+          $('#' + field).removeClass('is-invalid');
+          isValid = true;
+        }
+      });
+
+      if( limiteDiario && ValorMinimo && ValorMaximo ){
+            
         var nuevoParametro= {
           limiteParticipacion: limiteParticipacion,
           idTransaccion: Transaccion,
@@ -595,9 +615,11 @@ function initStepper() {
         $('#RangoDias').val('');
         
         mostrarDatosParametro('#TablaParametros');
-      }else{
-    
+
+       
       }
+      
+      return isValid;
     
     });
 
@@ -607,7 +629,21 @@ function initStepper() {
       var municipio = parseInt($('#municipio').val());
       var limiteGanador = parseInt($('#limiteGanador').val());
       var presupuesto = parseFloat($('#presupuesto').val());
-    
+
+      var fields = ['departamento', 'municipio', 'limiteGanador', 'presupuesto'];
+      var isValid = true;
+      
+      fields.forEach(function(field) {
+        var value = $('#' + field).val();
+        if (!value) {
+          $('#' + field).addClass('is-invalid');
+          isValid = false;
+        } else {
+          $('#' + field).removeClass('is-invalid');
+          isValid = true;
+        }
+      });
+
       // Validar que los campos no estén vacíos
       if (departamento && municipio && limiteGanador && presupuesto) {
         // Crear un objeto con los datos
@@ -633,9 +669,9 @@ function initStepper() {
     
         // Incrementar el índice
         indexLocalidad++;
-      } else {
-        alert('Por favor complete todos los campos.');
-      }
+      }    
+      
+      return isValid;
     });
     
     $('#addPremio').click(function(){
@@ -644,8 +680,22 @@ function initStepper() {
       var premio = parseInt($('#premio').val());
       var valor = parseFloat($('#valor').val());
       //var porcentaje = $('#porcentajePremio').val();
+
+      var fields = ['tipoPremio', 'linkPremio', 'premio', 'valor'];
+      var isValid = true;
+      
+      fields.forEach(function(field) {
+        var value = $('#' + field).val();
+        if (!value) {
+          $('#' + field).addClass('is-invalid');
+          isValid = false;
+        } else {
+          $('#' + field).removeClass('is-invalid');
+          isValid = true;
+        }
+      });
     
-      if( tipoPremio   && valor  ){
+      if( tipoPremio && valor  ){
         var nuevoPremio ={
           idPremio : premio,
           linkPremio: linkPremio, 
@@ -666,10 +716,8 @@ function initStepper() {
     
         mostrarDatosParametro('#TablaPremio');
         
-      }else{
-        //Colocar una alerta 
-        alert("ERRORR")
       }
+      return isValid;
     });
 
     function mostrarDatosParametro(tabla) {
@@ -1527,23 +1575,43 @@ $('#addBloqueo').click(function(){
 $('#Archivo').change(function(e) {
   var inputFile = e.target;
   var extPermitidas = /(.xlsx)$/;
+  var restriccion = $('#restriccionUsuarios').val();
 
   if (!extPermitidas.exec(inputFile.value)) {
     Alert("El archivo debe ser un excel", "error");
     inputFile.value = "";
   } else {
-    readXlsxFile(inputFile.files[0]).then(function(data) {
-      data.map((row, indexP) => {
-        var block = {
-          numero: row[0],
-          estado: 1
-        };
 
-        bloqueadosUsuarios.push(block);
+    if(restriccion === 1 || restriccion === '1'){
+        
+      readXlsxFile(inputFile.files[0]).then(function(data) {
+        data.map((row, indexP) => {
+          var permitido = {
+            numero: row[0],
+            estado: 1
+          };
+  
+          permitidoUsuario.push(permitido);
+        });
+        console.log(permitidoUsuario);
       });
-
-
-    });
+    }else if(restriccion === 2 || restriccion === '2'){
+        
+      readXlsxFile(inputFile.files[0]).then(function(data) {
+        data.map((row, indexP) => {
+          var block = {
+            numero: row[0],
+            estado: 1
+          };
+  
+          bloqueadosUsuarios.push(block);
+        });
+  
+      });
+    }else{
+      bloqueadosUsuarios=[];
+      permitidoUsuario =[];
+    }
   }
 });
 
@@ -1607,7 +1675,7 @@ function mostrarDatosTabla(tabla) {
             {
               render: function(data, type, row, meta) {
                 var opcDelete = `
-                  <a href="#" class="dropdown-item" onclick="eliminarDato('${tabla}', ${meta.row})">
+                  <a href="#" class="dropdown-item"onclick="eliminarDato('${tabla}', ${meta.row}, event)">
                     ${feather.icons["trash-2"].toSvg({ class: "font-small-4 mr-50" })} Eliminar
                   </a>
                 `;
@@ -1664,7 +1732,9 @@ function mostrarDatosTabla(tabla) {
 
 }
 
-function eliminarDato(tabla, index) {
+function eliminarDato(tabla, index, event) {
+  event.preventDefault(); 
+
   switch (tabla) {
     case '#tablaBloqueo':
       bloqueadosUsuarios.splice(index, 1);
@@ -1681,16 +1751,18 @@ function eliminarDato(tabla, index) {
     case '#TablaPremio':
       datosTablaPremio.splice(index, 1);
       break;
-      
     case '#TablaEtapaEdit':
       dataEditEtapa.splice(index, 1);
       mostrarDatosTabla(tabla);
-      break;  
-      
+      break;
     default:
       break;
   }
-  mostrarDatosTabla(tabla);
+
+  // Retrasar la llamada a mostrarDatosTabla para que ocurra después de que se complete la operación de eliminación
+  setTimeout(function() {
+    mostrarDatosTabla(tabla);
+  }, 0);
 }
 
 function previewImage(event, textImg, textContent) {
@@ -1734,11 +1806,15 @@ function userValidator(event, container) {
   if (input.value === '0' || input.value === 0 || input.value === null) {
     containerArchivo.style.display = 'none';
     containerBloqueo.style.display = 'none';
+    $('#Archivo').val('');
+    
   } else {
     containerArchivo.style.display = 'block';
     containerBloqueo.style.display = 'none';
+    $('#Archivo').val('');
     if(input.value === 2 || input.value === '2'){
       containerBloqueo.style.display = 'flex';
+      $('#Archivo').val('');
     } 
   }
       
