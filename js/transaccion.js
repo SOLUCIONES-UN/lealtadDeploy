@@ -3,6 +3,7 @@ let token = localStorage.getItem("token");
 
 $(function () {
     getColumnas();
+    GetProjects();
     let tabla = getTransaccions();
     Usuario()
 
@@ -67,6 +68,7 @@ $(function () {
             "descripcion": descripcion,
             "puntos": $('#puntos').val(),
             "columna": $('#columna').val(),
+            "proyecto": $('#proyecto').val(),
             "botton": $('#botton').val()
         });
 
@@ -117,6 +119,7 @@ $(function () {
             "descripcion": $('#descripcionEdit').val(),
             "puntos": $('#puntosEdit').val(),
             "columna": $('#columnaEdit').val(),
+            "proyecto": $('#proyectoEdit').val(),
             "botton": $('#bottonEdit').val()
         });
 
@@ -306,6 +309,7 @@ const OpenEdit = (id) => {
             $('#bottonEdit').val(result.idBotton);
             $('#puntosEdit').val(result.puntos);
             $('#columnaEdit').val(result.idColumna);
+            $('#proyectoEdit').val(result.idProyecto);
             $('#modalEdit').modal('toggle');
         })
         .catch(error => console.log('error', error));
@@ -337,6 +341,50 @@ const getColumnas = () => {
                 var opc = `<option value="${element.id}">${element.nombre}</option>`;
                 $('#columna').append(opc);
                 $('#columnaEdit').append(opc);
+            });
+        })
+        .catch(error => console.log('error', error));
+
+}
+
+const GetProjects = () => {
+    var requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+        headers: { "Authorization": token }
+    };
+
+    $('#proyecto').html('<option value="0" selected disabled>Selecciona una Opcion</option>');
+    $('#proyectoEdit').html('<option value="0" selected disabled>Selecciona una Opcion</option>');
+    fetch(`${url} Proyectos`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            result.forEach(element => {
+                var opc = `<option value="${element.id}">${element.descripcion}</option>`;
+                $('#proyecto').append(opc);
+                $('#proyectoEdit').append(opc);
+            });
+        })
+        .catch(error => console.log('error', error));
+
+}
+
+const GetTablaDB  = () => {
+    var requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+        headers: { "Authorization": token }
+    };
+
+    $('#tablaDB').html('<option value="0" selected disabled>Selecciona una Opcion</option>');
+    $('#tablaDBEdit').html('<option value="0" selected disabled>Selecciona una Opcion</option>');
+    fetch(`${url} TablaDB`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            result.forEach(element => {
+                var opc = `<option value="${element.id}">${element.nombre_tabla}</option>`;
+                $('#tablaDB').append(opc);
+                $('#tablaDBEdit').append(opc);
             });
         })
         .catch(error => console.log('error', error));

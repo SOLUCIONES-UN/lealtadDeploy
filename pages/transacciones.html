@@ -6,10 +6,8 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0,minimal-ui">
-  <meta name="description"
-    content="Plataforma de lealtad a usuarios.">
-  <meta name="keywords"
-    content="Lealtad, fidelidad, préstamos.">
+  <meta name="description" content="Plataforma de lealtad a usuarios.">
+  <meta name="keywords" content="Lealtad, fidelidad, préstamos.">
   <meta name="author" content="SOLUCIONES-UN">
   <title>Invoice List - Lealtad V2</title>
   <link rel="apple-touch-icon" href="../app-assets/images/ico/apple-icon-120.png">
@@ -199,8 +197,7 @@
   <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
     <div class="navbar-header">
       <ul class="nav navbar-nav flex-row">
-        <li class="nav-item mr-auto"><a class="navbar-brand"
-            href="./dashboard.html"><span class="brand-logo">
+        <li class="nav-item mr-auto"><a class="navbar-brand" href="./dashboard.html"><span class="brand-logo">
               <svg viewbox="0 0 139 95" version="1.1" xmlns="http://www.w3.org/2000/svg"
                 xmlns:xlink="http://www.w3.org/1999/xlink" height="24">
                 <defs>
@@ -243,7 +240,7 @@
     <div class="shadow-bottom"></div>
     <div class="main-menu-content">
       <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-        
+
       </ul>
     </div>
   </div>
@@ -283,34 +280,42 @@
       <form id="formNew" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Agregar Nueva Transacción</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Agregar Transacción</h5>
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
-            <label class="form-label" for="nombre">Nombre</label>
-            <input type="text" class="form-control nombre" id="nombre" placeholder="Nombre de la Transacción" name="nombre" required />
-            <div class="invalid-feedback nombre-error"></div>
-        </div>
-          <div class="form-group">
-            <label class="form-label" for="botton">Boton App</label>
-            <input type="number" class="form-control " id="botton" placeholder="# de botton" name="botton" required />
+
+            <div class="form-group">
+              <label class="form-label" for="proyecto">Proyecto:</label>
+              <select type="text" class="form-control" id="proyecto" name="proyecto" required></select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="tablaDB">Tabla:</label>
+              <select type="text" class="form-control" id="tablaDB" name="tablaDB" required></select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="columna">Columna De Transacción:</label>
+              <select type="text" class="form-control" id="columna" name="columna" required></select>
+            </div>
+
+
+            <!-- <label class="form-label" for="nombreEdit">Descripcion:</label>
+            <input type="text" class="form-control nombre" id="nombreEdit" placeholder="Nombre de la Transacción"
+              name="nombreEdit" required />
+            <div class="invalid-feedback nombre-error"></div> -->
+
+
+            <label class="form-label" for="basic-icon-default-fullname">Descripcion:</label>
+            <input type="text" class="form-control dt-full-name nombre" id="nombre"
+              placeholder="Descripcion de la transacion :" name="nombre" aria-label=""
+              aria-describedby="basic-icon-default-fullname2" required />
+              <div class="invalid-feedback nombre-error"></div>
+              <div style="margin-bottom: 20px;"></div>
+            <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
+            <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
           </div>
-          <div class="form-group">
-            <label class="form-label" for="descripcion">Descripción</label>
-            <textarea class="form-control descripcion" id="descripcion" placeholder="Descripción de la Transacción" name="descripcion" required rows="3"></textarea>
-            <div class="invalid-feedback descripcion-error"></div>
-        </div>
-          <div class="form-group">
-            <label class="form-label" for="columna">Columna</label>
-            <select type="text" class="form-control" id="columna" name="columna" required></select>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="puntos">Puntos</label>
-            <input type="number" class="form-control " id="puntos" placeholder="# de puntos" name="puntos" required />
-          </div>
-          <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
-          <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-        </div>
       </form>
     </div>
   </div>
@@ -324,30 +329,28 @@
         </div>
         <div class="modal-body flex-grow-1">
           <input type="hidden" id="id">
+          
           <div class="form-group">
-            <label class="form-label" for="nombreEdit">Nombre</label>
-            <input type="text" class="form-control nombre" id="nombreEdit" placeholder="Nombre de la Transacción" name="nombreEdit" required />
-            <div class="invalid-feedback nombre-error"></div>
-        </div>
-          <div class="form-group">
-            <label class="form-label" for="bottonEdit">Boton App</label>
-            <input type="number" class="form-control " id="bottonEdit" placeholder="# de botton" name="bottonEdit"
-              required />
+            <label class="form-label" for="proyectoEdit">Proyecto:</label>
+            <select type="text" class="form-control" id="proyectoEdit" name="proyectoEdit" required></select>
           </div>
           <div class="form-group">
-            <label class="form-label" for="descripcionEdit">Descripción</label>
-            <textarea class="form-control descripcion" id="descripcionEdit" placeholder="Descripción de la Transacción" name="descripcion" required rows="3"></textarea>
-            <div class="invalid-feedback descripcion-error"></div>
-        </div>
+            <label class="form-label" for="tablaDBEdit">Tabla:</label>
+            <select type="text" class="form-control" id="tablaDBEdit" name="tablaDB" required></select>
+          </div>
+        
           <div class="form-group">
-            <label class="form-label" for="columnaEdit">Columna</label>
+            <label class="form-label" for="columnaEdit">Columna:/label>
             <select type="text" class="form-control" id="columnaEdit" name="columna" required></select>
           </div>
-          <div class="form-group">
-            <label class="form-label" for="puntosEdit">Puntos</label>
-            <input type="number" class="form-control " id="puntosEdit" placeholder="# de puntos" name="puntos"
-              required />
-          </div>
+        
+       
+
+          <label class="form-label" for="basic-icon-default-fullname">Descripcion:</label>
+            <input type="text" class="form-control dt-full-name nombreEdit" id="nombreEdit"
+              placeholder="Descripcion de la transacion :" name="nombreEdit" aria-label=""
+              aria-describedby="basic-icon-default-fullname2" required />
+              
           <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
         </div>
@@ -378,10 +381,10 @@
   <!-- End: Customizer-->
   <!-- BEGIN: Footer-->
   <footer class="footer footer-static footer-light">
-    <p class="clearfix mb-0"><span class="float-md-left d-block d-md-inline-block mt-25">&copy; 2024<a
-          class="ml-25" href="#" target="_blank">LEALTAD</a><span
-          class="d-none d-sm-inline-block">, Reservados todos los derechos.</span></span><span
-        class="float-md-right d-none d-md-block">Desarrollado por: SOLUCIONES-UN<i data-feather="code"></i></span></p>
+    <p class="clearfix mb-0"><span class="float-md-left d-block d-md-inline-block mt-25">&copy; 2024<a class="ml-25"
+          href="#" target="_blank">LEALTAD</a><span class="d-none d-sm-inline-block">, Reservados todos los
+          derechos.</span></span><span class="float-md-right d-none d-md-block">Desarrollado por: SOLUCIONES-UN<i
+          data-feather="code"></i></span></p>
   </footer>
   <button class="btn btn-primary btn-icon scroll-top" type="button"><i data-feather="arrow-up"></i></button>
   <!-- END: Footer-->
