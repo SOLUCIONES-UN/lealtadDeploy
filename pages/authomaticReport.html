@@ -148,7 +148,7 @@
         </div>
     </div>
     <!-- END: Main Menu-->
-    
+
 
     <!-- BEGIN: Content-->
     <div class="app-content content ">
@@ -163,31 +163,21 @@
 
                     <div class="row p-2">
                         <div class="col-md-3">
-                            <label for="FechaInicio">Seleccionar configuracion</label>
-                            <select id=""  class="form-control"> </select>
-                        </div>
-                        <div class="col-md-3">
                             <label for="FechaFin">Seleccionar Reporte</label>
-                            <select id=""  class="form-control"> </select>
+                            <select id="" class="form-control"> </select>
                         </div>
                         <div class="col-md-3">
-                          <label for="FechaFin">Campaña</label>
-                          <select id=""  class="form-control"> </select>
-                      </div>
-                        <div class="col-md-2">
-                            <button type="button" class="btn btn-primary mt-2 btn-block" data-toggle="modal" data-target="#modalNew">+</button>
+                            <label for="FechaFin">Campaña</label>
+                            <select id="" class="form-control"> </select>
                         </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-primary mt-2 btn-block" data-toggle="modal" data-target="#modalNew" style="font-size: 24px;">+</button>
+                        </div>
+
 
 
                         <div class="form-group col-6">
                             <button id="ConsultarPromo" class="btn btn-info mt-2 btn-block"> Consultar </button>
-                        </div>
-                        <div class="col-md-3">
-                            <button class="btn btn-primary mt-2 btn-block" id="btnDescargarExcel"> Excel </button>
-
-                        </div>
-                        <div class="col-md-3">
-                            <button class="btn btn-primary mt-2 btn-block" id="PantallaInfo"> Mostar en Pantalla </button>
                         </div>
                     </div>
                     <div class="card-datatable table-responsive p-2">
@@ -215,43 +205,74 @@
     </div>
 
 
-      <!-- modal de creacion or Update -->
-  <div class="modal modal-slide-in new-user-modal fade" id="modalNew">
-    <div class="modal-dialog">
-      <form id="formNew" class="add-new-user modal-content pt-0" autocomplete="off">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-        <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Agregar configuracion de Reporte</h5>
-        </div>
-        <div class="modal-body flex-grow-1">  
-          <div class="form-group">
-            <input id="id" type="hidden">
-            <label class="form-label" for="proyecto">Seleccionar configuracion</label>
-            <select type="text" class="form-control proyecto" id="proyecto" name="proyecto" required>
+    <!-- modal de creacion or Update -->
+    <div class="modal modal-slide-in new-user-modal fade" id="modalNew">
+        <div class="modal-dialog">
+            <form id="formNew" class="add-new-user modal-content pt-0" autocomplete="off">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                <div class="modal-header mb-1">
+                    <h5 class="modal-title" id="exampleModalLabel">Agregar configuracion de Reporte</h5>
+                </div>
+                <div class="modal-body flex-grow-1">
+                    <div class="form-group">
+                        <label class="form-label" for="seleccionConfiguracion">Seleccionar configuración</label>
+                        <select class="form-control proyecto" id="seleccionConfiguracion" name="seleccionConfiguracion" onchange="mostrarOcultarSelectDia();" required>
+                        <option selected disabled>Selecciona una opción</option>
+                        <option value="dia">Día</option> 
+                        <option value="semana">Semana</option>
+                        <option value="mes">Mes</option>
+                    </select>
+                        <div id="proyectoEditError" class="invalid-feedback proyecto-error"></div>
+                    </div>
+
+                    <div class="form-group" id="selectDiaContainer" style="display: none;">
+                        <label class="form-label" for="selectDia">Dia semana</label>
+                        <select type="text" class="form-control proyecto" id="selectDia" name="selectDia" required>
+                          <option selected disabled>Selecciona una Opcion</option>
+                          <option value="lunes">Lunes</option> 
+                          <option value="martes">Martes</option>
+                          <option value="miercoles">Miércoles</option>
+                          <option value="jueves">Jueves</option>
+                          <option value="viernes">Viernes</option>
+                      </select>
+                        <div id="selectDiaError" class="invalid-feedback proyecto-error"></div>
+                    </div>
+
+
+                    <div class="form-group" id="selectDiaMesContainer" style="display: none;">
+                        <label class="form-label" for="selectDiaMes">Día del mes</label>
+                        <select type="text" class="form-control proyecto" id="selectDiaMes" name="selectDiaMes" required>
+                      </select>
+                        <div id="selectDiaMesError" class="invalid-feedback proyecto-error"></div>
+                    </div>
+
+
+
+
+                    <div class="form-group">
+                        <input id="id" type="hidden">
+                        <label class="form-label" for="proyecto">Seleccionar Reporte</label>
+                        <select type="text" class="form-control proyecto" id="proyecto" name="proyecto" required>
               <option selected disabled>Selecciona una Opcion</option>
+                          <option value="OfferCraft">OfferCraft</option>
+                          <option value="Referidos">Referidos</option>
+                          <option value="Referidos">General de Referidos</option>
+
             </select>
-            <div id="proyectoEditError" class="invalid-feedback proyecto-error"></div>
-          </div>
-          <div class="form-group">
-            <input id="id" type="hidden">
-            <label class="form-label" for="proyecto">Seleccionar Reporte</label>
-            <select type="text" class="form-control proyecto" id="proyecto" name="proyecto" required>
-              <option selected disabled>Selecciona una Opcion</option>
+                        <div id="proyectoEditError" class="invalid-feedback proyecto-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="selecCampania">Campaña</label>
+                        <select id="selecCampania" multiple="multiple" class="form-control">
             </select>
-            <div id="proyectoEditError" class="invalid-feedback proyecto-error"></div>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="selecCampania">Campaña</label>
-            <select id="selecCampania" multiple="multiple" class="form-control">
-            </select>
-            <div id="proyectoEditError" class="invalid-feedback proyecto-error"></div>
-          </div>
-          <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
-          <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+                        <div id="proyectoEditError" class="invalid-feedback proyecto-error"></div>
+                    </div>
+                    <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
+                    <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
         </div>
-      </form>
     </div>
-  </div>
 
 
 
