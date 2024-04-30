@@ -254,8 +254,9 @@ const  getPaginas = () => {
                 }
             },
         
-            { data: "menu.descripcion" },
+        
             { data: "descripcion" },
+            { data: "menu.descripcion" },
                     //  { data: "path" },
             {
                 data: "id", 
