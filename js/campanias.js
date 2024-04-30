@@ -18,7 +18,7 @@ let imgCampania = null;
 var bloqueadosUsuarios =[];
 var DataEtapa =[];
 
-var muestraEtapa=[];
+
 
 
 //valor para poder editar etapas
@@ -32,6 +32,7 @@ $(function () {
   //select
   getProjecs();
   Calendar();
+  getTransaccion();
 
   const containerArchivo = document.getElementById('containerArchivo');
   if (containerArchivo) {
@@ -126,12 +127,11 @@ $(function () {
       terminosCondiciones: $('#terminosCondiciones').val(),
       observaciones: $('#Observaciones').val(),
       esArchivada: 0,
+      restriccionUser: parseInt($('#restriccionUsuarios').val()),
       idProyecto: parseInt($('#proyecto').val()),
       etapas: getEtapasData(),
-      bloqueados: bloqueadosUsuarios
-      /*
-      participacion: getParticipacionData(),
-      */
+      bloqueados: bloqueadosUsuarios,
+      participacion:permitidoUsuario
       
     });
 
@@ -201,7 +201,7 @@ function initStepper() {
   actualStep=0;
   var steps = $('#stepper').children(); // Obtener todos los elementos hijos del contenedor #stepper
   var totalSteps = steps.length;
-
+  Calendar();
 
   //provisional
   const containerBloqueo = document.querySelector('#Bloqueo');
@@ -218,6 +218,7 @@ function initStepper() {
         hideStep(actualStep);
         actualStep++;
         showStep(actualStep);  
+        console.log(actualStep)
       }else{
         console.log("Error")
       }
@@ -291,9 +292,7 @@ function initStepper() {
 
   // Stepp de los parametros de la campaña segun esta una etapa
   $('#add-step-btn').click(function() {
-    //getTransaccion();
     getDepartamento();
-    //getMunicipio();
     getTransaccion();
     getPremio();
     addStep(`<div class="form-step ">
@@ -485,7 +484,7 @@ function initStepper() {
           estado: 1,
         }
         TEMP.push(nuevo);
-        muestraEtapa.push(TEMP)
+        //muestraEtapa.push(TEMP)
     
         $('#NombreEtapa').val('');
         $('#orden').val('');
@@ -509,12 +508,12 @@ function initStepper() {
     actualStep = totalSteps - 1;
     showStep(actualStep);
 
-    // Deshabilitar y ocultar los botones de la barra
-    $('.step-button').prop('disabled', true);
-        //borrar los arreglos para su reutilizacion
-        datosTablaParametro = [];
-        datosTablaLocalidad = [];
-        datosTablaPremio = [];
+    // // Deshabilitar y ocultar los botones de la barra
+    // $('.step-button').prop('disabled', true);
+    //     //borrar los arreglos para su reutilizacion
+    //     datosTablaParametro = [];
+    //     datosTablaLocalidad = [];
+    //     datosTablaPremio = [];
     // Agregar evento de clic al botón "Borrar" del nuevo paso
     newStep.find('#removeStepp').click(function(e) {
       e.preventDefault();
@@ -561,8 +560,8 @@ function initStepper() {
       newStep.html('');
       stepData = null;
       
-      // Habilitar los botones de la barra
-      $('.step-buttons button').prop('disabled', false);
+      // // Habilitar los botones de la barra
+      // $('.step-buttons button').prop('disabled', false);
     });
   
 
@@ -666,9 +665,7 @@ function initStepper() {
     
         // Mostrar los datos en la tabla
         mostrarDatosParametro('#tableLocalidad');
-    
-        // Incrementar el índice
-        indexLocalidad++;
+  
       }    
       
       return isValid;
@@ -1631,7 +1628,7 @@ function mostrarDatosTabla(tabla) {
       $('#TablaEtapa').DataTable({
         searching: false, // Deshabilitar la funcionalidad de búsqueda
         paging: false,
-        data: muestraEtapa,
+        data: TEMP,
         columns: [
           { 
             render: function(data, type, row, meta) {
@@ -1915,7 +1912,7 @@ const getTransaccion = () =>{
     })
 }
 
-//Funcion para traer los Transacciones
+//Funcion para traer los Premios
 const getPremio = () =>{
   var requestOptions = {
     method: 'GET',
