@@ -3,6 +3,7 @@ let token = localStorage.getItem("token");
 
 $(function () {
   let tabla = getDepartamentos();
+  getSelect();
   Usuario();
   function validarNombre(nombre) {
     const nombreValido = /^[a-zA-Z0-9\s]+$/.test(nombre.trim());
@@ -299,6 +300,31 @@ const OpenEdit = (id) => {
     })
     .catch((error) => console.log("error", error));
 };
+
+
+const getSelect =()=>{ 
+  var requestOptions ={
+      method: 'GET',
+      redirect: 'follow',
+      headers: {"Authorization": token}
+  };
+  // $('#ruta').html('<option value="0" selected disabled>Selecciona una Opcion</option>');
+  fetch(`${url}projects`,requestOptions)
+      .then(response => response.json())
+      .then(result =>{
+          console.log(result);
+    
+  
+          result.forEach(element=>{
+               
+              var  opc = `<option value="${element.id}">${element.descripcion}</option>`; 
+  
+              $('#ruta').append(opc);
+              $('#rutaEdit').append(opc);
+          });
+      })
+      .catch(err => Alert(err.message, 'error'))
+}
 
 const OpenDelete = (id) => {
   $("#idDelete").val(id);
