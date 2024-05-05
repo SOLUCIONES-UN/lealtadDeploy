@@ -373,7 +373,7 @@
                                             </thead>
                                         </table>
                                     </div>
-                                    <div class="tab-pane fade opcLista" id="opcArchivo" role="tabpanel">
+                                    <div class="tab-pane fade opcLista" id="opcArchivadas" role="tabpanel">
                                         <!--Tabla de todas las campañas archivadas--> 
                                         <table class="datatables-basic table" id="tableArchivo">
                                             <thead>
@@ -431,6 +431,7 @@
                                     <div class="custom-file">
                                       <input type="file" class="custom-file-input" id="imgCampania" onchange="previewImage(event, 'previewImg', 'imgCampania')">
                                       <label class="custom-file-label" for="imgCampania">Seleccionar archivo</label>
+                                      <div id="imgCampaniaError" class="invalid-feedback imgCampania-error"></div>
                                     </div>
                                     <div class="preview-container" >
                                       <img id="previewImg" src="#" alt="Preview" style="display: none;">
@@ -445,6 +446,7 @@
                                     <div class="custom-file">
                                       <input type="file" class="custom-file-input" id="imgNotificacion" onchange="previewImage(event, 'previewNotificacion', 'imgNotificacion')">
                                       <label class="custom-file-label" for="imgNotificacion">Seleccionar archivo</label>
+                                      <div id="imgNotificacionError" class="invalid-feedback imgNotificacion-error"></div>
                                     </div>
                                     <div class="preview-container">
                                       <img id="previewNotificacion" src="#" alt="Preview" style="display: none;">
@@ -531,7 +533,7 @@
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="campania">Campaña</label>
                                         <input type="text" aria-describedby="CampaniaError"   id="campania" class="form-control campania" placeholder="Ingresa el Nombre" />
-                                        <div id="CampaniaError" class="invalid-feedback Campania-error"></div>
+                                        <div id="campaniaError" class="invalid-feedback Campania-error"></div>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="form-label" for="notificacion">Titulo de Notificación</label>
@@ -839,10 +841,10 @@
             </div>
             <div class="modal-body flex-grow-1 ">
                 <div class="d-flex justify-content-center step-buttons">
-                    <button class="step-progress mr-1 ml-1 step-btn-1Edit">1</button>
-                    <button class="step-progress mr-1 step-btn-2Edit">2</button>
-                    <button class="step-progress mr-1 step-btn-3Edit">3</button>
-                    <button class="step-progress mr-1 step-btn-4Edit">4</button>
+                    <button class="step-progress mr-1 ml-1 step-btn-1-edit">1</button>
+                    <button class="step-progress mr-1 step-btn-2-edit">2</button>
+                    <button class="step-progress mr-1 step-btn-3-edit">3</button>
+                    <button class="step-progress mr-1 step-btn-4-edit">4</button>
                 </div>
                 <div class="divider">
                     <div class="divider-text"></div>
@@ -1057,6 +1059,95 @@
                                 <h4 class="mb-0">Etapa registradas</h4>
                                 <small class="text-muted">Etapas registradas en esta campaña.</small>
                             </div>
+                            <button type="button" id="CrearEtapaBtn" class="btn btn-primary">Crear Etapa</button>
+                            <div id="CrearEtapa" style="display: none;">
+                                <div class="content-header mt-2 mb-1">
+                                    <h4 class="mb-0">Configuración de Etapa</h4>
+                                    <small class="text-muted">Ingresa los datos basicos de la Campaña.</small>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label" for="NombreEtapa">Nombre</label>
+                                        <input type="text" id="NombreEtapa" aria-describedby="NombreEtapaError"  class="form-control" />
+                                        <div id="NombreEtapaError" class="invalid-feedback NombreEtapa-error"></div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label" for="orden">Orden</label>
+                                        <input type="number" id="orden" class="form-control" aria-describedby="ordenError"  />
+                                        <div id="ordenError" class="invalid-feedback orden-error"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label" for="descripcionEtapa">Descripcion de las Etapas</label>
+                                        <textarea type="text" id="descripcionEtapa" aria-describedby="descripcionEtapaError" class="form-control" placeholder="Ingrese la descripcion" rows="2"></textarea>
+                                        <div id="descripcionEtapaError" class="invalid-feedback descripcionEtapa-error"></div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label" for="tipoParticipacion">Tipo de Participación</label>
+                                        <select name="tipoParticipacion" aria-describedby="tipoParticipacionError" id="tipoParticipacion" class="form-control">
+                                            <option disabled selected>Selecciona una opción</option>
+                                            <option value="0">Transacciones</option>
+                                            <option value="1">Recurrentes</option>
+                                            <option value="2">Acumular Transacciones</option>
+                                            <option value="3">Acumular Transacciones Recurrentes</option>
+                                            <option value="4">Acumular Valor</option>
+                                            <option value="5">Combinar Transacciones</option>
+                                        </select>
+                                        <div id="tipoParticipacionError" class="invalid-feedback tipoParticipacion-error"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label" for="RangoTiempo">Tipo de Participación</label>
+                                        <select name="RangoTiempo" aria-describedby="RangoTiempoError" id="RangoTiempo" class="form-control">
+                                            <option disabled selected>Selecciona una opción</option>
+                                            <option value="0">Diaria</option>
+                                            <option value="1">Semanal</option>
+                                            <option value="2">Anual</option>
+                                        </select>
+                                        <div id="RangoTiempoError" class="invalid-feedback RangoTiempo-error"></div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="form-label" for="intervalo">Intervalo de tiempo</label>
+                                        <input type="number" id="intervalo" class="form-control" aria-describedby="intervaloError"  />
+                                        <div id="intervaloError" class="invalid-feedback intervalo-error"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="inputsContainer">
+                                            <div id="inputsTipo0" style="display: none;">
+                                                <!-- Inputs para Aculadas -->
+                                                <div class="row">
+                                                    <div class="form-group col-md-6">
+                                                        <label class="form-label" for="minimoTransaccion">Minimo Transaccion</label>
+                                                        <input type="text" id="minimoTransaccion" class="form-control" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                
+                                            <div id="inputsTipo1" style="display: none;">
+                                                <!-- Inputs para Acumuladas -->
+                                                <div class="row">
+                                                    <div class="form-group col-md-6">
+                                                        <label class="form-label" for="TotalMinimo">Total Minimo</label>
+                                                        <input type="text" id="TotalMinimo" class="form-control" />
+                                                    </div>
+                                               
+                                                </div>
+                                            </div> 
+                                        </div>
+                                    </div>   
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="btn-crear d-flex justify-content-end mt-2">
+                                            <button type="button" class="btn btn-outline-primary" id="add-step-btn">Crear</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <table class="datatables-basic table mb-3 mt-2" id="TablaEtapaEdit">
                                 <thead>
                                     <tr>
@@ -1069,7 +1160,7 @@
                             </table>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-outline-secondary prev-btn-edit">Anterior</button>
-                            <button type="button" id="btnSiguienteEdit" class="btn btn-primary next-btn-edit">Siguiente</button>
+                                <button type="button" id="btnSiguienteEdit" class="btn btn-primary next-btn-edit">Siguiente</button>
                             </div>
                         </div>
                     </div>
@@ -1082,8 +1173,8 @@
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-6">
-                                    <div id="calendarEdit">
-                                        <div class="calendarEdit">
+                                    <div id="calendar">
+                                        <div class="calendar">
                                             <div class="calendar-header">
                                             <button id="prev-month">&lt;</button>
                                             <div id="current-month-year"></div>
@@ -1106,7 +1197,7 @@
                                 <div class="form-group col-md-6">
                                     <div class="form-group ">
                                         <label class="form-label" for="FechaIniRecordatorioEdit">Fecha Inicial</label>
-                                        <input type="date" id="FechaIniRecordatorio" class="form-control" />
+                                        <input type="date" id="FechaIniRecordatorioEdit" class="form-control" />
                                     </div>
                                     <div class="form-group ">
                                         <label class="form-label" for="FechaFinRecordatorioEdit">Fecha Final</label>
@@ -1135,8 +1226,8 @@
                                         </div>
                                     </div>
                                     <div class="form-group ">
-                                        <label class="form-label" for="correo">Correo</label>
-                                        <input type="email" id="correo" class="form-control" />
+                                        <label class="form-label" for="correoEdit">Correo</label>
+                                        <input type="email" id="correoEdit" class="form-control" />
                                     </div>
                                 </div>
                             </div>
