@@ -3,6 +3,7 @@ let token = localStorage.getItem("token");
 
 $(function () {
     getDepartamentos();
+    GetProjects();
     let tabla = getMunicipios();
     Usuario()
     function validarNombre(nombre) {
@@ -322,7 +323,34 @@ const OpenDelete = (id) => {
 
 }
 
-
+const GetProjects = (isEdit = false) => {
+    $("#proyecto").html(null);
+    $("#proyectoEdit").html(null);
+  
+    var requestOptions = {
+      method: "GET",
+      redirect: "follow",
+      headers: { Authorization: token },
+    };
+  
+    $("#proyecto").html(
+      '<option value="0" selected disabled>Selecciona una Opcion</option>'
+    );
+    fetch(`${url}projects`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        result.forEach((element) => {
+          var option = `<option value="${element.id}">${element.descripcion}</option>`;
+          $("#proyecto").append(option);
+          $("#proyectoEdit").append(option);
+        });
+        var selectProyecto = document.getElementById("proyecto");
+        var selectProyectoEdit = document.getElementById("proyectoEdit");
+  
+        
+      })
+      .catch((err) => console.log("error", err));
+  };
 const getDepartamentos = () => {
     var requestOptions = {
         method: 'GET',
