@@ -41,12 +41,15 @@ function getMeses(event) {
     .then((response) => response.json())
     .then((data) => {
       console.log("Datos de aios:", data);
-      let options = `<option value="0">MES</option>`;
-      data.forEach((d) => {
-        options += `<option value="${
-          d.mesValido < 10 ? "0" + d.mesValido : d.mesValido
-        }">${d.mesValido < 10 ? "0" + d.mesValido : d.mesValido}</option>`;
-      });
+      const meses = [
+        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", 
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    ];
+    let options = `<option value="0">MES</option>`;
+    data.forEach((d) => {
+        const nombreMes = meses[d.mesValido - 1]; // Restamos 1 porque los índices de array comienzan en 0
+        options += `<option value="${d.mesValido}">${nombreMes}</option>`;
+    });
 
       $("#mesCampana").html(options);
     })
@@ -102,7 +105,15 @@ $("#btnConsultar").click(function () {
             {
               label: "Participantes",
               data: participantes,
-              backgroundColor: "rgba(117, 85, 245)",
+              backgroundColor:  
+             [
+                "rgba(41, 182, 246)",
+                "rgba(129, 199, 132)",
+                "rgba(21, 101, 192)",
+                "rgba(165, 105, 189 )",
+                "rgba(102, 102, 255)",
+                "rgba(255, 159, 64, 0.2)",
+            ],
               borderColor: "rgba(54, 162, 235, 1)",
               borderWidth: 1,
             },
@@ -127,5 +138,52 @@ $("#btnConsultar").click(function () {
       .catch((error) =>
         console.error("Error al obtener los datos de las campañas:", error)
       );
+  }
+});
+$("#btnGrafCircular").click(function () {
+  if (window.myChart) {
+      // Destruir el gráfico de barras existente
+      window.myChart.destroy();
+
+      // Obtener los datos para el gráfico circular
+      const chartData = window.myChart.config.data;
+      const labels = chartData.labels;
+      const data = chartData.datasets[0].data;
+
+      // Crear el gráfico circular
+      const canvas = document.getElementById("graficaParticipantes");
+      const ctx = canvas.getContext("2d");
+      window.myChart = new Chart(ctx, {
+          type: "doughnut",
+          data: {
+              labels: labels,
+              datasets: [
+                  {
+                      label: "Participantes",
+                      data: data,
+                      backgroundColor: [
+                          "rgba(41, 182, 246)",
+                          "rgba(129, 199, 132)",
+                          "rgba(21, 101, 192)",
+                          "rgba(165, 105, 189 )",
+                          "rgba(102, 102, 255)",
+                          "rgba(255, 159, 64, 0.2)",
+                      ],
+                      borderColor: [
+                          "rgba(253, 254, 254)",
+                          "rgba(253, 254, 254)",
+                          "rgba(253, 254, 254)",
+                          "rgba(253, 254, 254)",
+                          "rgba(253, 254, 254)",
+                          "rgba(255, 159, 64, 1)",
+                      ],
+                      borderWidth: 1,
+                  },
+              ],
+          },
+          options: {
+              responsive: true,
+          },
+      });
   }
 });

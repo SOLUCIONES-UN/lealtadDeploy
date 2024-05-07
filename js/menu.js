@@ -205,7 +205,7 @@ const getMenus = () => {
                 }
             },
             { data: "descripcion" },
-            { data: "icono" },
+        //    { data: "icono" }, 
 
 
             

@@ -5,6 +5,7 @@ $(function () {
     getDepartamentos();
     GetProjects();
     let tabla = getMunicipios();
+    getSelect();
     Usuario()
     function validarNombre(nombre) {
         const nombreValido = /^[a-zA-Z\s]+$/.test(nombre.trim());
@@ -50,8 +51,9 @@ $(function () {
     
     //evento submit del formulario
     $('#formNew').submit(function () {
-        const nombre = $('#nombre').val();
         const idDepartamento = $('#departamento').val();
+        const nombre = $('#nombre').val();
+
 
         
 
@@ -75,6 +77,8 @@ $(function () {
         var raw = JSON.stringify({
             "nombre": $('#nombre').val(),
             "departamento":idDepartamento,
+         
+         
         });
 
         var requestOptions = {
@@ -120,8 +124,9 @@ $(function () {
         const id = $('#id').val();
 
         var raw = JSON.stringify({
-            "nombre": $('#nombreEdit').val(),
             "departamento": $('#departamentoActualizar').val(),
+            "nombre": $('#nombreEdit').val(),
+     
         });
 
 
@@ -211,10 +216,13 @@ const getMunicipios = () => {
                 }
                 return meta.row + 1; 
             }},
-            { data: "nombre" },
             { data: "departamento.nombre" },
+            { data: "nombre" },
+       
+
             {
-                data: "id", render: function (data) {
+                data: "id",
+                 render: function (data) {
                     return `
               <div class="btn-group">
                 <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
@@ -273,6 +281,7 @@ const getMunicipios = () => {
 function limpiarFormulario() {
     $('#formNew').trigger("reset");
     $('.nombre').removeClass('is-invalid');
+
     $('.nombre-error').empty().removeClass('text-danger');
   }
 
@@ -305,14 +314,14 @@ const OpenEdit = (id) => {
             console.log($('#departamentoActualizar'))
             console.log(result)
             $('#id').val(id);
-            $('#nombreEdit').val(result.nombre);
             $('#departamentoActualizar').val(result.idDepartamento);
+            $('#nombreEdit').val(result.nombre);
+          
             $('#modalEdit').modal('toggle');
         })
         .catch(error => console.log('error', error));
 
 }
-
 
 const OpenDelete = (id) => {
 
@@ -371,3 +380,27 @@ const getDepartamentos = () => {
         .catch(error => console.log('error', error));
 
 }
+const getSelect =()=>{ 
+    var requestOptions ={
+        method: 'GET',
+        redirect: 'follow',
+        headers: {"Authorization": token}
+    };
+    // $('#ruta').html('<option value="0" selected disabled>Selecciona una Opcion</option>');
+    fetch(`${url}projects`,requestOptions)
+        .then(response => response.json())
+        .then(result =>{
+            console.log(result);
+      
+    
+            result.forEach(element=>{
+                 
+                var  opc = `<option value="${element.id}">${element.descripcion}</option>`; 
+    
+                $('#ruta').append(opc);
+                $('#rutaEdit').append(opc);
+            });
+        })
+        .catch(err => Alert(err.message, 'error'))
+}
+
