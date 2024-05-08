@@ -205,7 +205,7 @@ const getMenus = () => {
                 }
             },
             { data: "descripcion" },
-            { data: "icono" },
+        //    { data: "icono" }, 
 
 
             
@@ -314,3 +314,4 @@ const OpenDelete = (id) => {
     $('#idDelete').val(id);
     $('#modalDelete').modal('toggle');
 }
+

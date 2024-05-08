@@ -12,7 +12,7 @@ $(function () {
   getAllPromocionesActivasLastWeek();
   getAllPromocionesActivas();
   getAllCampanasActivas();
-  mostrarGraficaCampañas();
+  // mostrarGraficaCampañas();
 });
 
 // //boton para volver a pagina anterior
