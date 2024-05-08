@@ -43,7 +43,7 @@ $(function () {
   getAllCampanias();
   getProjecs();
   getMunicipios();
-
+  getDepartamento();
   const containerArchivo = document.getElementById('containerArchivo');
   if (containerArchivo) {
     containerArchivo.style.display = 'none';
@@ -719,6 +719,12 @@ function initStepper() {
           $('#' + field).removeClass('is-invalid');
           errorDiv.text('');
         }
+
+        // Agregar evento input para quitar el error cuando el usuario comience a escribir
+        $('#' + field).on('input', function() {
+          $(this).removeClass('is-invalid');
+          errorDiv.text('');
+        });
       });
 
       
@@ -794,8 +800,13 @@ function initStepper() {
         } else {
           $('#' + field).removeClass('is-invalid');
           errorDiv.text('');
-          isValid = true;
         }
+
+        // Agregar evento input para quitar el error cuando el usuario comience a escribir
+        $('#' + field).on('input', function() {
+          $(this).removeClass('is-invalid');
+          errorDiv.text('');
+        });
       });
 
       // Validar que los campos no estén vacíos
@@ -848,8 +859,13 @@ function initStepper() {
         } else {
           $('#' + field).removeClass('is-invalid');
           errorDiv.text('');
-          isValid = true;
         }
+
+        // Agregar evento input para quitar el error cuando el usuario comience a escribir
+        $('#' + field).on('input', function() {
+          $(this).removeClass('is-invalid');
+          errorDiv.text('');
+        });
       });
 
       if( tipoPremio && valor  ){
@@ -2492,9 +2508,6 @@ const getProjecs = () =>{
     })
 }
 
-
-
-//Funcion para traer los departamentos
 const getDepartamento = () => {
   return new Promise((resolve, reject) => {
     var requestOptions = {
@@ -2511,8 +2524,6 @@ const getDepartamento = () => {
         return response.json();
       })
       .then(result => {
-
-        
         // Vaciar el select antes de agregar las nuevas opciones
         $('#departamento').empty();
         $('#departamentoEdit').empty();
@@ -2532,18 +2543,23 @@ const getDepartamento = () => {
                
         console.log('Departamentos obtenidos:', dataDeptoView);
 
+        // Verificar si los elementos existen antes de asignar los event listeners
         var selectDepartamento = document.getElementById('departamento');
         var selectDepartamentoEdit = document.getElementById('departamentoEdit');
 
-        selectDepartamento.addEventListener('change', function() {
-          var selectedId = this.value;
-          getMunicipioByDepto(selectedId);
-        });
+        if (selectDepartamento) {
+          selectDepartamento.addEventListener('change', function() {
+            var selectedId = this.value;
+            getMunicipioByDepto(selectedId);
+          });
+        }
 
-        selectDepartamentoEdit.addEventListener('change', function() {
-          var selectedId = this.value;
-          getMunicipioByDepto(selectedId);
-        });
+        if (selectDepartamentoEdit) {
+          selectDepartamentoEdit.addEventListener('change', function() {
+            var selectedId = this.value;
+            getMunicipioByDepto(selectedId);
+          });
+        }
 
         // Resolver la promesa
         resolve();
@@ -2564,8 +2580,9 @@ const getMunicipioByDepto = (idDepartamento) => {
       headers: { "Authorization": token }
     };
 
-    // Eliminar todas las opciones del select #municipio excepto la opción seleccionada por defecto
+    // Eliminar todas las opciones del select #municipio y #municipioEdit excepto la opción seleccionada por defecto
     $('#municipio option:not(:disabled)').remove();
+    $('#municipioEdit option:not(:disabled)').remove();
 
     fetch(`${url}Municipio/by/${idDepartamento}`, requestOptions)
       .then(response => {
@@ -2730,14 +2747,36 @@ function validarCamposStep(stepIndex) {
       fields.forEach(function(field) {
         var value = $('#' + field).val();
         var errorDiv = $('#' + field + 'Error');
-        if (!value) {
+
+        // Validar que no haya números negativos
+        if (/^-\d+/.test(value)) {
+          $('#' + field).addClass('is-invalid');
+          errorDiv.text('Este campo no puede contener números negativos.');
+          isValid = false;
+        }
+        // Validar que no haya espacios en blanco al inicio o que solo sean espacios en blanco
+        else if (/^(\s+|\s+$)/.test(value)) {
+          if ($('#' + field).attr('type') !== 'textarea') {
+            $('#' + field).addClass('is-invalid');
+            errorDiv.text('Este campo no puede comenzar o contener solo espacios en blanco.');
+            isValid = false;
+          }
+        }
+        // Validar que no haya caracteres especiales (excepto para fechas, texto y "_", ".", ",")
+        else if (/[^a-zA-ZñÑ0-9\/\-\:\s\n\r_.,]/g.test(value)) {
+          if ($('#' + field).attr('type') !== 'date' && $('#' + field).attr('type') !== 'textarea') {
+            $('#' + field).addClass('is-invalid');
+            errorDiv.text('Este campo no puede contener caracteres especiales.');
+            isValid = false;
+          }
+        }
+        else if (!value) {
           $('#' + field).addClass('is-invalid');
           errorDiv.text('Este campo no puede estar vacío.');
           isValid = false;
         } else {
           $('#' + field).removeClass('is-invalid');
           errorDiv.text('');
-          isValid = true;
         }
 
         // Agregar evento input para quitar el error cuando el usuario comience a escribir
@@ -2819,10 +2858,51 @@ function validarCamposStep(stepIndex) {
           } else {
             $('#' + field).removeClass('is-invalid');
             errorDiv.text('');
-            isValid = true;
           }
         });
       }
+
+      fields.forEach(function(field) {
+        var value = $('#' + field).val();
+        var errorDiv = $('#' + field + 'Error');
+        // Validar que no haya números negativos
+        if (/^-\d+/.test(value)) {
+          $('#' + field).addClass('is-invalid');
+          errorDiv.text('Este campo no puede contener números negativos.');
+          isValid = false;
+        }
+        // Validar que no haya espacios en blanco al inicio o que solo sean espacios en blanco
+        else if (/^(\s+|\s+$)/.test(value)) {
+          if ($('#' + field).attr('type') !== 'textarea') {
+            $('#' + field).addClass('is-invalid');
+            errorDiv.text('Este campo no puede comenzar o contener solo espacios en blanco.');
+            isValid = false;
+          }
+        }
+        // Validar que no haya caracteres especiales (excepto para fechas, texto y "_", ".", ",")
+        else if (/[^a-zA-ZñÑ0-9\/\-\:\s\n\r_.,]/g.test(value)) {
+          if ($('#' + field).attr('type') !== 'date' && $('#' + field).attr('type') !== 'textarea') {
+            $('#' + field).addClass('is-invalid');
+            errorDiv.text('Este campo no puede contener caracteres especiales.');
+            isValid = false;
+          }
+        }
+        else if (!value) {
+          $('#' + field).addClass('is-invalid');
+          errorDiv.text('Este campo no puede estar vacío.');
+          isValid = false;
+        } else {
+          $('#' + field).removeClass('is-invalid');
+          errorDiv.text('');
+        }
+
+        // Agregar evento input para quitar el error cuando el usuario comience a escribir
+        $('#' + field).on('input', function() {
+          $(this).removeClass('is-invalid');
+          errorDiv.text('');
+        });
+      });
+      
      
 
       return isValid;
@@ -3098,9 +3178,6 @@ const table = (table, data) => {
               <a href="#" class="btn_edit dropdown-item" onclick="OpenEdit(${data})" data-toggle="modal" data-target="#modalEdit">
                 ${feather.icons["edit"].toSvg({ class: "font-small-4 mr-50" })} Editar
               </a>
-              <a href="#" onclick="archivarCampania(${data})" class="btn_archivar dropdown-item">
-                ${feather.icons["archive"].toSvg({ class: "font-small-4 mr-50" })} Archivar
-              </a>
               <a href="#" onclick="OpenDelete(${data})" class="btn_delete dropdown-item">
                 ${feather.icons["trash-2"].toSvg({ class: "font-small-4 mr-50" })} Eliminar
               </a>
@@ -3126,7 +3203,7 @@ const table = (table, data) => {
             
             opcAdd += `
               <a href="#" class="btn_edit dropdown-item" onclick="OpenEdit(${data})" data-toggle="modal" data-target="#modalEdit">
-                ${feather.icons["archive"].toSvg({ class: "font-small-4 mr-50" })} Actualizar
+                ${feather.icons["edit"].toSvg({ class: "font-small-4 mr-50" })} Actualizar
               </a>
               <a href="#" onclick="OpenDelete(${data})" class="btn_delete dropdown-item">
                 ${feather.icons["trash-2"].toSvg({ class: "font-small-4 mr-50" })} Inhabilitar
