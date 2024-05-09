@@ -1880,32 +1880,29 @@ function initStepperEdit() {
 
 
 
-    function eliminarLocalidad(id) {
-      if (etapa) {
-        var presupuestoIndex = etapa.presupuestos.findIndex(function(item) {
-          return item.id === id;
-        });
-        
-        if (presupuestoIndex !== -1) {
-          // Eliminar el elemento del arreglo etapa.presupuestos
-          etapa.presupuestos.splice(presupuestoIndex, 1);
-          
-          // Guardar los cambios en dataEditEtapa o en la base de datos
-          var etapaIndex = dataEditEtapa.findIndex(function(item) {
-            return item.id === etapa.id;
-          });
-          
-          if (etapaIndex !== -1) {
-            dataEditEtapa[etapaIndex] = etapa;
-          }
-          
-          mostrarDatosEdit('#tableLocalidadEdit', etapa); // Actualizar la tabla
-        }
+function eliminarLocalidad(id) {
+  if (etapa) {
+    var presupuestoIndex = etapa.presupuestos.findIndex(function(item) {
+      return item.id === id;
+    });
+    
+    if (presupuestoIndex !== -1) {
+      etapa.presupuestos[presupuestoIndex].estado = 0; // Cambiar el estado a 0
+      
+      // Guardar los cambios en dataEditEtapa o en la base de datos
+      var etapaIndex = dataEditEtapa.findIndex(function(item) {
+        return item.id === etapa.id;
+      });
+      
+      if (etapaIndex !== -1) {
+        dataEditEtapa[etapaIndex] = etapa;
       }
+      
+      mostrarDatosEdit('#tableLocalidadEdit', etapa); // Actualizar la tabla
     }
-    
-    
-    
+  }
+}
+
   
     function eliminarPremio(id) {
       if (etapa) {
@@ -3012,9 +3009,6 @@ function limpiarFormulario() {
   $('#Archivo').val('');
   $('#usuarioBloqueo').val('');
 
-
-  $('#formNew').trigger("reset");
-
   // Limpiar las tablas
   $('#TablaEtapa').DataTable().clear().destroy();
   $('#tablaBloqueo').DataTable().clear().destroy();
@@ -3101,15 +3095,15 @@ const OpenEdit = (id) => {
       userValidator(event, 'containerArchivoEdit');
 
 
-      // // Asignar las imágenes si existen
-      // if (result.imgPush) {
-      //   $('#previewImgEdit').attr('src', `ruta/a/la/imagen/${result.imgPush}`);
-      //   $('#previewImgEdit').show();
-      // }
-      // if (result.imgAkisi) {
-      //   $('#previewNotificacionEdit').attr('src', `ruta/a/la/imagen/${result.imgAkisi}`);
-      //   $('#previewNotificacionEdit').show();
-      // }
+      // Asignar las imágenes si existen
+      if (result.imgPush) {
+        $('#previewImgEdit').attr('src', `ruta/a/la/imagen/${result.imgPush}`);
+        $('#previewImgEdit').show();
+      }
+      if (result.imgAkisi) {
+        $('#previewNotificacionEdit').attr('src', `ruta/a/la/imagen/${result.imgAkisi}`);
+        $('#previewNotificacionEdit').show();
+      }
 
       $('#maximoParticipantesEdit').val(result.maximoParticipaciones);
       $('#tercerosCampaniaEdit').val(result.campaniaTerceros);
