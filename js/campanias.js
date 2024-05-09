@@ -396,7 +396,9 @@ function initStepper() {
       var orden = $('#orden').val();
       var descripcionEtapa = $('#descripcionEtapa').val();
       var tipoParticipacion = $('#tipoParticipacion').val();
-      var intervalo = $('#intervalo').val();
+      var intervalo =parseInt( $('#intervalo').val());
+      var minimoTransaccion = parseFloat($('minimoTransaccion').val());
+      var TotalMinimo = parseFloat($('#totalMinimo').val());
   
 
       if(validarCamposStep(actualStep)){
@@ -591,6 +593,8 @@ function initStepper() {
           intervalo: intervalo,
           periodo: 0,
           valorAcumulado: null,
+          minimoTransaccion: minimoTransaccion,
+          totalMinimo: TotalMinimo,
           estado: 1,
         }
         TEMP.push(nuevo);
@@ -846,7 +850,7 @@ function initStepper() {
       var valor = parseFloat($('#valor').val());
       var porcentaje = $('#porcentajePremio').val();
 
-      var fields = ['tipoPremio', 'linkPremio', 'premio', 'valor'];
+      var fields = ['tipoPremio', 'linkPremio', 'premio', 'valor', 'porcentajePremio'];
       var isValid = true;
 
       fields.forEach(function(field) {
@@ -868,7 +872,7 @@ function initStepper() {
         });
       });
 
-      if( tipoPremio && valor  ){
+      if( isValid ){
         var nuevoPremio ={
           idPremio : premio,
           linkPremio: linkPremio,
@@ -1117,6 +1121,8 @@ function initStepperEdit() {
   
   // Inicializar los stepps
   var totalStepsEdits = stepsEdits.length;
+  var previousStep
+  var newStep
   
   showStep(actualStepEdit);
   $('.next-btn-edit').click(function(e) {
@@ -1171,8 +1177,25 @@ function initStepperEdit() {
     stepsEdits.eq(stepIndex).hide();
   }
 
-  var previousStep
-  var newStep
+  function handleTipoParticipacionChange(selectId, inputsContainerId) {
+    const tipoSeleccionado = $(`#${selectId}`).val();
+    const inputsContainer = $(`#${inputsContainerId}`);
+  
+    inputsContainer.find('#inputsTipo0').css('display', 'none');
+    inputsContainer.find('#inputsTipo1').css('display', 'none');
+  
+    if (tipoSeleccionado === '2' || tipoSeleccionado === '3') {
+      inputsContainer.find('#inputsTipo0').css('display', 'block');
+    } else if (tipoSeleccionado === '4') {
+      inputsContainer.find('#inputsTipo1').css('display', 'block');
+    }
+  }
+  
+  // Para el stepIniEdit
+  $('#tipoParticipacionEdit').change(function() {
+    handleTipoParticipacionChange('tipoParticipacionEdit', 'inputsContainerEdit');
+  });
+
 
  $('#TablaEtapaEdit').on('click', '.btn_edit', function(event) {
    var id = $(this).data('id');
@@ -1385,7 +1408,7 @@ function initStepperEdit() {
          <div class="form-group col-md-6">
            <input id="idPremio" type="hidden">
            <label class="form-label" for="tipoPremioEdit">Tipo de Premio</label>
-           <select name="tipoPremioEdit" aria-describedby="tipoPremioError" id="tipoPremio" class="form-control">
+           <select name="tipoPremioEdit" aria-describedby="tipoPremioEditError" id="tipoPremioEdit" class="form-control">
              <option disabled selected>Selecciona una opción</option>
              <option value="0">Único Premio</option>
              <option value="1">Premio Random</option>
@@ -1474,6 +1497,25 @@ function initStepperEdit() {
     if (etapa) {
       console.log(etapa, 'la etapa es')
 
+      function handleTipoParticipacionChange(selectId, inputsContainerId) {
+        const tipoSeleccionado = $(`#${selectId}`).val();
+        const inputsContainer = $(`#${inputsContainerId}`);
+      
+        inputsContainer.find('#inputsTipo0').css('display', 'none');
+        inputsContainer.find('#inputsTipo1').css('display', 'none');
+      
+        if (tipoSeleccionado === '2' || tipoSeleccionado === '3') {
+          inputsContainer.find('#inputsTipo0').css('display', 'block');
+        } else if (tipoSeleccionado === '4') {
+          inputsContainer.find('#inputsTipo1').css('display', 'block');
+        }
+      }
+      
+      // Para el stepIniEdit
+      $('#tipoParticipacionEdit').change(function() {
+        handleTipoParticipacionChange('tipoParticipacionEdit', 'inputsContainerEdit');
+      });
+
       $('#departamentoEdit').on('change', function() {
         var selectedId = $(this).val();
         getMunicipioByDepto(selectedId);
@@ -1536,7 +1578,7 @@ function initStepperEdit() {
       $('#ordenEdit').val(etapa.orden);
       $('#descripcionEtapaEdit').val(etapa.descripcion);
       $('#tipoParticipacionEdit').val(etapa.tipoParticipacion);
-      console.log('tipo participacion', etapa.tipoParticipacion)
+      $('#intervaloEdit').val(etapa.intervalo);
       $('#idParemetros').val(etapa.parametros.id);
 
       Promise.all([getDepartamento(), getTransaccion(), getPremio()])
@@ -1619,7 +1661,7 @@ function initStepperEdit() {
       }
     }
     
-    // Evento de clic para el botón de guardar parámetro editado
+    // Event listener para el botón de guardar parámetro editado
     $('#addParamasEdit').click(function() {
       var id = $('#idParemetros').val();
       var limiteParticipacion = $('#limiteParticipacionEdit').val();
@@ -1627,34 +1669,43 @@ function initStepperEdit() {
       var ValorMinimo = $('#valorMinimoEdit').val();
       var ValorMaximo = $('#valorMaximoEdit').val();
       var limiteDiario = $('#limiteDiarioEdit').val();
+      var parametro = {}
 
-    
-      // Crear un nuevo objeto con los valores actualizados
-      var parametroActualizado = {
-        id: id,
-        limiteParticipacion: limiteParticipacion,
-        idTransaccion: idTransaccion,
-        tipoTransaccion: 0,
-        ValorMinimo: ValorMinimo,
-        ValorMaximo: ValorMaximo,
-        valorAnterior: 0,
-        limiteDiario: limiteDiario,
-        estado:1
-      };
-    
+      if(id === null || id === ''){
+        parametro = {
+          limiteParticipacion: limiteParticipacion,
+          idTransaccion: idTransaccion,
+          tipoTransaccion: 0,
+          ValorMinimo: ValorMinimo,
+          ValorMaximo: ValorMaximo,
+          valorAnterior: 0,
+          limiteDiario: limiteDiario,
+          estado:1
+        };
+      }else{
+        parametro = {
+          id: id,
+          limiteParticipacion: limiteParticipacion,
+          idTransaccion: idTransaccion,
+          tipoTransaccion: 0,
+          ValorMinimo: ValorMinimo,
+          ValorMaximo: ValorMaximo,
+          valorAnterior: 0,
+          limiteDiario: limiteDiario,
+          estado:1
+        };
+      }
+
       // Agregar el parámetro actualizado al arreglo datosTablaParametro
-      etapa.parametros.push(parametroActualizado);
-      
-      // Actualizar la tabla de parámetros
-      mostrarDatosEdit('#TablaParametrosEdit', etapa);
-    
+      etapa.parametros.push(parametro);
+
       // Limpiar los inputs después de guardar
       $('#idParemetros').val('');
       $('#limiteParticipacionEdit').val('');
       $('#transaccionEdit').val('');
       $('#valorMinimoEdit').val('');
       $('#valorMaximoEdit').val('');
-      $('#limiteDiarioEdit').val('')
+      $('#limiteDiarioEdit').val('');
     });
 
     //Funcion asociada
@@ -1719,7 +1770,6 @@ function initStepperEdit() {
       }
     }
 
-    // Evento de clic para el botón de guardar presupuesto editado
     $('#addLocalidadEdit').click(function() {
       var id = $('#idPresupuesto').val();
       var idDepartamento = $('#departamentoEdit').val();
@@ -1727,26 +1777,32 @@ function initStepperEdit() {
       var limiteGanadores = $('#limiteGanadorEdit').val();
       var valor = $('#presupuestoEdit').val();
       var presupuestoDiario = $('#presupuestoDiarioEdit').val();
-
-      // Crear un nuevo objeto con los valores actualizados
-      var presupuestoActualizado = {
-        id: id,
-        idDepartamento: idDepartamento,
-        idMunicipio: idMunicipio,
-        limiteGanadores: limiteGanadores,
-        valor: valor,
-        presupuestoDiario: presupuestoDiario,
-        estado: 1,
-      };
-
+      var presupuestoActualizado = {};
+    
+      if (id === null || id === '') {
+        presupuestoActualizado = {
+          idDepartamento: idDepartamento,
+          idMunicipio: idMunicipio,
+          limiteGanadores: limiteGanadores,
+          valor: valor,
+          presupuestoDiario: presupuestoDiario,
+          estado: 1
+        };
+      } else {
+        presupuestoActualizado = {
+          id: id,
+          idDepartamento: idDepartamento,
+          idMunicipio: idMunicipio,
+          limiteGanadores: limiteGanadores,
+          valor: valor,
+          presupuestoDiario: presupuestoDiario,
+          estado: 1
+        };
+      }
+    
       // Agregar el presupuesto actualizado al arreglo etapa.presupuestos
       etapa.presupuestos.push(presupuestoActualizado);
-      console.log(etapa.presupuestos, 'actualizacion')
-      console.log(etapa)
-
-      // Actualizar la tabla de presupuestos
-      mostrarDatosEdit('#tableLocalidadEdit', etapa);
-
+    
       // Limpiar los inputs después de guardar
       $('#idPresupuesto').val('');
       $('#departamentoEdit').val('');
@@ -1754,7 +1810,7 @@ function initStepperEdit() {
       $('#limiteGanadorEdit').val('');
       $('#presupuestoEdit').val('');
       $('#presupuestoDiarioEdit').val('');
-    });    
+    });
     //Funcion asociada
     function editarPremio(id) {
       if (etapa) {
@@ -1780,37 +1836,48 @@ function initStepperEdit() {
         }
       }
     }    
-    // Evento de clic para el botón de guardar parámetro editado
+    
     $('#addPremioEdit').click(function() {
-      var id = $('#idPremio').val();
-      var valor = $('#valorEdit').val();
-      var linkPremio = $('#linkPremioEdit').val();
-      var idPremio = $('#premioEdit').val();
+      var id = $('#idPremioEdit').val();
+      var tipoPremio = $('#tipoPremioEdit').val();
+      var linkPremio = parseInt($('#linkPremioEdit').val());
+      var premio = parseInt($('#premioEdit').val());
+      var valor = parseFloat($('#valorEdit').val());
       var porcentaje = $('#porcentajePremioEdit').val();
+      var premioActualizado = {};
     
-      // Crear un nuevo objeto con los valores actualizados
-      var premioActualizado = {
-        id: id,
-        valor: valor,
-        linkPremio: linkPremio,
-        idPremio: idPremio,
-        estado: 1
-      };
+      if (id === null || id === '') {
+        premioActualizado = {
+          idPremio: premio,
+          linkPremio: linkPremio,
+          tipoPremio: tipoPremio,
+          valor: valor,
+          porcentajePremio: porcentaje,
+          estado: 1
+        };
+      } else {
+        premioActualizado = {
+          id: id,
+          idPremio: premio,
+          linkPremio: linkPremio,
+          tipoPremio: tipoPremio,
+          valor: valor,
+          porcentajePremio: porcentaje,
+          estado: 1
+        };
+      }
     
-      // Agregar el parámetro actualizado al arreglo datosTablaParametro
+      // Agregar el premio actualizado al arreglo etapa.premiocampania
       etapa.premiocampania.push(premioActualizado);
-      console.log(etapa.premioActualizado, 'actualizacion')
-      console.log(etapa)
-      // Actualizar la tabla de parámetros
-      mostrarDatosEdit('#TablaPremioEdit', etapa);
     
       // Limpiar los inputs después de guardar
       $('#idPremio').val('');
       $('#valorEdit').val('');
       $('#linkPremioEdit').val('');
-      $('#tipoPremioEdit').val(''); // Asignar el valor del premio al select
-      $('#porcentajePremioEdit').val(''); 
+      $('#premioEdit').val('');
+      $('#porcentajePremioEdit').val('');
     });
+
 
 
     function eliminarLocalidad(id) {
@@ -1820,24 +1887,25 @@ function initStepperEdit() {
         });
         
         if (presupuestoIndex !== -1) {
-          etapa.presupuestos[presupuestoIndex].estado = 0; // Cambiar el estado a 0
+          // Eliminar el elemento del arreglo etapa.presupuestos
+          etapa.presupuestos.splice(presupuestoIndex, 1);
+          
+          // Guardar los cambios en dataEditEtapa o en la base de datos
+          var etapaIndex = dataEditEtapa.findIndex(function(item) {
+            return item.id === etapa.id;
+          });
+          
+          if (etapaIndex !== -1) {
+            dataEditEtapa[etapaIndex] = etapa;
+          }
+          
           mostrarDatosEdit('#tableLocalidadEdit', etapa); // Actualizar la tabla
         }
       }
     }
-  
-    function eliminarParametro(id) {
-      if (etapa) {
-        var parametroIndex = etapa.parametros.findIndex(function(item) {
-          return item.id === id;
-        });
-        console.log(parametroIndex)
-        if (parametroIndex !== -1) {
-          etapa.parametros[parametroIndex].estado = 0; // Cambiar el estado a 0
-          mostrarDatosEdit('#TablaParametrosEdit', etapa); // Actualizar la tabla
-        }
-      }
-    }
+    
+    
+    
   
     function eliminarPremio(id) {
       if (etapa) {
@@ -1851,8 +1919,7 @@ function initStepperEdit() {
         }
       }
     }
-    // getDepartamento();
-    // getMunicipios();
+
     console.log('data depto', dataDeptoView)
     function mostrarDatosEdit(tabla, etapa) {
       switch (tabla) {
@@ -1960,7 +2027,7 @@ function initStepperEdit() {
                     console.log('transaccion despues de if', datatransaccionView)
                     const transaccionActual = datatransaccionView.find(transaccion => transaccion.id == data);
                     if (transaccionActual) {
-                      return transaccionActual.nombre;
+                      return transaccionActual.descripcion;
                     }
                   }
                   return 'Transaccion no encontrado';
@@ -2019,21 +2086,21 @@ function initStepperEdit() {
                 render: function (data) {
                   return data === 1 ? 'Sí' : 'No';
                 },
-                width: '30%'
+                width: '20%'
               },
               {
                 data: "id",
                 render: function (data) {
-                  return `<div>
+                  return `<div style="display: flex; justify-content:space-around">
                     <a href="#" data-id="${data}" class="btn_edit_premio dropdown-item">
-                      ${feather.icons["archive"].toSvg({ class: "font-small-4 mr-50" })} 
+                      ${feather.icons["edit"].toSvg({ class: "font-small-4 mr-50" })} 
                     </a>
                     <a href="#" data-id="${data}" class="btn_delete_premio dropdown-item">
                       ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} 
                     </a> 
                   </div>`;
                 },
-                width: '15%'
+                width: '20%'
               }
             ]
           });
@@ -2620,7 +2687,7 @@ const getTransaccion = () => {
       .then(result => {
         datatransaccionView = result;
         result.forEach(element => {
-          var opc  = `<option value="${element.id}">${element.nombre}</option>`;
+          var opc  = `<option value="${element.id}">${element.descripcion}</option>`;
           $('#transaccion').append(opc);
           $('#transaccionEdit').append(opc);
         });
@@ -2945,6 +3012,9 @@ function limpiarFormulario() {
   $('#Archivo').val('');
   $('#usuarioBloqueo').val('');
 
+
+  $('#formNew').trigger("reset");
+
   // Limpiar las tablas
   $('#TablaEtapa').DataTable().clear().destroy();
   $('#tablaBloqueo').DataTable().clear().destroy();
@@ -3031,15 +3101,15 @@ const OpenEdit = (id) => {
       userValidator(event, 'containerArchivoEdit');
 
 
-      // Asignar las imágenes si existen
-      if (result.imgPush) {
-        $('#previewImgEdit').attr('src', `ruta/a/la/imagen/${result.imgPush}`);
-        $('#previewImgEdit').show();
-      }
-      if (result.imgAkisi) {
-        $('#previewNotificacionEdit').attr('src', `ruta/a/la/imagen/${result.imgAkisi}`);
-        $('#previewNotificacionEdit').show();
-      }
+      // // Asignar las imágenes si existen
+      // if (result.imgPush) {
+      //   $('#previewImgEdit').attr('src', `ruta/a/la/imagen/${result.imgPush}`);
+      //   $('#previewImgEdit').show();
+      // }
+      // if (result.imgAkisi) {
+      //   $('#previewNotificacionEdit').attr('src', `ruta/a/la/imagen/${result.imgAkisi}`);
+      //   $('#previewNotificacionEdit').show();
+      // }
 
       $('#maximoParticipantesEdit').val(result.maximoParticipaciones);
       $('#tercerosCampaniaEdit').val(result.campaniaTerceros);
