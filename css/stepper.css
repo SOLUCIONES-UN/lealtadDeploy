@@ -138,8 +138,3 @@
     margin-right: 5px;
 }
 
-.step-progress.blocked {
-    opacity: 0.5;
-    pointer-events: none;
-    cursor: default;
-  }
