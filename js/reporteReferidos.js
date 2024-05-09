@@ -77,6 +77,7 @@ const getReport = () => {
 
   const fechaInicio = $("#FechaInicio").val();
   const fechaFin = $("#FechaFin").val();
+  const nombreCampania=$("#nombre").val();
 
   if (!fechaInicio || !fechaFin) {
     console.error("Las fechas de inicio y fin son obligatorias.");
@@ -86,6 +87,7 @@ const getReport = () => {
   var raw = JSON.stringify({
     fechaInicio: fechaInicio,
     fechaFin: fechaFin,
+    nombreCampania: nombreCampania, 
     campanas: $("#selectcampana").val(),
   });
   var requestOptions = {
@@ -100,10 +102,9 @@ const getReport = () => {
   fetch(`${url}reporteReferidos/referidos`, requestOptions)
     .then((response) => response.json())
     .then((data) => {
-      // Actualizar la variable datosObtenidos con los datos recibidos
+     
       datosObtenidos = data;
-      // Llamar a la función mostrarDatosEnTabla con los datos obtenidos
-      // mostrarDatosEnTabla(data);
+      
       $("#PantallaInfo").prop("disabled", false);
     })
     .catch((error) => {
@@ -111,7 +112,7 @@ const getReport = () => {
       alert("Error al obtener reporte de referidos.", "error");
     });
 };
-// Evento para descargar el archivo Excel
+
 function mostrarDatosEnTabla(datos) {
   console.log("Datos para mostrar en la tabla:", datos);
   if (!Array.isArray(datos)) {
@@ -120,10 +121,10 @@ function mostrarDatosEnTabla(datos) {
   }
 
   if (!$.fn.DataTable.isDataTable('#tableData')) {
-    // Si la tabla no ha sido inicializada aún, inicialízala
+   
     $('#tableData').DataTable({
       columnDefs: [
-        { "defaultContent": "-", "targets": "_all" } // Replace empty cells with "-"
+        { "defaultContent": "-", "targets": "_all" }
       ],
       order: [[0, 'asc']],
       ordering: true,
@@ -148,22 +149,24 @@ function mostrarDatosEnTabla(datos) {
     
       
       const fechaHora= formatearFechaHora(element.fecha);
-      const campanas = element.nombre; // Nombre de la campaña
-      const opcion = element.medio; // Opción
-      const telefono = element.telusuario;
+      const campanas = element.nombre_campania; // Nombre de la campaña
+      const opcion = element.opcion_referido; // Opción
+      const telefono = element.telefono_usuario;
+      const nombreUsuario = element.nombre_usuario;
       const telefReferido = element.telref;
       const nombreref = element.nombreref;
       const montopremio = element.valor;
-      const codigo = element.codigosReferido;
+      const codigo = element.codigo_referido;
       // Agrega una fila a la tabla
+      if (datosObtenidos.some(data => data.customerId === element.customerId)) 
       table.row.add([
         contador++,
         opcion,
         campanas,
        codigo,
        telefono,
-        element.refiriente,
-        fechaHora,
+       nombreUsuario,
+       fechaHora,  
         element.descripcionTrx,
         montopremio,
         telefReferido,
@@ -171,6 +174,7 @@ function mostrarDatosEnTabla(datos) {
         // Agregado un guión como valor por defecto
         // Utiliza la fecha formateada
       ]).draw();
+    
     });
 }
 
@@ -229,7 +233,7 @@ document.getElementById("btnDescargarExcel").addEventListener("click", function 
   const ws = XLSX.utils.aoa_to_sheet(data);
 
   // Ajustar el ancho de las columnas al contenido
-  ws['!cols'] = [{wch:15}, {wch:15}, {wch:12}, {wch:25}, {wch:20}, {wch:15}, {wch:15}, {wch:15}, {wch:12}, {wch:20}, {wch:20}];
+  ws['!cols'] = [{wch:15}, {wch:15}, {wch:12}, {wch:25}, {wch:20}, {wch:15}, {wch:15}, {wch:20}, {wch:20}, {wch:20}, {wch:25}];
 
   // Combinar las celdas E1, F1 y G1
   if(!ws['!merges']) ws['!merges'] = [];
@@ -253,5 +257,5 @@ function formatearFechaHora(fechaHora) {
   const año = fecha.getFullYear();
   const horas = fecha.getHours().toString().padStart(2, "0");
   const minutos = fecha.getMinutes().toString().padStart(2, "0");
-  return `${dia}/${mes}/${año}/${horas}/${minutos}`;
+  return `${dia}/${mes}/${año} ${horas}:${minutos}`;
 }

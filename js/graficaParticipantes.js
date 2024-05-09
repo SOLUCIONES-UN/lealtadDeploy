@@ -56,16 +56,6 @@ function getMeses(event) {
     .catch((error) => console.error("Error al obtener los anios:", error));
 }
 
-function llenarTabla(data) {
-  const listaDatos = $("#listaDatos");
-  listaDatos.html(''); // Limpiar contenido previo de la tabla
-
-  data.forEach((data) => {
-      const row = `<tr><td>${data.fechaRegistro}</td><td>${data.nombre}</td><td>${data.participantes}</td></tr>`;
-      listaDatos.append(row);
-  });
-  $("#container").hide();
-}
 $("#btnConsultar").click(function () {
   const headers = {
     "Content-Type": "application/json",
@@ -100,8 +90,8 @@ $("#btnConsultar").click(function () {
         // Obtener el canvas y su contexto
         
         const canvas = document.getElementById("graficaParticipantes");
-        // canvas.width = 400; // Establecer el ancho del canvas
-        // canvas.height = 400
+        // canvas.width = 600; // Ancho fijo
+        // canvas.height = 600; 
         const ctx = canvas.getContext("2d");
 
         // Destruir el gráfico existente si existe
@@ -174,6 +164,16 @@ $("#btnGrafCircular").click(function () {
     const labels = chartData.labels;
     const data = chartData.datasets[0].data;
 
+    let rowHTML = '<div class="row">';
+    labels.forEach((label, index) => {
+      rowHTML += `<div class="col-md-3">Fecha: ${label.split(" - ")[1]}, Campaña: ${label.split(" - ")[0]}, Participantes: ${data[index]}</div>`;
+      if ((index + 1) % 4 === 0) {
+        rowHTML += '</div><div class="row">';
+      }
+    });
+    rowHTML += '</div>';
+    $("#listaDatos").html(rowHTML);
+
     // Crear el nuevo gráfico con maintainAspectRatio establecido en false
     const canvas = document.getElementById("graficaParticipantes");
     const ctx = canvas.getContext("2d");
@@ -212,11 +212,11 @@ $("#btnGrafCircular").click(function () {
     });
   }
 });
-// document.getElementById('btnGrafCircular').addEventListener('click', function() {
-//   var container = document.getElementById('container');
-//   if (container.style.display === 'none') {
-//       container.style.display = 'block'; // Mostrar el contenedor
-//   } else {
-//       container.style.display = 'none'; // Ocultar el contenedor
-//   }
-// });
+document.getElementById('btnGrafCircular').addEventListener('click', function() {
+  var container = document.getElementById('container');
+  if (container.style.display === 'none') {
+      container.style.display = 'block'; // Mostrar el contenedor
+  } else {
+      container.style.display = 'none'; // Ocultar el contenedor
+  }
+});

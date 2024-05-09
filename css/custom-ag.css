@@ -338,3 +338,7 @@
   margin-bottom: 20px; /* Add some margin below the heading */
   color: #333; /* Set the text color to dark gray */
 }
+/* Estilo para centrar el texto del placeholder */
+.multiple-select-placeholder {
+  text-align: center; /* Centra horizontalmente el texto */
+}
