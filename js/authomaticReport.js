@@ -3,7 +3,7 @@ let tokenReportA = localStorage.getItem("token");
 let datosObtenidos = null; // Variable global para almacenar los datos obtenidos
 let archivadas = 0;
 $(function() {
-   
+
     getCampanias();
     getCampaniasForEditModal();
     $("#btnDescargarExcel, #PantallaInfo").hide(); // Ocultar botones al inicio
@@ -21,46 +21,46 @@ $(function() {
 
 
 
-    $('#modalEdit').on('show.bs.modal', function () {
-        limpiarFormulario();  
-        $("#btnSubmEdit").attr("disabled",false);
-
-    });
-
-
-
-    $('#modalEdit').on('hidden.bs.modal', function () {
+    $('#modalEdit').on('show.bs.modal', function() {
         limpiarFormulario();
-        $("#btnSubmEdit").attr("disabled",false);
+        $("#btnSubmEdit").attr("disabled", false);
 
     });
 
-    $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
+
+
+    $('#modalEdit').on('hidden.bs.modal', function() {
         limpiarFormulario();
-        $("#btnSubmEdit").attr("disabled",false);
+        $("#btnSubmEdit").attr("disabled", false);
 
     });
 
-
-
-    $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
+    $('#modalEdit').find('[data-dismiss="modal"]').click(function() {
         limpiarFormulario();
-        $("#btnSubmEdit").attr("disabled",false);
+        $("#btnSubmEdit").attr("disabled", false);
 
     });
 
 
-    
+
+    $('#modalEdit').find('[data-dismiss="modal"]').click(function() {
+        limpiarFormulario();
+        $("#btnSubmEdit").attr("disabled", false);
+
+    });
+
+
+
 
     $("#btnSubmit").attr("disabled", false);
 
 
-    $('#formNew').submit(function (event) {
+    $('#formNew').submit(function(event) {
         event.preventDefault(); // Evitar que el formulario se envíe por defecto
-    
+
         // Deshabilitar el botón de enviar para evitar envíos múltiples
         $("#btnSubmit").attr("disabled", true);
-    
+
         // Obtener los datos del formulario
         var formData = {
             diasemana: $('#diasemana').val(),
@@ -72,43 +72,43 @@ $(function() {
         };
 
         fetch(`${url}authomatic`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': tokenReportA
-            },
-            body: JSON.stringify(formData) // Enviar el array como JSON
-        })
-        .then(response => response.json())
-        .then(result => {
-            console.log(result);
-            if (result.code == "ok") {
-                limpiarFormulario();
-                $('#modalNew').modal('toggle');
-                limpiarFormulario();
-                alert(result.message, 'success');
-            } else {
-                alert(result.message, 'error');
-            }
-            $('#btnSubmit').prop('disabled', false);
-        })
-        .catch(error => {
-            console.error('Error al enviar los datos:', error);
-            $('#btnSubmit').prop('disabled', false);
-        });
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': tokenReportA
+                },
+                body: JSON.stringify(formData) // Enviar el array como JSON
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log(result);
+                if (result.code == "ok") {
+                    limpiarFormulario();
+                    $('#modalNew').modal('toggle');
+                    limpiarFormulario();
+                    Alert(result.message, 'success');
+                } else {
+                    Alert(result.message, 'error');
+                }
+                $('#btnSubmit').prop('disabled', false);
+            })
+            .catch(error => {
+                console.error('Error al enviar los datos:', error);
+                $('#btnSubmit').prop('disabled', false);
+            });
     });
 
     function limpiarFormulario() {
-       
+
         $('#diasemana').val('');
         $('#diames').val('');
         $('#selecCampania').val([]);
         $('#emails').val('');
-    
-       
+
+
         $('#frecuencia').val(null);
         $('#tiporeporte').val([]);
-    
+
         // Si estás usando el plugin multipleSelect, también necesitas refrescarlo después de limpiar los valores
         $('#selecCampania').multipleSelect('refresh');
     }
@@ -121,7 +121,7 @@ $(function() {
         ) {
             getReport();
         } else {
-            alert("Debe llenar todos los campos", "error");
+            Alert("Debe llenar todos los campos", "error");
         }
     });
 
@@ -129,17 +129,120 @@ $(function() {
         if (datosObtenidos) {
             mostrarDatosEnTabla(datosObtenidos);
         } else {
-            alert("Primero debes obtener los datos", "error");
+            Alert("Primero debes obtener los datos", "error");
         }
     });
 
-    // Agregar evento de escucha al checkbox
-    $("#checkboxArchivadas").on("change", function() {
-        // Obtener el valor del checkbox
-        archivadas = this.checked ? 1 : 0;
-        // Llamar a la función getReport con el valor del checkbox como parámetro
 
+
+
+
+
+
+    $('#formEdit').submit(function() {
+        console.log("Enviando datos de edición...");
+
+        const frecuencia = $('#frecuenciaeddit').val() || ''; // Añadir manejo para valores undefined
+        const diasemana = frecuencia === 'dia' ? null : $('#diasemanaeddit').val() || ''; // Añadir manejo para valores undefined
+        const diames = frecuencia === 'dia' ? null : $('#diameseddit').val() || ''; // Añadir manejo para valores undefined
+        const campanias = $('#selecCampaniaEdit').val() || []; // Añadir manejo para valores undefined
+        const tiporeporte = $('#tiporeporteeddit').val() || ''; // Corregir selector
+        const emails = $('#emailseddit').val() || ''; // Añadir manejo para valores undefined
+
+        // Imprimir los valores en la consola para verificar
+        console.log("Frecuencia:", frecuencia);
+        console.log("Día de la semana:", diasemana);
+        console.log("Día del mes:", diames);
+        console.log("Campañas seleccionadas:", campanias);
+        console.log("Tipo de reporte:", tiporeporte);
+        console.log("Emails:", emails);
+
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", tokenReportA);
+
+        const id = $('#id').val();
+
+        var raw = JSON.stringify({
+            "diasemana": diasemana,
+            "diames": diames,
+            "campanias": campanias,
+            "frecuencia": frecuencia,
+            "tiporeporte": tiporeporte,
+            "emails": emails
+        });
+
+        var requestOptions = {
+            method: 'PUT',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        fetch(`${url}authomatic/update/${id}`, requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                if (result.code == "ok") {
+                    limpiarFormulario();
+                    $('#modalEdit').modal('toggle');
+                    Alert(result.message, 'success');
+                } else {
+                    Alert(result.message, 'error');
+                }
+            })
+            .catch(error => { alert(error.errors, 'error'); });
+
+        return false;
     });
+
+
+
+
+    $('#BtnDelete').click(function() {
+
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", tokenReportA);
+
+        const id = $('#idDelete').val();
+        var requestOptions = {
+            method: 'DELETE',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+
+        fetch(`${url}authomatic/${id}`, requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                if (result.code == "ok") {
+                    limpiarFormulario();
+
+                    $('#modalDelete').modal('toggle');
+                    Alert(result.message, 'success')
+                } else {
+                    console.log("Result", result);
+
+                    Alert(result.message, 'error')
+                }
+
+            })
+            .catch(error => {
+                console.log("Error", error);
+                Alert(error.errors, 'error')
+            });
+
+    })
+
+
+
+
+
+
+
+
+
+
+
 });
 
 const getCampanias = () => {
@@ -155,8 +258,8 @@ const getCampanias = () => {
             console.log("Campania obtenidas:", result);
             // Limpiar el select antes de agregar opciones
             $("#selecCampania").empty();
-           
-            
+
+
             // Agregar la opción por defecto
             // $("#selectpromo").append(
             //   "<option disabled selected value='0'>Elige una promoción</option>"
@@ -185,7 +288,7 @@ const getCampaniasForEditModal = () => {
         headers: { Authorization: tokenReportA },
     };
     $("#selecCampaniaEdit").empty();
-           
+
 
     fetch(`${url}Campania`, requestOptions)
         .then((response) => response.json())
@@ -193,7 +296,7 @@ const getCampaniasForEditModal = () => {
             console.log("Campanias obtenidas para modal de edición:", result);
             // Limpiar el select antes de agregar opciones
             // $("#selecCampaniaEdit").empty();
-            
+
             result.forEach((element) => {
                 // Agregar opciones al select
                 $("#selecCampaniaEdit").append(
@@ -208,61 +311,6 @@ const getCampaniasForEditModal = () => {
             alert(error, "error");
         });
 };
-
-
-$('#formEdit').submit(function () {
-
-
-   const diasemana = $('#diasemana').val();
-     const diames = ('#diames').val();
-          const campanias = $('#selecCampania').val();
-         const frecuencia = $('#frecuencia').val();
-        const tiporeporte = $('#tiporeporte').val();
-          const emails = $('#emails').val()
-
-  
-    
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Authorization", tokenReportA);
-
-    const id = $('#id').val();
-
-    var raw = JSON.stringify({
-        // "descripcion": $('#descripcionEdit').val(),
-        // "ruta": $('#rutaEdit').val(),
-        "diasemana": $('#diasemanaeddit').val(),
-        "diames": $('#diameseddit').val(),
-        "campanias": $('#selecCampaniaEdit').val(),
-        "frecuencia": $('#frecuenciaeddit').val(),
-        "tiporeporte": $('#tiporeporteessit').val(),
-        "emails": $('#emailseddit').val()
-
-    });
-
-    var requestOptions = {
-        method: 'PUT',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow'
-    };
-
-    fetch(`${url}authomatic/update${id}`, requestOptions)
-        .then(response => response.json())
-        .then(result => {
-            if (result.code == "ok") {
-                limpiarFormulario();
-                tabla._fnAjaxUpdate();
-                $('#modalEdit').modal('toggle');
-                alert(result.message, 'success')
-            } else {
-                alert(result.message, 'error')
-            }
-        })
-        .catch(error => { alert(error.errors, 'error') });
-    return false;
-});
-
 
 
 
@@ -309,6 +357,54 @@ $(function() {
         mostrarOcultarSelectDiaMes();
     });
 });
+
+
+
+
+
+function mostrarOcultarSelectDiaEdit() {
+    var selectConfiguracion = document.getElementById("frecuenciaeddit");
+    var selectDiaContainer = document.getElementById("selectDiaContainerEdit");
+
+    if (selectConfiguracion.value === "semana") {
+        selectDiaContainer.style.display = "block";
+    } else {
+        selectDiaContainer.style.display = "none";
+    }
+}
+
+
+
+
+$(function() {
+    // Llama a la función mostrarOcultarSelectDiaMes cuando cambie el valor del primer select
+    $('#frecuenciaeddit').change(function() {
+        mostrarOcultarSelectDiaMesEdit();
+    });
+});
+
+function mostrarOcultarSelectDiaMesEdit() {
+    var selectConfiguracion = document.getElementById("frecuenciaeddit");
+    var selectDiaMesContainer = document.getElementById("selectDiaMesContainerEdit");
+    var selectDiaMes = document.getElementById("diameseddit");
+
+    if (selectConfiguracion.value === "mes") {
+        selectDiaMesContainer.style.display = "block";
+        // Limpiar el select antes de agregar opciones
+        selectDiaMes.innerHTML = "";
+        // Agregar opciones del 1 al 30
+        for (var i = 1; i <= 30; i++) {
+            var option = document.createElement("option");
+            option.value = i;
+            option.text = i;
+            selectDiaMes.appendChild(option);
+        }
+    } else {
+        selectDiaMesContainer.style.display = "none";
+    }
+}
+
+
 
 
 
@@ -393,7 +489,7 @@ function mostrarDatosEnTabla(datos) {
                                 <a href="#" onclick="OpenEdit(${element.id})" class="dropdown-item">
                                     ${feather.icons['edit'].toSvg({ class: 'font-small-4 mr-50' })} Editar
                                 </a>
-                                <a href="#" onclick="eliminar(${element.id})" class="dropdown-item">
+                                <a href="#"  onclick="OpenDelete(${element.id})" class="dropdown-item">
                                     ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Eliminar
                                 </a>
                             </div>
@@ -411,39 +507,50 @@ function mostrarDatosEnTabla(datos) {
     // Inicializar el plugin DataTables
     $('.datatables-basic').DataTable({
         // Opciones de configuración de DataTables
-        
-     order: [
-        [0, 'asc']
-    ],
-    ordering: true,
-    dom: 
-        '<"d-flex justify-content-between align-items-center header-actions mx-1 row mt-75"' +
-        '<"col-lg-6" l>' +
-        '<"col-lg-6 pl-0"<"dt-action-buttons text-right text-md-left text-lg-right text-left d-flex align-items-center justify-content-lg-end align-items-center flex-sm-nowrap flex-wrap mr-1"<"mr-1"f>B>>' +
-        '>t' +
-        '<"d-flex justify-content-between mx-2 row mb-1"' +
-        '<"col-sm-12 col-md-6"i>' +
-        '<"col-sm-12 col-md-6"p>' +
-        '>',
-    language: {
-        sLengthMenu: 'Show _MENU_',
-        search: 'Buscar',
-        searchPlaceholder: 'Buscar...',
-    },
-    buttons: [{
-        text: 'Nuevo',
-        className: 'add-new btn btn-primary mt-50',
-        attr: {
-            'data-toggle': 'modal',
-            'data-target': '#modalNew',
+
+        order: [
+            [0, 'asc']
+        ],
+        ordering: true,
+        dom: '<"d-flex justify-content-between align-items-center header-actions mx-1 row mt-75"' +
+            '<"col-lg-6" l>' +
+            '<"col-lg-6 pl-0"<"dt-action-buttons text-right text-md-left text-lg-right text-left d-flex align-items-center justify-content-lg-end align-items-center flex-sm-nowrap flex-wrap mr-1"<"mr-1"f>B>>' +
+            '>t' +
+            '<"d-flex justify-content-between mx-2 row mb-1"' +
+            '<"col-sm-12 col-md-6"i>' +
+            '<"col-sm-12 col-md-6"p>' +
+            '>',
+        language: {
+            sLengthMenu: 'Show _MENU_',
+            search: 'Buscar',
+            searchPlaceholder: 'Buscar...',
         },
-        init: function(api, node, config) {
-            $(node).removeClass('btn-secondary');
-            // Método para agregar un nuevo usuario
-        },
-    }],
-});
+        buttons: [{
+            text: 'Nuevo',
+            className: 'add-new btn btn-primary mt-50',
+            attr: {
+                'data-toggle': 'modal',
+                'data-target': '#modalNew',
+            },
+            init: function(api, node, config) {
+                $(node).removeClass('btn-secondary');
+                // Método para agregar un nuevo usuario
+            },
+        }],
+    });
 }
+
+
+const Alert = function(message, status) // si se proceso correctamente la solicitud
+    {
+        toastr[`${status}`](message, `${status}`, {
+            closeButton: true,
+            tapToDismiss: false,
+            positionClass: 'toast-top-right',
+            rtl: false
+        });
+    }
+
 
 
 
@@ -468,7 +575,7 @@ const OpenEdit = (id) => {
         })
         .then(resultArray => {
             if (resultArray.length > 0) {
-                const result = resultArray[0]; 
+                const result = resultArray[0];
                 console.log('Esto es lo que viene:', result);
                 if (result.configreporte) {
                     $('#id').val(id);
@@ -477,10 +584,10 @@ const OpenEdit = (id) => {
                     $('#diasemanaeddit').val(result.configreporte.diaSemana);
                     $('#diameseddit').val(result.configreporte.diaMes);
                     $('#emailseddit').val(result.configreporte.emails);
-                    $('#selecCampaniaEdit').val(result.idCampania);
-                    getCampaniasForEditModal();
+                    $('#selecCampaniaEdit').val(result.campanium.nombre);
+                    // getCampaniasForEditModal();
 
-                    $('#selecCampaniaEdit').val(result.idCampania);
+                    // $('#selecCampaniaEdit').val(result.idCampania);
                     $('#modalEdit').modal('toggle');
                 } else {
                     console.error("Error: El objeto result no tiene la propiedad 'configreporte' definida.");
@@ -495,4 +602,12 @@ const OpenEdit = (id) => {
             console.error("Error en la solicitud GET:", error);
             alert("Error al obtener datos del proyecto", 'error');
         });
+}
+
+
+
+
+const OpenDelete = (id) => {
+    $("#idDelete").val(id);
+    $("#modalDelete").modal("toggle");
 }

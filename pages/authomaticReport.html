@@ -168,11 +168,11 @@
                                 <option selected disabled>Selecciona una Opcion</option>
                                 <option value="OfferCraft">OfferCraft</option>
                                 <option value="Referidos">Referidos</option>
-                                <option value="Referidos">General de Referidos</option>
-                                <option value="Referidos">Pomociones</option>
+                                <option value="General">General</option>
+                                <option value="Promociones">Promociones</option>
                             </select>
                         </div>
-                       
+
 
 
 
@@ -181,8 +181,8 @@
                         </div>
                     </div>
                     <div class="card-datatable  p-2">
-                        <div class="table-responsive " >
-                            <table class="datatables-basic table  p-2" id="tableData" >
+                        <div class="table-responsive ">
+                            <table class="datatables-basic table  p-2" id="tableData">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -255,8 +255,8 @@
               <option selected disabled>Selecciona una Opcion</option>
                           <option value="OfferCraft">OfferCraft</option>
                           <option value="Referidos">Referidos</option>
-                          <option value="Referidos">General de Referidos</option>
-                          <option value="Referidos">Pomociones</option>
+                          <option value="General">General</option>
+                          <option value="Promociones">Promociones</option>
 
 
                           
@@ -272,10 +272,9 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="emails">Correo</label>
-                        <input type="text" class="form-control dt-full-name emails" id="emails" placeholder="correo"
-                          name="emails" aria-label="" aria-describedby="nombreError" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"/>
+                        <input type="text" class="form-control dt-full-name emails" id="emails" placeholder="correo" name="emails" aria-label="" aria-describedby="nombreError" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" />
                         <div id="nombreError" class="invalid-feedback nombre-error"></div>
-                      </div>
+                    </div>
                     <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
                     <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
                 </div>
@@ -289,26 +288,26 @@
 
     <div class="modal modal-slide-in new-user-modal fade" id="modalEdit">
         <div class="modal-dialog">
-          <form id="formEdit" class="add-new-user modal-content pt-0" autocomplete="off">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-            <div class="modal-header mb-1">
-                <h5 class="modal-title" id="exampleModalLabel">Editar configuracion de Reporte</h5>
-            </div>
-            <div class="modal-body flex-grow-1">
-                <div class="form-group">
-                    <label class="form-label" for="frecuenciaeddit">Seleccionar configuración</label>
-                    <select class="form-control proyecto" id="frecuenciaeddit" name="frecuenciaeddit" onchange="mostrarOcultarSelectDia();" required>
+            <form id="formEdit" class="add-new-user modal-content pt-0" autocomplete="off">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                <div class="modal-header mb-1">
+                    <h5 class="modal-title" id="exampleModalLabel">Editar configuracion de Reporte</h5>
+                </div>
+                <div class="modal-body flex-grow-1">
+                    <div class="form-group">
+                        <label class="form-label" for="frecuenciaeddit">Seleccionar configuración</label>
+                        <select class="form-control proyecto" id="frecuenciaeddit" name="frecuenciaeddit" onchange="mostrarOcultarSelectDiaEdit();" required>
                     <option selected disabled>Selecciona una opción</option>
                     <option value="dia">Díario</option> 
                     <option value="semana">Semana</option>
                     <option value="mes">Mes</option>
                 </select>
-                    <div id="proyectoEditError" class="invalid-feedback proyecto-error"></div>
-                </div>
+                        <div id="proyectoEditError" class="invalid-feedback proyecto-error"></div>
+                    </div>
 
-                <div class="form-group" id="selectDiaContainerEdit" style="display: none;">
-                    <label class="form-label" for="diasemanaeddit">Dia semana</label>
-                    <select type="text" class="form-control proyecto" id="diasemanaeddit" name="diasemanaeddit">
+                    <div class="form-group" id="selectDiaContainerEdit" style="display: none;">
+                        <label class="form-label" for="diasemanaeddit">Dia semana</label>
+                        <select type="text" class="form-control proyecto" id="diasemanaeddit" name="diasemanaeddit">
                       <option selected disabled>Selecciona una Opcion</option>
                       <option value="lunes">Lunes</option> 
                       <option value="martes">Martes</option>
@@ -316,52 +315,70 @@
                       <option value="jueves">Jueves</option>
                       <option value="viernes">Viernes</option>
                   </select>
-                    <div id="selectDiaError" class="invalid-feedback proyecto-error"></div>
-                </div>
+                        <div id="selectDiaError" class="invalid-feedback proyecto-error"></div>
+                    </div>
 
-                <div class="form-group" id="selectDiaMesContainerEdit" style="display: none;">
-                    <label class="form-label" for="diameseddit">Día del mes</label>
-                    <select class="form-control proyecto" id="diames" name="diameseddit">
+                    <div class="form-group" id="selectDiaMesContainerEdit" style="display: none;">
+                        <label class="form-label" for="diameseddit">Día del mes</label>
+                        <select class="form-control proyecto" id="diameseddit" name="diameseddit">
                     </select>
-                    <div id="selectDiaMesError" class="invalid-feedback proyecto-error"></div>
-                </div>
+                        <div id="selectDiaMesError" class="invalid-feedback proyecto-error"></div>
+                    </div>
 
 
-                <div class="form-group">
-                    <input id="id" type="hidden">
-                    <label class="form-label" for="tiporeporteeddit">Seleccionar Reporte</label>
-                    <select type="text" class="form-control tiporeporte" id="tiporeporteeddit" name="tiporeporteeddit" required>
+                    <div class="form-group">
+                        <input id="id" type="hidden">
+                        <label class="form-label" for="tiporeporteeddit">Seleccionar Reporte</label>
+                        <select type="text" class="form-control tiporeporte" id="tiporeporteeddit" name="tiporeporteeddit" required>
           <option selected disabled>Selecciona una Opcion</option>
                       <option value="OfferCraft">OfferCraft</option>
                       <option value="Referidos">Referidos</option>
-                      <option value="Referidos">General de Referidos</option>
-                      <option value="Referidos">Pomociones</option>
+                      <option value="General">General</option>
+                      <option value="Promociones">Promociones</option>
 
 
                       
 
         </select>
-                    <div id="proyectoEditError" class="invalid-feedback proyecto-error"></div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="selecCampaniaEdit">Campaña</label>
-                    <select id="selecCampaniaEdit" multiple="multiple" class="form-control">
+                        <div id="proyectoEditError" class="invalid-feedback proyecto-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="selecCampaniaEdit">Campaña</label>
+                        <select id="selecCampaniaEdit" multiple="multiple" name="selecCampaniaEdit" class="form-control">
         </select>
-                    <div id="proyectoEditError" class="invalid-feedback proyecto-error"></div>
+                        <div id="proyectoEditError" class="invalid-feedback proyecto-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="emailseddit">Correo</label>
+                        <input type="text" class="form-control dt-full-name emails" id="emailseddit" placeholder="correo" name="emailseddit" aria-label="" aria-describedby="nombreError" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" />
+                        <div id="nombreError" class="invalid-feedback nombre-error"></div>
+                    </div>
+                    <button id="btnSubmEdit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
+                    <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
                 </div>
-                <div class="form-group">
-                    <label class="form-label" for="emailseddit">Correo</label>
-                    <input type="text" class="form-control dt-full-name emails" id="emailseddit" placeholder="correo"
-                      name="emailseddit" aria-label="" aria-describedby="nombreError" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"/>
-                    <div id="nombreError" class="invalid-feedback nombre-error"></div>
-                  </div>
-                <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
-                <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-            </div>
-          </form>
+            </form>
         </div>
-      </div>
+    </div>
 
+    <div class="modal modal-slide-in new-user-modal fade" id="modalDelete">
+        <div class="modal-dialog">
+            <form id="formDelete" class="add-new-user modal-content pt-0" autocomplete="off">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+                <div class="modal-header mb-1">
+                    <h5 class="modal-title" id="exampleModalLabel">Inhabilitar un proyecto</h5>
+                </div>
+                <div class="modal-body flex-grow-1">
+                    <div class="form-group">
+                        <input id="idDelete" type="hidden">
+                        <p>¿Esta seguro que desea <b>¿esta seguro que desea inhabilitar este Reporte?</b></p>
+                    </div>
+                    <button id="BtnDelete" type="button" class="btn btn-danger mr-1 data-submit">Confirmar</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+
+                </div>
+            </form>
+        </div>
+    </div>
 
 
 
