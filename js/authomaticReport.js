@@ -3,43 +3,125 @@ let tokenReportA = localStorage.getItem("token");
 let datosObtenidos = null; // Variable global para almacenar los datos obtenidos
 let archivadas = 0;
 $(function() {
+   
     getCampanias();
+    getCampaniasForEditModal();
     $("#btnDescargarExcel, #PantallaInfo").hide(); // Ocultar botones al inicio
-
     // Inicializar el plugin multiple-select
     $('#selecCampania').multipleSelect({
         filter: true,
         selectAll: true, // Habilitar la opción de seleccionar todos los elementos
-        placeholder: "Elige una promoción",
+        placeholder: "Elige una campania",
+    });
+    $('#selecCampaniaEdit').multipleSelect({
+        filter: true,
+        selectAll: true, // Habilitar la opción de seleccionar todos los elementos
+        placeholder: "Elige una campania",
     });
 
-    // Eventos para el modal New
-    $('#modalNew').on('hidden.bs.modal', function() {
+
+
+    $('#modalEdit').on('show.bs.modal', function () {
+        limpiarFormulario();  
+        $("#btnSubmEdit").attr("disabled",false);
+
+    });
+
+
+
+    $('#modalEdit').on('hidden.bs.modal', function () {
         limpiarFormulario();
-        $("#btnSubmit").attr("disabled", false);
+        $("#btnSubmEdit").attr("disabled",false);
+
     });
 
-
-
-
-    // Evento para el botón de cerrar el modal New
-    $('#modalNew').find('[data-dismiss="modal"]').click(function() {
+    $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
         limpiarFormulario();
-        $("#btnSubmit").attr("disabled", false);
+        $("#btnSubmEdit").attr("disabled",false);
+
     });
+
+
+
+    $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
+        limpiarFormulario();
+        $("#btnSubmEdit").attr("disabled",false);
+
+    });
+
+
+    
+
+    $("#btnSubmit").attr("disabled", false);
+
+
+    $('#formNew').submit(function (event) {
+        event.preventDefault(); // Evitar que el formulario se envíe por defecto
+    
+        // Deshabilitar el botón de enviar para evitar envíos múltiples
+        $("#btnSubmit").attr("disabled", true);
+    
+        // Obtener los datos del formulario
+        var formData = {
+            diasemana: $('#diasemana').val(),
+            diames: $('#diames').val(),
+            campanias: $('#selecCampania').val(),
+            frecuencia: $('#frecuencia').val(),
+            tiporeporte: $('#tiporeporte').val(),
+            emails: $('#emails').val()
+        };
+
+        fetch(`${url}authomatic`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': tokenReportA
+            },
+            body: JSON.stringify(formData) // Enviar el array como JSON
+        })
+        .then(response => response.json())
+        .then(result => {
+            console.log(result);
+            if (result.code == "ok") {
+                limpiarFormulario();
+                $('#modalNew').modal('toggle');
+                limpiarFormulario();
+                alert(result.message, 'success');
+            } else {
+                alert(result.message, 'error');
+            }
+            $('#btnSubmit').prop('disabled', false);
+        })
+        .catch(error => {
+            console.error('Error al enviar los datos:', error);
+            $('#btnSubmit').prop('disabled', false);
+        });
+    });
+
+    function limpiarFormulario() {
+       
+        $('#diasemana').val('');
+        $('#diames').val('');
+        $('#selecCampania').val([]);
+        $('#emails').val('');
+    
+       
+        $('#frecuencia').val(null);
+        $('#tiporeporte').val([]);
+    
+        // Si estás usando el plugin multipleSelect, también necesitas refrescarlo después de limpiar los valores
+        $('#selecCampania').multipleSelect('refresh');
+    }
+
 
 
     $("#ConsultarPromo").on("click", function() {
         if (
-            $("#selecCampania").val() !== null && // Verificar si se ha seleccionado al menos una opción
-            $("#selecCampania").val().length > 0 && // Verificar si se ha seleccionado al menos una opción
-            $("#FechaInicio").val() !== "" &&
-            $("#FechaFin").val() !== "" &&
-            $("#checkbox").val() !== ""
+            $("#reporte").val() !== null
         ) {
             getReport();
         } else {
-            Alert("Debe llenar todos los campos", "error");
+            alert("Debe llenar todos los campos", "error");
         }
     });
 
@@ -47,7 +129,7 @@ $(function() {
         if (datosObtenidos) {
             mostrarDatosEnTabla(datosObtenidos);
         } else {
-            Alert("Primero debes obtener los datos", "error");
+            alert("Primero debes obtener los datos", "error");
         }
     });
 
@@ -73,6 +155,8 @@ const getCampanias = () => {
             console.log("Campania obtenidas:", result);
             // Limpiar el select antes de agregar opciones
             $("#selecCampania").empty();
+           
+            
             // Agregar la opción por defecto
             // $("#selectpromo").append(
             //   "<option disabled selected value='0'>Elige una promoción</option>"
@@ -94,9 +178,97 @@ const getCampanias = () => {
         });
 };
 
+const getCampaniasForEditModal = () => {
+    var requestOptions = {
+        method: "GET",
+        redirect: "follow",
+        headers: { Authorization: tokenReportA },
+    };
+    $("#selecCampaniaEdit").empty();
+           
+
+    fetch(`${url}Campania`, requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+            console.log("Campanias obtenidas para modal de edición:", result);
+            // Limpiar el select antes de agregar opciones
+            // $("#selecCampaniaEdit").empty();
+            
+            result.forEach((element) => {
+                // Agregar opciones al select
+                $("#selecCampaniaEdit").append(
+                    `<option value="${element.id}">[${element.fechaInicio} - ${element.fechaFin}] ${element.nombre}</option>`
+                );
+            });
+            // Actualizar el select múltiple después de agregar opciones
+            $('#selecCampaniaEdit').multipleSelect('refresh');
+        })
+        .catch((error) => {
+            console.error("Error al obtener Campanias para modal de edición:", error);
+            alert(error, "error");
+        });
+};
+
+
+$('#formEdit').submit(function () {
+
+
+   const diasemana = $('#diasemana').val();
+     const diames = ('#diames').val();
+          const campanias = $('#selecCampania').val();
+         const frecuencia = $('#frecuencia').val();
+        const tiporeporte = $('#tiporeporte').val();
+          const emails = $('#emails').val()
+
+  
+    
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", tokenReportA);
+
+    const id = $('#id').val();
+
+    var raw = JSON.stringify({
+        // "descripcion": $('#descripcionEdit').val(),
+        // "ruta": $('#rutaEdit').val(),
+        "diasemana": $('#diasemanaeddit').val(),
+        "diames": $('#diameseddit').val(),
+        "campanias": $('#selecCampaniaEdit').val(),
+        "frecuencia": $('#frecuenciaeddit').val(),
+        "tiporeporte": $('#tiporeporteessit').val(),
+        "emails": $('#emailseddit').val()
+
+    });
+
+    var requestOptions = {
+        method: 'PUT',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+    };
+
+    fetch(`${url}authomatic/update${id}`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            if (result.code == "ok") {
+                limpiarFormulario();
+                tabla._fnAjaxUpdate();
+                $('#modalEdit').modal('toggle');
+                alert(result.message, 'success')
+            } else {
+                alert(result.message, 'error')
+            }
+        })
+        .catch(error => { alert(error.errors, 'error') });
+    return false;
+});
+
+
+
+
 
 function mostrarOcultarSelectDia() {
-    var selectConfiguracion = document.getElementById("seleccionConfiguracion");
+    var selectConfiguracion = document.getElementById("frecuencia");
     var selectDiaContainer = document.getElementById("selectDiaContainer");
 
     if (selectConfiguracion.value === "semana") {
@@ -109,9 +281,9 @@ function mostrarOcultarSelectDia() {
 
 
 function mostrarOcultarSelectDiaMes() {
-    var selectConfiguracion = document.getElementById("seleccionConfiguracion");
+    var selectConfiguracion = document.getElementById("frecuencia");
     var selectDiaMesContainer = document.getElementById("selectDiaMesContainer");
-    var selectDiaMes = document.getElementById("selectDiaMes");
+    var selectDiaMes = document.getElementById("diames");
 
     if (selectConfiguracion.value === "mes") {
         selectDiaMesContainer.style.display = "block";
@@ -133,7 +305,7 @@ $(function() {
     // Otro código que puedas tener...
 
     // Llama a la función mostrarOcultarSelectDiaMes cuando cambie el valor del primer select
-    $('#seleccionConfiguracion').change(function() {
+    $('#frecuencia').change(function() {
         mostrarOcultarSelectDiaMes();
     });
 });
@@ -148,32 +320,31 @@ $(function() {
 
 
 
-
 const getReport = () => {
+    // Obtener el tipo de reporte seleccionado
+    const tipoReporte = $("#reporte").val();
+
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    var raw = JSON.stringify({
-        idCampanas: $("#selecCampania").val(),
-        fecha1: $("#FechaInicio").val(),
-        fecha2: $("#FechaFin").val(),
-        archivadas: archivadas
-
-
-    });
-
     var requestOptions = {
-        method: "POST",
+        method: "GET",
         headers: myHeaders,
-        body: raw,
         redirect: "follow",
     };
 
-    fetch(url + "reporteOfferCraft", requestOptions)
-        .then((response) => response.json())
+    // Incluir el tipo de reporte seleccionado en la URL
+    fetch(`${url}authomatic/${tipoReporte}`, requestOptions)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("Error en la solicitud: " + response.statusText);
+            }
+            return response.json();
+        })
         .then((result) => {
             console.log("Datos del informe de oferCraft:", result);
             datosObtenidos = result;
+            mostrarDatosEnTabla(datosObtenidos);
             $("#btnDescargarExcel, #PantallaInfo").show(); // Mostrar botones después de obtener los datos
         })
         .catch((error) => {
@@ -183,6 +354,18 @@ const getReport = () => {
 };
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 function mostrarDatosEnTabla(datos) {
     console.log("Datos para mostrar en la tabla:", datos);
     $("#TablaReportePromo").empty();
@@ -190,62 +373,126 @@ function mostrarDatosEnTabla(datos) {
         $('.datatables-basic').DataTable().destroy();
     }
     let tabla = '';
-    datos.forEach((element) => {
-        element.participaciones.forEach((participacion) => {
-            const fecha = formatearFechaHora(participacion.fecha);
-            const telefono = participacion.customerInfo ? participacion.customerInfo.telno : "Desconocido";
-            const descripcionTrx = participacion.descripcionTrx || "Sin descripción";
-            const valor = participacion.valor || "Sin valor";
-            const nombre = participacion.customerInfo ? participacion.customerInfo.fname : "Sin nombre";
-            const codigo = participacion.customerInfo ? participacion.customerInfo.customer_reference : "Sin código";
-            const nombreCampania = participacion.campanium ? participacion.campanium.nombre : "Sin campaña";
-            const fechaCreacion = participacion.campanium ? participacion.campanium.fechaCreacion : "Sin fecha";
-            const premioDescripcion = participacion.premioDescripcion || "Sin premio";
-            const premioMonto = participacion.detallepromocion && participacion.detallepromocion.premiopromocion ? parseFloat(participacion.detallepromocion.premiopromocion.valor).toFixed(2) : "0.00";
-            const cupon = participacion.detallepromocion ? participacion.detallepromocion.cupon : "Sin cupón";
-
+    // Verificar si los datos son un array
+    if (Array.isArray(datos)) {
+        // Iterar sobre cada objeto en el array de datos
+        datos.forEach((element) => {
+            // Crear una fila de tabla para cada objeto en los datos
             tabla += `
-        <tr> 
-          <td>${fechaCreacion}</td>
-          <td>${telefono}</td>
-          <td>${nombre}</td>
-          <td>${nombreCampania}</td>
-          <td>${premioDescripcion}</td>
-          <td>${valor}</td>
-          <td>${descripcionTrx}</td>
-          <td>${codigo}</td>
-          <td>${premioMonto}</td>
-          <td>${fecha}</td>
-        </tr>
-      `;
+                <tr> 
+                    <td>${element.id}</td>
+                    <td>${element.frecuencia}</td>
+                    <td>${element.diaSemana || '-'}</td>
+                    <td>${element.diaMes || '-'}</td>
+                    <td>
+                        <div class="btn-group">
+                            <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
+                                ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a href="#" onclick="OpenEdit(${element.id})" class="dropdown-item">
+                                    ${feather.icons['edit'].toSvg({ class: 'font-small-4 mr-50' })} Editar
+                                </a>
+                                <a href="#" onclick="eliminar(${element.id})" class="dropdown-item">
+                                    ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Eliminar
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            `;
         });
-    });
+    } else {
+        // Si los datos no son un array, mostrar un mensaje de error en la consola
+        console.error('Los datos no son un array:', datos);
+    }
+    // Insertar las filas de tabla en el cuerpo de la tabla
     $('.datatables-basic tbody').html(tabla);
+    // Inicializar el plugin DataTables
     $('.datatables-basic').DataTable({
-
-        order: [
-            [0, 'asc']
-        ],
-        ordering: true,
-        language: {
-            search: "Buscar:",
-            searchPlaceholder: "Buscar",
-            lengthMenu: "Mostrar _MENU_",
-
+        // Opciones de configuración de DataTables
+        
+     order: [
+        [0, 'asc']
+    ],
+    ordering: true,
+    dom: 
+        '<"d-flex justify-content-between align-items-center header-actions mx-1 row mt-75"' +
+        '<"col-lg-6" l>' +
+        '<"col-lg-6 pl-0"<"dt-action-buttons text-right text-md-left text-lg-right text-left d-flex align-items-center justify-content-lg-end align-items-center flex-sm-nowrap flex-wrap mr-1"<"mr-1"f>B>>' +
+        '>t' +
+        '<"d-flex justify-content-between mx-2 row mb-1"' +
+        '<"col-sm-12 col-md-6"i>' +
+        '<"col-sm-12 col-md-6"p>' +
+        '>',
+    language: {
+        sLengthMenu: 'Show _MENU_',
+        search: 'Buscar',
+        searchPlaceholder: 'Buscar...',
+    },
+    buttons: [{
+        text: 'Nuevo',
+        className: 'add-new btn btn-primary mt-50',
+        attr: {
+            'data-toggle': 'modal',
+            'data-target': '#modalNew',
         },
-        scrollX: true,
-        buttons: [{
-            text: 'Nuevo',
-            className: 'add-new btn btn-primary mt-50',
-            attr: {
-                'data-toggle': 'modal',
-                'data-target': '#modalNew',
-            },
-            init: function(api, node, config) {
-                $(node).removeClass('btn-secondary');
-                //Metodo para agregar un nuevo usuario
-            },
-        }, ],
-    });
+        init: function(api, node, config) {
+            $(node).removeClass('btn-secondary');
+            // Método para agregar un nuevo usuario
+        },
+    }],
+});
+}
 
+
+
+const OpenEdit = (id) => {
+    var requestOptions = {
+        method: 'GET',
+        headers: {
+            'Authorization': tokenReportA,
+        },
+        redirect: 'follow'
+    };
+
+    fetch(`${url}authomatic/config/${id}`, requestOptions)
+        .then(response => {
+            if (!response.ok) {
+                if (response.status === 401) {
+                    console.error("Error de autenticación: Token no válido o expirado.");
+                }
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(resultArray => {
+            if (resultArray.length > 0) {
+                const result = resultArray[0]; 
+                console.log('Esto es lo que viene:', result);
+                if (result.configreporte) {
+                    $('#id').val(id);
+                    $('#frecuenciaeddit').val(result.configreporte.frecuencia);
+                    $('#tiporeporteeddit').val(result.configreporte.tiporeporte);
+                    $('#diasemanaeddit').val(result.configreporte.diaSemana);
+                    $('#diameseddit').val(result.configreporte.diaMes);
+                    $('#emailseddit').val(result.configreporte.emails);
+                    $('#selecCampaniaEdit').val(result.idCampania);
+                    getCampaniasForEditModal();
+
+                    $('#selecCampaniaEdit').val(result.idCampania);
+                    $('#modalEdit').modal('toggle');
+                } else {
+                    console.error("Error: El objeto result no tiene la propiedad 'configreporte' definida.");
+                    alert("Error al obtener datos del proyecto", 'error');
+                }
+            } else {
+                console.error("Error: No se recibieron resultados para el ID proporcionado.");
+                alert("Error al obtener datos del proyecto", 'error');
+            }
+        })
+        .catch(error => {
+            console.error("Error en la solicitud GET:", error);
+            alert("Error al obtener datos del proyecto", 'error');
+        });
 }
