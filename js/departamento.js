@@ -5,6 +5,8 @@ $(function () {
   let tabla = getDepartamentos();
   GetProjects();
   Usuario();
+  getMunicipios();
+  getDepartamento();
   function validarNombre(nombre) {
     const descripcionValida =/^[a-zA-Z]+(?:\s[a-zA-Z]+)*$/.test(nombre);
     if (!descripcionValida) {

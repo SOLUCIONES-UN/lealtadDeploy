@@ -278,35 +278,62 @@
 
   <!-- modal de creacion or Update -->
   <div class="modal modal-slide-in new-user-modal fade" id="modalNew">
-    <div class="modal-dialog">
+    <div class="modal-dialog w-50">
       <form id="formNew" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
           <h5 class="modal-title" id="exampleModalLabel">Agregar Nuevo Proyecto</h5>
         </div>
         <div class="modal-body flex-grow-1">
-          <div class="form-group">
-            <label class="form-label" for="basic-icon-default-fullname">Descripción</label>
-            <input type="text" class="form-control dt-full-name descripcion" id="descripcion"
-              placeholder="Descripción del proyecto " name="descripcion" aria-label=""
-              aria-describedby="descripcion-error" required />
-            <div id="descripcionError" class="invalid-feedback descripcion-error"></div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label class="form-label" for="descripcion">Descripción</label>
+              <input type="text" class="form-control descripcion" id="descripcion" placeholder="Descripción del proyecto" name="descripcion" aria-describedby="descripcion-error" required />
+              <div id="descripcionError" class="invalid-feedback descripcion-error"></div>
+            </div>
+            <div class="form-group col-md-6">
+              <label class="form-label" for="ruta">Ruta</label>
+              <input type="text" class="form-control ruta" id="ruta" placeholder="Ruta del proyecto" name="ruta" aria-describedby="ruta-error" required />
+              <div id="ruta-error" class="invalid-feedback ruta-error"></div>
+            </div>
           </div>
-          <div class="form-group">
-            <label class="form-label" for="basic-icon-default-fullname">Ruta</label>
-            <input type="text" class="form-control dt-full-name ruta" id="ruta"
-              placeholder="Ruta del proyecto" name="ruta" aria-label=""
-              aria-describedby="basic-icon-default-fullname2" required />
-            <div id="ruta-error" class="invalid-feedback ruta-error"></div>
-          </div>
-
+          <div class="row">
+            <div class="form-group col-md-6">
+                <label class="form-label" for="departamento">Departamento</label>
+                <select name="" id="departamento" aria-describedby="departamentoError" required class="form-control">
+                    <option disabled selected>Selecciona una opción</option>
+                </select>
+                <div id="departamentoError" class="invalid-feedback departamento-error"></div>
+            </div>
+            <div class="form-group col-md-6">
+                <label class="form-label" for="municipio">Municipio</label>
+                <select name="municipio" id="municipio" aria-describedby="municipioError" required class="form-control">
+                    <option disabled selected>Selecciona una opción</option>
+                </select>
+                <div id="municipioError" class="invalid-feedback municipio-error"></div>
+            </div>
+            </div>
+            
+              <div class="btn-crear d-flex justify-content-end " >
+                  <button type="button" class="btn btn-outline-primary" id="addLocalidad">Agregar</button>
+              
+            </div>
+             <!--Tabla-->
+        <table class="datatables-basic table mb-3 mt-2 stepper-table" id="tableLocalidad">
+          <thead>
+              <tr>
+                  <th>#</th>
+                  <th>DEPARTAMENTO</th>
+                  <th>MUNICIPIO</th>
+                  <th>Accion</th>
+              </tr>
+          </thead>
+      </table>
+          <div class="d-flex justify-content-end">
           <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar</button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
         </div>
-      </form>
-    </div>
-  </div>
-
+      </div>
   <div class="modal modal-slide-in new-user-modal fade" id="modalEdit">
     <div class="modal-dialog">
       <form id="formEdit" class="add-new-user modal-content pt-0" autocomplete="off">

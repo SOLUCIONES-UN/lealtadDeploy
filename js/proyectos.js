@@ -1,6 +1,6 @@
 const url = 'http://localhost:3000/';
 let token = localStorage.getItem("token");
-
+var dataDeptoView=[]
 const headers = {
     'Authorization': token,
     'Content-Type': 'application/json'
@@ -9,6 +9,12 @@ const headers = {
 $(function () {
     let tabla = getProyectos();
     Usuario();
+    getMunicipios();
+    getDepartamento();
+    const containerArchivo = document.getElementById('containerArchivo');
+  if (containerArchivo) {
+    containerArchivo.style.display = 'none';
+  }
     function validarDescripcion(descripcion) {
         const descripcionValida =/^[a-zA-Z]+(?:\s[a-zA-Z]+)*$/.test(descripcion);
         if (!descripcionValida) {
@@ -358,7 +364,130 @@ const OpenEdit = (id) => {
         });
 }
 
+const getDepartamento = () => {
+    $('#departamento').html(null);
+    $('#departamentoEdit').html(null);
+      var requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+        headers: { "Authorization": token }
 
+      };
+
+      $("#proyecto").html(
+        '<option value="0" selected disabled>Selecciona una Opcion</option>'
+      );
+      fetch(`${url}Departamento`, requestOptions)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error en la respuesta de la API');
+          }
+          return response.json();
+        })
+        .then(result => {
+          // Vaciar el select antes de agregar las nuevas opciones
+          $('#departamento').empty();
+          $('#departamentoEdit').empty();
+  
+          // Agregar la opción por defecto
+          $('#departamento').append('<option value="" selected disabled>Selecciona una opción</option>');
+          $('#departamentoEdit').append('<option value="" selected disabled>Selecciona una opción</option>');
+  
+          // Agregar las opciones de los departamentos
+          result.forEach(element => {
+            var opc = `<option value="${element.id}">${element.nombre}</option>`;
+            $('#departamento').append(opc);
+            $('#departamentoEdit').append(opc);
+          });
+  
+          dataDeptoView = result;
+                 
+          console.log('Departamentos obtenidos:', dataDeptoView);
+  
+          // Verificar si los elementos existen antes de asignar los event listeners
+          var selectDepartamento = document.getElementById('departamento');
+          var selectDepartamentoEdit = document.getElementById('departamentoEdit');
+  
+          if (selectDepartamento) {
+            selectDepartamento.addEventListener('change', function() {
+              var selectedId = this.value;
+              getMunicipioByDepto(selectedId);
+            });
+          }
+  
+          if (selectDepartamentoEdit) {
+            selectDepartamentoEdit.addEventListener('change', function() {
+              var selectedId = this.value;
+              getMunicipioByDepto(selectedId);
+            });
+          }
+  
+          // Resolver la promesa
+          resolve();
+        })
+        .catch(error => {
+          console.error('Error al obtener los departamentos:', error);
+          reject(error);
+        });
+    
+  };
+  
+  //Funcion para traer municipios segun el departamento
+  const getMunicipioByDepto = (idDepartamento) => {
+    $('#municipio').html(null);
+    $('#municipioEdit').html(null);
+    
+      var requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+        headers: { "Authorization": token }
+      };
+  
+      // Eliminar todas las opciones del select #municipio y #municipioEdit excepto la opción seleccionada por defecto
+      $('#municipio option:not(:disabled)').remove();
+      $('#municipioEdit option:not(:disabled)').remove();
+  
+      fetch(`${url}Municipio/by/${idDepartamento}`, requestOptions)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(result => {
+          // Agregar las nuevas opciones de municipios
+          result.forEach(element => {
+            var opc = `<option value="${element.id}">${element.nombre}</option>`;
+            $('#municipio').append(opc);
+            $('#municipioEdit').append(opc);
+          });
+          resolve();
+        })
+        .catch(err => {
+          console.log('error', err);
+          reject(err);
+        });
+    
+  };
+  //Funcion para traer municipios
+const getMunicipios = () => {
+    var requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+        headers: {"Authorization": token}
+    };
+  
+    //$('#').html('<option value="0" selected disabled>Selecciona una Opcion</option>');
+    fetch(`${url}Municipio`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          dataMunicipiosView = result;
+          console.log('municipios', dataMunicipiosView)
+        })
+        .catch(error => console.log('error', error));
+  
+  }
+  
 const OpenDelete = (id) => { 
     $("#idDelete").val(id);
   $("#modalDelete").modal("toggle");
