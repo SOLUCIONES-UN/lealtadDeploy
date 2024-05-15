@@ -235,7 +235,7 @@ document.getElementById("btnDescargarExcel").addEventListener("click", function 
   XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
 
   // Descargar el archivo Excel
-  XLSX.writeFile(wb, "Reporte_Participantes_Campañas.xlsx");
+  XLSX.writeFile(wb, "Reporte_Participantes.xlsx");
 });
 
 function formatearFechaHora(fechaHora) {
