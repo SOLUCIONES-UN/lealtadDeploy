@@ -1,21 +1,20 @@
 const url = "http://localhost:3000/";
 let tokenReportA = localStorage.getItem("token");
-let datosObtenidos = null; // Variable global para almacenar los datos obtenidos
+let datosObtenidos = null; 
 let archivadas = 0;
 $(function() {
 
     getCampanias();
     getCampaniasForEditModal();
-    $("#btnDescargarExcel, #PantallaInfo").hide(); // Ocultar botones al inicio
-    // Inicializar el plugin multiple-select
+    $("#btnDescargarExcel, #PantallaInfo").hide(); 
     $('#selecCampania').multipleSelect({
         filter: true,
-        selectAll: true, // Habilitar la opción de seleccionar todos los elementos
+        selectAll: true, 
         placeholder: "Elige una campania",
     });
     $('#selecCampaniaEdit').multipleSelect({
         filter: true,
-        selectAll: true, // Habilitar la opción de seleccionar todos los elementos
+        selectAll: true, 
         placeholder: "Elige una campania",
     });
 
@@ -23,6 +22,8 @@ $(function() {
 
     $('#modalEdit').on('show.bs.modal', function() {
         limpiarFormulario();
+        mostrarOcultarSelectDiaEdit();
+        mostrarOcultarSelectDiaMesEdit();
         $("#btnSubmEdit").attr("disabled", false);
 
     });
@@ -31,37 +32,63 @@ $(function() {
 
     $('#modalEdit').on('hidden.bs.modal', function() {
         limpiarFormulario();
+        mostrarOcultarSelectDiaEdit();
+        mostrarOcultarSelectDiaMesEdit();
         $("#btnSubmEdit").attr("disabled", false);
 
     });
 
     $('#modalEdit').find('[data-dismiss="modal"]').click(function() {
         limpiarFormulario();
+        mostrarOcultarSelectDiaEdit();
+        mostrarOcultarSelectDiaMesEdit();
         $("#btnSubmEdit").attr("disabled", false);
 
     });
+    
 
 
 
-    $('#modalEdit').find('[data-dismiss="modal"]').click(function() {
+    //create
+    
+    $('#formNew').on('show.bs.modal', function() {
         limpiarFormulario();
-        $("#btnSubmEdit").attr("disabled", false);
+        mostrarOcultarSelectDia();
+        mostrarOcultarSelectDiaMes();
+        $("#btnSubmit").attr("disabled", false);
 
     });
 
 
+
+    $('#formNew').on('hidden.bs.modal', function() {
+        limpiarFormulario();
+        mostrarOcultarSelectDia();
+        mostrarOcultarSelectDiaMes();
+        $("#btnSubmit").attr("disabled", false);
+
+    });
+
+    $('#formNew').find('[data-dismiss="modal"]').click(function() {
+        limpiarFormulario();
+        mostrarOcultarSelectDia();
+        mostrarOcultarSelectDiaMes();
+        $("#btnSubmit").attr("disabled", false);
+
+    });
+
+
+
+
+   
 
 
     $("#btnSubmit").attr("disabled", false);
 
 
     $('#formNew').submit(function(event) {
-        event.preventDefault(); // Evitar que el formulario se envíe por defecto
-
-        // Deshabilitar el botón de enviar para evitar envíos múltiples
+        event.preventDefault(); 
         $("#btnSubmit").attr("disabled", true);
-
-        // Obtener los datos del formulario
         var formData = {
             diasemana: $('#diasemana').val(),
             diames: $('#diames').val(),
@@ -70,7 +97,6 @@ $(function() {
             tiporeporte: $('#tiporeporte').val(),
             emails: $('#emails').val()
         };
-
         fetch(`${url}authomatic`, {
                 method: 'POST',
                 headers: {
@@ -87,6 +113,7 @@ $(function() {
                     $('#modalNew').modal('toggle');
                     limpiarFormulario();
                     Alert(result.message, 'success');
+                    getReport();
                 } else {
                     Alert(result.message, 'error');
                 }
@@ -99,20 +126,20 @@ $(function() {
     });
 
     function limpiarFormulario() {
-
         $('#diasemana').val('');
         $('#diames').val('');
         $('#selecCampania').val([]);
         $('#emails').val('');
-
-
         $('#frecuencia').val(null);
         $('#tiporeporte').val([]);
-
-        // Si estás usando el plugin multipleSelect, también necesitas refrescarlo después de limpiar los valores
         $('#selecCampania').multipleSelect('refresh');
+        
+        // Verificar si la frecuencia es 'diario' para ocultar los selectores de día y mes
+        if ($('#frecuencia').val() === 'diario') {
+            $('#selectDiaContainer').hide(); // Ocultar selector de día
+            $('#selectDiaMesContainer').hide(); // Ocultar selector de mes
+        }
     }
-
 
 
     $("#ConsultarPromo").on("click", function() {
@@ -139,37 +166,40 @@ $(function() {
 
 
 
-    $('#formEdit').submit(function() {
+    $('#formEdit').submit(function( event) {
+        event.preventDefault();
         console.log("Enviando datos de edición...");
-
-        const frecuencia = $('#frecuenciaeddit').val() || ''; // Añadir manejo para valores undefined
-        const diasemana = frecuencia === 'dia' ? null : $('#diasemanaeddit').val() || ''; // Añadir manejo para valores undefined
-        const diames = frecuencia === 'dia' ? null : $('#diameseddit').val() || ''; // Añadir manejo para valores undefined
-        const campanias = $('#selecCampaniaEdit').val() || []; // Añadir manejo para valores undefined
-        const tiporeporte = $('#tiporeporteeddit').val() || ''; // Corregir selector
-        const emails = $('#emailseddit').val() || ''; // Añadir manejo para valores undefined
-
-        // Imprimir los valores en la consola para verificar
-        console.log("Frecuencia:", frecuencia);
-        console.log("Día de la semana:", diasemana);
-        console.log("Día del mes:", diames);
-        console.log("Campañas seleccionadas:", campanias);
-        console.log("Tipo de reporte:", tiporeporte);
-        console.log("Emails:", emails);
-
+      
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", tokenReportA);
 
+       
         const id = $('#id').val();
+        const frecuencia = $('#frecuenciaeddit').val() || ''; 
+        const campanias = $('#selecCampaniaEdit').val() || []; 
+        const tiporeporte = $('#tiporeporteeddit').val() || ''; 
+        const emails = $('#emailseddit').val() || ''; 
+        const diasemanaEdit  = $('#diasemanaeddit').val() || ''; 
+        const diamesEdit  = $('#diameseddit').val() || ''; 
+
+        console.log("Datos a enviar:", {
+            
+            "diasemanaeddit": diasemanaEdit,
+            "diameseddit": diamesEdit,
+            "selecCampaniaEdit": campanias,
+            "frecuenciaeddit": frecuencia,
+            "tiporeporteeddit": tiporeporte,
+            "emailseddit": emails
+        });
 
         var raw = JSON.stringify({
-            "diasemana": diasemana,
-            "diames": diames,
-            "campanias": campanias,
-            "frecuencia": frecuencia,
-            "tiporeporte": tiporeporte,
-            "emails": emails
+            "frecuencia": $('#frecuenciaeddit').val(),
+            "diasemana": $('#diasemanaeddit').val(),
+            "diames": $('#diameseddit').val(),
+            "tiporeporte": $('#tiporeporteeddit').val(),
+            "selecCampania": $('#selecCampaniaEdit').val(),
+            "emails": $('#emailseddit').val(),
         });
 
         var requestOptions = {
@@ -178,6 +208,7 @@ $(function() {
             body: raw,
             redirect: 'follow'
         };
+       
 
         fetch(`${url}authomatic/update/${id}`, requestOptions)
             .then(response => response.json())
@@ -186,6 +217,7 @@ $(function() {
                     limpiarFormulario();
                     $('#modalEdit').modal('toggle');
                     Alert(result.message, 'success');
+                    getReport();
                 } else {
                     Alert(result.message, 'error');
                 }
@@ -219,6 +251,7 @@ $(function() {
 
                     $('#modalDelete').modal('toggle');
                     Alert(result.message, 'success')
+                    getReport();
                 } else {
                     console.log("Result", result);
 
@@ -234,15 +267,6 @@ $(function() {
     })
 
 
-
-
-
-
-
-
-
-
-
 });
 
 const getCampanias = () => {
@@ -256,23 +280,16 @@ const getCampanias = () => {
         .then((response) => response.json())
         .then((result) => {
             console.log("Campania obtenidas:", result);
-            // Limpiar el select antes de agregar opciones
+            
             $("#selecCampania").empty();
 
-
-            // Agregar la opción por defecto
-            // $("#selectpromo").append(
-            //   "<option disabled selected value='0'>Elige una promoción</option>"
-            // );
-
             result.forEach((element) => {
-                // Agregar opciones al select
+                
                 $("#selecCampania").append(
-                    // '<option value="' + element.id + '">' + element.nombre + "</option>"
+                   
                     `<option value="${element.id}">[${element.fechaInicio} - ${element.fechaFin}] ${element.nombre}</option>`
                 );
             });
-            // Actualizar el select múltiple después de agregar opciones
             $('#selecCampania').multipleSelect('refresh');
         })
         .catch((error) => {
@@ -294,16 +311,12 @@ const getCampaniasForEditModal = () => {
         .then((response) => response.json())
         .then((result) => {
             console.log("Campanias obtenidas para modal de edición:", result);
-            // Limpiar el select antes de agregar opciones
-            // $("#selecCampaniaEdit").empty();
-
+           
             result.forEach((element) => {
-                // Agregar opciones al select
                 $("#selecCampaniaEdit").append(
                     `<option value="${element.id}">[${element.fechaInicio} - ${element.fechaFin}] ${element.nombre}</option>`
                 );
             });
-            // Actualizar el select múltiple después de agregar opciones
             $('#selecCampaniaEdit').multipleSelect('refresh');
         })
         .catch((error) => {
@@ -311,9 +324,6 @@ const getCampaniasForEditModal = () => {
             alert(error, "error");
         });
 };
-
-
-
 
 function mostrarOcultarSelectDia() {
     var selectConfiguracion = document.getElementById("frecuencia");
@@ -326,40 +336,49 @@ function mostrarOcultarSelectDia() {
     }
 }
 
-
-
 function mostrarOcultarSelectDiaMes() {
     var selectConfiguracion = document.getElementById("frecuencia");
     var selectDiaMesContainer = document.getElementById("selectDiaMesContainer");
+    var selectDiaSemanaContainer = document.getElementById("selectDiaContainer");
     var selectDiaMes = document.getElementById("diames");
+    var selectDiaSemana = document.getElementById("diasemana");
 
     if (selectConfiguracion.value === "mes") {
         selectDiaMesContainer.style.display = "block";
-        // Limpiar el select antes de agregar opciones
-        selectDiaMes.innerHTML = "";
-        // Agregar opciones del 1 al 30
+        selectDiaSemanaContainer.style.display = "none"; 
+
+        selectDiaSemana.value = "";
+
+        selectDiaMes.innerHTML = ""; 
         for (var i = 1; i <= 30; i++) {
             var option = document.createElement("option");
             option.value = i;
             option.text = i;
             selectDiaMes.appendChild(option);
         }
+    } else if (selectConfiguracion.value === "semana") {
+        selectDiaMesContainer.style.display = "none"; 
+        selectDiaSemanaContainer.style.display = "block"; 
+
+        
+        selectDiaMes.value = "";
     } else {
-        selectDiaMesContainer.style.display = "none";
+        selectDiaMesContainer.style.display = "none"; 
+        selectDiaSemanaContainer.style.display = "none"; 
+
+        selectDiaMes.value = "";
+        selectDiaSemana.value = "";
     }
+    
 }
 
-$(function() {
-    // Otro código que puedas tener...
 
-    // Llama a la función mostrarOcultarSelectDiaMes cuando cambie el valor del primer select
+$(function() {
+  
     $('#frecuencia').change(function() {
         mostrarOcultarSelectDiaMes();
     });
 });
-
-
-
 
 
 function mostrarOcultarSelectDiaEdit() {
@@ -374,50 +393,48 @@ function mostrarOcultarSelectDiaEdit() {
 }
 
 
-
-
 $(function() {
-    // Llama a la función mostrarOcultarSelectDiaMes cuando cambie el valor del primer select
     $('#frecuenciaeddit').change(function() {
         mostrarOcultarSelectDiaMesEdit();
     });
 });
 
+
 function mostrarOcultarSelectDiaMesEdit() {
     var selectConfiguracion = document.getElementById("frecuenciaeddit");
     var selectDiaMesContainer = document.getElementById("selectDiaMesContainerEdit");
+    var selectDiaSemanaContainer = document.getElementById("selectDiaContainerEdit");
     var selectDiaMes = document.getElementById("diameseddit");
+    var selectDiaSemana = document.getElementById("diasemanaeddit");
 
     if (selectConfiguracion.value === "mes") {
         selectDiaMesContainer.style.display = "block";
-        // Limpiar el select antes de agregar opciones
-        selectDiaMes.innerHTML = "";
-        // Agregar opciones del 1 al 30
+        selectDiaSemanaContainer.style.display = "none"; 
+
+        selectDiaSemana.value = "";
+
+        selectDiaMes.innerHTML = ""; 
         for (var i = 1; i <= 30; i++) {
             var option = document.createElement("option");
             option.value = i;
             option.text = i;
             selectDiaMes.appendChild(option);
         }
+    } else if (selectConfiguracion.value === "semana") {
+        selectDiaMesContainer.style.display = "none"; 
+        selectDiaSemanaContainer.style.display = "block"; 
+
+        selectDiaMes.value = "";
     } else {
-        selectDiaMesContainer.style.display = "none";
+        selectDiaMesContainer.style.display = "none"; 
+        selectDiaSemanaContainer.style.display = "none"; 
+
+        selectDiaMes.value = "";
+        selectDiaSemana.value = "";
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 const getReport = () => {
-    // Obtener el tipo de reporte seleccionado
     const tipoReporte = $("#reporte").val();
 
     var myHeaders = new Headers();
@@ -429,7 +446,6 @@ const getReport = () => {
         redirect: "follow",
     };
 
-    // Incluir el tipo de reporte seleccionado en la URL
     fetch(`${url}authomatic/${tipoReporte}`, requestOptions)
         .then((response) => {
             if (!response.ok) {
@@ -441,25 +457,13 @@ const getReport = () => {
             console.log("Datos del informe de oferCraft:", result);
             datosObtenidos = result;
             mostrarDatosEnTabla(datosObtenidos);
-            $("#btnDescargarExcel, #PantallaInfo").show(); // Mostrar botones después de obtener los datos
+            $("#btnDescargarExcel, #PantallaInfo").show(); 
         })
         .catch((error) => {
             console.error("Error al obtener el informe de oferCraft:", error);
             alert(error, "error");
         });
 };
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 function mostrarDatosEnTabla(datos) {
@@ -469,17 +473,24 @@ function mostrarDatosEnTabla(datos) {
         $('.datatables-basic').DataTable().destroy();
     }
     let tabla = '';
-    // Verificar si los datos son un array
     if (Array.isArray(datos)) {
-        // Iterar sobre cada objeto en el array de datos
-        datos.forEach((element) => {
-            // Crear una fila de tabla para cada objeto en los datos
+        datos.forEach((element, index) => {
+            let estadoText = '';
+            if (element.estado === 1) {
+                estadoText = 'Activada';
+            } else if (element.estado === 2) {
+                estadoText = 'Pausada';
+            } else {
+                estadoText = 'Indefinido';
+            }
             tabla += `
                 <tr> 
-                    <td>${element.id}</td>
+                <td>${index + 1}</td>
+                    <td>${element.configuraciones[0] ? element.configuraciones[0].campanium.nombre : 'No disponible'}</td>
                     <td>${element.frecuencia}</td>
-                    <td>${element.diaSemana || '-'}</td>
-                    <td>${element.diaMes || '-'}</td>
+                    <td>${element.diaSemana || 'Indefinido'}</td>
+                    <td>${element.diaMes || 'Indefinido'}</td>
+                    <td>${estadoText}</td>
                     <td>
                         <div class="btn-group">
                             <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
@@ -492,6 +503,7 @@ function mostrarDatosEnTabla(datos) {
                                 <a href="#"  onclick="OpenDelete(${element.id})" class="dropdown-item">
                                     ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Eliminar
                                 </a>
+                                ${getEstadoButton(element)}
                             </div>
                         </div>
                     </td>
@@ -499,15 +511,10 @@ function mostrarDatosEnTabla(datos) {
             `;
         });
     } else {
-        // Si los datos no son un array, mostrar un mensaje de error en la consola
         console.error('Los datos no son un array:', datos);
     }
-    // Insertar las filas de tabla en el cuerpo de la tabla
     $('.datatables-basic tbody').html(tabla);
-    // Inicializar el plugin DataTables
     $('.datatables-basic').DataTable({
-        // Opciones de configuración de DataTables
-
         order: [
             [0, 'asc']
         ],
@@ -534,14 +541,63 @@ function mostrarDatosEnTabla(datos) {
             },
             init: function(api, node, config) {
                 $(node).removeClass('btn-secondary');
-                // Método para agregar un nuevo usuario
             },
         }],
     });
 }
 
+function getEstadoButton(row) {
+    let opcAdd = '';
+    switch (row.estado) {
+        case 1:
+            opcAdd += `
+                <a href="#" onclick="cambiarEstado(${row.id}, 2)" class="dropdown-item">
+                    ${feather.icons["pause-circle"].toSvg({ class: "font-small-4 mr-50" })}
+                    Pausar
+                </a>`;
+            break;
+        case 2:
+            opcAdd += `
+                <a href="#" onclick="cambiarEstado(${row.id}, 1)" class="dropdown-item">
+                    ${feather.icons["play"].toSvg({ class: "font-small-4 mr-50" })}
+                    Activar
+                </a>`;
+            break;
+    }
+    return opcAdd;
+}
 
-const Alert = function(message, status) // si se proceso correctamente la solicitud
+function cambiarEstado(id, estate) {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", tokenReportA);
+
+    var requestOptions = {
+        method: 'PUT',
+        headers: myHeaders,
+        body: JSON.stringify({ estado: estate }),
+        redirect: 'follow'
+    };
+
+    fetch(`${url}authomatic/state/${id}/${estate}`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            if (result.code == "ok") {
+                
+                console.log("Estado cambiado con éxito.");
+                getReport();
+            } else {
+                console.error("Error al cambiar el estado:", result.message);
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            Alert("Ha ocurrido un error al intentar cambiar el estado.", 'error');
+        });
+}
+
+
+const Alert = function(message, status) 
     {
         toastr[`${status}`](message, `${status}`, {
             closeButton: true,
@@ -550,8 +606,6 @@ const Alert = function(message, status) // si se proceso correctamente la solici
             rtl: false
         });
     }
-
-
 
 
 const OpenEdit = (id) => {
@@ -585,9 +639,7 @@ const OpenEdit = (id) => {
                     $('#diameseddit').val(result.configreporte.diaMes);
                     $('#emailseddit').val(result.configreporte.emails);
                     $('#selecCampaniaEdit').val(result.campanium.nombre);
-                    // getCampaniasForEditModal();
-
-                    // $('#selecCampaniaEdit').val(result.idCampania);
+                   
                     $('#modalEdit').modal('toggle');
                 } else {
                     console.error("Error: El objeto result no tiene la propiedad 'configreporte' definida.");
@@ -603,7 +655,6 @@ const OpenEdit = (id) => {
             alert("Error al obtener datos del proyecto", 'error');
         });
 }
-
 
 
 
