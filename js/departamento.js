@@ -3,10 +3,9 @@ let token = localStorage.getItem("token");
 
 $(function () {
   let tabla = getDepartamentos();
-  GetProjects();
+ 
   Usuario();
-  getMunicipios();
-  getDepartamento();
+  
   function validarNombre(nombre) {
     const descripcionValida =/^[a-zA-Z]+(?:\s[a-zA-Z]+)*$/.test(nombre);
     if (!descripcionValida) {
@@ -65,7 +64,7 @@ function validaIdLocal(IdLocal) {
   $("#formNew").submit(function () {
     const nombre = $('#nombre').val();
     const IdLocal = $('#IdLocal').val();
-    const idProyecto = $('#proyectoSelect').val();
+
 
     if (!validarNombre(nombre)) {
       
@@ -142,7 +141,7 @@ function validaIdLocal(IdLocal) {
     var raw = JSON.stringify({
       "nombre": $('#nombreEdit').val(),
       "IdLocal": $('#IdLocalEdit').val(),
-      "idProyecto": $('#proyectoEdit').val(),
+      
     });
 
 
