@@ -10,12 +10,12 @@ $(function() {
     $('#selecCampania').multipleSelect({
         filter: true,
         selectAll: true, 
-        placeholder: "Elige una campania",
+        placeholder: "Elige una campaña",
     });
     $('#selecCampaniaEdit').multipleSelect({
         filter: true,
         selectAll: true, 
-        placeholder: "Elige una campania",
+        placeholder: "Elige una campaña",
     });
 
 
@@ -128,17 +128,19 @@ $(function() {
     function limpiarFormulario() {
         $('#diasemana').val('');
         $('#diames').val('');
-        $('#selecCampania').val([]);
+        $('#selecCampania').val([]).trigger('change');  // Asegúrate de refrescar los selects múltiples
         $('#emails').val('');
-        $('#frecuencia').val(null);
-        $('#tiporeporte').val([]);
+        $('#frecuencia').val('').trigger('change');  // Restablecer y refrescar select de frecuencia
+        $('#tiporeporte').val('').trigger('change');  // Restablecer y refrescar select de tipo de reporte
         $('#selecCampania').multipleSelect('refresh');
-        
-        // Verificar si la frecuencia es 'diario' para ocultar los selectores de día y mes
-        if ($('#frecuencia').val() === 'diario') {
-            $('#selectDiaContainer').hide(); // Ocultar selector de día
-            $('#selectDiaMesContainer').hide(); // Ocultar selector de mes
-        }
+    
+        // Resetear select de día y mes
+        $('#diasemana').prop('selectedIndex', 0).trigger('change');
+        $('#diames').prop('selectedIndex', 0).trigger('change');
+    
+        // Ocultar contenedores de día y mes
+        $('#selectDiaContainer').hide();
+        $('#selectDiaMesContainer').hide();
     }
 
 
@@ -481,15 +483,15 @@ function mostrarDatosEnTabla(datos) {
             } else if (element.estado === 2) {
                 estadoText = 'Pausada';
             } else {
-                estadoText = 'Indefinido';
+                estadoText = 'No aplica';
             }
             tabla += `
                 <tr> 
                 <td>${index + 1}</td>
                     <td>${element.configuraciones[0] ? element.configuraciones[0].campanium.nombre : 'No disponible'}</td>
                     <td>${element.frecuencia}</td>
-                    <td>${element.diaSemana || 'Indefinido'}</td>
-                    <td>${element.diaMes || 'Indefinido'}</td>
+                    <td>${element.diaSemana || 'No aplica'}</td>
+                    <td>${element.diaMes || 'No aplica'}</td>
                     <td>${estadoText}</td>
                     <td>
                         <div class="btn-group">
