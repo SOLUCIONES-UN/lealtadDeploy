@@ -11,7 +11,7 @@ $(function() {
     Usuario();
 
     function validarDescripcion(descripcion) {
-        const descripcionValida = /^[a-zA-Z]+(?:\s[a-zA-Z]+)*$/.test(descripcion);
+        const descripcionValida = /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s]+$/.test(descripcion.trim());
         if (!descripcionValida) {
             $('.descripcion').addClass('is-invalid');
             $('.descripcion-error').text('La descripción no admite caracteres especiales ni espacios en blanco solo debe contener letras').addClass('text-danger');
