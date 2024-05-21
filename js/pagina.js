@@ -1,19 +1,25 @@
-const url = 'http://localhost:3000/'
+const url = "http://localhost:3000/";
 let token = localStorage.getItem("token");
 $(function () {
   let tabla = getPaginas();
   getMenu();
   Usuario();
   function validarDescripcion(descripcion) {
-    const descripcionValida = /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s]+$/.test(descripcion.trim());
+    const descripcionValida = /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s()]+$/.test(
+        descripcion.trim()
+      );
 
     if (!descripcionValida) {
-        $('.descripcion').addClass('is-invalid');
-        $('.descripcion-error').text('La descripción no admite caracteres especiales ni espacios en blanco').addClass('text-danger');
-        return false;
+      $(".descripcion").addClass("is-invalid");
+      $(".descripcion-error")
+        .text(
+          "La descripción no admite caracteres especiales ni espacios en blanco"
+        )
+        .addClass("text-danger");
+      return false;
     }
     return true;
-}
+  }
 
   $("#modalNew, #modalEdit").on("show.bs.modal", function () {
     $(".descripcion").removeClass("is-invalid");
@@ -28,56 +34,56 @@ $(function () {
     .find('[data-dismiss="modal"]')
     .click(function () {
       limpiarForm();
-    });$('#formNew').submit(function () {
-        $('#btnSubmit').prop('disabled', true);
-        const descripcion = $('#descripcion').val();
-        const idMenu = $('#idMenu').val(); 
-    
-        if (!validarDescripcion(descripcion)) {
-            return false;
-        }
-    
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-        myHeaders.append("Authorization", token);
-    
-        var raw = JSON.stringify({
-            "descripcion": descripcion,
-            "idMenu": idMenu, 
-            "path": $('#path').val(),
-            "icono": $('#Icono').val()
-        });
-    
-        console.log("Datos a guardar:", JSON.parse(raw));
-        console.log("ID del Menú seleccionado:", idMenu);
-    
-        var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-        };
-    
-        fetch(`${url}Pagina`, requestOptions)
-            .then(response => response.json())
-            .then(result => {
-                $('#btnSubmit').prop('disabled', false);
-                console.log("Resultado de la creación de la página:", result);
-                if (result.code == "ok") {
-                    limpiarForm();
-                    tabla._fnAjaxUpdate();
-                    $('#modalNew').modal('toggle');
-                    Alert(result.message, 'success')
-                } else {
-                    Alert(result.message, 'error');
-                }
-            })
-            .catch(error => {
-                Alert(error, 'error')
-            });
-        return false;
     });
-    
+  $("#formNew").submit(function () {
+    $("#btnSubmit").prop("disabled", true);
+    const descripcion = $("#descripcion").val();
+    const idMenu = $("#idMenu").val();
+
+    if (!validarDescripcion(descripcion)) {
+      return false;
+    }
+
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", token);
+
+    var raw = JSON.stringify({
+      descripcion: descripcion,
+      idMenu: idMenu,
+      path: $("#path").val(),
+      icono: $("#Icono").val(),
+    });
+
+    console.log("Datos a guardar:", JSON.parse(raw));
+    console.log("ID del Menú seleccionado:", idMenu);
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch(`${url}Pagina`, requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        $("#btnSubmit").prop("disabled", false);
+        console.log("Resultado de la creación de la página:", result);
+        if (result.code == "ok") {
+          limpiarForm();
+          tabla._fnAjaxUpdate();
+          $("#modalNew").modal("toggle");
+          Alert(result.message, "success");
+        } else {
+          Alert(result.message, "error");
+        }
+      })
+      .catch((error) => {
+        Alert(error, "error");
+      });
+    return false;
+  });
 
   $("#formEdit").submit(function () {
     const descripcion = $("#descripcionEdit").val();
@@ -175,7 +181,6 @@ const getPaginas = () => {
       },
       { data: "menu.descripcion" },
       { data: "descripcion" },
-    
 
       {
         data: "id",
@@ -230,7 +235,6 @@ const getPaginas = () => {
         },
         init: function (api, node, config) {
           $(node).removeClass("btn-secondary");
-     
         },
       },
     ],
@@ -285,7 +289,6 @@ const OpenEdit = (id) => {
     redirect: "follow",
     headers: { Authorization: token },
   };
-
   fetch(`${url}Pagina/${id}`, requestOptions)
     .then((response) => response.json())
     .then((result) => {

@@ -328,6 +328,12 @@
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
+            <label class="form-label" for="MenuEdith">Id_menu:</label>
+            <select type="text" class="form-control" id="MenuEdith" name="MenuEdith" required>
+              <option value="0" default selected disabled>Selecciona una opción</option>
+            </select>
+          </div>
+          <div class="form-group">
             <input id="id" type="hidden">
             <label class="form-label" for="basic-icon-default-fullname">Descripción:</label>
             <input type="text" class="form-control dt-full-name descripcion" id="descripcionEdit"
@@ -335,12 +341,7 @@
               aria-describedby="basic-icon-default-fullname2" required />
             <div id="descripcionEditError" class="descripcion-error invalid-feedback"></div>
           </div>
-          <div class="form-group">
-            <label class="form-label" for="MenuEdith">Id_menu:</label>
-            <select type="text" class="form-control" id="MenuEdith" name="MenuEdith" required>
-              <option value="0" default selected disabled>Selecciona una opción</option>
-            </select>
-          </div>
+       
           <div class="form-group">
             <label class="form-label" for="basic-icon-default-fullname">Dirección:</label>
             <input type="text" class="form-control dt-full-name" id="PathEdit" placeholder="Nueva dirección de la página"
