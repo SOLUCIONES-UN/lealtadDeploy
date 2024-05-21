@@ -2,6 +2,9 @@ const url = 'http://localhost:3000/';
 let token = localStorage.getItem("token");
 var dataDeptoView = [];
 var localidadesSeleccionadas = []; // Array para almacenar las localidades seleccionadas
+var dataDepaAndMuni = [];
+var dataTableEdith = [];
+var tableEditLocalidades;
 
 const headers = {
     'Authorization': token,
@@ -47,6 +50,8 @@ $(function () {
         localidadesSeleccionadas = []; // Limpiar las localidades seleccionadas
         $('#tableLocalidad tbody').empty(); // Limpiar la tabla de localidades
         $('#tableLocalidadEdit tbody').empty(); // Limpiar la tabla de localidades en edición
+        $('#departamentoEdit').val('');
+        $('#municipioEdit').val('0');
     }
 
     function Alert(message, status) {
@@ -242,28 +247,6 @@ $(function () {
         localidadesSeleccionadas.push({ departamentoId: departamentoId, municipioId: municipioId });
     });
 
-    $('#addLocalidadEdit').click(function () {
-        var departamentoSeleccionado = $('#departamentoEdit option:selected').text();
-        var municipioSeleccionado = $('#municipioEdit option:selected').text();
-        var departamentoId = $('#departamentoEdit').val();
-        var municipioId = $('#municipioEdit').val();
-
-        var rowCount = $('#tableLocalidadEdit tbody tr').length;
-
-        var newRow = '<tr data-departamento-id="' + departamentoId + '" data-municipio-id="' + municipioId + '">' +
-            '<td>' + (rowCount + 1) + '</td>' +
-            '<td>' + departamentoSeleccionado + '</td>' +
-            '<td>' + municipioSeleccionado + '</td>' +
-            '<td><a href="#" class="delete-row">' +
-            feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' }) +
-            '</a></td>' +
-            '</tr>';
-
-        $('#tableLocalidadEdit tbody').append(newRow);
-
-        localidadesSeleccionadas.push({ departamentoId: departamentoId, municipioId: municipioId });
-    });
-
     $('#tableLocalidad').on('click', '.delete-row', function (event) {
         var rowIndex = $(this).closest('tr').index();
         $(this).closest('tr').remove();
@@ -280,11 +263,41 @@ $(function () {
         $(this).closest('tr').remove();
 
         localidadesSeleccionadas.splice(rowIndex, 1);
+        dataDepaAndMuni.splice(rowIndex, 1);
 
         $('#tableLocalidadEdit tbody tr').each(function (index) {
             $(this).find('td:first').text(index + 1);
         });
     });
+
+    $('#addLocalidadEdit').on('click', function () {
+
+        console.log('Localidades seleccionadas:', localidadesSeleccionadas);
+
+        var departamentoSeleccionado = $('#departamentoEdit option:selected').text();
+        var municipioSeleccionado = $('#municipioEdit option:selected').text();
+        var departamentoId = $('#departamentoEdit').val();
+        var municipioId = $('#municipioEdit').val();
+
+        var rowCount = $('#tableLocalidadEdit tbody tr').length;
+
+        var newRow = '<tr data-departamento-id="' + departamentoId + '" data-municipio-id="' + municipioId + '">' +
+            '<td>' + (rowCount + 1) + '</td>' +
+            '<td>' + departamentoSeleccionado + '</td>' +
+            '<td>' + municipioSeleccionado + '</td>' 
+
+        newRow += '<td><a  class="dropdown-item delete-row" onclick="deleteRow(' + rowCount + ')">' + feather.icons['trash-2'].toSvg({ class: 'font-small-4 ' }) + '</a></td>';
+        newRow += '</tr>';
+
+        $('#tableLocalidadEdit tbody').append(newRow);
+
+        localidadesSeleccionadas.push({ departamentoId: departamentoId, municipioId: municipioId });
+        dataDepaAndMuni.push({ departamentoId: +departamentoId, municipioId: +municipioId });
+
+        console.log('Localidades seleccionadas:', dataDepaAndMuni);
+
+    });
+
 });
 
 const getProyectos = () => {
@@ -459,6 +472,9 @@ const getMunicipios = () => {
 }
 
 const OpenEdit = (id) => {
+
+    var table;
+
     var requestOptions = {
         method: 'GET',
         headers: {
@@ -479,66 +495,61 @@ const OpenEdit = (id) => {
             return response.json();
         })
         .then(result => {
+            $('#tableLocalidadEdit').dataTable().fnDestroy();
             console.log('Project Data:', result);
             $('#id').val(id);
             $('#descripcionEdit').val(result.descripcion);
             $('#rutaEdit').val(result.ruta);
-            localidadesSeleccionadas = []; // Limpiar las localidades seleccionadas
+            dataTableEdith = result.departamento_proyectos; // Limpiar las localidades seleccionadas
 
-            // Obtener las localidades asociadas al proyecto
-            fetch(`${url}Departamento/byproyecto/${id}`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': token,
-                },
-                redirect: 'follow'
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error en la respuesta de la API de localidades');
+            //$('#tableLocalidadEdit tbody').empty();
+
+            result.departamento_proyectos.forEach((loc, index) => {
+
+                localidadesSeleccionadas.push({ departamentoId: loc.departamento.id, municipioId: loc.municipio.id  });
+                dataDepaAndMuni.push({ departamentoId: loc.departamento.id, municipioId: loc.municipio.id});
+            });
+
+            tableEditLocalidades = $('#tableLocalidadEdit').dataTable({
+                data: dataTableEdith,
+                searching: false,
+                paging: false,
+                columns: [
+                    {
+                        data: null,
+                        render: function (data, type, row, meta) {
+                            if (type === 'display') {
+                                return meta.row + 1;
+                            }
+                            return meta.row + 1;
+                        }
+                    },
+                    { data: "departamento.nombre" },
+                    { data: "municipio.nombre" },
+                    {
+                        data: "id",
+                        render: function (data) {
+                            return `<a href="#" class="dropdown-item delete-row" onclick="deleteRow(${data})">${feather.icons['trash-2'].toSvg({ class: 'font-small-4 ml-2 ' })}</a>`
+                        }
                     }
-                    return response.json();
-                })
-                .then(localidades => {
-                    console.log('Localidades:', localidades);
+                ],
+            });
 
-                    const departamentoMap = {};
-                    const municipioMap = {};
 
-                    localidades.forEach(loc => {
-                        departamentoMap[loc.Departamento.id] = loc.Departamento.nombre;
-                        municipioMap[loc.Municipio.id] = loc.Municipio.nombre;
-                    });
-
-                    localidadesSeleccionadas = localidades.map(loc => ({
-                        departamentoId: loc.Departamento.id,
-                        municipioId: loc.Municipio.id
-                    }));
-
-                    $('#tableLocalidadEdit tbody').empty();
-
-                    localidades.forEach((loc, index) => {
-                        var newRow = `<tr data-departamento-id="${loc.Departamento.id}" data-municipio-id="${loc.Municipio.id}">
-                            <td>${index + 1}</td>
-                            <td>${departamentoMap[loc.Departamento.id]}</td>
-                            <td>${municipioMap[loc.Municipio.id]}</td>
-                            <td><a href="#" class="delete-row">${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })}</a></td>
-                        </tr>`;
-                        $('#tableLocalidadEdit tbody').append(newRow);
-                    });
-                })
-                .catch(error => {
-                    console.error("Error al obtener las localidades:", error);
-                });
-
+            //table.reload();
             $('#modalEdit').modal('toggle');
+            tableEditLocalidades.fnDraw();
+
         })
         .catch(error => {
             console.error("Error en la solicitud GET:", error);
             Alert("Error al obtener datos del proyecto", 'error');
-        });
+        })
 }
 
+const deleteRow = (data) => {
+    console.log('ID:', data);
+}
 
 const OpenDelete = (id) => {
     $("#idDelete").val(id);

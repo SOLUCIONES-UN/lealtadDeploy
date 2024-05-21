@@ -215,68 +215,70 @@
   </div>
 
  <!-- Modal Edit -->
-<<!-- Modal Edit -->
-<div class="modal modal-slide-in new-user-modal fade" id="modalEdit">
-  <div class="modal-dialog w-50">
-      <form id="formEdit" class="add-new-user modal-content pt-0" autocomplete="off">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-          <div class="modal-header mb-1">
-              <h5 class="modal-title" id="exampleModalLabel">Actualizar Proyecto</h5>
-          </div>
-          <div class="modal-body flex-grow-1">
-              <div class="form-group">
-                  <label class="form-label" for="descripcionEdit">Descripción</label>
-                  <input type="text" class="form-control descripcion" id="descripcionEdit" placeholder="Descripción del proyecto" name="descripcion" aria-describedby="descripcion-error" required />
-                  <div class="invalid-feedback descripcion-error"></div>
-              </div>
-              <div class="form-group">
-                  <label class="form-label" for="rutaEdit">Ruta</label>
-                  <input type="text" class="form-control ruta" id="rutaEdit" placeholder="Ruta del proyecto" name="ruta" aria-describedby="ruta-error" required />
-                  <div class="invalid-feedback ruta-error"></div>
-              </div>
-              <div class="form-row">
-                  <div class="form-group col-md-6">
-                      <label class="form-label" for="departamentoEdit">Departamento</label>
-                      <select name="departamento" id="departamentoEdit" aria-describedby="departamentoError" required class="form-control">
-                          <option disabled selected>Selecciona una opción</option>
-                      </select>
-                      <div id="departamentoError" class="invalid-feedback departamento-error"></div>
-                  </div>
-                  <div class="form-group col-md-6">
-                      <label class="form-label" for="municipioEdit">Municipio</label>
-                      <select name="municipio" id="municipioEdit" aria-describedby="municipioError" required class="form-control">
-                          <option disabled selected>Selecciona una opción</option>
-                      </select>
-                      <div id="municipioError" class="invalid-feedback municipio-error"></div>
-                  </div>
-              </div>
+  <!-- Modal Edit -->
+  <div class="modal modal-slide-in new-user-modal fade" id="modalEdit">
+    <div class="modal-dialog w-50">
+        <form id="formEdit" class="add-new-user modal-content pt-0" autocomplete="off">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+            <div class="modal-header mb-1">
+                <h5 class="modal-title" id="exampleModalLabel">Actualizar Proyecto</h5>
+            </div>
+            <div class="modal-body flex-grow-1">
+                <div class="form-group">
+                    <label class="form-label" for="descripcionEdit">Descripción</label>
+                    <input type="text" class="form-control descripcion" id="descripcionEdit" placeholder="Descripción del proyecto" name="descripcion" aria-describedby="descripcion-error" required />
+                    <div class="invalid-feedback descripcion-error"></div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="rutaEdit">Ruta</label>
+                    <input type="text" class="form-control ruta" id="rutaEdit" placeholder="Ruta del proyecto" name="ruta" aria-describedby="ruta-error" required />
+                    <div class="invalid-feedback ruta-error"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label" for="departamentoEdit">Departamento</label>
+                        <select name="departamento" id="departamentoEdit" aria-describedby="departamentoError" required class="form-control">
+                            <option disabled selected>Selecciona una opción</option>
+                        </select>
+                        <div id="departamentoError" class="invalid-feedback departamento-error"></div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="form-label" for="municipioEdit">Municipio</label>
+                        <select name="municipio" id="municipioEdit" aria-describedby="municipioError" required class="form-control">
+                            <option disabled selected value="0">Selecciona una opción</option>
+                        </select>
+                        <div id="municipioError" class="invalid-feedback municipio-error"></div>
+                    </div>
+                </div>
 
-              <div class="btn-crear d-flex justify-content-end">
-                  <button type="button" class="btn btn-outline-primary" id="addLocalidadEdit">Agregar</button>
-              </div>
+                <div class="btn-crear d-flex justify-content-end">
+                    <button type="button" class="btn btn-outline-primary" id="addLocalidadEdit">Agregar</button>
+                </div>
 
-              <!-- Tabla -->
-              <table class="datatables-basic table mb-3 mt-2 stepper-table" id="tableLocalidadEdit">
-                  <thead>
-                      <tr>
-                          <th>#</th>
-                          <th>Departamento</th>
-                          <th>Municipio</th>
-                          <th>Acción</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <!-- Aquí se agregarán las filas dinámicamente -->
-                  </tbody>
-              </table>
-              <div class="d-flex justify-content-end">
-                  <button id="btnSubmEdit" type="submit" class="btn btn-primary mr-1 data-submit">Actualizar</button>
-                  <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-              </div>
-          </div>
-      </form>
+                <!-- Tabla -->
+                <table class="datatables-basic table mb-3 mt-2 stepper-table" id="tableLocalidadEdit">
+                    <thead >
+                        <tr>
+                            <th>#</th>
+                            <th>Departamento</th>
+                            <th>Municipio</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tbodyLocalidadEdith" name="tbodyLocalidadEdith">
+                        <!-- Aquí se agregarán las filas dinámicamente -->
+                    </tbody>
+                  
+                </table>
+                <div class="d-flex justify-content-end">
+                    <button id="btnSubmEdit" type="submit" class="btn btn-primary mr-1 data-submit">Actualizar</button>
+                    <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </form>
+    </div>
   </div>
-</div>
 
 
   <div class="modal modal-slide-in new-user-modal fade" id="modalDelete">
