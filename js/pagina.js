@@ -45,7 +45,7 @@ $(function () {
         $('#btnSubmit').prop('disabled', true);
         const descripcion = $('#descripcion').val();
 
-    
+        // const idMenu = $('#idMenu').val();
         if (!validarDescripcion(descripcion)) {
             return false;
         }
@@ -268,7 +268,7 @@ const limpiarForm = () => {
     $('#formNew').trigger("reset");
     $('#descripcion').removeClass('is-invalid');
     $('#descripcionError').empty().removeClass('text-danger');
-    $('#idMenu').removeClass('is-invalid');
+    $('#idMenu').val(''); 
 }
 
 
