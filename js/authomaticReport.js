@@ -1,20 +1,20 @@
 const url = "http://localhost:3000/";
 let tokenReportA = localStorage.getItem("token");
-let datosObtenidos = null; 
+let datosObtenidos = null;
 let archivadas = 0;
 $(function() {
 
     getCampanias();
     getCampaniasForEditModal();
-    $("#btnDescargarExcel, #PantallaInfo").hide(); 
+    $("#btnDescargarExcel, #PantallaInfo").hide();
     $('#selecCampania').multipleSelect({
         filter: true,
-        selectAll: true, 
+        selectAll: true,
         placeholder: "Elige una campaña",
     });
     $('#selecCampaniaEdit').multipleSelect({
         filter: true,
-        selectAll: true, 
+        selectAll: true,
         placeholder: "Elige una campaña",
     });
 
@@ -45,12 +45,12 @@ $(function() {
         $("#btnSubmEdit").attr("disabled", false);
 
     });
-    
+
 
 
 
     //create
-    
+
     $('#formNew').on('show.bs.modal', function() {
         limpiarFormulario();
         mostrarOcultarSelectDia();
@@ -80,14 +80,14 @@ $(function() {
 
 
 
-   
+
 
 
     $("#btnSubmit").attr("disabled", false);
 
 
     $('#formNew').submit(function(event) {
-        event.preventDefault(); 
+        event.preventDefault();
         $("#btnSubmit").attr("disabled", true);
         var formData = {
             diasemana: $('#diasemana').val(),
@@ -128,16 +128,16 @@ $(function() {
     function limpiarFormulario() {
         $('#diasemana').val('');
         $('#diames').val('');
-        $('#selecCampania').val([]).trigger('change');  // Asegúrate de refrescar los selects múltiples
+        $('#selecCampania').val([]).trigger('change'); // Asegúrate de refrescar los selects múltiples
         $('#emails').val('');
-        $('#frecuencia').val('').trigger('change');  // Restablecer y refrescar select de frecuencia
-        $('#tiporeporte').val('').trigger('change');  // Restablecer y refrescar select de tipo de reporte
+        $('#frecuencia').val('').trigger('change'); // Restablecer y refrescar select de frecuencia
+        $('#tiporeporte').val('').trigger('change'); // Restablecer y refrescar select de tipo de reporte
         $('#selecCampania').multipleSelect('refresh');
-    
+
         // Resetear select de día y mes
         $('#diasemana').prop('selectedIndex', 0).trigger('change');
         $('#diames').prop('selectedIndex', 0).trigger('change');
-    
+
         // Ocultar contenedores de día y mes
         $('#selectDiaContainer').hide();
         $('#selectDiaMesContainer').hide();
@@ -168,25 +168,25 @@ $(function() {
 
 
 
-    $('#formEdit').submit(function( event) {
+    $('#formEdit').submit(function(event) {
         event.preventDefault();
         console.log("Enviando datos de edición...");
-      
+
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", tokenReportA);
 
-       
+
         const id = $('#id').val();
-        const frecuencia = $('#frecuenciaeddit').val() || ''; 
-        const campanias = $('#selecCampaniaEdit').val() || []; 
-        const tiporeporte = $('#tiporeporteeddit').val() || ''; 
-        const emails = $('#emailseddit').val() || ''; 
-        const diasemanaEdit  = $('#diasemanaeddit').val() || ''; 
-        const diamesEdit  = $('#diameseddit').val() || ''; 
+        const frecuencia = $('#frecuenciaeddit').val() || '';
+        const campanias = $('#selecCampaniaEdit').val() || '';
+        const tiporeporte = $('#tiporeporteeddit').val() || '';
+        const emails = $('#emailseddit').val() || '';
+        const diasemanaEdit = $('#diasemanaeddit').val() || '';
+        const diamesEdit = $('#diameseddit').val() || '';
 
         console.log("Datos a enviar:", {
-            
+
             "diasemanaeddit": diasemanaEdit,
             "diameseddit": diamesEdit,
             "selecCampaniaEdit": campanias,
@@ -200,7 +200,7 @@ $(function() {
             "diasemana": $('#diasemanaeddit').val(),
             "diames": $('#diameseddit').val(),
             "tiporeporte": $('#tiporeporteeddit').val(),
-            "selecCampania": $('#selecCampaniaEdit').val(),
+            "campanias": $('#selecCampaniaEdit').val(),
             "emails": $('#emailseddit').val(),
         });
 
@@ -210,7 +210,7 @@ $(function() {
             body: raw,
             redirect: 'follow'
         };
-       
+
 
         fetch(`${url}authomatic/update/${id}`, requestOptions)
             .then(response => response.json())
@@ -282,13 +282,13 @@ const getCampanias = () => {
         .then((response) => response.json())
         .then((result) => {
             console.log("Campania obtenidas:", result);
-            
+
             $("#selecCampania").empty();
 
             result.forEach((element) => {
-                
+
                 $("#selecCampania").append(
-                   
+
                     `<option value="${element.id}">[${element.fechaInicio} - ${element.fechaFin}] ${element.nombre}</option>`
                 );
             });
@@ -313,7 +313,7 @@ const getCampaniasForEditModal = () => {
         .then((response) => response.json())
         .then((result) => {
             console.log("Campanias obtenidas para modal de edición:", result);
-           
+
             result.forEach((element) => {
                 $("#selecCampaniaEdit").append(
                     `<option value="${element.id}">[${element.fechaInicio} - ${element.fechaFin}] ${element.nombre}</option>`
@@ -347,11 +347,11 @@ function mostrarOcultarSelectDiaMes() {
 
     if (selectConfiguracion.value === "mes") {
         selectDiaMesContainer.style.display = "block";
-        selectDiaSemanaContainer.style.display = "none"; 
+        selectDiaSemanaContainer.style.display = "none";
 
         selectDiaSemana.value = "";
 
-        selectDiaMes.innerHTML = ""; 
+        selectDiaMes.innerHTML = "";
         for (var i = 1; i <= 30; i++) {
             var option = document.createElement("option");
             option.value = i;
@@ -359,24 +359,24 @@ function mostrarOcultarSelectDiaMes() {
             selectDiaMes.appendChild(option);
         }
     } else if (selectConfiguracion.value === "semana") {
-        selectDiaMesContainer.style.display = "none"; 
-        selectDiaSemanaContainer.style.display = "block"; 
+        selectDiaMesContainer.style.display = "none";
+        selectDiaSemanaContainer.style.display = "block";
 
-        
+
         selectDiaMes.value = "";
     } else {
-        selectDiaMesContainer.style.display = "none"; 
-        selectDiaSemanaContainer.style.display = "none"; 
+        selectDiaMesContainer.style.display = "none";
+        selectDiaSemanaContainer.style.display = "none";
 
         selectDiaMes.value = "";
         selectDiaSemana.value = "";
     }
-    
+
 }
 
 
 $(function() {
-  
+
     $('#frecuencia').change(function() {
         mostrarOcultarSelectDiaMes();
     });
@@ -411,11 +411,11 @@ function mostrarOcultarSelectDiaMesEdit() {
 
     if (selectConfiguracion.value === "mes") {
         selectDiaMesContainer.style.display = "block";
-        selectDiaSemanaContainer.style.display = "none"; 
+        selectDiaSemanaContainer.style.display = "none";
 
         selectDiaSemana.value = "";
 
-        selectDiaMes.innerHTML = ""; 
+        selectDiaMes.innerHTML = "";
         for (var i = 1; i <= 30; i++) {
             var option = document.createElement("option");
             option.value = i;
@@ -423,13 +423,13 @@ function mostrarOcultarSelectDiaMesEdit() {
             selectDiaMes.appendChild(option);
         }
     } else if (selectConfiguracion.value === "semana") {
-        selectDiaMesContainer.style.display = "none"; 
-        selectDiaSemanaContainer.style.display = "block"; 
+        selectDiaMesContainer.style.display = "none";
+        selectDiaSemanaContainer.style.display = "block";
 
         selectDiaMes.value = "";
     } else {
-        selectDiaMesContainer.style.display = "none"; 
-        selectDiaSemanaContainer.style.display = "none"; 
+        selectDiaMesContainer.style.display = "none";
+        selectDiaSemanaContainer.style.display = "none";
 
         selectDiaMes.value = "";
         selectDiaSemana.value = "";
@@ -459,7 +459,7 @@ const getReport = () => {
             console.log("Datos del informe de oferCraft:", result);
             datosObtenidos = result;
             mostrarDatosEnTabla(datosObtenidos);
-            $("#btnDescargarExcel, #PantallaInfo").show(); 
+            $("#btnDescargarExcel, #PantallaInfo").show();
         })
         .catch((error) => {
             console.error("Error al obtener el informe de oferCraft:", error);
@@ -585,7 +585,7 @@ function cambiarEstado(id, estate) {
         .then(response => response.json())
         .then(result => {
             if (result.code == "ok") {
-                
+
                 console.log("Estado cambiado con éxito.");
                 getReport();
             } else {
@@ -599,15 +599,14 @@ function cambiarEstado(id, estate) {
 }
 
 
-const Alert = function(message, status) 
-    {
-        toastr[`${status}`](message, `${status}`, {
-            closeButton: true,
-            tapToDismiss: false,
-            positionClass: 'toast-top-right',
-            rtl: false
-        });
-    }
+const Alert = function(message, status) {
+    toastr[`${status}`](message, `${status}`, {
+        closeButton: true,
+        tapToDismiss: false,
+        positionClass: 'toast-top-right',
+        rtl: false
+    });
+}
 
 
 const OpenEdit = (id) => {
@@ -641,7 +640,7 @@ const OpenEdit = (id) => {
                     $('#diameseddit').val(result.configreporte.diaMes);
                     $('#emailseddit').val(result.configreporte.emails);
                     $('#selecCampaniaEdit').val(result.campanium.nombre);
-                   
+
                     $('#modalEdit').modal('toggle');
                 } else {
                     console.error("Error: El objeto result no tiene la propiedad 'configreporte' definida.");
