@@ -6,7 +6,7 @@ $(function () {
     getMenu();
     Usuario();
     function validarDescripcion(descripcion) {
-        const descripcionValida = /^[a-zA-Z\s]+$/.test(descripcion.trim());
+        const descripcionValida = /^[a-zA-Z\sáéíóúAÉÍÓÚñÑ]+$/i.test(descripcion.trim()) || /^Campaña$/i.test(descripcion.trim());
 
         if (!descripcionValida) {
             $('.descripcion').addClass('is-invalid');
@@ -44,7 +44,7 @@ $(function () {
 
         var raw = JSON.stringify({
             "descripcion": $('#descripcion').val(),
-            "idMenu": $('#idMenu').val(),
+            "idMenu": $('#Menu').val(),
             "path": $('#path').val(),
             "icono": $('#Icono').val()
         });
@@ -251,16 +251,25 @@ const  getPaginas = () => {
                         return meta.row + 1;
                     }
                     return meta.row + 1;
+                 
                 }
             },
         
         
             { data: "descripcion" },
-            { data: "menu.descripcion" },
+            // { data: "menu.descripcion" },
+            {
+                data: null,
+                render: function (data, type, row) {
+                    return row.menu ? row.menu.descripcion : '';
+                }
+            },
                     //  { data: "path" },
+      
             {
                 data: "id", 
                 render: function (data) {
+                    console.log("menu.descripcion:", data);
                     return '<div class="btn-group">' +
                         '<a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">' +
                         feather.icons['more-vertical'].toSvg({ class: 'font-small-4' }) +
