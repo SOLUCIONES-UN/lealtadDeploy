@@ -262,3 +262,7 @@ textarea {
 
 
 
+.permisos-content-left {
+    max-height: 300px; /* Altura máxima del contenedor antes de que aparezca el scroll */
+    overflow-y: auto; /* Agrega un scroll vertical si el contenido excede la altura máxima */
+}
