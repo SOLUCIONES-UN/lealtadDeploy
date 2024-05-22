@@ -1,5 +1,6 @@
-const url = "http://localhost:3000/";
+const url = 'http://localhost:3000/'
 let token = localStorage.getItem("token");
+
 $(function () {
     let tabla = getPaginas();
     getMenu();
@@ -7,44 +8,39 @@ $(function () {
     function validarDescripcion(descripcion) {
         const descripcionValida = /^[a-zA-Z\sáéíóúAÉÍÓÚñÑ]+$/i.test(descripcion.trim()) || /^Campaña$/i.test(descripcion.trim());
 
-    if (!descripcionValida) {
-      $(".descripcion").addClass("is-invalid");
-      $(".descripcion-error")
-        .text(
-          "La descripción no admite caracteres especiales ni espacios en blanco"
-        )
-        .addClass("text-danger");
-      return false;
+        if (!descripcionValida) {
+            $('.descripcion').addClass('is-invalid');
+            $('.descripcion-error').text('La descripción no debe contener caracteres especiales, números ni espacios en blanco').addClass('text-danger');
+            return false;
+        }
+        return true;
     }
-    return true;
-  }
 
-  $("#modalNew, #modalEdit").on("show.bs.modal", function () {
-    $(".descripcion").removeClass("is-invalid");
-    $(".descripcion-error").empty().removeClass("text-danger");
-  });
 
-  $("#modalNew, #modalEdit").on("hidden.bs.modal", function () {
-    limpiarForm();
-  });
-
-  $("#modalNew, #modalEdit")
-    .find('[data-dismiss="modal"]')
-    .click(function () {
-      limpiarForm();
+    $('#modalNew, #modalEdit').on('show.bs.modal', function () {
+        $('.descripcion').removeClass('is-invalid');
+        $('.descripcion-error').empty().removeClass('text-danger');
     });
-  $("#formNew").submit(function () {
-    $("#btnSubmit").prop("disabled", true);
-    const descripcion = $("#descripcion").val();
-    const idMenu = $("#idMenu").val();
 
-    if (!validarDescripcion(descripcion)) {
-      return false;
-    }
+    $('#modalNew, #modalEdit').on('hidden.bs.modal', function () {
+        limpiarForm();
+    });
 
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Authorization", token);
+    $('#modalNew, #modalEdit').find('[data-dismiss="modal"]').click(function () {
+        limpiarForm();
+    });
+
+
+    //evento submit del formulario
+    $('#formNew').submit(function () {
+        const descripcion = $('#descripcion').val();
+
+        if (!validarDescripcion(descripcion)) {
+            return false;
+        }
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", token);
 
         var raw = JSON.stringify({
             "descripcion": $('#descripcion').val(),
@@ -53,89 +49,87 @@ $(function () {
             "icono": $('#Icono').val()
         });
 
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
 
-    fetch(`${url}Pagina`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        $("#btnSubmit").prop("disabled", false);
-        console.log("Resultado de la creación de la página:", result);
-        if (result.code == "ok") {
-          limpiarForm();
-          tabla._fnAjaxUpdate();
-          $("#modalNew").modal("toggle");
-          Alert(result.message, "success");
-        } else {
-          Alert(result.message, "error");
-        }
-      })
-      .catch((error) => {
-        Alert(error, "error");
-      });
-    return false;
-  });
-
-  $("#formEdit").submit(function () {
-    const descripcion = $("#descripcionEdit").val();
-
-    if (!validarDescripcion(descripcion)) {
-      return false;
-    }
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Authorization", token);
-
-    const id = $("#id").val();
-
-    var raw = JSON.stringify({
-      descripcion: $("#descripcionEdit").val(),
-
-      idMenu: $("#MenuEdith").val(),
+        fetch(`${url}Pagina`, requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                if (result.code == "ok") {
+                    limpiarForm();
+                    tabla._fnAjaxUpdate();
+                    $('#modalNew').modal('toggle');
+                    Alert(result.message, 'success')
+                } else {
+                    Alert(result.message, 'error')
+                }
+            })
+            .catch(error => { Alert(error.errors, 'error') });
+        return false;
     });
 
-    console.log(raw);
+    //eventos de edicion para un menu
+    $('#formEdit').submit(function () {
+        const descripcion = $('#descripcionEdit').val();
 
-    var requestOptions = {
-      method: "PUT",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
-
-    fetch(`${url}Pagina/${id}`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.code == "ok") {
-          limpiarForm();
-          tabla._fnAjaxUpdate();
-          $("#modalEdit").modal("toggle");
-          Alert(result.message, "success");
-        } else {
-          Alert(result.message, "error");
+        if (!validarDescripcion(descripcion)) {
+            return false;
         }
-      })
-      .catch((error) => {
-        Alert(error.errors, "error");
-      });
-    return false;
-  });
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", token);
 
-  $("#BtnDelete").click(function () {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Authorization", token);
+        const id = $('#id').val();
 
-    const id = $("#idDelete").val();
-    var requestOptions = {
-      method: "DELETE",
-      headers: myHeaders,
-      redirect: "follow",
-    };
+        var raw = JSON.stringify({
+            "descripcion": $('#descripcionEdit').val(),
+            "path": $('#PathEdit').val(),
+            "icono": $('#IconoEdith').val(),
+            "idMenu": $('#MenuEdith').val()
+        });
+
+        console.log(raw);
+
+        var requestOptions = {
+            method: 'PUT',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        fetch(`${url}Pagina/${id}`, requestOptions)
+            .then(response => response.json())
+            .then(result => {
+                if (result.code == "ok") {
+                    limpiarForm();
+                    tabla._fnAjaxUpdate();
+                    $('#modalEdit').modal('toggle');
+                    Alert(result.message, 'success')
+                } else {
+                    Alert(result.message, 'error')
+                }
+            })
+            .catch(error => { Alert(error.errors, 'error') });
+        return false;
+    });
+
+    //eventos para la inhabilitacion de un menu
+    $('#BtnDelete').click(function () {
+
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", token);
+
+        const id = $('#idDelete').val();
+        var requestOptions = {
+            method: 'DELETE',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
 
         fetch(`${url}Pagina/${id}`, requestOptions)
             .then(response => response.json())
@@ -328,68 +322,63 @@ const  getPaginas = () => {
 
 
 const getMenu = () => {
-  var requestOptions = {
-    method: "GET",
-    redirect: "follow",
-    headers: { Authorization: token },
-  };
 
-  fetch(`${url}Menu`, requestOptions)
-    .then((response) => response.json())
-    .then((result) => {
-      $("#idMenu").empty();
-      $("#MenuEdith").empty();
-      result.forEach((element) => {
-        var opc = `<option value="${element.id}">${element.descripcion}</option>`;
-        $("#idMenu").append(opc);
-        $("#MenuEdith").append(opc);
-        console.log("Opción agregada al menú:", element);
-      });
-    })
-    .catch((error) => console.log("error", error));
-};
+    var requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+        headers: { "Authorization": token }
+    };
 
-$(document).ready(function () {
-  getMenu();
-});
+    fetch(`${url}Menu`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            result.forEach(element => {
+                var opc = `<option value="${element.id}">${element.descripcion}</option>`;
+                $('#Menu').append(opc);
+                $('#MenuEdith').append(opc);
+            });
+        })
+        .catch(error => console.log('error', error))
+}
+
 
 const limpiarForm = () => {
-  $("#formNew").trigger("reset");
-  $("#descripcion").removeClass("is-invalid");
-  $("#descripcionError").empty().removeClass("text-danger");
-  $("#idMenu").val("");
-};
-
-const Alert = function (message, status) {
-  toastr[`${status}`](message, `${status}`, {
-    closeButton: true,
-    tapToDismiss: false,
-    positionClass: "toast-top-right",
-    rtl: false,
-  });
-};
+    $('#formNew').trigger("reset");
+    $('#descripcion').removeClass('is-invalid');
+    $('#descripcionError').empty().removeClass('text-danger');
+}
+const Alert = function (message, status) // si se proceso correctamente la solicitud
+{
+    toastr[`${status}`](message, `${status}`, {
+        closeButton: true,
+        tapToDismiss: false,
+        positionClass: 'toast-top-right',
+        rtl: false
+    });
+}
 
 const OpenEdit = (id) => {
-  var requestOptions = {
-    method: "GET",
-    redirect: "follow",
-    headers: { Authorization: token },
-  };
-  fetch(`${url}Pagina/${id}`, requestOptions)
-    .then((response) => response.json())
-    .then((result) => {
-      console.log(result);
-      $("#id").val(id);
-      $("#descripcionEdit").val(result.descripcion);
-      $("#MenuEdith").val(result.idMenu);
-      $("#PathEdit").val(result.path);
-      $("#IconoEdith").val(result.icono);
-      $("#modalEdit").modal("toggle");
-    })
-    .catch((error) => console.log("error", error));
-};
+    var requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+        headers: { "Authorization": token }
+    };
+
+    fetch(`${url}Pagina/${id}`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            console.log(result)
+            $('#id').val(id);
+            $('#descripcionEdit').val(result.descripcion);
+            $('#MenuEdith').val(result.idMenu)
+            $('#PathEdit').val(result.path);
+            $('#IconoEdith').val(result.icono);
+            $('#modalEdit').modal('toggle');
+        })
+        .catch(error => console.log('error', error));
+}
 
 const OpenDelete = (id) => {
-  $("#idDelete").val(id);
-  $("#modalDelete").modal("toggle");
-};
+    $('#idDelete').val(id);
+    $('#modalDelete').modal('toggle');
+}
