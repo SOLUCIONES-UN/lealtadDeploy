@@ -64,7 +64,7 @@
                     <li class="nav-item" style="margin-right: 20px;">
                         <div style="text-align: center; margin-left: 350px;">
                             <div><b style="font-size: 20px;">REPORTES AUTOMATICOS</b></div>
-                            <!-- <div><b>Notificaciones enviadas con links de OfferCraft</b></div> -->
+                            <div><b>Crea, consulta y envía reportes automáticos</b></div>
                         </div>
                     </li>
                 </ul>
@@ -169,7 +169,7 @@
                                 <option value="OfferCraft">OfferCraft</option>
                                 <option value="Referidos">Referidos</option>
                                 <option value="General">General</option>
-                                <option value="Promociones">Promociones</option>
+                                <!-- <option value="Promociones">Promociones</option> -->
                             </select>
                         </div>
 
@@ -221,7 +221,7 @@
                     <div class="form-group">
                         <label class="form-label" for="frecuencia">Seleccionar configuración</label>
                         <select class="form-control proyecto" id="frecuencia" name="frecuencia" onchange="mostrarOcultarSelectDia();" required>
-                        <option selected disabled>Selecciona una opción</option>
+                        <option selected disabled value="">Selecciona una configuración</option>
                         <option value="dia">Díario</option> 
                         <option value="semana">Semana</option>
                         <option value="mes">Mes</option>
@@ -254,11 +254,11 @@
                         <input id="id" type="hidden">
                         <label class="form-label" for="tiporeporte">Seleccionar Reporte</label>
                         <select type="text" class="form-control tiporeporte" id="tiporeporte" name="tiporeporte" required>
-              <option selected disabled>Selecciona una Opcion</option>
+              <option selected disabled value="">Selecciona Reporte</option>
                           <option value="OfferCraft">OfferCraft</option>
                           <option value="Referidos">Referidos</option>
                           <option value="General">General</option>
-                          <option value="Promociones">Promociones</option>
+                          <!-- <option value="Promociones">Promociones</option> -->
 
 
                           
@@ -336,7 +336,7 @@
                       <option value="OfferCraft">OfferCraft</option>
                       <option value="Referidos">Referidos</option>
                       <option value="General">General</option>
-                      <option value="Promociones">Promociones</option>
+                      <!-- <option value="Promociones">Promociones</option> -->
 
 
                       
@@ -345,7 +345,7 @@
                         <div id="proyectoEditError" class="invalid-feedback proyecto-error"></div>
                     </div>
                     <div class="form-group">
-                        <label class="form-label" for="selecCampaniaEdit">Campaña</label>
+                        <label class="form-label selecCampaniaEdit" for="selecCampaniaEdit">Campaña</label>
                         <select id="selecCampaniaEdit" multiple="multiple" name="selecCampaniaEdit" class="form-control">
         </select>
                         <div id="proyectoEditError" class="invalid-feedback proyecto-error"></div>
