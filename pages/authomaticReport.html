@@ -50,6 +50,7 @@
 <!-- BEGIN: Body-->
 
 <body class="vertical-layout vertical-menu-modern  navbar-floating footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="">
+
     <nav class="header-navbar navbar navbar-expand-lg align-items-center floating-nav navbar-light navbar-shadow container-xxl">
         <div class="navbar-container d-flex content">
             <div class="bookmark-wrapper d-flex align-items-center">
@@ -61,8 +62,8 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-nav">
-                    <li class="nav-item" style="margin-right: 20px;">
-                        <div style="text-align: center; margin-left: 350px;">
+                    <li class="nav-item">
+                        <div class="navbar-content">
                             <div><b style="font-size: 20px;">REPORTES AUTOMATICOS</b></div>
                             <div><b>Crea, consulta y envía reportes automáticos</b></div>
                         </div>
@@ -70,18 +71,29 @@
                 </ul>
             </div>
             <ul class="nav navbar-nav align-items-center ml-auto">
-                <li class="nav-item d-none d-lg-block"><a class="nav-link nav-link-style"><i class="ficon"
-              data-feather="moon"></i></a></li>
+                <li class="nav-item d-none d-lg-block">
+                    <a class="nav-link nav-link-style"><i class="ficon" data-feather="moon"></i></a>
+                </li>
                 <li class="nav-item dropdown dropdown-user">
                     <a class="nav-link dropdown-toggle dropdown-user-link" id="dropdown-user" href="javascript:void(0);" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <div class="user-nav d-sm-flex d-none"><span class="user-name font-weight-bolder">John Doe</span><span class="user-status">Admin</span></div><span class="avatar"><img class="round"
-                src="../../../app-assets/images/portrait/small/avatar-s-11.jpg" alt="avatar" height="40"
-                width="40"><span class="avatar-status-online"></span></span>
+                        <div class="user-nav d-sm-flex d-none">
+                            <span class="user-name font-weight-bolder">John Doe</span>
+                            <span class="user-status">Admin</span>
+                        </div>
+                        <span class="avatar">
+                            <img class="round" src="../../../app-assets/images/portrait/small/avatar-s-11.jpg" alt="avatar" height="40" width="40">
+                            <span class="avatar-status-online"></span>
+                        </span>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-user"><a class="dropdown-item" href="page-profile.html"><i class="mr-50" data-feather="user"></i> Profile</a><a class="dropdown-item" href="app-email.html"><i class="mr-50" data-feather="mail"></i> Inbox</a>
-                        <a class="dropdown-item" href="app-todo.html"><i class="mr-50" data-feather="check-square"></i> Task</a><a class="dropdown-item" href="app-chat.html"><i class="mr-50" data-feather="message-square"></i> Chats</a>
-                        <div class="dropdown-divider"></div><a class="dropdown-item" href="page-account-settings.html"><i
-                class="mr-50" data-feather="settings"></i> Settings</a><a class="dropdown-item" href="page-pricing.html"><i class="mr-50" data-feather="credit-card"></i> Pricing</a><a class="dropdown-item" href="page-faq.html"><i class="mr-50" data-feather="help-circle"></i> FAQ</a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-user">
+                        <a class="dropdown-item" href="page-profile.html"><i class="mr-50" data-feather="user"></i> Profile</a>
+                        <a class="dropdown-item" href="app-email.html"><i class="mr-50" data-feather="mail"></i> Inbox</a>
+                        <a class="dropdown-item" href="app-todo.html"><i class="mr-50" data-feather="check-square"></i> Task</a>
+                        <a class="dropdown-item" href="app-chat.html"><i class="mr-50" data-feather="message-square"></i> Chats</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="page-account-settings.html"><i class="mr-50" data-feather="settings"></i> Settings</a>
+                        <a class="dropdown-item" href="page-pricing.html"><i class="mr-50" data-feather="credit-card"></i> Pricing</a>
+                        <a class="dropdown-item" href="page-faq.html"><i class="mr-50" data-feather="help-circle"></i> FAQ</a>
                         <a class="dropdown-item" href="login.html"><i class="mr-50" data-feather="power"></i> Logout</a>
                     </div>
                 </li>
@@ -89,6 +101,9 @@
         </div>
     </nav>
 
+
+
+    
     <ul class="main-search-list-defaultlist-other-list d-none">
         <li class="auto-suggestion justify-content-between">
             <a class="d-flex align-items-center justify-content-between w-100 py-50">
@@ -215,13 +230,13 @@
             <form id="formNew" class="add-new-user modal-content pt-0" autocomplete="off">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
                 <div class="modal-header mb-1">
-                    <h5 class="modal-title" id="exampleModalLabel">Agregar configuracion de Reporte</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Agregar Reporte</h5>
                 </div>
                 <div class="modal-body flex-grow-1">
                     <div class="form-group">
                         <label class="form-label" for="frecuencia">Seleccionar configuración</label>
                         <select class="form-control proyecto" id="frecuencia" name="frecuencia" onchange="mostrarOcultarSelectDia();" required>
-                        <option selected disabled value="">Selecciona una configuración</option>
+                        <option selected disabled value="">Selecciona una Opcion</option>
                         <option value="dia">Díario</option> 
                         <option value="semana">Semana</option>
                         <option value="mes">Mes</option>
@@ -254,7 +269,7 @@
                         <input id="id" type="hidden">
                         <label class="form-label" for="tiporeporte">Seleccionar Reporte</label>
                         <select type="text" class="form-control tiporeporte" id="tiporeporte" name="tiporeporte" required>
-              <option selected disabled value="">Selecciona Reporte</option>
+              <option selected disabled value="">Selecciona una Opcion</option>
                           <option value="OfferCraft">OfferCraft</option>
                           <option value="Referidos">Referidos</option>
                           <option value="General">General</option>
@@ -274,7 +289,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="emails">Correo</label>
-                        <input type="text" class="form-control dt-full-name emails" id="emails" placeholder="correo" name="emails" aria-label="" aria-describedby="nombreError" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" />
+                        <input type="text" class="form-control dt-full-name emails" id="emails" placeholder="Ingrese un correo electronico" name="emails" aria-label="" aria-describedby="nombreError" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" />
                         <div id="nombreError" class="invalid-feedback nombre-error"></div>
                     </div>
                     <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>

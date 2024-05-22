@@ -266,3 +266,14 @@ textarea {
     max-height: 300px; /* Altura máxima del contenedor antes de que aparezca el scroll */
     overflow-y: auto; /* Agrega un scroll vertical si el contenido excede la altura máxima */
 }
+
+
+.navbar-content {
+	margin-left: 350px;
+	text-align: center;
+}
+@media (max-width: 768px) {
+	.navbar-content {
+		margin-left: 0;
+	}
+}
