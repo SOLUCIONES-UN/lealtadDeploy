@@ -9,12 +9,14 @@ $(function() {
     $("#btnDescargarExcel, #PantallaInfo").hide();
     $('#selecCampania').multipleSelect({
         filter: true,
-        selectAll: true,
+        // selectAll: true,
+        single: true,
         placeholder: "Elige una campaña",
     });
     $('#selecCampaniaEdit').multipleSelect({
         filter: true,
-        selectAll: true,
+        // selectAll: false,
+        single: true,
         placeholder: "Elige una campaña",
     });
 
