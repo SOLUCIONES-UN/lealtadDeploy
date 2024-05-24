@@ -13,12 +13,29 @@ $(function() {
         if (fecha1 !== '' && fecha2 !== '') {
             getParticipacionesFechasGeneral(fecha1, fecha2);
         } else {
-            console.error('Por favor, ingresa ambas fechas.');
+            console.error('Por favor, ingresa ambas fechas.','warning');
         }
     });
     
 
 });
+
+
+function validarFechas() {
+    const fecha1 = document.getElementById('fecha1').value;
+    const fecha2 = document.getElementById('fecha2').value;
+
+    if (fecha1 >= fecha2) {
+        Alert('La fecha fin debe ser mayor a la fecha inicio ','error');
+    }
+}
+
+// no se escucha el onchange por que se levanta la alerta cada vez que hay un cambio en los campos de fecha, por eso mejor se escucha el evento blur
+
+window.onload = function() {
+    document.getElementById('fecha1').addEventListener('blur', validarFechas);
+    document.getElementById('fecha2').addEventListener('blur', validarFechas);
+}
 
 
 
@@ -88,6 +105,18 @@ const mostrarDatosEnTabla = (datos) => {
         },
     });
 };
+
+
+
+
+const Alert = function(message, status) {
+    toastr[`${status}`](message, `${status}`, {
+        closeButton: true,
+        tapToDismiss: false,
+        positionClass: 'toast-top-right',
+        rtl: false
+    });
+}
 
 
 

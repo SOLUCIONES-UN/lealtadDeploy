@@ -9,8 +9,8 @@ $(function() {
     $("#btnDescargarExcel, #PantallaInfo").hide();
     $('#selecCampania').multipleSelect({
         filter: true,
-        // selectAll: true,
-        single: true,
+        selectAll: false,
+        // single: true,
         placeholder: "Elige una campaña",
     });
     $('#selecCampaniaEdit').multipleSelect({

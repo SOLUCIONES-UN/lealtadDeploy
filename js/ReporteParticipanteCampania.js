@@ -13,6 +13,13 @@ $(function () {
       placeholder: "",
     });
   
+    
+
+
+
+
+
+
     getCampaniasActivas();
   
     $("#btnConsultar").click(function () {
@@ -75,6 +82,26 @@ $(function () {
         alert("Error al obtener campañas.");
       });
   };
+
+
+  function validarFechas() {
+    const FechaInicio = document.getElementById('FechaInicio').value;
+    const FechaFin = document.getElementById('FechaFin').value;
+  
+    if (FechaInicio >= FechaFin) {
+        Alert('La fecha Fin debe ser mayor a la fecha inicio','error');
+    }
+  }
+  
+  window.onload = function() {
+    document.getElementById('FechaInicio').addEventListener('blur', validarFechas);
+    document.getElementById('FechaFin').addEventListener('blur', validarFechas);
+  }
+  
+
+
+
+
   
   const getReport = () => {
     var myHeaders = new Headers();
@@ -117,6 +144,22 @@ $(function () {
         alert("Error al obtener reporte de referidos.");
       });
   };
+
+
+
+
+  
+const Alert = function(message, status) {
+  toastr[`${status}`](message, `${status}`, {
+      closeButton: true,
+      tapToDismiss: false,
+      positionClass: 'toast-top-right',
+      rtl: false
+  });
+}
+
+
+
   
   function mostrarDatosEnTabla(participantesCamp, infoCustom) {
     console.log("Datos para mostrar en la tabla:", participantesCamp, infoCustom);
