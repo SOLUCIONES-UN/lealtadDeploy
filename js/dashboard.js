@@ -5,7 +5,7 @@ const token = localStorage.getItem("token");
 
 $(function () {
   $('#datosGrafica').hide();
-  
+  getparticipantes();
   getAllCountCoustomeName();
   getAllSumValor();
   getTransaccion();
@@ -438,54 +438,56 @@ function displayNumTransaccion(numTransaccion) {
 
 
 
-// function displayNumTransaccion(numPromociones) {
-//   const numPromocionesElement = document.getElementById(
-//     "num-Transacciones-last-week"
-//   );
-//   numPromocionesElement.textContent = numPromociones;
-// };
 
-// function getAllTransaccionesActivasLastWeek() {
-//   const token = localStorage.getItem("token");
-//   const today = new Date();
-//   const lastWeekStart = new Date(
-//     today.getFullYear(),
-//     today.getMonth(),
-//     today.getDate() - 6
-//   );
-//   const lastWeekEnd = new Date(
-//     today.getFullYear(),
-//     today.getMonth(),
-//     today.getDate()
-//   );
+const getparticipantes = () => {
+  const headers = {
+    Authorization: token,
+    "Content-Type": "application/json",
+  };
 
-//   const headers = {
-//     Authorization: token,
-//     "Content-Type": "application/json",
-//   };
-
-//   var requestOptions = {
-//     method: "GET",
-//     headers: headers,
-//     redirect: "follow",
-//   };
-
-//   fetch(`${url}Transaccion`, requestOptions)
-//     .then((response) => response.json())
-//     .then((result) => {
-//       const transaccionesActivasLastWeek = result.filter(
-//         (transaccion) =>
-//           transaccion.estado === 1 &&
-//           new Date(transaccion.fechaCreacion) >= lastWeekStart &&
-//           new Date(transaccion.fechaCreacion) <= lastWeekEnd
-//       );
-//       console.log(
-//         "Transacciones activas de la última semana:",
-//         transaccionesActivasLastWeek, 'aqui bienen las transacciones '
-//       );
-//       displayTransaccionesLastWeek(transaccionesActivasLastWeek.length);
-//     })
-//     .catch((error) => console.log("error", error));
-// };
-
-
+  return $('#tableData').dataTable({
+    ajax: {
+      url: `${url}Participante`,
+      type: "GET",
+      datatype: "json",
+      dataSrc: function(json) {
+        console.log('Datos recibidos del servidor:', json); // Inspecciona los datos recibidos
+        if (json && Array.isArray(json)) {
+          return json;
+        } else {
+          console.error('La respuesta no es un array:', json);
+          return [];
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error('Error en la solicitud Ajax:', status, error);
+        console.error('Respuesta del servidor:', xhr.responseText);
+      },
+      headers: headers
+    },
+    columns: [
+      { data: null, render: function (data, type, row, meta) {
+        if (type === 'display') {
+          return meta.row + 1;
+        }
+        return meta.row + 1;
+      }},
+      { data: "id" },
+      { data: "campanium.nombre" }, // Nombre de la campaña
+       // Fecha de creación de la campaña
+      {
+        data: "campanium.fechaCreacion" 
+        
+      }
+    ],
+    dom:
+      '<"d-flex justify-content-between align-items-center header-actions mx-1 row mt-75"' +
+      '<"col-lg-12 col-xl-6" l>' +
+      '<"col-lg-12 col-xl-6 pl-xl-75 pl-0"<"dt-action-buttons text-xl-right text-lg-left text-md-right text-left d-flex align-items-center justify-content-lg-end align-items-center flex-sm-nowrap flex-wrap mr-1"<"mr-1"f>B>>' +
+      '>t' +
+      '<"d-flex justify-content-between mx-2 row mb-1"' +
+      '<"col-sm-12 col-md-6"i>' +
+      '<"col-sm-12 col-md-6"p>' +
+      '>',
+  });
+}

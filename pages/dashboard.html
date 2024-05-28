@@ -279,13 +279,6 @@
                                                 <h4 class="card-title">Resumen</h4>
                                                 <h2 class="fw-bolder mb-25"> <span id="Transaccion"></span></h2>
                                                 <p class="card-text fw-bold mb-2">Transacciones</p>
-                                                <div class="font-medium-2">
-                                                    <span class="text-success me-25">+1.2%</span>
-                                                    <span>última semana</span>
-                                                </div>
-                                                
-                                                <button id="ver-detalles-btn" type="button" class="btn btn-primary">Ver Detalles</button>
-                                               
                                             </div>
                                         </div>
                                         <div
@@ -392,13 +385,6 @@
                                             <div class="mb-1 mb-sm-0">
                                                 <h2 class="fw-bolder mb-25">122</h2>
                                                 <p class="card-text fw-bold mb-2">Clientes</p>
-                                                <div class="font-medium-2">
-                                                    <span class="text-success me-25">+1.2%</span>
-                                                    <span>última semana</span>
-                                                </div>
-                                                
-                                                <button id="ver-detalles-btn" type="button" class="btn btn-primary">Ver Detalles</button>
-                                               
                                             </div>
                                         </div>
                                         <div
@@ -482,7 +468,7 @@
                                 
                                 </div>
                                 <div class="table-responsive custom-scroll" > 
-                                <table class="table table-striped">
+                                <table class="table table-striped" id="tableData">
                                   <thead>
                                     <tr>
                                       <th>No.</th>
@@ -492,27 +478,6 @@
                                     </tr>
                                   </thead>
                                   <tbody id="topUsuariosParticipantes">
-                                    <tr><td>1</td><td>Bryan García  (50230349689)</td><td>Prueba de campana acumulativa</td><td>26/01/2024</td></tr>
-                                
-                                    <tr><td>2</td><td>Bryan García  (50230349689)</td><td>Test 05 </td><td>26/01/2024</td></tr>
-                                
-                                    <tr><td>3</td><td>Bryan García  (50230349689)</td><td>Test 05 </td><td>26/01/2024</td></tr>
-                                
-                                    <tr><td>4</td><td>Bryan García  (50230349689)</td><td>Test 05 </td><td>26/01/2024</td></tr>
-                                
-                                    <tr><td>5</td><td>Bryan García  (50230349689)</td><td>Te devolvemos Q5.00 al pagar con tu billetera akisi</td><td>26/01/2024</td></tr>
-                                
-                                    <tr><td>6</td><td>Bryan García  (50230349689)</td><td>Test 04 acumulativa</td><td>26/01/2024</td></tr>
-                                
-                                    <tr><td>7</td><td>Bryan García  (50230349689)</td><td>Te devolvemos Q5.00 al pagar con tu billetera akisi</td><td>26/01/2024</td></tr>
-                                
-                                    <tr><td>8</td><td>Bryan García  (50230349689)</td><td>test02</td><td>26/01/2024</td></tr>
-                                
-                                    <tr><td>9</td><td>Bryan García  (50230349689)</td><td>Test 03</td><td>26/01/2024</td></tr>
-                                
-                                    <tr><td>10</td><td>Bryan García  (50230349689)</td><td>Te devolvemos Q5.00 al pagar con tu billetera akisi</td><td>26/01/2024</td></tr>
-
-                                    <tr><td>11</td><td>Bryan García  (50230349689)</td><td>Te devolvemos Q5.00 al pagar con tu billetera akisi</td><td>26/01/2024</td></tr>
                                 </tbody>
                                 </table>
                               </div>
@@ -733,6 +698,11 @@
     <!-- BEGIN Vendor JS-->
 
     <!-- BEGIN: Page Vendor JS-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+
+
     <script src="../app-assets/vendors/js/extensions/moment.min.js"></script>
     <script src="../app-assets/vendors/js/tables/ag-grid/ag-grid-community.min.noStyle.js"></script>
     <!-- END: Page Vendor JS-->
