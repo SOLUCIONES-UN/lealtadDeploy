@@ -223,25 +223,6 @@ $(function () {
   });
 });
 
-// const Usuario = () => {
-
-//     let usuario = JSON.parse(sessionStorage.getItem('infoUsuario'));
-//     console.log(usuario.nombre)
-//     $('.user-name').text(usuario.nombre);
-//     $('.user-status').text(usuario.rol.descripcion);
-// }
-
-// const Usuario = () => {
-//     let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
-//     if (usuario !== null && usuario.username !== null) {
-//         console.log(usuario.username);
-//         $('.user-name').text(usuario.nombre);
-//         $('.user-status').text(usuario.rol.descripcion);
-//     } else {
-//         console.log('El objeto de usuario o su propiedad "nombre" es null.');
-//         // Aquí puedes manejar el caso en el que el objeto de usuario o su propiedad "nombre" sean null
-//     }
-// }
 
 function limpiarFormulario() {
   $("#tipoTransaccion").val("0");
@@ -271,43 +252,41 @@ const getPremios = () => {
           }
         },
       },
-      {
-        data: "tipo",
-        render: function (data) {
-          if (data == 1) {
-            return "Transaccion";
-          } else if (data == 2) {
-            return "OfertCraft";
-          }
-        },
-      },
-      {
+    //   {
+    //     data: "tipo",
+    //     render: function (data) {
+    //       if (data == 1) {
+    //         return "Transaccion";
+    //       } else if (data == 2) {
+    //         return "OfertCraft";
+    //       }
+    //     },
+    //   },
+     
+    {
         data: "id",
         render: function (data) {
-          return `
-              <div class="btn-group">
-                <a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">
-                    ${feather.icons["more-vertical"].toSvg({
-                      class: "font-small-4",
-                    })}
-                </a>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <a href="#" onclick="OpenEdit(${data})" class="btn_edit dropdown-item">
-                        ${feather.icons["archive"].toSvg({
-                          class: "font-small-4 mr-50",
-                        })} Actualizar
-                    </a>
-                
-                <div class="dropdown-menu dropdown-menu-right">
-                    <a href="#" onclick="OpenDelete(${data})" class="btn_delete dropdown-item">
-                      ${feather.icons["trash-2"].toSvg({
-                        class: "font-small-4 mr-50",
-                      })} Inhabilitar
-                    </a>
-                </div>
-                </div>
-              </div> 
-            `;
+            return (
+                '<div class="btn-group">' +
+                '<a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">' +
+                feather.icons["more-vertical"].toSvg({ class: "font-small-4" }) +
+                "</a>" +
+                '<div class="dropdown-menu dropdown-menu-right">' +
+                '<a href="#" onclick="OpenEdit(' +
+                data +
+                ')" class="btn_edit dropdown-item">' +
+                feather.icons["archive"].toSvg({ class: "font-small-4 mr-50" }) +
+                " Actualizar" +
+                "</a>" +
+                '<a href="#" onclick="OpenDelete(' +
+                data +
+                ')" class="btn_delete dropdown-item">' +
+                feather.icons["trash-2"].toSvg({ class: "font-small-4 mr-50" }) +
+                " Inhabilitar" +
+                "</a>" +
+                "</div>" +
+                "</div>"
+              );
         },
       },
     ],
