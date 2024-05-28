@@ -1,10 +1,11 @@
-let usuarioDashboardDashboard = JSON.parse(localStorage.getItem("infousuarioDashboard"));
-
+let usuarioDashboardDashboard = JSON.parse(
+  localStorage.getItem("infousuarioDashboard")
+);
 
 const token = localStorage.getItem("token");
 
 $(function () {
-  $('#datosGrafica').hide();
+  $("#datosGrafica").hide();
   getparticipantes();
   getAllCountCoustomeName();
   getAllSumValor();
@@ -16,10 +17,6 @@ $(function () {
   getAllCampanasActivas();
   // mostrarGraficaCampañas();
 });
-
-
-
-
 
 const cerrarModalBtn = document.getElementById("cerrar-modal-btn");
 
@@ -34,7 +31,7 @@ const cerrarModalBtn = document.getElementById("cerrar-modal-btn");
 function displayNumCampanas(numCampanas) {
   const numCampanasElement = document.getElementById("num-campanas");
   numCampanasElement.textContent = numCampanas;
-};
+}
 
 function getAllCampanasActivas() {
   const token = localStorage.getItem("token");
@@ -53,8 +50,7 @@ function getAllCampanasActivas() {
   fetch(`${url}Campania`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
-
-      console.log('\n\n\n\n Datos campania ' + result + "\n\n\n\n");
+      console.log("\n\n\n\n Datos campania " + result + "\n\n\n\n");
       const campanasActivas = result.filter((campana) => campana.estado === 1);
       const fechaActual = new Date();
       const datosCampañas = campanasActivas.map((campana) => {
@@ -64,8 +60,8 @@ function getAllCampanasActivas() {
         console.log("FECHA FIN ES " + campana.fechaFin);
 
         const año = fechaActual.getFullYear();
-        const mes = (fechaActual.getMonth() + 1).toString().padStart(2, '0');
-        const día = fechaActual.getDate().toString().padStart(2, '0');
+        const mes = (fechaActual.getMonth() + 1).toString().padStart(2, "0");
+        const día = fechaActual.getDate().toString().padStart(2, "0");
 
         const fechaFormateada = `${año}-${mes}-${día}`;
 
@@ -78,9 +74,12 @@ function getAllCampanasActivas() {
         const fechaActualizada = new Date(fechaFormateada);
 
         console.log("FECHA INICIAL ANTES DE CALCULAR " + fechaInicial);
-        console.log("FECHA fechaActualizada ANTES DE CALCULAR " + fechaActualizada);
+        console.log(
+          "FECHA fechaActualizada ANTES DE CALCULAR " + fechaActualizada
+        );
 
-        const diferenciaMs = fechaActualizada.getTime() - fechaInicial.getTime();
+        const diferenciaMs =
+          fechaActualizada.getTime() - fechaInicial.getTime();
 
         const diferenciaDias = Math.ceil(diferenciaMs / (1000 * 60 * 60 * 24));
 
@@ -91,7 +90,6 @@ function getAllCampanasActivas() {
           diasRestantes: diferenciaDias,
           fechaVencimiento: fechaFin.toLocaleDateString(),
         };
-
       });
       displayCampanas(datosCampañas);
       displayNumCampanas(campanasActivas.length);
@@ -114,22 +112,22 @@ function displayCampanas(campanas) {
     console.log("LOS DIAS SON " + campana.diasRestantes);
 
     // Agregar clases de estilo según el número de días restantes
-    if (campana.diasRestantes>=10 || campana.diasRestantes <=10 && campana.diasRestantes>5) {
+    if (
+      campana.diasRestantes >= 10 ||
+      (campana.diasRestantes <= 10 && campana.diasRestantes > 5)
+    ) {
       celdaDiasRestantes.classList.add("verde");
-
-    }else if(campana.diasRestantes <=5 && campana.diasRestantes >2){
+    } else if (campana.diasRestantes <= 5 && campana.diasRestantes > 2) {
       celdaDiasRestantes.classList.add("amarillo");
-
-    }else if(campana.diasRestantes <= 2){
+    } else if (campana.diasRestantes <= 2) {
       celdaDiasRestantes.classList.add("rojo");
     }
-
   });
 }
 function displayNumReferidos(numReferidos) {
   const numReferidosElement = document.getElementById("num-referidos");
   numReferidosElement.textContent = numReferidos;
-};
+}
 
 // Función para obtener y mostrar todas las participaciones activas
 function getAllParticipaciones() {
@@ -150,11 +148,10 @@ function getAllParticipaciones() {
       console.log("Data de participaciones:", result);
     })
     .catch((error) => console.log("Error al obtener participaciones:", error));
-};
-
+}
 
 function getAllCountCoustomeName() {
-  console.log('\n\n\n\n\n\n Estoy dentro de la funcion Count \n\n\n\n')
+  console.log("\n\n\n\n\n\n Estoy dentro de la funcion Count \n\n\n\n");
   const headers = {
     Authorization: `Bearer ${token}`,
     "Content-Type": "application/json",
@@ -164,19 +161,20 @@ function getAllCountCoustomeName() {
     method: "GET",
     headers: headers,
   };
-
 
   fetch(`${url}Participacion/count`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
       console.log("Data de count:", result);
-      $('#clientesCount').text(result.totalParticipacions);
+      $("#clientesCount").text(result.totalParticipacions);
     })
-    .catch((error) => console.log("Error al obtener la cantidad de clientes:", error));
-};
+    .catch((error) =>
+      console.log("Error al obtener la cantidad de clientes:", error)
+    );
+}
 
 function getAllSumValor() {
-  console.log('\n\n\n\n\n\n Estoy dentro de la funcion Sum \n\n\n\n')
+  console.log("\n\n\n\n\n\n Estoy dentro de la funcion Sum \n\n\n\n");
   const headers = {
     Authorization: `Bearer ${token}`,
     "Content-Type": "application/json",
@@ -187,23 +185,20 @@ function getAllSumValor() {
     headers: headers,
   };
 
-
   fetch(`${url}Participacion/sumarvalor`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
       console.log("Data de count:", result);
-      $('#sumaValor').text("Q " + parseFloat(result.total).toFixed(2));
+      $("#sumaValor").text("Q " + parseFloat(result.total).toFixed(2));
     })
-    .catch((error) => console.log("Error al obtener el total de beneficios:", error));
-};
-
-
-
-
+    .catch((error) =>
+      console.log("Error al obtener el total de beneficios:", error)
+    );
+}
 
 //transacciones
 function getTransaccion() {
-  console.log('transaccion de backend')
+  console.log("transaccion de backend");
   const headers = {
     Authorization: token,
     "Content-Type": "application/json",
@@ -213,25 +208,22 @@ function getTransaccion() {
     method: "GET",
     headers: headers,
   };
-
 
   fetch(`${url}Transaccion/count`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
       console.log("Data de count:", result);
-      $('#Transaccion').text(result.cantidad);
+      $("#Transaccion").text(result.cantidad);
     })
-    .catch((error) => console.log("Error al obtener el total de beneficios:", error));
-};
-
-
+    .catch((error) =>
+      console.log("Error al obtener el total de beneficios:", error)
+    );
+}
 
 //referidos
 
-
-
 function getReferidos() {
-  console.log('transaccion de backend')
+  console.log("transaccion de backend");
   const headers = {
     Authorization: token,
     "Content-Type": "application/json",
@@ -242,28 +234,21 @@ function getReferidos() {
     headers: headers,
   };
 
-
   fetch(`${url}referidosIngresos/count`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
       console.log("Data de count referidos:", result);
-      $('#Teferidos').text(result.cantidad);
+      $("#Teferidos").text(result.cantidad);
     })
-    .catch((error) => console.log("Error al obtener el total de beneficios:", error));
-};
-
-
-
-
-
-
+    .catch((error) =>
+      console.log("Error al obtener el total de beneficios:", error)
+    );
+}
 
 function displayNumPromociones(numPromociones) {
   const numPromocionesElement = document.getElementById("num-promociones");
   numPromocionesElement.textContent = numPromociones;
-};
-
-
+}
 
 function getAllPromocionesActivas() {
   const token = localStorage.getItem("token");
@@ -279,7 +264,6 @@ function getAllPromocionesActivas() {
     redirect: "follow",
   };
 
-
   fetch(`${url}Promocion`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
@@ -290,12 +274,12 @@ function getAllPromocionesActivas() {
       displayNumPromociones(promocionesActivas.length);
     })
     .catch((error) => console.log("error", error));
-};
+}
 
 function displayNumCampanasLastWeek(numCampanas) {
   const numCampanasElement = document.getElementById("num-campanas-last-week");
   numCampanasElement.textContent = numCampanas;
-};
+}
 
 function getAllCampanasActivasLastWeek() {
   const token = localStorage.getItem("token");
@@ -340,13 +324,12 @@ function getAllCampanasActivasLastWeek() {
     .catch((error) => console.log("error", error));
 }
 
-
 function displayNumPromocionesLastWeek(numPromociones) {
   const numPromocionesElement = document.getElementById(
     "num-promociones-last-week"
   );
   numPromocionesElement.textContent = numPromociones;
-};
+}
 
 function getAllPromocionesActivasLastWeek() {
   const token = localStorage.getItem("token");
@@ -389,14 +372,7 @@ function getAllPromocionesActivasLastWeek() {
       displayNumPromocionesLastWeek(promocionesActivasLastWeek.length);
     })
     .catch((error) => console.log("error", error));
-};
-
-
-
-
-
-
-
+}
 
 function getAllTransaccionesActivas() {
   const token = localStorage.getItem("token");
@@ -412,32 +388,22 @@ function getAllTransaccionesActivas() {
     redirect: "follow",
   };
 
-
   fetch(`${url}Transaccion`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
       const transaccionActivas = result.filter(
         (transaccion) => transaccion.estado === 1
       );
-      console.log('esto traebn las transacciones',transaccionActivas);
+      console.log("esto traebn las transacciones", transaccionActivas);
       displayNumTransaccion(transaccionActivas.length);
     })
     .catch((error) => console.log("error", error));
-};
-
-
-
+}
 
 function displayNumTransaccion(numTransaccion) {
   const numTransaccionElement = document.getElementById("num-Transacciones");
   numTransaccionElement.textContent = numTransaccion;
-};
-
-
-
-
-
-
+}
 
 const getparticipantes = () => {
   const headers = {
@@ -445,49 +411,51 @@ const getparticipantes = () => {
     "Content-Type": "application/json",
   };
 
-  return $('#tableData').dataTable({
+  return $("#tableData").dataTable({
     ajax: {
       url: `${url}Participante`,
       type: "GET",
       datatype: "json",
-      dataSrc: function(json) {
-        console.log('Datos recibidos del servidor:', json); // Inspecciona los datos recibidos
+      dataSrc: function (json) {
+        console.log("Datos recibidos del servidor:", json); // Inspecciona los datos recibidos
         if (json && Array.isArray(json)) {
           return json;
         } else {
-          console.error('La respuesta no es un array:', json);
+          console.error("La respuesta no es un array:", json);
           return [];
         }
       },
-      error: function(xhr, status, error) {
-        console.error('Error en la solicitud Ajax:', status, error);
-        console.error('Respuesta del servidor:', xhr.responseText);
+      error: function (xhr, status, error) {
+        console.error("Error en la solicitud Ajax:", status, error);
+        console.error("Respuesta del servidor:", xhr.responseText);
       },
-      headers: headers
+      headers: headers,
     },
     columns: [
-      { data: null, render: function (data, type, row, meta) {
-        if (type === 'display') {
+      {
+        data: null,
+        render: function (data, type, row, meta) {
+          if (type === "display") {
+            return meta.row + 1;
+          }
           return meta.row + 1;
-        }
-        return meta.row + 1;
-      }},
+        },
+      },
       { data: "id" },
       { data: "campanium.nombre" }, // Nombre de la campaña
-       // Fecha de creación de la campaña
+      // Fecha de creación de la campaña
       {
-        data: "campanium.fechaCreacion" 
-        
-      }
+        data: "campanium.fechaCreacion",
+      },
     ],
     dom:
       '<"d-flex justify-content-between align-items-center header-actions mx-1 row mt-75"' +
       '<"col-lg-12 col-xl-6" l>' +
       '<"col-lg-12 col-xl-6 pl-xl-75 pl-0"<"dt-action-buttons text-xl-right text-lg-left text-md-right text-left d-flex align-items-center justify-content-lg-end align-items-center flex-sm-nowrap flex-wrap mr-1"<"mr-1"f>B>>' +
-      '>t' +
+      ">t" +
       '<"d-flex justify-content-between mx-2 row mb-1"' +
       '<"col-sm-12 col-md-6"i>' +
       '<"col-sm-12 col-md-6"p>' +
-      '>',
+      ">",
   });
-}
+};
