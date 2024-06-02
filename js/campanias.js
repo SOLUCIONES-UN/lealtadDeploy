@@ -158,6 +158,7 @@ $(function () {
       etapas: getEtapasData(),
       bloqueados: bloqueadosUsuarios,
       participacion: permitidoUsuario,
+      emails: $('#emails').val(),
     });
 
     console.log(raw);
@@ -170,24 +171,30 @@ $(function () {
     };
 
     fetch(`${url}Campania`, requestOptions)
-      .then((response) => response.json())
-      .then((result) => {
+      .then(response => response.json())
+      .then(result => {
         if (result.code == "ok") {
+          actualStep = 0;
+          initStepper();
           limpiarFormulario();
           getAllCampanias();
-          $("#modalNew").modal("toggle"); // Mover esta línea aquí
-          Alert(result.message, "success");
+          $('#modalNew').modal('toggle'); // Mover esta línea aquí
+          Alert(result.message, 'success');
           console.log(result);
         } else {
           console.log("Verifica datos");
           Alert(result.message, "error");
         }
       })
-      .catch((error) => {
-        Alert(error.errors, "error");
-      });
+      .catch(error => { Alert(error.errors, 'error') });
     return false;
   });
+
+
+
+
+
+
 
   $("#formEdit").submit(function () {
     console.log("entro a el form edit");
@@ -228,6 +235,7 @@ $(function () {
       etapas: dataEditEtapa,
       bloqueados: bloqueadosUsuarios,
       participacion: permitidoUsuario,
+      emails: $('#emailsEdit').val(),
     });
 
     console.log(raw, "raw");
@@ -293,10 +301,18 @@ $(function () {
 
 //Funcion del stepper
 function initStepper() {
+  // Reiniciar el estado al inicio de la función
   actualStep = 0;
-  var steps = $("#stepper").children(); // Obtener todos los elementos hijos del contenedor #stepper
-  var totalSteps = steps.length;
+  var steps = $('#stepper').children();
+  steps.hide();
   DataEtapa = [];
+  TEMP = [];
+  datosTablaParametro = [];
+  datosTablaLocalidad = [];
+  datosTablaPremio = [];
+  nombresMunicipios = {};
+  // $('#stepper .step:not(:first)').remove();
+  var totalSteps = steps.length;
   var visitedSteps = [];
   const containerBloqueo = document.querySelector("#Bloqueo");
   containerBloqueo.style.display = "none";
@@ -399,10 +415,10 @@ function initStepper() {
   $("#tipoParticipacion").change(function () {
     var tipoSeleccionado = $(this).val();
 
-    // Ocultar todos los inputs
+  
     $("#inputsContainer > div").hide();
 
-    // Mostrar los inputs correspondientes al tipo seleccionado
+
     if (tipoSeleccionado === "2" || tipoSeleccionado === "3") {
       $("#inputsTipo0").show();
     } else if (tipoSeleccionado === "4") {
@@ -410,22 +426,61 @@ function initStepper() {
     }
   });
 
-  // Stepp de los parametros de la campaña segun esta una etapa
-  $("#add-step-btn").click(function () {
-    var NombreEtapa = $("#NombreEtapa").val();
-    var orden = $("#orden").val();
-    var descripcionEtapa = $("#descripcionEtapa").val();
-    var tipoParticipacion = $("#tipoParticipacion").val();
-    var intervalo = parseInt($("#intervalo").val());
-    var rangoTiempo = parseInt($("#RangoTiempo").val());
-    var minimoTransaccion = parseFloat($("minimoTransaccion").val());
-    var TotalMinimo = parseFloat($("#totalMinimo").val());
+    $(document).ready(function() {
+      $('#RangoTiempo').change(function() {
+          $('#intervaloDiarioDiv').hide();
+          $('#intervaloSemanalDiv').hide();
+          $('#intervaloMensualDiv').hide();
+          $('#diasResultadoDiv').hide();
 
-    if (validarCamposStep(actualStep)) {
-      getDepartamento();
-      getTransaccion();
-      getPremio();
-      addStep(`<div class="form-step ">
+          var rangoTiempo = $(this).val();
+          if (rangoTiempo === '0') {
+              $('#intervaloDiarioDiv').show();
+          } else if (rangoTiempo === '1') {
+              $('#intervaloSemanalDiv').show();
+          } else if (rangoTiempo === '2') {
+              $('#intervaloMensualDiv').show();
+          }
+      });
+
+      $('#intervaloSemanal').on('input', function() {
+          var semanas = $(this).val();
+          var dias = semanas * 7;
+          console.log("Días semanales:", dias);
+          $('#diasResultado').val(dias);
+          $('#diasResultadoDiv').show();
+          $('#intervalo').val(dias);
+      });
+
+      $('#intervaloMensual').on('input', function() {
+          var meses = $(this).val();
+          var dias = meses * 30;
+          console.log("Días mensuales:", dias);
+          $('#diasResultado').val(dias);
+          $('#diasResultadoDiv').show();
+          $('#intervalo').val(dias); 
+      });
+
+      $('#RangoTiempo').trigger('change');
+
+      $('#add-step-btn').click(function() {
+          var NombreEtapa = $('#NombreEtapa').val();
+          var orden = $('#orden').val();
+          var descripcionEtapa = $('#descripcionEtapa').val();
+          var tipoParticipacion = $('#tipoParticipacion').val();
+          var intervalo = $('#intervalo').val();
+          var intervaloSemanal = $('#intervaloSemanal').val();
+          var intervaloMensual = $('#intervaloMensual').val();
+          var rangoTiempo = $('#RangoTiempo').val();
+          var minimoTransaccion = parseFloat($('#minimoTransaccion').val());
+          var TotalMinimo = parseFloat($('#totalMinimo').val());
+          
+
+      if(validarCamposStep(actualStep)){
+        getDepartamento();
+        getTransaccion();
+        getPremio();
+        addStep(`<div class="form-step ">
         <div class="content-header mt-2 mb-1">
             <h4 class="mb-0">Configuración de Parametros de Etapa</h4>
             <small class="text-muted">Ingresa los datos basicos de la Campaña.</small>
@@ -605,33 +660,41 @@ function initStepper() {
             </div>
           </div>`);
 
-      var nuevo = {
-        nombre: NombreEtapa,
-        descripcion: descripcionEtapa,
-        orden: orden,
-        tipoParticipacion: tipoParticipacion,
-        intervalo: intervalo,
-        periodo: rangoTiempo,
-        valorAcumulado: null,
-        minimoTransaccion: minimoTransaccion,
-        totalMinimo: TotalMinimo,
-        estado: 1,
-      };
-      TEMP.push(nuevo);
-      //muestraEtapa.push(TEMP)
+        var nuevo ={
+          nombre: NombreEtapa,
+          descripcion: descripcionEtapa,
+          orden: orden,
+          tipoParticipacion: tipoParticipacion,
+          intervalo: intervalo,
+          intervaloSemanal: intervaloSemanal,
+          intervaloMensual: intervaloMensual,
+          periodo: rangoTiempo,
+          valorAcumulado: null,
+          minimoTransaccion: minimoTransaccion,
+          totalMinimo: TotalMinimo,
+          estado: 1,
+        }
+        TEMP.push(nuevo);
+        //muestraEtapa.push(TEMP)
 
-      $("#NombreEtapa").val("");
-      $("#orden").val("");
-      $("#descripcionEtapa").val("");
-      $("#tipoParticipacion").val("");
-      $("#RangoTiempo").val("");
-      $("#intervalo").val("");
-      $("#minimoTransaccion").val("");
-      $("#TotalMinimo").val("");
-    } else {
-      Alert("No se pudo crear la etapa, por falta de datos", "error");
-    }
+        $('#NombreEtapa').val('');
+        $('#orden').val('');
+        $('#descripcionEtapa').val('');
+        $('#tipoParticipacion').val('');
+        $('#RangoTiempo').val('');
+        $('#intervalo').val('');
+        $('#intervaloSemanal').val('');
+        $('#intervaloMensual').val('');
+        $('#minimoTransaccion').val('');
+        $('#TotalMinimo').val('');
+
+
+      }else{
+        Alert('No se pudo crear la etapa, por falta de datos', 'error');
+      }
   });
+
+});
 
   function addStep(content) {
     $(".step-progress").addClass("blocked");
@@ -646,29 +709,23 @@ function initStepper() {
     });
 
     totalSteps++;
-    var previousStep = actualStep; // Guardar el valor actual de actualStep
+    var previousStep = actualStep; 
     hideStep(actualStep);
     actualStep = totalSteps - 1;
     showStep(actualStep);
 
-    // // Deshabilitar y ocultar los botones de la barra
-    // $('.step-button').prop('disabled', true);
-    //     //borrar los arreglos para su reutilizacion
-    //     datosTablaParametro = [];
-    //     datosTablaLocalidad = [];
-    //     datosTablaPremio = [];
-    // Agregar evento de clic al botón "Borrar" del nuevo paso
+  
     newStep.find("#removeStepp").click(function (e) {
       e.preventDefault();
       if (totalSteps > 1) {
-        // Limpiar los datos de la etapa actual
+       
         nombresMunicipios = {};
         TEMP = [];
         datosTablaParametro = [];
         datosTablaLocalidad = [];
         datosTablaPremio = [];
         hideStep(actualStep);
-        actualStep = previousStep; // Establecer actualStep al valor guardado
+        actualStep = previousStep; 
         showStep(actualStep);
         newStep.html("");
         stepData = null;
@@ -689,7 +746,7 @@ function initStepper() {
         presupuesto: datosTablaLocalidad,
         premio: datosTablaPremio,
       };
-      // Guardar los datos de la etapa en el objeto correspondiente
+    
       if (
         datosTablaParametro.length != 0 &&
         datosTablaLocalidad.length != 0 &&
@@ -700,16 +757,15 @@ function initStepper() {
         getEtapasData();
         console.log(getEtapasData());
         mostrarDatosTabla("#TablaEtapa");
-        // Limpiar los datos de la etapa actual
+    
         nombresMunicipios = {};
         TEMP = [];
         datosTablaParametro = [];
         datosTablaLocalidad = [];
         datosTablaPremio = [];
 
-        //Funciones del stepp
         hideStep(actualStep);
-        actualStep = previousStep; // Establecer actualStep al valor guardado
+        actualStep = previousStep;
         showStep(actualStep);
         newStep.html("");
         stepData = null;
@@ -1582,47 +1638,48 @@ function initStepperEdit() {
         stepData = null;
       });
 
-      $("#GuardarEtapaEdit")
-        .off("click")
-        .on("click", function (e) {
-          e.preventDefault();
-
-          // Obtener los datos actualizados de la etapa desde los campos de entrada
-          var nombre = $("#NombreEtapaEdit").val();
-          var orden = $("#ordenEdit").val();
-          var descripcion = $("#descripcionEtapaEdit").val();
-          var tipoParticipacion = $("#tipoParticipacionEdit").val();
-          var intervalo = $("#intervaloEdit").val();
-
-          // Actualizar los datos de la etapa
-          etapa.nombre = nombre;
-          etapa.orden = orden;
-          etapa.descripcion = descripcion;
-          etapa.tipoParticipacion = tipoParticipacion;
-          etapa.intervalo = intervalo;
-
-          // Buscar la etapa editada en el arreglo dataEditEtapa
-          var etapaIndex = dataEditEtapa.findIndex(function (item) {
-            return item.id === id;
-          });
-
-          if (etapaIndex !== -1) {
-            // Actualizar la etapa editada en el arreglo dataEditEtapa
-            dataEditEtapa[etapaIndex] = etapa;
-
-            console.log(dataEditEtapa, "data pasando");
-            //Funciones del stepp
-            hideStep(actualStepEdit);
-            actualStepEdit = previousStep; // Establecer actualStep al valor guardado
-            showStep(actualStepEdit);
-            newStep.html("");
-            stepData = null;
-            $(".step-progress").removeClass("blocked");
-            Alert("Etapa actualizada correctamente", "success");
-          } else {
-            Alert("No se pudo encontrar la etapa editada", "error");
-          }
+      $('#GuardarEtapaEdit').off('click').on('click', function(e) {
+        e.preventDefault();
+  
+        // Obtener los datos actualizados de la etapa desde los campos de entrada
+        var nombre = $('#NombreEtapaEdit').val();
+        var orden = $('#ordenEdit').val();
+        var descripcion = $('#descripcionEtapaEdit').val();
+        var tipoParticipacion = $('#tipoParticipacionEdit').val();
+        var intervalo = $('#intervaloEdit').val();
+  
+        // Actualizar los datos de la etapa
+        etapa.nombre = nombre;
+        etapa.orden = orden;
+        etapa.descripcion = descripcion;
+        etapa.tipoParticipacion = tipoParticipacion;
+        etapa.intervalo = intervalo;
+  
+        // Buscar la etapa editada en el arreglo dataEditEtapa
+        var etapaIndex = dataEditEtapa.findIndex(function(item) {
+          return item.id === id;
         });
+  
+        if (etapaIndex !== -1) {
+          // Actualizar la etapa editada en el arreglo dataEditEtapa
+          dataEditEtapa[etapaIndex] = etapa;
+  
+          console.log(dataEditEtapa, 'data pasando');
+          //Funciones del stepp
+          hideStep(actualStepEdit);
+          actualStepEdit = previousStep; // Establecer actualStep al valor guardado
+          showStep(actualStepEdit);
+          newStep.html('');
+           stepData = null;
+            $('.step-progress').removeClass('blocked');
+          Alert('Etapa actualizada correctamente', 'success');
+         
+        } else {
+          Alert('No se pudo encontrar la etapa editada', 'error');
+        }
+         
+      });
+
 
       // Asignar los valores de la etapa a los campos de edición
       $("#idEtapa").val(etapa.id);
@@ -1730,13 +1787,13 @@ function initStepperEdit() {
           etapa.parametros.splice(parametroIndex, 1);
 
           // Mostrar los datos del registro seleccionado en los inputs
-          $("#idParemetros").val(parametro.id);
-          $("#limiteParticipacionEdit").val(parametro.limiteParticipacion);
-          $("#transaccionEdit").val(parametro.idTransaccion);
-          $("#valorMinimoEdit").val(parametro.ValorMinimo);
-          $("#valorMaximoEdit").val(parametro.ValorMaximo);
-          $("#limiteDiarioEdit").val(parametro.limiteDiario);
-
+          $('#idParametros').val(parametro.id);
+          $('#limiteParticipacionEdit').val(parametro.limiteParticipacion);
+          $('#transaccionEdit').val(parametro.idTransaccion);
+          $('#valorMinimoEdit').val(parametro.ValorMinimo);
+          $('#valorMaximoEdit').val(parametro.ValorMaximo);
+          $('#limiteDiarioEdit').val(parametro.limiteDiario);
+    
           // Actualizar la tabla de parámetros
           mostrarDatosEdit("#TablaParametrosEdit", etapa);
         }
@@ -1744,14 +1801,14 @@ function initStepperEdit() {
     }
 
     // Event listener para el botón de guardar parámetro editado
-    $("#addParamasEdit").click(function () {
-      var id = $("#idParemetros").val();
-      var limiteParticipacion = $("#limiteParticipacionEdit").val();
-      var idTransaccion = $("#transaccionEdit").val();
-      var ValorMinimo = $("#valorMinimoEdit").val();
-      var ValorMaximo = $("#valorMaximoEdit").val();
-      var limiteDiario = $("#limiteDiarioEdit").val();
-      var parametro = {};
+    $('#addParamasEdit').click(function() {
+      var id = $('#idParametros').val();
+      var limiteParticipacion = $('#limiteParticipacionEdit').val();
+      var idTransaccion = $('#transaccionEdit').val();
+      var ValorMinimo = $('#valorMinimoEdit').val();
+      var ValorMaximo = $('#valorMaximoEdit').val();
+      var limiteDiario = $('#limiteDiarioEdit').val();
+      var parametro = {}
 
       // Validar campos y aplicar clases y mensajes de error
       var fields = [
@@ -1781,26 +1838,22 @@ function initStepperEdit() {
         });
       });
 
-      // Validar ValorMinimo y ValorMaximo
-      var errorValorMinimo = $("#valorMinimoEditError");
-      var errorValorMaximo = $("#valorMaximoEditError");
+      // // Validar ValorMinimo y ValorMaximo
+      // var errorValorMinimo = $('#valorMinimoEditError');
+      // var errorValorMaximo = $('#valorMaximoEditError');
 
-      if (ValorMinimo > ValorMaximo) {
-        $("#valorMinimoEdit").addClass("is-invalid");
-        $("#valorMaximoEdit").addClass("is-invalid");
-        errorValorMinimo.text(
-          "El valor mínimo debe ser menor al valor máximo."
-        );
-        errorValorMaximo.text(
-          "El valor máximo debe ser mayor al valor mínimo."
-        );
-        isValid = false;
-      } else {
-        $("#valorMinimoEdit").removeClass("is-invalid");
-        $("#valorMaximoEdit").removeClass("is-invalid");
-        errorValorMinimo.text("");
-        errorValorMaximo.text("");
-      }
+      // if (ValorMinimo > ValorMaximo) {
+      //   $('#valorMinimoEdit').addClass('is-invalid');
+      //   $('#valorMaximoEdit').addClass('is-invalid');
+      //   errorValorMinimo.text('El valor mínimo debe ser menor al valor máximo.');
+      //   errorValorMaximo.text('El valor máximo debe ser mayor al valor mínimo.');
+      //   isValid = false;
+      // } else {
+      //   $('#valorMinimoEdit').removeClass('is-invalid');
+      //   $('#valorMaximoEdit').removeClass('is-invalid');
+      //   errorValorMinimo.text('');
+      //   errorValorMaximo.text('');
+      // }
 
       if (isValid) {
         if (id === null || id === "") {
@@ -3158,34 +3211,31 @@ function validarCamposStep(stepIndex) {
 
       return isValid;
     }
-
-    case "step3": {
+    case 'step3':{
       var fields = [
-        "NombreEtapa",
-        "orden",
-        "descripcionEtapa",
-        "tipoParticipacion",
-        "intervalo",
+        'NombreEtapa',
+        'orden',
+        'descripcionEtapa',
+        'tipoParticipacion',
+        'intervalo',
+        'intervaloSemanal',
+        'intervaloMensual',
+        'emails',
       ];
       var isValid = true;
-      if (DataEtapa.length == 0) {
-        fields.forEach(function (field) {
-          var value = $("#" + field).val();
-          var errorDiv = $("#" + field + "Error");
-          if (!value) {
-            $("#" + field).addClass("is-invalid");
-            errorDiv.text("Este campo no puede estar vacío.");
-            isValid = false;
-          } else {
-            $("#" + field).removeClass("is-invalid");
-            errorDiv.text("");
-          }
-        });
+    
+      // No se realiza ninguna validación si DataEtapa está vacío
+      if(DataEtapa.length == 0){
+        isValid = true;
       }
-
-      fields.forEach(function (field) {
-        var value = $("#" + field).val();
-        var errorDiv = $("#" + field + "Error");
+    
+      fields.forEach(function(field) {
+        var value = $('#' + field).val();
+        var errorDiv = $('#' + field + 'Error');
+    
+        // Console log para verificar que se está ejecutando la validación
+        console.log("Validando campo:", field, "con valor:", value);
+    
         // Validar que no haya números negativos
         if (/^-\d+/.test(value)) {
           $("#" + field).addClass("is-invalid");
@@ -3214,25 +3264,35 @@ function validarCamposStep(stepIndex) {
             );
             isValid = false;
           }
-        } else if (!value) {
-          $("#" + field).addClass("is-invalid");
-          errorDiv.text("Este campo no puede estar vacío.");
-          isValid = false;
         } else {
           $("#" + field).removeClass("is-invalid");
           errorDiv.text("");
         }
+    
+        function validarEmail(email) {
+          var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return re.test(String(email).toLowerCase());
+        }
 
+        // if (!validarEmail(email)) {
+        //   alert("Por favor ingresa un email válido.");
+        //   $('#emails').focus(); // Enfocar el campo de email para que el usuario lo corrija
+        //   return; // Detener la ejecución adicional del código para evitar enviar un formulario con errores
+        // }
         // Agregar evento input para quitar el error cuando el usuario comience a escribir
         $("#" + field).on("input", function () {
           $(this).removeClass("is-invalid");
           errorDiv.text("");
         });
       });
-
+    
       return isValid;
+
     }
+
   }
+
+
 }
 
 function resetSteps() {
@@ -3255,14 +3315,13 @@ function resetSteps() {
   $("#TablaEtapa").DataTable().clear().destroy();
   $("#tablaBloqueo").DataTable().clear().destroy();
 
-  // Eliminar los steps adicionales
-  $("#stepper .step:not(:first)").remove();
-
-  // Mostrar el primer step
-  steps.first().show();
-  $(".step-progress").removeClass("active");
-  $(".step-btn-1").addClass("active");
-  $(".step-progress").removeClass("disabled").prop("disabled", false);
+  // Mostrar el primer step después de una pequeña pausa
+  setTimeout(function() {
+    steps.first().show();
+    $('.step-progress').removeClass('active');
+    $('.step-btn-1').addClass('active');
+    $('.step-progress').removeClass('disabled').prop('disabled', false);
+  }, 100);
 }
 
 function resetStepsEdit() {
@@ -3297,33 +3356,52 @@ function limpiarFormulario() {
   // Limpiar los steps y reiniciar los datos relacionados
   resetSteps();
   resetStepsEdit();
-  $("#campania").val("");
-  $("#descripcionCampania").val("");
-  $("#fechaRegistro").val("");
-  $("#fechaInicial").val("");
-  $("#fechaFinal").val("");
-  $("#HoraRecordatorio").val("");
-  $("#correo").val("");
-  $("#edadInicial").val("");
-  $("#edadFinal").val("");
-  $("#sexo").val("");
-  $("#tipoUsuarios").val("");
-  $("#notificacion").val("");
-  $("#descripcionNotificacion").val("");
-  $("#imgCampania").val("");
-  $("#imgNotificacion").val("");
-  $("#maximoParticipantes").val("");
-  $("#tercerosCampania").val("");
-  $("#allday").prop("checked", false);
-  $("#repeat").prop("checked", false);
-  $("#FechaIniRecordatorio").val("");
-  $("#FechaFinRecordatorio").val("");
-  $("#terminosCondiciones").val("");
-  $("#Observaciones").val("");
-  $("#proyecto").val("");
-  $("#restriccionUsuarios").val("");
-  $("#Archivo").val("");
-  $("#usuarioBloqueo").val("");
+  $('#campania').val('');
+  $('#descripcionCampania').val('');
+  $('#fechaRegistro').val('');
+  $('#fechaInicial').val('');
+  $('#fechaFinal').val('');
+  $('#HoraRecordatorio').val('');
+  $('#correo').val('');
+  $('#edadInicial').val('');
+  $('#edadFinal').val('');
+  $('#sexo').val('');
+  $('#tipoUsuarios').val('');
+  $('#notificacion').val('');
+  $('#descripcionNotificacion').val('');
+  $('#imgCampania').val('');
+  $('#imgNotificacion').val('');
+  $('#maximoParticipantes').val('');
+  $('#tercerosCampania').val('');
+  $('#allday').prop('checked', false);
+  $('#repeat').prop('checked', false);
+  $('#FechaIniRecordatorio').val('');
+  $('#FechaFinRecordatorio').val('');
+  $('#terminosCondiciones').val('');
+  $('#Observaciones').val('');
+  $('#proyecto').val('');
+  $('#restriccionUsuarios').val('');
+  $('#Archivo').val('');
+  $('#usuarioBloqueo').val('');
+  $('#emailsEdit').val('');
+
+  // Limpiar las imágenes
+  imgPush = null;
+  imgAkisi = null;
+  imgPushEdit = null;
+  imgAkisiEdit = null;
+
+  // Limpiar las previews de las imágenes
+  $('#previewImg').attr('src', '').hide();
+  $('#requerimientos').show();
+  $('#previewNotificacion').attr('src', '').hide();
+  $('#requerimientosNotificacion').show();
+  $('#previewImgEdit').attr('src', '').hide();
+  $('#requerimientosEdit').show();
+  $('#previewNotificacionEdit').attr('src', '').hide();
+  $('#requerimientosNotificacionEdit').show();
+  $('#requerimientosNotificacionEdit').show();
+  
 
   // Limpiar las tablas
   $("#TablaEtapa").DataTable().clear().destroy();
@@ -3357,7 +3435,8 @@ function limpiarFormulario() {
   $("#restriccionUsuariosEdit").val("");
   $("#ArchivoEdit").val("");
   $("#usuarioBloqueoEdit").val("");
-
+  $('#emails').val('');
+  
   // Limpiar las tablas
   $("#TablaEtapaEdit").DataTable().clear().destroy();
   $("#tablaBloqueoEdit").DataTable().clear().destroy();
@@ -3415,65 +3494,49 @@ const OpenEdit = (id) => {
       var stepsEdits = $("#stepperEdit").children();
       stepsEdits.hide();
       stepsEdits.eq(0).show();
+
       // Ocultar el spinner y mostrar el contenido del modal
-      $("#modalEdit .modal-body").css("opacity", "1");
-      $("#modalEdit .spinner-container").hide();
+      $('#modalEdit .modal-body').css('opacity', '1');
+      $('#modalEdit .spinner-container').hide();
+      $('#proyectoEdit').val(result.idProyecto);
 
-      // Ocultar el indicador de carga
-      $("#modalEdit .spinner-container").hide();
 
-      // Mostrar el primer paso del stepper
-      var stepsEdits = $("#stepperEdit").children();
-      stepsEdits.hide();
-      stepsEdits.eq(0).show();
+      $('#emailsEdit').val(result.emails);
 
       // Mostrar el modal solo si los datos han sido cargados
       if (isDataLoaded) {
-        $("#modalEdit").modal("show");
+        $('#modalEdit').modal('show');
       }
 
-      // Mostrar el modal
-      $("#modalEdit").modal("toggle");
-      console.log("Resultados", result);
-
       // Asignar los datos del registro a los campos del formulario
-      $("#idCampania").val(id);
-      $("#campaniaEdit").val(result.nombre);
-      $("#descripcionCampaniaEdit").val(result.descripcion);
-      $("#fechaRegistroEdit").val(result.fechaRegistro);
-      $("#fechaInicialEdit").val(result.fechaInicio);
-      $("#fechaFinalEdit").val(result.fechaFin);
-      $("#fechaCreacion").val(result.fechaCreacion);
-      $("#edadInicialEdit").val(result.edadInicial);
-      $("#edadFinalEdit").val(result.edadFinal);
-      $("#sexoEdit").val(result.sexo);
-      $("#tipoUsuariosEdit").val(result.tipoUsuario);
-      $("#notificacionEdit").val(result.tituloNotificacion);
-      $("#descripcionNotificacionEdit").val(result.descripcionNotificacion);
-      $("#estadoCampania").val(result.estado);
+      $('#idCampania').val(id);
+      $('#campaniaEdit').val(result.nombre);
+      $('#descripcionCampaniaEdit').val(result.descripcion);
+      $('#fechaRegistroEdit').val(result.fechaRegistro);
+      $('#fechaInicialEdit').val(result.fechaInicio);
+      $('#fechaFinalEdit').val(result.fechaFin);
+      $('#fechaCreacion').val(result.fechaCreacion);
+      $('#edadInicialEdit').val(result.edadInicial);
+      $('#edadFinalEdit').val(result.edadFinal);
+      $('#sexoEdit').val(result.sexo);
+      $('#tipoUsuariosEdit').val(result.tipoUsuario);
+      $('#notificacionEdit').val(result.tituloNotificacion);
+      $('#descripcionNotificacionEdit').val(result.descripcionNotificacion);
+      $('#estadoCampania').val(result.estado);
+
       // Llamar a la función userValidator con el valor de restriccionUsuarios
       const event = {
         target: document.getElementById("restriccionUsuariosEdit"),
       };
-      userValidator(event, "containerArchivoEdit");
+      userValidator(event, 'containerArchivoEdit');
 
-      // Asignar las imágenes si existen
-      // if (result.imgPush) {
-      //   $('#previewImgEdit').attr('src', `ruta/a/la/imagen/${result.imgPush}`);
-      //   $('#previewImgEdit').show();
-      // }
-      // if (result.imgAkisi) {
-      //   $('#previewNotificacionEdit').attr('src', `ruta/a/la/imagen/${result.imgAkisi}`);
-      //   $('#previewNotificacionEdit').show();
-      // }
-
-      $("#maximoParticipantesEdit").val(result.maximoParticipaciones);
-      $("#tercerosCampaniaEdit").val(result.campaniaTerceros);
-      $("#esArchivadaEdit").prop("checked", result.esArchivada === 1);
-      $("#terminosCondicionesEdit").val(result.terminosCondiciones);
-      $("#ObservacionesEdit").val(result.observaciones);
-      $("#proyectoEdit").val(result.idProyecto);
-      $("#restriccionUsuariosEdit").val(result.restriccionUser);
+      $('#maximoParticipantesEdit').val(result.maximoParticipaciones);
+      $('#tercerosCampaniaEdit').val(result.campaniaTerceros);
+      $('#esArchivadaEdit').prop('checked', result.esArchivada === 1);
+      $('#terminosCondicionesEdit').val(result.terminosCondiciones);
+      $('#ObservacionesEdit').val(result.observaciones);
+      $('#proyectoEdit').val(result.idProyecto);
+      $('#restriccionUsuariosEdit').val(result.restriccionUser);
 
       bloqueadosUsuarios = result.bloqueados;
       permitidoUsuario = result.participantes;
@@ -3482,14 +3545,12 @@ const OpenEdit = (id) => {
 
       // Mostrar las etapas en la tabla
       mostrarDatosTabla("#TablaEtapaEdit");
-      // Mostrar el modal
-      $("#modalEdit").modal("toggle");
-      console.log("Resultados", result);
+      console.log('Resultados', result);
     })
-    .catch((error) => {
-      console.log("error", error);
-      $("#modalEdit .modal-body").css("opacity", "1");
-      $("#modalEdit .spinner-container").hide();
+    .catch(error => {
+      console.log('error', error);
+      $('#modalEdit .modal-body').css('opacity', '1');
+      $('#modalEdit .spinner-container').hide();
     });
 };
 
@@ -3680,7 +3741,7 @@ const table = (table, data) => {
       '<"col-sm-12 col-md-6"p>' +
       ">",
     language: {
-      sLengthMenu: "Show _MENU_",
+      sLengthMenu: "Mostrar _MENU_",
       search: "Buscar",
       searchPlaceholder: "Buscar...",
     },
