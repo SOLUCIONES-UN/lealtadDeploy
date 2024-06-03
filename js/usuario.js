@@ -7,8 +7,8 @@ $(function () {
   Usuario();
 
   function validarNombreYusername(nombre, username) {
-    const nombreValido = /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s]+$/.test(nombre.trim());
-    const usernameValida = /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s]+$/.test(username.trim());
+    const nombreValido = /^[a-zA-Z0-9\s]+$/.test(nombre.trim());
+    const usernameValida = /^[a-zA-Z0-9\s]+$/.test(username.trim());
 
     if (!nombreValido) {
       $("#nombre").addClass("is-invalid");
@@ -57,7 +57,32 @@ $(function () {
 
     const nombre = $("#nombre").val();
     const username = $("#username").val();
+    const telefono = $("#telefono").val();
+    const email = $("#emailNotification").val();
 
+    if (!/^(\d{7})$/.test(telefono)) {
+      $("#telefono").addClass("is-invalid");
+      $("#telefonoError")
+        .text("El teléfono debe tener 7 dígitos")
+        .addClass("text-danger");
+      $("#btnSubmitAdd").prop("disabled", false);
+      return false;
+    } else {
+      $("#telefono").removeClass("is-invalid");
+      $("#telefonoError").empty().removeClass("text-danger");
+    }
+
+    if (!email.includes("@")) {
+      $("#emailNotification").addClass("is-invalid");
+      $("#emailError")
+        .text("Ingresa un correo electronico correcto 'user@gmail.com'")
+        .addClass("text-danger");
+      $("#btnSubmitAdd").prop("disabled", false);
+      return false;
+    } else {
+      $("#emailNotification").removeClass("is-invalid");
+      $("#emailError").empty().removeClass("text-danger");
+    }
     if (!validarNombreYusername(nombre, username)) {
       $("#btnSubmitAdd").prop("disabled", false);
       return false;
@@ -79,7 +104,6 @@ $(function () {
       nombre: $("#nombre").val(),
       telefono: $("#telefono").val(),
       emailNotificacion: $("#emailNotification").val(),
-   
       idRol: $("#rol").val(),
     });
 
@@ -117,6 +141,32 @@ $(function () {
     $("#btnSubmitEdit").prop("disabled", true);
     const nombre = $("#nombreEdit").val();
     const username = $("#usernameEdit").val();
+    const telefono = $("#telefonoEdit").val();
+    const email = $("#emailEdit").val();
+
+    if (!/^(\d{7})$/.test(telefono)) {
+      $("#telefonoEdit").addClass("is-invalid");
+      $("#telefonoEditError")
+        .text("El teléfono debe tener 7 dígitos")
+        .addClass("text-danger");
+      $("#btnSubmitEdit").prop("disabled", false);
+      return false;
+    } else {
+      $("#telefonoEdit").removeClass("is-invalid");
+      $("#telefonoEditError").empty().removeClass("text-danger");
+    }
+
+    if (!email.includes("@")) {
+      $("#emailEdit").addClass("is-invalid");
+      $("#emailEditError")
+        .text("Ingresa un correo electrónico correcto 'user@gmail.com'")
+        .addClass("text-danger");
+      $("#btnSubmitEdit").prop("disabled", false);
+      return false;
+    } else {
+      $("#emailEdit").removeClass("is-invalid");
+      $("#emailEditError").empty().removeClass("text-danger");
+    }
 
     if (!validarNombreYusername(nombre, username)) {
       $("#btnSubmitEdit").prop("disabled", false);
@@ -142,10 +192,9 @@ $(function () {
       nombre: $("#nombreEdit").val(),
       telefono: $("#telefonoEdit").val(),
       emailNotificacion: $("#emailEdit").val(),
-
       idRol: $("#rolActualizar").val(),
     });
-
+    console.log("Datos a actualizar:", raw);
     var requestOptions = {
       method: "PUT",
       headers: myHeaders,
@@ -162,15 +211,18 @@ $(function () {
           limpiarForm();
           tabla._fnAjaxUpdate();
           $("#modalEdit").modal("toggle");
+          $("#passwordEdit").prop("disabled", false);
           Alert(result.message, "success");
         } else {
           Alert(result.message, "error");
         }
       })
       .catch((error) => {
-        $("#btnSubmitEdit").prop("disabled", false);
-        Alert(error.errors, "error");
+        console.log("Error al editar usuario:", error);
+        console.log("Error al editar usuario:", error);
+        Alert("Error al editar usuario: " + error.message, "error");
       });
+
     return false;
   });
 
@@ -223,12 +275,10 @@ const getUsuarios = () => {
       dataSrc: "",
       headers: { Authorization: token },
     },
-
     columns: [
       { data: "username" },
       { data: "nombre" },
       { data: "rol.descripcion" },
-   
 
       {
         data: "username",
@@ -239,15 +289,15 @@ const getUsuarios = () => {
             feather.icons["more-vertical"].toSvg({ class: "font-small-4" }) +
             "</a>" +
             '<div class="dropdown-menu dropdown-menu-right">' +
-            '<a href="#" onclick="OpenEdit(' +
+            '<a href="#" onclick="OpenEdit(\'' +
             data +
-            ')" class="btn_edit dropdown-item">' +
+            '\')" class="btn_edit dropdown-item">' +
             feather.icons["archive"].toSvg({ class: "font-small-4 mr-50" }) +
             " Actualizar" +
             "</a>" +
-            '<a href="#" onclick="OpenDelete(' +
+            '<a href="#" onclick="OpenDelete(\'' +
             data +
-            ')" class="btn_delete dropdown-item">' +
+            '\')" class="btn_delete dropdown-item">' +
             feather.icons["trash-2"].toSvg({ class: "font-small-4 mr-50" }) +
             " Inhabilitar" +
             "</a>" +
@@ -257,7 +307,6 @@ const getUsuarios = () => {
         },
       },
     ],
-    // order: [[1, 'asc']],
     dom:
       '<"d-flex justify-content-between align-items-center header-actions mx-1 row mt-75"' +
       '<"col-lg-12 col-xl-6" l>' +
@@ -283,10 +332,38 @@ const getUsuarios = () => {
         },
         init: function (api, node, config) {
           $(node).removeClass("btn-secondary");
-          //Metodo para agregar un nuevo usuario
         },
       },
     ],
+    initComplete: function (settings, json) {
+      // Añadir estilos CSS después de que la tabla esté completa
+      $("<style>")
+        .prop("type", "text/css")
+        .html(
+          `
+        .dropdown-menu {    
+          position: absolute !important;
+          top: 100%;
+          left: 5 !important;
+          margin-left:  50px !important;
+          z-index: 1051 !important; /* Incrementa z-index para superar la paginación */
+          display: none;
+          white-space: nowrap;
+        }
+        .btn-group.show .dropdown-menu {
+          display: block; 
+        }
+        #tableData {
+          position: relative !important;
+          z-index: 0 !important;
+        }
+        #tableData_wrapper .row:last-child {
+          margin-top: 50px; /* Ajusta este valor según sea necesario */
+        }
+      `
+        )
+        .appendTo("head");
+    },
   });
 };
 
@@ -298,6 +375,7 @@ const limpiarForm = () => {
   $("#username").removeClass("is-invalid").val("");
   $("#nombreError").empty();
   $("#usernameError").empty();
+  $("#passwordEdit").val("");
 };
 
 const Alert = function (
@@ -327,8 +405,7 @@ const OpenEdit = (username) => {
       $("#passwordEdit").val(result.password);
       $("#telefonoEdit").val(result.telefono);
       $("#emailEdit").val(result.emailNotificacion);
-  
-        $("#rolActualizar").val(result.idRol);
+      $("#rolActualizar").val(result.idRol);
       $("#modalEdit").modal("toggle");
     })
     .catch((error) => console.log("error", error));

@@ -44,6 +44,43 @@
 </head>
 <!-- END: Head-->
 
+<style>
+  /* Asegúrate de que el contenedor del dropdown tenga posición relativa */
+
+
+  .btn-group {
+    position: absolute !important;
+  }
+
+  /* Ajusta la posición y el z-index del menú desplegable */
+  .dropdown-menu {
+    position: absolute !important;
+    top: 100%;
+    left: 0 !important;
+    margin-right: 100px !important;
+    z-index: 10 !important;
+    display: none;
+    /* Ocultar por defecto */
+  }
+
+  /* Mostrar el menú desplegable al hacer clic en el botón */
+  .btn-group.show .dropdown-menu {
+    position: absolute !important;
+    display: block;
+  }
+
+  /* Ajusta el z-index de la tabla */
+  #tableData {
+    position: relative !important;
+    z-index: 0 !important;
+  }
+
+
+  .dropdown-toggle {
+    margin-top: -15px !important;
+  }
+</style>
+
 <!-- BEGIN: Body-->
 
 <body class="vertical-layout vertical-menu-modern  navbar-floating footer-static  " data-open="click"
@@ -70,7 +107,7 @@
       <ul class="nav navbar-nav align-items-center ml-auto">
         <li class="nav-item d-none d-lg-block"><a class="nav-link nav-link-style"><i class="ficon"
               data-feather="moon"></i></a></li>
-       
+
         <li class="nav-item dropdown dropdown-user"><a class="nav-link dropdown-toggle dropdown-user-link"
             id="dropdown-user" href="javascript:void(0);" data-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false">
@@ -105,8 +142,7 @@
   <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
     <div class="navbar-header">
       <ul class="nav navbar-nav flex-row">
-        <li class="nav-item mr-auto"><a class="navbar-brand"
-            href="./dashboard.html"><span class="brand-logo">
+        <li class="nav-item mr-auto"><a class="navbar-brand" href="./dashboard.html"><span class="brand-logo">
               <svg viewbox="0 0 139 95" version="1.1" xmlns="http://www.w3.org/2000/svg"
                 xmlns:xlink="http://www.w3.org/1999/xlink" height="24">
                 <defs>
@@ -169,10 +205,10 @@
               <table class="datatables-basic table" id="tableData">
                 <thead>
                   <tr>
-                    <th>Usuario</th>
-                    <th>Nombre</th>
-                    <th>Rol</th>
-                    <th>Acciones</th>
+                    <th>USUARIO</th>
+                    <th>NOMBRE</th>
+                    <th>ROL</th>
+                    <th>ACCIONES</th>
                   </tr>
                 </thead>
               </table>
@@ -188,7 +224,7 @@
       <form id="formNew" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Agregar  Usuario</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Agregar Usuario</h5>
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
@@ -213,20 +249,23 @@
               name="password2" required />
           </div>
           <div class="form-group">
-            <label class="form-label" for="telefono">Teléfono</label>
-            <input type="text" class="form-control " id="telefono" placeholder="# de telefono" name="telefono"
+            <label class="form-label" for="telefono">Teléfono (502)</label>
+            <input type="text" class="form-control " id="telefono" placeholder="# de teléfono" name="telefono"
               required />
+            <div id="telefonoError" class="invalid-feedback"></div>
           </div>
           <div class="form-group">
             <label class="form-label" for="emailNotification">E-mail</label>
-            <input type="text" class="form-control " id="emailNotification" placeholder="E-mail"
+            <input type="text" class="form-control " id="emailNotification" placeholder="example@gmail.com"
               name="emailNotification" required />
+            <div id="emailError" class="invalid-feedback"></div>
           </div>
-         
-       
+
+
           <div class="form-group">
             <label class="form-label" for="rol">Roles</label>
             <select type="text" class="form-control" id="rol" name="rol" required></select>
+
           </div>
           <button id="btnSubmitAdd" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
@@ -240,13 +279,13 @@
       <form id="formEdit" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Actualizar el ususario</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Actualizar el usuario</h5>
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
             <label class="form-label" for="usernameEdit">Usuario</label>
             <input type="text" class="form-control" id="usernameEdit" placeholder="Nombre del usuario"
-              name="usernameEdit" required readonly/>
+              name="usernameEdit" required readonly />
             <div id="usernameEditError" class="invalid-feedback"></div>
           </div>
           <div class="form-group">
@@ -255,28 +294,40 @@
             <div id="nombreEditError" class="invalid-feedback"></div>
           </div>
 
+          <div class="form-group">
+            <label class="form-label" for="passwordEdit">Nueva Contraseña</label>
+            <input type="password" alt="strongPass" class="form-control" id="passwordEdit" placeholder="Contraseña"
+              name="passwordEdit" required />
+            <small id="passwordEditHelp" class="form-text text-muted">Ingrese una nueva contraseña si desea
+              actualizarla</small>
+          </div>
 
+
+          <!-- <div class="form-group">
+            <label class="form-label" for="passwordEdit2">Confirmar Contraseña</label>
+            <input type="password" alt="strongPass" class="form-control " id="passwordEdit2" placeholder="Contraseña"
+              name="passwordEdit2" required />
+          </div> -->
           <div class="form-group">
-            <label class="form-label" for="passwordEdit">Contraseña</label>
-            <input type="password" alt="strongPass" class="form-control " id="passwordEdit" placeholder="Contraseña"
-              name="passwordEdit" required readonly />
-          </div>
-      
-          <div class="form-group">
-            <label class="form-label" for="telefonoEdit">Telefono</label>
-            <input type="text" class="form-control " id="telefonoEdit" placeholder="# de telefono" name="telefonoEdit"
+            <label class="form-label" for="telefono">Teléfono (502)</label>
+            <input type="text" class="form-control" id="telefonoEdit" placeholder="# de telefono" name="telefono"
               required />
+
+            <div id="telefonoEditError" class="invalid-feedback"></div>
           </div>
           <div class="form-group">
-            <label class="form-label" for="emailEdit">E-mail</label>
-            <input type="text" class="form-control " id="emailEdit" placeholder="E-mail" name="emailEdit" required />
+            <label class="form-label" for="emailNotification">E-mail</label>
+            <input type="text" class="form-control" id="emailEdit" placeholder="example@gmail.com"
+              name="emailNotification" required />
+
+            <div id="emailEditError" class="invalid-feedback"></div>
           </div>
-        
+
           <div class="form-group">
             <label class="form-label" for="rolActualizar">Rol</label>
             <select type="text" class="form-control" id="rolActualizar" name="rolActualizar" required></select>
           </div>
-          <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Actualizar </button>
+          <button id="btnSubmitEdit" type="submit" class="btn btn-primary mr-1 data-submit">Actualizar</button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
         </div>
       </form>
@@ -293,7 +344,7 @@
         <div class="modal-body flex-grow-1">
           <div class="form-group">
             <input id="usernameDelete" type="hidden">
-            <p>¿Está seguro que desea <b>Inhabilitar este usuario?</b></p>
+            <p>¿Esta seguro que desea <b>Inhabilitar este usuario?</b></p>
           </div>
           <button id="BtnDelete" type="button" class="btn btn-danger mr-1 data-submit">Confirmar </button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
