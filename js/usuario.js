@@ -79,7 +79,7 @@ $(function () {
       nombre: $("#nombre").val(),
       telefono: $("#telefono").val(),
       emailNotificacion: $("#emailNotification").val(),
-      tipoUsuario: $("#tipoUsuario").val(),
+   
       idRol: $("#rol").val(),
     });
 
@@ -142,7 +142,7 @@ $(function () {
       nombre: $("#nombreEdit").val(),
       telefono: $("#telefonoEdit").val(),
       emailNotificacion: $("#emailEdit").val(),
-      tipoUsuario: $("#tipoUsuarioEdit").val(),
+
       idRol: $("#rolActualizar").val(),
     });
 
@@ -228,7 +228,7 @@ const getUsuarios = () => {
       { data: "username" },
       { data: "nombre" },
       { data: "rol.descripcion" },
-      { data: "tipoUsuario" },
+   
 
       {
         data: "username",
@@ -327,7 +327,7 @@ const OpenEdit = (username) => {
       $("#passwordEdit").val(result.password);
       $("#telefonoEdit").val(result.telefono);
       $("#emailEdit").val(result.emailNotificacion);
-      $("#tipoUsuarioEdit").val(result.tipoUsuario),
+  
         $("#rolActualizar").val(result.idRol);
       $("#modalEdit").modal("toggle");
     })
