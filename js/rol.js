@@ -194,7 +194,7 @@ const getRoles = () => {
                     }
                     return meta.row + 1;
                 }
-            },
+            }, 
             { data: "descripcion" },
             {
                 data: "id", render: function (data) {

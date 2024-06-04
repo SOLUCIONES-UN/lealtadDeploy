@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="ltr">
 <!-- BEGIN: Head-->
@@ -44,6 +45,43 @@
 </head>
 <!-- END: Head-->
 
+<style>
+
+  /* Asegúrate de que el contenedor del dropdown tenga posición relativa */
+ 
+
+.btn-group {
+  position: absolute !important;
+}
+
+/* Ajusta la posición y el z-index del menú desplegable */
+.dropdown-menu {    
+  position: absolute !important;
+  top: 100%;
+  left:  0 !important;
+  margin-right:  100px !important;
+  z-index: 10 !important;
+  display: none; /* Ocultar por defecto */
+}
+
+/* Mostrar el menú desplegable al hacer clic en el botón */
+.btn-group.show .dropdown-menu {
+  position:absolute !important;
+  display: block;
+}
+
+  /* Ajusta el z-index de la tabla */
+   #tableData {
+    position: relative !important;
+    z-index: 0 !important;
+  }
+
+
+  .dropdown-toggle{
+    margin-top: -15px !important;
+  }
+
+</style>
 <!-- BEGIN: Body-->
 
 <body class="vertical-layout vertical-menu-modern  navbar-floating footer-static  " data-open="click"
@@ -62,7 +100,7 @@
         <ul class="nav navbar-nav">
           <li class="nav-item">
             <a class="nav-link menu-toggle" href="javascript:void(0);">
-              <b>Administracion de Tablas</b>
+              <b>Administración de Tablas</b>
             </a>
           </li>
         </ul>
@@ -70,7 +108,7 @@
       <ul class="nav navbar-nav align-items-center ml-auto">
         <li class="nav-item d-none d-lg-block"><a class="nav-link nav-link-style"><i class="ficon"
               data-feather="moon"></i></a></li>
-       
+        
         <li class="nav-item dropdown dropdown-user"><a class="nav-link dropdown-toggle dropdown-user-link"
             id="dropdown-user" href="javascript:void(0);" data-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false">
@@ -170,7 +208,7 @@
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>DESCRIPCIÓN</th>
+                    <th>Descripción</th>
                     <th>Acciones</th>
                   </tr>
                 </thead>
@@ -195,11 +233,12 @@
 
           <div class="form-group">
             <label class="form-label" for="basic-icon-default-fullname">Proyecto</label>
-         
-              <select type="text" class="form-control ruta" id="ruta" name="ruta" required></select>
-              <!-- <option selected>Seleccione una opción</option> -->
- 
+            <select type="text" class="form-control ruta" id="ruta" name="ruta" required>
+                <option selected disabled>Seleccione una opción</option>
+            </select>
             <div id="ruta-error" class="invalid-feedback ruta-error"></div>
+        </div>
+        
           <div class="form-group">
             <label class="form-label" for="basic-icon-default-fullname">Descripción</label>
             <input type="text" class="form-control dt-full-name descripcion" id="descripcion"
@@ -207,11 +246,10 @@
               aria-describedby="descripcion-error" required />
             <div id="descripcionError" class="invalid-feedback descripcion-error"></div>
           </div>
-         
-          </div>
-          <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit ">Agregar</button>
-          <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
         </div>
+        <button id="btnSubmitAdd" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
+        <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+      </div>
       </form>
     </div>
   </div>
@@ -257,7 +295,7 @@
         <div class="modal-body flex-grow-1">
           <div class="form-group">
             <input id="idDelete" type="hidden">
-            <p>¿Está   seguro que desea <b>inhabilitar esta tabla?</b></p>
+            <p>¿Esta seguro que desea <b>¿esta seguro que desea inhabilitar esta tabla?</b></p>
           </div>
           <button id="BtnDelete" type="button" class="btn btn-danger mr-1 data-submit" >Confirmar</button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
