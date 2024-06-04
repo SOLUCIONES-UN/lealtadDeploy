@@ -1,5 +1,4 @@
-
-const url = "http://localhost:3000/";
+const url = "  https://d4dc-181-209-150-206.ngrok-free.app ";
 let token = localStorage.getItem("token");
 
 let isPageOpen = true;
@@ -222,83 +221,61 @@ const getColumnas = () => {
       {
         data: "id",
         render: function (data) {
-          return `
-          <div class="btn-group">
-              <button type="button" class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  ${feather.icons['more-vertical'].toSvg({ class: 'font-small-4' })}
-              </button>
-              <div class="dropdown-menu dropdown-menu-right">
-                  <a href="#" onclick="OpenEdit(${data})" class="btn_edit dropdown-item">
-                      ${feather.icons['archive'].toSvg({ class: 'font-small-4 mr-50' })} Actualizar
-                  </a>
-                  <a href="#" onclick="OpenDelete(${data})" class="btn_delete dropdown-item">
-                      ${feather.icons['trash-2'].toSvg({ class: 'font-small-4 mr-50' })} Inhabilitar
-                  </a>
-              </div>
-          </div>
-      `;
+          return (
+            '<div class="btn-group">' +
+            '<a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">' +
+            feather.icons["more-vertical"].toSvg({ class: "font-small-4" }) +
+            "</a>" +
+            '<div class="dropdown-menu dropdown-menu-right">' +
+            '<a href="#" onclick="OpenEdit(' +
+            data +
+            ')" class="btn_edit dropdown-item">' +
+            feather.icons["archive"].toSvg({ class: "font-small-4 mr-50" }) +
+            " Actualizar" +
+            "</a>" +
+            '<a href="#" onclick="OpenDelete(' +
+            data +
+            ')" class="btn_delete dropdown-item">' +
+            feather.icons["trash-2"].toSvg({ class: "font-small-4 mr-50" }) +
+            " Inhabilitar" +
+            "</a>" +
+            "</div>" +
+            "</div>"
+          );
         },
       },
     ],
     dom:
-                      '<"d-flex justify-content-between align-items-center header-actions mx-1 row mt-75"' +
-                      '<"col-lg-12 col-xl-6" l>' +
-                      '<"col-lg-12 col-xl-6 pl-xl-75 pl-0"<"dt-action-buttons text-xl-right text-lg-left text-md-right text-left d-flex align-items-center justify-content-lg-end align-items-center flex-sm-nowrap flex-wrap mr-1"<"mr-1"f>B>>' +
-                      ">t" +
-                      '<"d-flex justify-content-between mx-2 row mb-1"' +
-                      '<"col-sm-12 col-md-6"i>' +
-                      '<"col-sm-12 col-md-6"p>' +
-                      ">",
-                    language: {
-                      sLengthMenu: "Mostrar _MENU_",
-                      search: "Buscar",
-                      searchPlaceholder: "Buscar...",
-                    },
-                    // Buttons with Dropdown
-                    buttons: [
-                      {
-                        text: "Nuevo",
-                        className: "add-new btn btn-primary mt-50",
-                        attr: {
-                          "data-toggle": "modal",
-                          "data-target": "#modalNew",
-                        },
-                        init: function (api, node, config) {
-                          $(node).removeClass("btn-secondary");
-                        },
-                      },
-                    ],
-                    initComplete: function (settings, json) {
-                      // Añadir estilos CSS después de que la tabla esté completa
-                      $("<style>")
-                        .prop("type", "text/css")
-                        .html(
-                          `
-                          .dropdown-menu {    
-                            position: absolute !important;
-                            top: 100%;
-                            left: 5 !important;
-                            margin-left:  50px !important;
-                            z-index: 1051 !important; /* Incrementa z-index para superar la paginación */
-                            display: none;
-                            white-space: nowrap;
-                          }
-                          .btn-group.show .dropdown-menu {
-                            display: block;
-                          }
-                          #tableData {
-                            position: relative !important;
-                            z-index: 0 !important;
-                          }
-                          #tableData_wrapper .row:last-child {
-                            margin-top: 50px; /* Ajusta este valor según sea necesario */
-                          }
-                        `
-                        )
-                        .appendTo("head");
-                    },
-                  });
-                };
+    '<"d-flex justify-content-between align-items-center header-actions mx-1 row mt-75"' +
+    '<"col-lg-12 col-xl-6" l>' +
+    '<"col-lg-12 col-xl-6 pl-xl-75 pl-0"<"dt-action-buttons text-xl-right text-lg-left text-md-right text-left d-flex align-items-center justify-content-lg-end align-items-center flex-sm-nowrap flex-wrap mr-1"<"mr-1"f>B>>' +
+    '>t' +
+    '<"d-flex justify-content-between mx-2 row mb-1"' +
+    '<"col-sm-12 col-md-6"i>' +
+    '<"col-sm-12 col-md-6"p>' +
+    '>',
+language: {
+    sLengthMenu: 'Mostrar_MENU_',
+    search: 'Buscar',
+    searchPlaceholder: 'Buscar...',
+},
+// Buttons with Dropdown
+buttons: [
+    {
+        text: 'Nuevo',
+        className: 'add-new btn btn-primary mt-50',
+        attr: {
+            'data-toggle': 'modal',
+            'data-target': '#modalNew',
+        },
+        init: function (api, node, config) {
+            $(node).removeClass('btn-secondary');
+            //Metodo para agregar un nuevo usuario
+        },
+    },
+],
+});
+}
 
 
 function limpiarFormulario() {

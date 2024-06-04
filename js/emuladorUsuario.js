@@ -1,4 +1,4 @@
-const url = "http://localhost:3000/";
+const url = "  https://d4dc-181-209-150-206.ngrok-free.app ";
 let token = localStorage.getItem("token");
 
 $(function () {

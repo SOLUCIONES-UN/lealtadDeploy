@@ -76,25 +76,15 @@
                 </li>
                 <li class="nav-item dropdown dropdown-user">
                     <a class="nav-link dropdown-toggle dropdown-user-link" id="dropdown-user" href="javascript:void(0);" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <div class="user-nav d-sm-flex d-none">
-                            <span class="user-name font-weight-bolder">John Doe</span>
-                            <span class="user-status">Admin</span>
-                        </div>
-                        <span class="avatar">
-                            <img class="round" src="../../../app-assets/images/portrait/small/avatar-s-11.jpg" alt="avatar" height="40" width="40">
-                            <span class="avatar-status-online"></span>
-                        </span>
+                        <div class="user-nav d-sm-flex d-none"><span class="user-name font-weight-bolder">Admin</span><span class="user-status">Admin</span>
+                        </div><span class="avatar"><img class="round"
+                                src="../../../app-assets/images/portrait/small/akisiPuedo.jpeg" alt="avatar" height="40"
+                                width="40"><span class="avatar-status-online"></span></span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-user">
-                        <a class="dropdown-item" href="page-profile.html"><i class="mr-50" data-feather="user"></i> Profile</a>
-                        <a class="dropdown-item" href="app-email.html"><i class="mr-50" data-feather="mail"></i> Inbox</a>
-                        <a class="dropdown-item" href="app-todo.html"><i class="mr-50" data-feather="check-square"></i> Task</a>
-                        <a class="dropdown-item" href="app-chat.html"><i class="mr-50" data-feather="message-square"></i> Chats</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="page-account-settings.html"><i class="mr-50" data-feather="settings"></i> Settings</a>
-                        <a class="dropdown-item" href="page-pricing.html"><i class="mr-50" data-feather="credit-card"></i> Pricing</a>
-                        <a class="dropdown-item" href="page-faq.html"><i class="mr-50" data-feather="help-circle"></i> FAQ</a>
-                        <a class="dropdown-item" href="login.html"><i class="mr-50" data-feather="power"></i> Logout</a>
+                        <div class="dropdown-divider"></div><a class="dropdown-item" href="dashboard.html"><i class="mr-50" data-feather="power"></i>
+                          Dashboard</a><a class="dropdown-item" href="login.html"><i class="mr-50" data-feather="power"></i>
+                            Logout</a>
                     </div>
                 </li>
             </ul>
@@ -180,7 +170,7 @@
                         <div class="col-md-6">
                             <label for="reporte">Seleccionar Reporte</label>
                             <select id="reporte" class="form-control"> 
-                                <option selected disabled>selecciona una opción</option>
+                                <option selected disabled>Selecciona una opción</option>
                                 <option value="OfferCraft">OfferCraft</option>
                                 <option value="Referidos">Referidos</option>
                                 <option value="General">General</option>
@@ -236,7 +226,7 @@
                     <div class="form-group">
                         <label class="form-label" for="frecuencia">Seleccionar configuración</label>
                         <select class="form-control proyecto" id="frecuencia" name="frecuencia" onchange="mostrarOcultarSelectDia();" required>
-                        <option selected disabled value="">selecciona una opción</option>
+                        <option selected disabled value="">Selecciona una opción</option>
                         <option value="dia">Díario</option> 
                         <option value="semana">Semana</option>
                         <option value="mes">Mes</option>
@@ -260,7 +250,7 @@
                     <div class="form-group" id="selectDiaMesContainer" style="display: none;">
                         <label class="form-label" for="diames">Día del mes</label>
                         <select class="form-control proyecto" id="diames" name="diames">
-                            <option selected disabled>selecciona una opción</option>
+                            <option selected disabled>Selecciona una opción</option>
                         </select>
                         <div id="selectDiaMesError" class="invalid-feedback proyecto-error"></div>
                     </div>
@@ -270,7 +260,7 @@
                         <input id="id" type="hidden">
                         <label class="form-label" for="tiporeporte">Seleccionar Reporte</label>
                         <select type="text" class="form-control tiporeporte" id="tiporeporte" name="tiporeporte" required>
-              <option selected disabled value="">selecciona una opción</option>
+              <option selected disabled value="">Selecciona una opción</option>
                           <option value="OfferCraft">OfferCraft</option>
                           <option value="Referidos">Referidos</option>
                           <option value="General">General</option>
@@ -290,7 +280,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="emails">Correo</label>
-                        <input type="text" class="form-control dt-full-name emails" id="emails"   placeholder="username@gmail.com"  name="emails" aria-label="" aria-describedby="nombreError" pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}" required />
+                        <input type="text" class="form-control dt-full-name emails" id="emails"   placeholder="example@gmail.com"  name="emails" aria-label="" aria-describedby="nombreError" pattern="[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{1,5}" required />
                         <div id="nombreError" class="invalid-feedback nombre-error"></div>
                     </div>
                     <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
@@ -371,7 +361,7 @@
                         <input type="text" class="form-control dt-full-name emails" id="emailseddit"   placeholder="username@gmail.com" name="emailseddit" aria-label="" aria-describedby="nombreError"  pattern=".+@beststartupever\.com" />
                         <div id="nombreError" class="invalid-feedback nombre-error"></div>
                     </div>
-                    <button id="btnSubmEdit" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
+                    <button id="btnSubmEdit" type="submit" class="btn btn-primary mr-1 data-submit">Actualizar </button>
                     <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
                 </div>
             </form>

@@ -1,4 +1,4 @@
-const url = 'http://localhost:3000/'
+const url = '  https://d4dc-181-209-150-206.ngrok-free.app '
 let token = localStorage.getItem("token");
 
 $(function () {
@@ -62,10 +62,10 @@ $(function () {
         }
       
 
-    if (!/^(\d{7})$/.test(telefono)) {
+    if (!/^(\d{8})$/.test(telefono)) {
       $("#telefono").addClass("is-invalid");
       $("#telefonoError")
-        .text("El teléfono debe tener 7 dígitos")
+        .text("El teléfono debe tener 8 dígitos")
         .addClass("text-danger");
       $("#btnSubmitAdd").prop("disabled", false);
       return false;
@@ -157,10 +157,10 @@ $(function () {
         }
 
 
-    if (!/^(\d{7})$/.test(telefono)) {
+    if (!/^(\d{8})$/.test(telefono)) {
       $("#telefonoEdit").addClass("is-invalid");
       $("#telefonoEditError")
-        .text("El teléfono debe tener 7 dígitos")
+        .text("El teléfono debe tener 8 dígitos")
         .addClass("text-danger");
       $("#btnSubmitEdit").prop("disabled", false);
       return false;
@@ -415,8 +415,8 @@ const getRoles = () => {
         headers: { "Authorization": token }
     };
 
-    $('#rol').html('<option value="0" selected disabled>Selecciona una Opcion</option>');
-    $('#rolActualizar').html('<option value="0" selected disabled>Selecciona una Opcion</option>');
+    $('#rol').html('<option value="0" selected disabled>Selecciona una opción</option>');
+    $('#rolActualizar').html('<option value="0" selected disabled>Selecciona una opción</option>');
     fetch(`${url}Rol`, requestOptions)
         .then(response => response.json())
         .then(result => {

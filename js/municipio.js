@@ -1,4 +1,4 @@
-const url = "http://localhost:3000/";
+const url = "  https://d4dc-181-209-150-206.ngrok-free.app ";
 let token = localStorage.getItem("token");
 
 $(function () {
@@ -8,7 +8,7 @@ $(function () {
 
   Usuario();
   function validarNombre(nombre) {
-    const nombreValido = /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s]+$/.test(nombre.trim());
+    const nombreValido = /^[a-zA-Z\s]+$/.test(nombre.trim());
 
     if (!nombreValido) {
       $(".nombre").addClass("is-invalid");
@@ -203,14 +203,6 @@ $(function () {
   });
 });
 
-// const Usuario = () => {
-
-//     let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
-//     console.log(usuario.nombre)
-//     $('.user-name').text(usuario.nombre);
-//     $('.user-status').text(usuario.rol.descripcion);
-// }
-
 //obtiene los municipios
 const getMunicipios = () => {
   return $("#tableData").dataTable({
@@ -233,33 +225,7 @@ const getMunicipios = () => {
       },
       { data: "departamento.nombre" },
       { data: "nombre" },
-
-      {
-        data: "id",
-        render: function (data) {
-          return (
-            '<div class="btn-group">' +
-            '<a class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">' +
-            feather.icons["more-vertical"].toSvg({ class: "font-small-4" }) +
-            "</a>" +
-            '<div class="dropdown-menu dropdown-menu-right">' +
-            '<a href="#" onclick="OpenEdit(' +
-            data +
-            ')" class="btn_edit dropdown-item">' +
-            feather.icons["archive"].toSvg({ class: "font-small-4 mr-50" }) +
-            " Actualizar" +
-            "</a>" +
-            '<a href="#" onclick="OpenDelete(' +
-            data +
-            ')" class="btn_delete dropdown-item">' +
-            feather.icons["trash-2"].toSvg({ class: "font-small-4 mr-50" }) +
-            " Inhabilitar" +
-            "</a>" +
-            "</div>" +
-            "</div>"
-          );
-        },
-      },
+    
     ],
     // order: [[1, 'asc']],
     dom:
@@ -272,24 +238,13 @@ const getMunicipios = () => {
       '<"col-sm-12 col-md-6"p>' +
       ">",
     language: {
-      sLengthMenu: "Mostrar _MENU_",
+      sLengthMenu: "Show _MENU_",
       search: "Buscar",
       searchPlaceholder: "Buscar...",
     },
     // Buttons with Dropdown
     buttons: [
-      // {
-      //   text: "Nuevo",
-      //   className: "add-new btn btn-primary mt-50",
-      //   attr: {
-      //     "data-toggle": "modal",
-      //     "data-target": "#modalNew",
-      //   },
-      //   init: function (api, node, config) {
-      //     $(node).removeClass("btn-secondary");
-      //     //Metodo para agregar un nuevo usuario
-      //   },
-      // },
+
     ],
   });
 };
@@ -303,7 +258,7 @@ function limpiarFormulario() {
 
 const Alert = function (
   message,
-  status // si se proceso correctamente la solicitud
+  status 
 ) {
   toastr[`${status}`](message, `${status}`, {
     closeButton: true,
