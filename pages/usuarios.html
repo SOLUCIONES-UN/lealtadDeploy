@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="ltr">
 <!-- BEGIN: Head-->
-<!-- test -->
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -45,43 +44,6 @@
 </head>
 <!-- END: Head-->
 
-<style>
-  /* Asegúrate de que el contenedor del dropdown tenga posición relativa */
-
-
-  .btn-group {
-    position: absolute !important;
-  }
-
-  /* Ajusta la posición y el z-index del menú desplegable */
-  .dropdown-menu {
-    position: absolute !important;
-    top: 100%;
-    left: 0 !important;
-    margin-right: 100px !important;
-    z-index: 10 !important;
-    display: none;
-    /* Ocultar por defecto */
-  }
-
-  /* Mostrar el menú desplegable al hacer clic en el botón */
-  .btn-group.show .dropdown-menu {
-    position: absolute !important;
-    display: block;
-  }
-
-  /* Ajusta el z-index de la tabla */
-  #tableData {
-    position: relative !important;
-    z-index: 0 !important;
-  }
-
-
-  .dropdown-toggle {
-    margin-top: -15px !important;
-  }
-</style>
-
 <!-- BEGIN: Body-->
 
 <body class="vertical-layout vertical-menu-modern  navbar-floating footer-static  " data-open="click"
@@ -108,7 +70,7 @@
       <ul class="nav navbar-nav align-items-center ml-auto">
         <li class="nav-item d-none d-lg-block"><a class="nav-link nav-link-style"><i class="ficon"
               data-feather="moon"></i></a></li>
-
+        
         <li class="nav-item dropdown dropdown-user"><a class="nav-link dropdown-toggle dropdown-user-link"
             id="dropdown-user" href="javascript:void(0);" data-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false">
@@ -143,7 +105,8 @@
   <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
     <div class="navbar-header">
       <ul class="nav navbar-nav flex-row">
-        <li class="nav-item mr-auto"><a class="navbar-brand" href="./dashboard.html"><span class="brand-logo">
+        <li class="nav-item mr-auto"><a class="navbar-brand"
+            href="./dashboard.html"><span class="brand-logo">
               <svg viewbox="0 0 139 95" version="1.1" xmlns="http://www.w3.org/2000/svg"
                 xmlns:xlink="http://www.w3.org/1999/xlink" height="24">
                 <defs>
@@ -206,10 +169,10 @@
               <table class="datatables-basic table" id="tableData">
                 <thead>
                   <tr>
-                    <th>USUARIO</th>
-                    <th>NOMBRE</th>
-                    <th>ROL</th>
-                    <th>ACCIONES</th>
+                    <th>Usuario</th>
+                    <th>Nombre</th>
+                    <th>Rol</th>
+                    <th>Acciones</th>
                   </tr>
                 </thead>
               </table>
@@ -225,15 +188,15 @@
       <form id="formNew" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Agregar Usuario</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Agregar  Usuario</h5>
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
-            <label class="form-label" for="username">Usuario</label>
-            <input type="text" class="form-control " id="username" placeholder="Nombre del usuario" name="username"
-              required />
-            <div id="usernameError" class="invalid-feedback"></div>
-          </div>
+            <label for="username">Nombre de usuario</label>
+            <input type="text" class="form-control" id="username" name="username">
+            <span id="usernameError" class="invalid-feedback"></span>
+        </div>
+        
           <div class="form-group">
             <label class="form-label" for="nombre">Nombre</label>
             <input type="text" class="form-control " id="nombre" placeholder="Nombre" name="nombre" required />
@@ -262,11 +225,10 @@
             <div id="emailError" class="invalid-feedback"></div>
           </div>
 
-
+       
           <div class="form-group">
             <label class="form-label" for="rol">Roles</label>
             <select type="text" class="form-control" id="rol" name="rol" required></select>
-
           </div>
           <button id="btnSubmitAdd" type="submit" class="btn btn-primary mr-1 data-submit">Agregar </button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
@@ -280,13 +242,13 @@
       <form id="formEdit" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Actualizar el usuario</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Actualizar el ususario</h5>
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
             <label class="form-label" for="usernameEdit">Usuario</label>
             <input type="text" class="form-control" id="usernameEdit" placeholder="Nombre del usuario"
-              name="usernameEdit" required readonly />
+              name="usernameEdit" required readonly/>
             <div id="usernameEditError" class="invalid-feedback"></div>
           </div>
           <div class="form-group">
@@ -294,6 +256,7 @@
             <input type="text" class="form-control" id="nombreEdit" placeholder="Nombre" name="nombreEdit" required />
             <div id="nombreEditError" class="invalid-feedback"></div>
           </div>
+
 
           <div class="form-group">
             <label class="form-label" for="passwordEdit">Nueva Contraseña</label>
@@ -303,12 +266,6 @@
               actualizarla</small>
           </div>
 
-
-          <!-- <div class="form-group">
-            <label class="form-label" for="passwordEdit2">Confirmar Contraseña</label>
-            <input type="password" alt="strongPass" class="form-control " id="passwordEdit2" placeholder="Contraseña"
-              name="passwordEdit2" required />
-          </div> -->
           <div class="form-group">
             <label class="form-label" for="telefono">Teléfono (502)</label>
             <input type="text" class="form-control" id="telefonoEdit" placeholder="# de telefono" name="telefono"
@@ -323,7 +280,7 @@
 
             <div id="emailEditError" class="invalid-feedback"></div>
           </div>
-
+          
           <div class="form-group">
             <label class="form-label" for="rolActualizar">Rol</label>
             <select type="text" class="form-control" id="rolActualizar" name="rolActualizar" required></select>
