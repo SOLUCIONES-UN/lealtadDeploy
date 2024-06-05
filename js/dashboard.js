@@ -20,8 +20,6 @@ $(function () {
 
 const cerrarModalBtn = document.getElementById("cerrar-modal-btn");
 
-;
-
 function displayNumCampanas(numCampanas) {
   const numCampanasElement = document.getElementById("num-campanas");
   numCampanasElement.textContent = numCampanas;
@@ -410,20 +408,8 @@ const getparticipantes = () => {
       url: `${url}Participante`,
       type: "GET",
       datatype: "json",
-      dataSrc: function (json) {
-        console.log("Datos recibidos del servidor:", json); // Inspecciona los datos recibidos
-        if (json && Array.isArray(json)) {
-          return json;
-        } else {
-          console.error("La respuesta no es un array:", json);
-          return [];
-        }
-      },
-      error: function (xhr, status, error) {
-        console.error("Error en la solicitud Ajax:", status, error);
-        console.error("Respuesta del servidor:", xhr.responseText);
-      },
-      headers: headers,
+      dataSrc: "",
+      headers: { Authorization: token },
     },
     columns: [
       {

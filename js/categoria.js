@@ -1,5 +1,5 @@
 let token = localStorage.getItem("token");
-const url = "  https://d4dc-181-209-150-206.ngrok-free.app ";
+const url = "https://lealtadv2be.onrender.com/";
 
 $(function () {
   let tabla = getCategorias();
