@@ -26,11 +26,11 @@ const verifytoken = () => {
   tokenMenu = localStorage.getItem("token");
 
   if (tokenMenu == null) {
-    window.location.href = "login.html";
+    window.location.href = "index.html";
   } else {
     const partes = tokenMenu.split(".");
     if (partes.length !== 3) {
-      window.location.href = "login.html";
+      window.location.href = "index.html";
     }
   }
 };
@@ -39,7 +39,7 @@ const verifyLogin = () => {
   tokenMenu = localStorage.getItem("token");
 
   if (tokenMenu == null) {
-    window.location.href = "login.html";
+    window.location.href = "index.html";
   } else {
     const partes = tokenMenu.split(".");
 
@@ -69,7 +69,7 @@ const verifyLogin = () => {
 
         setTimeout(() => {
           localStorage.removeItem("token");
-          window.location.href = "login.html";
+          window.location.href = "index.html";
         }, 1000 * 3);
       } else {
         return;

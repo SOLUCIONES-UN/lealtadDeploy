@@ -405,7 +405,7 @@ const getparticipantes = () => {
 
   return $("#tableData").dataTable({
     ajax: {
-      url: `${url}Participante`,
+      url: `${url}Participantes`,
       type: "GET",
       datatype: "json",
       dataSrc: "",

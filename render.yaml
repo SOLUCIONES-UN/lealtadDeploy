@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: lealtadDeploy
+    env: static
+    staticPublishPath: .
+    buildCommand: ""
+    startCommand: ""
+    routes:
+      - type: redirect
+        source: /
+        destination: /pages/login.html
+        status: 302
