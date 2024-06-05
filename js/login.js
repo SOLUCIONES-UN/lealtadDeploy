@@ -1,6 +1,6 @@
 const url = "https://lealtadv2be.onrender.com/";
 let dataUsuario;
-let pagina = "dashboard.html";
+let pagina = "/pages/dashboard.html";
 let token = localStorage.getItem("token");
 
 $(function () {
