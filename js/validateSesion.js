@@ -5,7 +5,7 @@ const verifyLogin = () => {
   var isUserActive = false;
 
   if (token == null) {
-    window.location.href = "index.html";
+    window.location.href = "login.html";
   } else {
     const partes = token.split(".");
 
@@ -42,7 +42,7 @@ const verifyLogin = () => {
 
         setTimeout(() => {
           localStorage.removeItem("token");
-          window.location.href = "index.html";
+          window.location.href = "login.html";
         }, 1000 * 5);
       } else {
         console.log("El token es válido");
