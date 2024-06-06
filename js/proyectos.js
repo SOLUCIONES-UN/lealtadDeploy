@@ -1,4 +1,4 @@
-const url = 'https://lealtadv2be.onrender.com/';
+const url = 'http://localhost:3000/';
 let token = localStorage.getItem("token");
 var dataDeptoView = [];
 var localidadesSeleccionadas = []; 
@@ -478,7 +478,7 @@ const getProyectos = () => {
             '<"col-sm-12 col-md-6"p>' +
             '>',
         language: {
-            sLengthMenu: 'Mostrar _MENU_',
+            sLengthMenu: 'Show _MENU_',
             search: 'Buscar',
             searchPlaceholder: 'Buscar...',
         },
@@ -674,7 +674,6 @@ $('#departamentoEdit').on('change', function () {
     var departamentoId = $(this).val();
     getMunicipios(departamentoId);
 });
-
 
 
 

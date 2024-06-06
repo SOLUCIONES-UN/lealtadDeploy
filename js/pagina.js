@@ -1,4 +1,4 @@
-const url = "https://lealtadv2be.onrender.com/";
+const url = "http://localhost:3000/";
 let token = localStorage.getItem("token");
 
 $(function () {
@@ -39,9 +39,11 @@ $(function () {
 
   //evento submit del formulario
   $("#formNew").submit(function () {
+    $('#btnSubmit').prop('disabled', true);
     const descripcion = $("#descripcion").val();
 
     if (!validarDescripcion(descripcion)) {
+      $('#btnSubmit').prop('disabled', false);
       return false;
     }
     var myHeaders = new Headers();
@@ -65,6 +67,7 @@ $(function () {
     fetch(`${url}Pagina`, requestOptions)
       .then((response) => response.json())
       .then((result) => {
+        $('#btnSubmit').prop('disabled', false);
         if (result.code == "ok") {
           limpiarForm();
           tabla._fnAjaxUpdate();

@@ -1,4 +1,4 @@
-const url = "https://lealtadv2be.onrender.com/";
+const url = "http://localhost:3000/";
 let token = localStorage.getItem("token");
 
 $(function () {
@@ -9,7 +9,7 @@ $(function () {
   Usuario();
 
   function validarNombreYDescripcion(descripcion) {
-    const descripcionValida = /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s]+$/.test(descripcion.trim());
+    const descripcionValida = /^[a-zA-Z0-9\s]+$/.test(descripcion.trim());
 
     if (!descripcionValida) {
       $(".descripcion").addClass("is-invalid");
@@ -164,13 +164,7 @@ $(function () {
   });
 });
 
-// const Usuario = () => {
 
-//     let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
-//     console.log(usuario.nombre)
-//     $('.user-name').text(usuario.nombre);
-//     $('.user-status').text(usuario.rol.descripcion);
-// }
 
 //obtiene las Transaccions
 const getTransaccions = () => {
@@ -232,7 +226,7 @@ const getTransaccions = () => {
       '<"col-sm-12 col-md-6"p>' +
       ">",
     language: {
-      sLengthMenu: "Mostrar_MENU_",
+      sLengthMenu: "Mostrar _MENU_",
       search: "Buscar",
       searchPlaceholder: "Buscar...",
     },
@@ -247,7 +241,7 @@ const getTransaccions = () => {
         },
         init: function (api, node, config) {
           $(node).removeClass("btn-secondary");
-          //Metodo para agregar un nuevo usuario
+         
         },
       },
     ],
@@ -263,7 +257,7 @@ const limpiarForm = () => {
 
 const Alert = function (
   message,
-  status // si se proceso correctamente la solicitud
+  status 
 ) {
   toastr[`${status}`](message, `${status}`, {
     closeButton: true,
@@ -290,7 +284,7 @@ const OpenEdit = (id) => {
       $("#tablaEdit").val(result.columna.idTablas);
       $("#columnaEdit").val(result.idColumna);
 
-      // Llamar a GetProjects y getTablaDB con la bandera de edición
+      
       GetProjects(true);
       getTablaDB(result.columna.idTablas, true);
 
@@ -329,11 +323,11 @@ const GetProjects = (isEdit = false) => {
       var selectProyectoEdit = document.getElementById("proyectoEdit");
 
       if (isEdit) {
-        // Si estamos en modo de edición, seleccionamos el proyecto actual
+
         var currentProjectId = $("#proyectoEdit").val();
         getTablaDB(currentProjectId, true);
       } else {
-        // Si no estamos en modo de edición, configuramos los eventos de cambio
+        
         selectProyecto.addEventListener("change", function () {
           var selectedId = this.value;
           getTablaDB(selectedId);
@@ -357,7 +351,7 @@ const getTablaDB = (id, isEdith = false) => {
     headers: { Authorization: token },
   };
 
-  // Limpiar completamente los selectores de tablas
+
   $("#tabla").empty();
   $("#tabla").append(
     '<option value="0" selected disabled>Selecciona una Opción</option>'
@@ -403,7 +397,7 @@ const getColumnas = (id_tabla) => {
     '<option value="0" selected disabled>Selecciona una Opción</option>'
   );
 
-  fetch(`${url}Columnabytablas/${id_tabla}`, requestOptions) // Filter by id_tabla=1
+  fetch(`${url}Columnabytablas/${id_tabla}`, requestOptions) 
     .then((response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -417,7 +411,7 @@ const getColumnas = (id_tabla) => {
         $("#columnaEdit").append(opc);
       });
 
-      // Handle case where no columns found with idTablas=1
+   
     })
     .catch((err) => console.log("error", err));
   return false;

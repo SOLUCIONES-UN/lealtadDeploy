@@ -1,4 +1,4 @@
-const url = "https://lealtadv2be.onrender.com/";
+const url = "http://localhost:3000/";
 let token = localStorage.getItem("token");
 
 let numeros = [];
@@ -10,7 +10,7 @@ $(function () {
 
   function validarDescripcion(descripcion) {
     console.log("esto biene ", descripcion);
-    const descripcionValida = /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s]+$/.test(descripcion.trim());
+    const descripcionValida = /^[a-zA-Z\sáéíóúAÉÍÓÚñÑ]+$/.test(descripcion.trim());
 
     if (!descripcionValida) {
       $(".descripcion").addClass("is-invalid");

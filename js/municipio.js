@@ -1,4 +1,4 @@
-const url = "https://lealtadv2be.onrender.com/";
+const url = "http://localhost:3000/";
 let token = localStorage.getItem("token");
 
 $(function () {
@@ -238,7 +238,7 @@ const getMunicipios = () => {
       '<"col-sm-12 col-md-6"p>' +
       ">",
     language: {
-      sLengthMenu: "Show _MENU_",
+      sLengthMenu: "Mostrar _MENU_",
       search: "Buscar",
       searchPlaceholder: "Buscar...",
     },

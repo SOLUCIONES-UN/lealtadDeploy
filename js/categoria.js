@@ -1,11 +1,11 @@
 let token = localStorage.getItem("token");
-const url = "https://lealtadv2be.onrender.com/";
+const url = "http://localhost:3000/";
 
 $(function () {
   let tabla = getCategorias();
   Usuario();
   function validarNombre(nombre) {
-    const nombreValido = /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s]+$/.test(nombre.trim());
+    const nombreValido = /^[a-zA-Z\sáéíóúAÉÍÓÚñÑ]+$/.test(nombre.trim());
 
 
     if (!nombreValido) {

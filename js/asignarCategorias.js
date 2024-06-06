@@ -1,4 +1,4 @@
-const url = "https://lealtadv2be.onrender.com/";
+const url = "http://localhost:3000/";
 let token = localStorage.getItem("token");
 
 const headers = {
@@ -24,7 +24,7 @@ const getCategorias = () => {
       result.forEach((element) => {
         var opc = `<option value="${element.id}">${element.nombre}</option>`;
         $("#categorias").append(opc);
-        console.log("Categorias para mostrar",result);
+        console.log("Categorias para mostrar", result);
       });
     })
     .catch((error) => console.log("error", error));
@@ -103,17 +103,9 @@ $("#categorias").on("change", function () {
   }
 });
 
-// const Usuario = () => {
-
-//     let usuario = JSON.parse(localStorage.getItem('infoUsuario'));
-//     console.log(usuario.nombre)
-//     $('.user-name').text(usuario.nombre);
-//     $('.user-status').text(usuario.rol.descripcion);
-// }
-
 $("#btnAdd").click(function () {
   var data = [];
-
+  $("#btnAdd").prop("disabled", true);
   $(".permiso:checked").each(function () {
     data.push({
       idTransaccion: $(this).val(),
@@ -145,11 +137,15 @@ $("#btnAdd").click(function () {
     })
     .catch((error) => {
       Alert(error, "error");
+    })
+    .finally(() => {
+      $("#btnAdd").prop("disabled", false);
     });
   return false;
 });
 
 $("#btnDelete").click(function () {
+  $("#btnDelete").prop("disabled", true);
   let id = [];
 
   $(".permiso:checked").each(function () {
@@ -157,6 +153,7 @@ $("#btnDelete").click(function () {
   });
 
   if (id.length == 0) {
+    $("#btnDelete").prop("disabled", false);
     return Alert("Por favor seleccione al menos una categoría.", "error");
   }
 
@@ -184,6 +181,9 @@ $("#btnDelete").click(function () {
     })
     .catch((error) => {
       Alert(error, "error");
+    })
+    .finally(() => {
+      $("#btnDelete").prop("disabled", false);
     });
   return false;
 });

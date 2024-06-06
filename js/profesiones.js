@@ -1,4 +1,4 @@
-const url = "https://lealtadv2be.onrender.com/";
+const url = "http://localhost:3000/";
 let token = localStorage.getItem("token");
 
 $(function () {
@@ -6,7 +6,7 @@ $(function () {
   let tabla = GetProfecion();
   Usuario();
   function validarDescripcion(descripcion) {
-    const descripcionValida = /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s]+$/.test(
+    const descripcionValida = /^[a-zA-Z\sáéíóúAÉÍÓÚñÑ]+$/.test(
       descripcion.trim()
     );
 

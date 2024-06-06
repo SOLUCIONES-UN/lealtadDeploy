@@ -1,4 +1,4 @@
-const url = "https://lealtadv2be.onrender.com/";
+const url = "http://localhost:3000/";
 var infoUsuario;
 let token = localStorage.getItem("token");
 
