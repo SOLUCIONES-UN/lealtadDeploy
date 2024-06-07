@@ -2,6 +2,8 @@ let usuarioDashboardDashboard = JSON.parse(
   localStorage.getItem("infousuarioDashboard")
 );
 
+const url = 'https://lealtadv2be.onrender.com/';
+
 const token = localStorage.getItem("token");
 
 $(function () {
