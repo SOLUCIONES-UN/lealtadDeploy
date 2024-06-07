@@ -1,4 +1,4 @@
-const url = 'http://localhost:3000/';
+const url = "https://lealtadv2be.onrender.com/";
 let token = localStorage.getItem("token");
 
 const headers = {
@@ -15,7 +15,7 @@ $(function () {
     getSelect();
 
     function validarDescripcion(descripcion) {
-        const descripcionValida = /^[a-zA-Z0-9\s_\-<>()!.,;:;"']+$/g.test(descripcion);
+        const descripcionValida = /^[a-zA-Z0-9\s_\-<>()!AÉÍÓÚñÑ.,;:;ñ"']+$/g.test(descripcion);
         if (!descripcionValida) {
             $('.descripcion').addClass('is-invalid');
             $('.descripcion-error').text('La descripción no debe contener caracteres especiales inesperados').addClass('text-danger');

@@ -9,7 +9,7 @@ $(function () {
   getSelect();
   // funcion para validar el nombre
   function validarNombre(nombre) {
-    const nombreValido = /^[a-zA-Z0-_9\s]+$/.test(nombre.trim());
+    const nombreValido = /^[a-zA-Z0-_AÉÍÓÚñÑ9\s]+$/.test(nombre.trim());
 
     if (!nombreValido) {
       $(".nombre").addClass("is-invalid");
