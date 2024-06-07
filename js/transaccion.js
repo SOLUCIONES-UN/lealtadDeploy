@@ -1,4 +1,4 @@
-const url = "http://localhost:3000/";
+const url = "https://lealtadv2be.onrender.com/";
 let token = localStorage.getItem("token");
 
 $(function () {
@@ -173,7 +173,7 @@ const getTransaccions = () => {
       url: `${url}Transaccion`,
       type: "GET",
       datatype: "json",
-      dataSrc: "",
+      dataSrc: "Transaccion",
       headers: { Authorization: token },
     },
     columns: [
@@ -309,7 +309,7 @@ const GetProjects = (isEdit = false) => {
   };
 
   $("#proyecto").html(
-    '<option value="0" selected disabled>Selecciona una Opcion</option>'
+    '<option value="0" selected disabled>Selecciona una  opción</option>'
   );
   fetch(`${url}projects`, requestOptions)
     .then((response) => response.json())
@@ -354,7 +354,7 @@ const getTablaDB = (id, isEdith = false) => {
 
   $("#tabla").empty();
   $("#tabla").append(
-    '<option value="0" selected disabled>Selecciona una Opción</option>'
+    '<option value="0" selected disabled>Selecciona una opción</option>'
   );
 
   fetch(`${url}tabla/${id}`, requestOptions)
@@ -391,10 +391,10 @@ const getColumnas = (id_tabla) => {
   };
 
   $("#columna").html(
-    '<option value="0" selected disabled>Selecciona una Opción</option>'
+    '<option value="0" selected disabled>Selecciona una  opción</option>'
   );
   $("#columnaEdit").html(
-    '<option value="0" selected disabled>Selecciona una Opción</option>'
+    '<option value="0" selected disabled>Selecciona una  opción</option>'
   );
 
   fetch(`${url}Columnabytablas/${id_tabla}`, requestOptions) 

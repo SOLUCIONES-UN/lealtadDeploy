@@ -300,13 +300,14 @@ const getSelect = ()=>{
         redirect: 'follow',
         headers: myHeaders
     };
-    $('#ruta').html('<option value="0" selected disabled>Selecciona una opción    </option>');
+    $('#ruta').html('<option value="0" selected disabled>Selecciona una opción</option>');
     fetch(`${url}projects`,requestOptions)
         .then(response => response.json())
         .then(result =>{
             console.log(result);
       
-    
+            $('#ruta').empty().append('<option value="" selected disabled>Selecciona una opción</option>');
+
             result.forEach(element=>{
                  
                 var  opc = `<option value="${element.id}">${element.descripcion}</option>`; 

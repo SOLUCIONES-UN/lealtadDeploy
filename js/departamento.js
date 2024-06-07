@@ -1,4 +1,4 @@
-const url = "http://localhost:3000/";
+const url = "https://lealtadv2be.onrender.com/";
 let token = localStorage.getItem("token");
 
 $(function () {
@@ -202,7 +202,7 @@ const getDepartamentos = () => {
       url: `${url}Departamento`,
       type: "GET",
       datatype: "json",
-      dataSrc: "",
+      dataSrc: "departamentos",
       headers: { Authorization: token },
     },
     columns: [
@@ -329,7 +329,7 @@ const GetProjects = (isEdit = false) => {
   };
 
   $("#proyecto").html(
-    '<option value="0" selected disabled>Selecciona una Opcion</option>'
+    '<option value="0" selected disabled>Selecciona una  opción</option>'
   );
   fetch(`${url}projects`, requestOptions)
     .then((response) => response.json())

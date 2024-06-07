@@ -1,4 +1,4 @@
-const url = "http://localhost:3000/";
+const url = "https://lealtadv2be.onrender.com/";
 let token = localStorage.getItem("token");
 
 const headers = {
@@ -113,6 +113,11 @@ $("#btnAdd").click(function () {
     });
   });
 
+  if (data.length === 0) {
+    $("#btnAdd").prop("disabled", false);
+    return Alert("Por favor seleccione al menos una categoría.", "error");
+  }
+
   var raw = JSON.stringify({
     data: data,
   });
@@ -129,7 +134,7 @@ $("#btnAdd").click(function () {
     .then((result) => {
       console.log(result);
       if (result.code == "ok") {
-        getTransaccionesNoAsignadas();
+        getTransaccionesNoAsignadas(); // Actualiza las transacciones no asignadas después de agregar
         Alert(result.message, "success");
       } else {
         Alert(result.message, "error");
@@ -152,7 +157,7 @@ $("#btnDelete").click(function () {
     id.push($(this).val());
   });
 
-  if (id.length == 0) {
+  if (id.length === 0) {
     $("#btnDelete").prop("disabled", false);
     return Alert("Por favor seleccione al menos una categoría.", "error");
   }
@@ -187,6 +192,7 @@ $("#btnDelete").click(function () {
     });
   return false;
 });
+
 
 const Alert = function (message, status) {
   toastr[`${status}`](message, `${status}`, {

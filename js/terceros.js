@@ -88,6 +88,11 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
     });
 
     $('#formEdit').submit(function () {
+        const nombreEdit = $('#nombreEdit').val();
+
+        if (!validarNombreEdit(nombreEdit)) {
+            return false;
+        }
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");

@@ -1,5 +1,5 @@
 let token = localStorage.getItem("token");
-const url = "http://localhost:3000/";
+const url = "https://lealtadv2be.onrender.com/";
 
 $(function () {
   let tabla = getCategorias();

@@ -1,4 +1,4 @@
-const url = "http://localhost:3000/";
+const url = "https://lealtadv2be.onrender.com/";
 let token = localStorage.getItem("token");
 
 const headers = {"Authorization": token}

@@ -478,7 +478,7 @@ const getProyectos = () => {
             '<"col-sm-12 col-md-6"p>' +
             '>',
         language: {
-            sLengthMenu: 'Show _MENU_',
+            sLengthMenu: 'Mostrar _MENU_',
             search: 'Buscar',
             searchPlaceholder: 'Buscar...',
         },
@@ -519,7 +519,7 @@ const getDepartamento = () => {
                 $('#departamento').empty().append('<option value="" selected disabled>Selecciona una opción</option>');
                 $('#departamentoEdit').empty().append('<option value="" selected disabled>Selecciona una opción</option>');
 
-                result.forEach(element => {
+                result.departamentos.forEach(element => {
                     var opc = `<option value="${element.id}">${element.nombre}</option>`;
                     $('#departamento').append(opc);
                     $('#departamentoEdit').append(opc);
@@ -557,8 +557,10 @@ const getDepartamento = () => {
 
 const getMunicipioByDepto = (idDepartamento) => {
     return new Promise((resolve, reject) => {
-        $('#municipio').html('<option value="" selected disabled>Selecciona una opción</option>');
-        $('#municipioEdit').html('<option value="" selected disabled>Selecciona una opción</option>');
+        // Limpia los selects y agrega la opción placeholder
+        console.log('Limpiando selects y agregando placeholder');
+        $('#municipio').html('<option value="" selected disabled>Selecciona un municipio</option>');
+        $('#municipioEdit').html('<option value="" selected disabled>Selecciona un municipio</option>');
 
         var requestOptions = {
             method: 'GET',
@@ -568,15 +570,17 @@ const getMunicipioByDepto = (idDepartamento) => {
 
         fetch(`${url}Municipio/by/${idDepartamento}`, requestOptions)
             .then(response => {
+                console.log('Recibida respuesta del servidor');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
             .then(result => {
+                console.log('Resultado de municipios:', result);
                 // Limpiar selects para evitar duplicados
-                $('#municipio').empty().append('<option value="" selected disabled>Selecciona una opción</option>');
-                $('#municipioEdit').empty().append('<option value="" selected disabled>Selecciona una opción</option>');
+                $('#municipio').empty().append('<option value="" selected disabled>Selecciona un municipio</option>');
+                $('#municipioEdit').empty().append('<option value="" selected disabled>Selecciona un municipio</option>');
 
                 result.forEach(element => {
                     var opc = `<option value="${element.id}">${element.nombre}</option>`;
@@ -592,7 +596,6 @@ const getMunicipioByDepto = (idDepartamento) => {
     });
 };
 
-
 const getMunicipios = () => {
     var requestOptions = {
         method: 'GET',
@@ -605,6 +608,7 @@ const getMunicipios = () => {
         .then(result => {
             dataMunicipiosView = result;
             console.log('municipios', dataMunicipiosView)
+            
         })
         .catch(error => console.log('error', error));
 }
@@ -624,6 +628,7 @@ const OpenEdit = (id) => {
         .then((response) => response.json())
         .then((result) => {
             console.log(result);
+            console.log(`id proyecto`, id);
             $("#id").val(id);
             $('#descripcionEdit').val(result.descripcion);
             $('#rutaEdit').val(result.ruta);

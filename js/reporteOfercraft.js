@@ -1,4 +1,4 @@
-const url = "http://localhost:3000/";
+const url = "https://lealtadv2be.onrender.com/";
 let tokenOfercraft = localStorage.getItem("token");
 let datosObtenidos = null; // Variable global para almacenar los datos obtenidos
 let archivadas = 0;

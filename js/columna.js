@@ -1,4 +1,5 @@
-const url = "http://localhost:3000/";
+const url = "https://lealtadv2be.onrender.com/";
+// const url = "https://lealtadv2be.onrender.com/";
 let token = localStorage.getItem("token");
 
 let isPageOpen = true;
@@ -8,7 +9,7 @@ $(function () {
   getSelect();
   // funcion para validar el nombre
   function validarNombre(nombre) {
-    const nombreValido = /^[a-zA-Z0-9\s]+$/.test(nombre.trim());
+    const nombreValido = /^[a-zA-Z0-_9\s]+$/.test(nombre.trim());
 
     if (!nombreValido) {
       $(".nombre").addClass("is-invalid");

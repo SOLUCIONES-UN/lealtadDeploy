@@ -1,4 +1,4 @@
-const url = "http://localhost:3000/";
+const url = "https://lealtadv2be.onrender.com/";
 let token = localStorage.getItem("token");
 
 $(function () {
@@ -318,14 +318,20 @@ const GetProjects = () => {
   $("#proyectoEdit").html(
     '<option value="0" selected disabled>Selecciona una opción</option>'
   );
-  fetch(`${url}projects`, requestOptions)
-    .then((response) => response.json())
-    .then((result) => {
-      result.forEach((element) => {
-        var opc = `<option value="${element.id}">${element.descripcion}</option>`;
-        $("#proyecto").append(opc);
-        $("#proyectoEdit").append(opc);
+  fetch(`${url}projects`,requestOptions)
+  .then(response => response.json())
+  .then(result =>{
+      console.log(result);
+
+      $('#proyecto').empty().append('<option value="" selected disabled>Selecciona una opción</option>');
+
+      result.forEach(element=>{
+           
+          var  opc = `<option value="${element.id}">${element.descripcion}</option>`; 
+
+          $('#proyecto').append(opc);
+          $('#proyectoEdit').append(opc);
       });
-    })
-    .catch((error) => console.log("error", error));
-};
+  })
+  .catch(err => Alert(err.message, 'error'))
+}

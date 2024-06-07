@@ -12,11 +12,13 @@
   <title>Invoice List - Lealtad V2</title>
   <link rel="apple-touch-icon" href="../app-assets/images/ico/apple-icon-120.png">
   <link rel="shortcut icon" type="image/x-icon" href="../app-assets/images/ico/favicon.ico">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500;1,600" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500;1,600"
+    rel="stylesheet">
 
   <!-- BEGIN: Vendor CSS-->
   <link rel="stylesheet" type="text/css" href="../app-assets/vendors/css/vendors.min.css">
-  <link rel="stylesheet" type="text/css" href="../app-assets/vendors/css/tables/datatable/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" type="text/css"
+    href="../app-assets/vendors/css/tables/datatable/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" type="text/css" href="../app-assets/vendors/css/tables/datatable/responsive.bootstrap.min.css">
   <!-- END: Vendor CSS-->
 
@@ -38,7 +40,7 @@
   <!-- BEGIN: Custom CSS-->
   <link rel="stylesheet" type="text/css" href="../../../assets/css/style.css">
   <!-- END: Custom CSS-->
-
+  <!-- 
  <style>
 .is-invalid {
     border-color: #dc3545;
@@ -51,59 +53,55 @@
     display: block;
 }
 
- </style> 
-
-
-<style>
-
-.is-invalid {
-    border-color: #dc3545;
-}
-
-
-.invalid-feedback {
-    display: none;
-    color: #dc3545;
-}
-
-
-.is-invalid + .invalid-feedback {
-    display: block;
-}
-
-   </style> 
-  
+ </style>  -->
 
 
   <style>
-
-.w-50 {
-    width: 50% !important;
-}
-
-
-.custom-modal-size {
-
-    max-width: 40% !important;
-}
-       </style> 
+    .is-invalid {
+      border-color: #dc3545;
+    }
 
 
+    .invalid-feedback {
+      display: none;
+      color: #dc3545;
+    }
 
-<style>
 
-  .w-50 {
+    .is-invalid+.invalid-feedback {
+      display: block;
+    }
+  </style>
+
+
+
+  <style>
+    .w-50 {
       width: 50% !important;
-  }
-  
-  
-  .custom-modal-size {
-  
+    }
+
+
+    .custom-modal-size {
+
       max-width: 40% !important;
-  }
-         </style> 
-        
-      
+    }
+  </style>
+
+
+
+  <style>
+    .w-50 {
+      width: 50% !important;
+    }
+
+
+    .custom-modal-size {
+
+      max-width: 40% !important;
+    }
+  </style>
+
+
 
 
 </head>
@@ -111,8 +109,10 @@
 
 <!-- BEGIN: Body-->
 
-<body class="vertical-layout vertical-menu-modern  navbar-floating footer-static  " data-open="click" data-menu="vertical-menu-modern" data-col="">
-  <nav class="header-navbar navbar navbar-expand-lg align-items-center floating-nav navbar-light navbar-shadow container-xxl">
+<body class="vertical-layout vertical-menu-modern  navbar-floating footer-static  " data-open="click"
+  data-menu="vertical-menu-modern" data-col="">
+  <nav
+    class="header-navbar navbar navbar-expand-lg align-items-center floating-nav navbar-light navbar-shadow container-xxl">
     <div class="navbar-container d-flex content">
       <div class="bookmark-wrapper d-flex align-items-center">
         <ul class="nav navbar-nav d-xl-none">
@@ -131,12 +131,26 @@
         </ul>
       </div>
       <ul class="nav navbar-nav align-items-center ml-auto">
-        <li class="nav-item d-none d-lg-block"><a class="nav-link nav-link-style"><i class="ficon" data-feather="moon"></i></a></li>
-        <li class="nav-item dropdown dropdown-user"><a class="nav-link dropdown-toggle dropdown-user-link" id="dropdown-user" href="javascript:void(0);" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <div class="user-nav d-sm-flex d-none"><span class="user-name font-weight-bolder">John Doe</span><span class="user-status">Admin</span></div><span class="avatar"><img class="round" src="../../../app-assets/images/portrait/small/avatar-s-11.jpg" alt="avatar" height="40" width="40"><span class="avatar-status-online"></span></span>
+        <li class="nav-item d-none d-lg-block"><a class="nav-link nav-link-style"><i class="ficon"
+              data-feather="moon"></i></a></li>
+        <li class="nav-item dropdown dropdown-user"><a class="nav-link dropdown-toggle dropdown-user-link"
+            id="dropdown-user" href="javascript:void(0);" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            <div class="user-nav d-sm-flex d-none"><span class="user-name font-weight-bolder">John Doe</span><span
+                class="user-status">Admin</span></div><span class="avatar"><img class="round"
+                src="../../../app-assets/images/portrait/small/avatar-s-11.jpg" alt="avatar" height="40"
+                width="40"><span class="avatar-status-online"></span></span>
           </a>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-user"><a class="dropdown-item" href="page-profile.html"><i class="mr-50" data-feather="user"></i> Profile</a><a class="dropdown-item" href="app-email.html"><i class="mr-50" data-feather="mail"></i> Inbox</a><a class="dropdown-item" href="app-todo.html"><i class="mr-50" data-feather="check-square"></i> Task</a><a class="dropdown-item" href="app-chat.html"><i class="mr-50" data-feather="message-square"></i> Chats</a>
-            <div class="dropdown-divider"></div><a class="dropdown-item" href="page-account-settings.html"><i class="mr-50" data-feather="settings"></i> Settings</a><a class="dropdown-item" href="page-pricing.html"><i class="mr-50" data-feather="credit-card"></i> Pricing</a><a class="dropdown-item" href="page-faq.html"><i class="mr-50" data-feather="help-circle"></i> FAQ</a><a class="dropdown-item" href="login.html"><i class="mr-50" data-feather="power"></i> Logout</a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-user"><a class="dropdown-item"
+              href="page-profile.html"><i class="mr-50" data-feather="user"></i> Profile</a><a class="dropdown-item"
+              href="app-email.html"><i class="mr-50" data-feather="mail"></i> Inbox</a><a class="dropdown-item"
+              href="app-todo.html"><i class="mr-50" data-feather="check-square"></i> Task</a><a class="dropdown-item"
+              href="app-chat.html"><i class="mr-50" data-feather="message-square"></i> Chats</a>
+            <div class="dropdown-divider"></div><a class="dropdown-item" href="page-account-settings.html"><i
+                class="mr-50" data-feather="settings"></i> Settings</a><a class="dropdown-item"
+              href="page-pricing.html"><i class="mr-50" data-feather="credit-card"></i> Pricing</a><a
+              class="dropdown-item" href="page-faq.html"><i class="mr-50" data-feather="help-circle"></i> FAQ</a><a
+              class="dropdown-item" href="login.html"><i class="mr-50" data-feather="power"></i> Logout</a>
           </div>
         </li>
       </ul>
@@ -144,15 +158,18 @@
   </nav>
 
   <ul class="main-search-list-defaultlist-other-list d-none">
-    <li class="auto-suggestion justify-content-between"><a class="d-flex align-items-center justify-content-between w-100 py-50">
-        <div class="d-flex justify-content-start"><span class="mr-75" data-feather="alert-circle"></span><span>No results found.</span></div>
+    <li class="auto-suggestion justify-content-between"><a
+        class="d-flex align-items-center justify-content-between w-100 py-50">
+        <div class="d-flex justify-content-start"><span class="mr-75" data-feather="alert-circle"></span><span>No
+            results found.</span></div>
       </a></li>
   </ul>
   <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
     <div class="navbar-header">
       <ul class="nav navbar-nav flex-row">
         <li class="nav-item mr-auto"><a class="navbar-brand" href="./dashboard.html"><span class="brand-logo">
-              <svg viewbox="0 0 139 95" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="24">
+              <svg viewbox="0 0 139 95" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink" height="24">
                 <defs>
                   <lineargradient id="linearGradient-1" x1="100%" y1="10.5120544%" x2="50%" y2="89.4879456%">
                     <stop stop-color="#000000" offset="0%"></stop>
@@ -166,18 +183,28 @@
                 <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                   <g id="Artboard" transform="translate(-400.000000, -178.000000)">
                     <g id="Group" transform="translate(400.000000, 178.000000)">
-                      <path class="text-primary" id="Path" d="M-5.68434189e-14,2.84217094e-14 L39.1816085,2.84217094e-14 L69.3453773,32.2519224 L101.428699,2.84217094e-14 L138.784583,2.84217094e-14 L138.784199,29.8015838 C137.958931,37.3510206 135.784352,42.5567762 132.260463,45.4188507 C128.736573,48.2809251 112.33867,64.5239941 83.0667527,94.1480575 L56.2750821,94.1480575 L6.71554594,44.4188507 C2.46876683,39.9813776 0.345377275,35.1089553 0.345377275,29.8015838 C0.345377275,24.4942122 0.230251516,14.560351 -5.68434189e-14,2.84217094e-14 Z" style="fill:currentColor"></path>
-                      <path id="Path1" d="M69.3453773,32.2519224 L101.428699,1.42108547e-14 L138.784583,1.42108547e-14 L138.784199,29.8015838 C137.958931,37.3510206 135.784352,42.5567762 132.260463,45.4188507 C128.736573,48.2809251 112.33867,64.5239941 83.0667527,94.1480575 L56.2750821,94.1480575 L32.8435758,70.5039241 L69.3453773,32.2519224 Z" fill="url(#linearGradient-1)" opacity="0.2"></path>
-                      <polygon id="Path-2" fill="#000000" opacity="0.049999997" points="69.3922914 32.4202615 32.8435758 70.5039241 54.0490008 16.1851325"></polygon>
-                      <polygon id="Path-21" fill="#000000" opacity="0.099999994" points="69.3922914 32.4202615 32.8435758 70.5039241 58.3683556 20.7402338"></polygon>
-                      <polygon id="Path-3" fill="url(#linearGradient-2)" opacity="0.099999994" points="101.428699 0 83.0667527 94.1480575 130.378721 47.0740288"></polygon>
+                      <path class="text-primary" id="Path"
+                        d="M-5.68434189e-14,2.84217094e-14 L39.1816085,2.84217094e-14 L69.3453773,32.2519224 L101.428699,2.84217094e-14 L138.784583,2.84217094e-14 L138.784199,29.8015838 C137.958931,37.3510206 135.784352,42.5567762 132.260463,45.4188507 C128.736573,48.2809251 112.33867,64.5239941 83.0667527,94.1480575 L56.2750821,94.1480575 L6.71554594,44.4188507 C2.46876683,39.9813776 0.345377275,35.1089553 0.345377275,29.8015838 C0.345377275,24.4942122 0.230251516,14.560351 -5.68434189e-14,2.84217094e-14 Z"
+                        style="fill:currentColor"></path>
+                      <path id="Path1"
+                        d="M69.3453773,32.2519224 L101.428699,1.42108547e-14 L138.784583,1.42108547e-14 L138.784199,29.8015838 C137.958931,37.3510206 135.784352,42.5567762 132.260463,45.4188507 C128.736573,48.2809251 112.33867,64.5239941 83.0667527,94.1480575 L56.2750821,94.1480575 L32.8435758,70.5039241 L69.3453773,32.2519224 Z"
+                        fill="url(#linearGradient-1)" opacity="0.2"></path>
+                      <polygon id="Path-2" fill="#000000" opacity="0.049999997"
+                        points="69.3922914 32.4202615 32.8435758 70.5039241 54.0490008 16.1851325"></polygon>
+                      <polygon id="Path-21" fill="#000000" opacity="0.099999994"
+                        points="69.3922914 32.4202615 32.8435758 70.5039241 58.3683556 20.7402338"></polygon>
+                      <polygon id="Path-3" fill="url(#linearGradient-2)" opacity="0.099999994"
+                        points="101.428699 0 83.0667527 94.1480575 130.378721 47.0740288"></polygon>
                     </g>
                   </g>
                 </g>
               </svg></span>
             <h2 class="brand-text">LealtadV2</h2>
           </a></li>
-        <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse"><i class="d-block d-xl-none text-primary toggle-icon font-medium-4" data-feather="x"></i><i class="d-none d-xl-block collapse-toggle-icon font-medium-4  text-primary" data-feather="disc" data-ticon="disc"></i></a></li>
+        <li class="nav-item nav-toggle"><a class="nav-link modern-nav-toggle pr-0" data-toggle="collapse"><i
+              class="d-block d-xl-none text-primary toggle-icon font-medium-4" data-feather="x"></i><i
+              class="d-none d-xl-block collapse-toggle-icon font-medium-4  text-primary" data-feather="disc"
+              data-ticon="disc"></i></a></li>
       </ul>
     </div>
     <div class="shadow-bottom"></div>
@@ -219,165 +246,180 @@
 
   <!-- modal de creacion or Update -->
   <div class="modal modal-slide-in new-user-modal fade" id="modalNew">
-    <div class="modal-dialog" style="max-width: 100%;">
-        <form id="formNew" class="add-new-user modal-content pt-0" autocomplete="off">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-            <div class="modal-header mb-1">
-                <h5 class="modal-title" id="exampleModalLabel">Agregar  Proyecto</h5>
+    <div class="modal-dialog w-50">
+      <form id="formNew" class="add-new-user modal-content pt-0" autocomplete="off">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+        <div class="modal-header mb-1">
+          <h5 class="modal-title" id="exampleModalLabel">Agregar Proyecto</h5>
+        </div>
+        <div class="modal-body flex-grow-1">
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label class="form-label" for="descripcion">Descripción</label>
+              <input type="text" class="form-control descripcion" id="descripcion"
+                placeholder="Descripción del proyecto" name="descripcion" aria-describedby="descripcion-error"
+                required />
+              <div id="descripcionError" class="invalid-feedback descripcion-error"></div>
             </div>
-            <div class="modal-body flex-grow-1">
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label class="form-label" for="descripcion">Descripción</label>
-                        <input type="text" class="form-control descripcion" id="descripcion" placeholder="Descripción del proyecto" name="descripcion" aria-describedby="descripcion-error" required />
-                        <div id="descripcionError" class="invalid-feedback descripcion-error"></div>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="form-label" for="ruta">Ruta</label>
-                        <input type="text" class="form-control ruta" id="ruta" placeholder="Ruta del proyecto" name="ruta" aria-describedby="ruta-error" required />
-                        <div id="ruta-error" class="invalid-feedback ruta-error"></div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label class="form-label" for="departamento">Departamento</label>
-                        <select name="departamento" id="departamento" aria-describedby="departamentoError" required class="form-control" autocomplete="off">
-                            <option disabled selected>Selecciona una opción</option>
-                        </select>
-                        <div id="departamentoErrorVacio" class="invalid-feedback">Por favor, seleccione un departamento.</div>
-                        <div id="departamentoErrorDuplicado" class="invalid-feedback">Departamento y municipio ya existen en la tabla.</div>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="form-label" for="municipio">Municipio</label>
-                        <select name="municipio" id="municipio" aria-describedby="municipioError" required class="form-control" autocomplete="off">
-                            <option disabled selected>Selecciona una opción</option>
-                        </select>
-                        <div id="municipioErrorVacio" class="invalid-feedback">Por favor, seleccione un municipio.</div>
-                        <div id="municipioErrorDuplicado" class="invalid-feedback">Departamento y municipio ya existen en la tabla.</div>
-                    </div>
-                </div>
-                <div class="btn-crear d-flex justify-content-end">
-                    <button type="button" class="btn btn-outline-primary" id="addLocalidad">Agregar</button>
-                </div>
+            <div class="form-group col-md-6">
+              <label class="form-label" for="ruta">Ruta</label>
+              <input type="text" class="form-control ruta" id="ruta" placeholder="Ruta del proyecto" name="ruta"
+                aria-describedby="ruta-error" required />
+              <div id="ruta-error" class="invalid-feedback ruta-error"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label class="form-label" for="departamento">Departamento</label>
+              <select name="departamento" id="departamento" aria-describedby="departamentoError" required
+                class="form-control" autocomplete="off">
+                <option disabled selected>Selecciona una opcións</option>
+              </select>
+              <div id="departamentoErrorVacio" class="invalid-feedback">Por favor, seleccione un departamento.</div>
+              <div id="departamentoErrorDuplicado" class="invalid-feedback">Departamento y municipio ya existen en la
+                tabla.</div>
+            </div>
+            <div class="form-group col-md-6">
+              <label class="form-label" for="municipio">Municipio</label>
+              <select name="municipio" id="municipio" aria-describedby="municipioError" required class="form-control" autocomplete="off">
+                <option disabled selected>Selecciona una opción</option>
+              </select>
+              <div id="municipioErrorVacioedit" class="invalid-feedback">Por favor, seleccione un municipio.</div>
+              <div id="municipioErrorDuplicadoedit" class="invalid-feedback">Municipio ya existen en la tabla.</div>
+            </div>
+          </div>
+          <div class="btn-crear d-flex justify-content-end">
+            <button type="button" class="btn btn-outline-primary" id="addLocalidad">Agregar</button>
+          </div>
 
-                <!-- Tabla -->
-                <div class="table-responsive"> <!-- Agrega esta clase -->
-                  <table class="datatables-basic table mb-3 mt-2 stepper-table table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl" id="tableLocalidad">
-                      <thead>
-                          <tr>
-                              <th>#</th>
-                              <th>DEPARTAMENTO</th>
-                              <th>MUNICIPIO</th>
-                              <th>Acción</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <!-- Aquí se agregarán las filas dinámicamente -->
-                      </tbody>
-                  </table>
-              </div>
-                <div class="d-flex justify-content-end">
-                    <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Guardar</button>
-                    <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-                </div>
-            </div>
-        </form>
+          <!-- Tabla -->
+          <div class="table-responsive">
+            <table
+              class="datatables-basic table mb-3 mt-2 stepper-table table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl"
+              id="tableLocalidad">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>DEPARTAMENTO</th>
+                  <th>MUNICIPIO</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+
+              </tbody>
+            </table>
+          </div>
+          <div class="d-flex justify-content-end">
+            <button id="btnSubmit" type="submit" class="btn btn-primary mr-1 data-submit">Guardar</button>
+            <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+          </div>
+        </div>
+      </form>
     </div>
-</div>
-
-
- <!-- Modal Edit -->
-  <!-- Modal Edit -->
+  </div>
   <div class="modal modal-slide-in new-user-modal fade" id="modalEdit">
-    <div class="modal-dialog w-50 custom-modal-size">
-        <form id="formEdit" class="add-new-user modal-content pt-0" autocomplete="off">
-            <input type="hidden" id="id" name="id">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-            <div class="modal-header mb-1">
-                <h5 class="modal-title" id="exampleModalLabel">Actualizar Proyecto</h5>
+    <div class="modal-dialog w-50">
+      <form id="formEdit" class="add-new-user modal-content pt-0" autocomplete="off">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+        <div class="modal-header mb-1">
+          <h5 class="modal-title" id="exampleModalLabel">Actualizar Proyecto</h5>
+        </div>
+        <div class="modal-body flex-grow-1">
+          <div class="  row">
+            <div class="form-group col-md-6">
+              <input id="id" hidden />
+              <label class="form-label" for="descripcionEdit">Descripción</label>
+              <input type="text" class="form-control descripcion" id="descripcionEdit"
+                placeholder="Descripción del proyecto" name="descripcion" aria-describedby="descripcion-error"
+                required />
+              <div id="descripcionError" class="invalid-feedback descripcion-error"></div>
             </div>
-            <div class="modal-body flex-grow-1">
-                <div class="form-group">
-                    <label class="form-label" for="descripcionEdit">Descripción</label>
-                    <input type="text" class="form-control descripcion" id="descripcionEdit" placeholder="Descripción del proyecto" name="descripcion" aria-describedby="descripcion-error" required />
-                    <div class="invalid-feedback descripcion-error"></div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="rutaEdit">Ruta</label>
-                    <input type="text" class="form-control ruta" id="rutaEdit" placeholder="Ruta del proyecto" name="ruta" aria-describedby="ruta-error" required />
-                    <div class="invalid-feedback ruta-error"></div>
-                </div>
-                <div class="row">
-                  <div class="form-group col-md-6">
-                      <label class="form-label" for="departamentoEdit">Departamento</label>
-                      <select name="departamento" id="departamentoEdit" aria-describedby="departamentoError" required class="form-control"autocomplete="off">
-                          <option disabled selected>Selecciona una opción</option>
-                      </select>
-                      <div id="departamentoErrorVacioedit" class="invalid-feedback">Por favor, seleccione un departamento.</div>
-                      <div id="departamentoErrorDuplicadoedit" class="invalid-feedback">Departamento ya existen en la tabla.</div>
-                  </div>
-                  <div class="form-group col-md-6">
-                      <label class="form-label" for="municipioEdit">Municipio</label>
-                      <select name="municipio" id="municipioEdit" aria-describedby="municipioError" required class="form-control" >
-                          <option disabled selected>Selecciona una opción</option>
-                      </select>
-                      <div id="municipioErrorVacioedit" class="invalid-feedback">Por favor, seleccione un municipio.</div>
-                      <div id="municipioErrorDuplicadoedit" class="invalid-feedback">municipio ya existen en la tabla.</div>
-                  </div>
+            <div class="form-group col-6">
+              <label class="form-label" for="rutaEdit">Ruta</label>
+              <input type="text" class="form-control ruta" id="rutaEdit" placeholder="Ruta del proyecto" name="ruta"
+                aria-describedby="ruta-error" required />
+              <div id="ruta-error" class="invalid-feedback ruta-error"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-6">
+              <label class="form-label" for="departamentoEdit">Departamento</label>
+              <select name="departamento" id="departamentoEdit" aria-describedby="departamentoError" required
+                class="form-control" autocomplete="off">
+                <option disabled selected>Selecciona una Departamento</option>
+              </select>
+              <div id="departamentoErrorVacioedit" class="invalid-feedback">Por favor, seleccione un departamento.</div>
+              <div id="departamentoErrorDuplicadoedit" class="invalid-feedback">Departamento ya existen en la tabla.
               </div>
-              
-                <div class="btn-crear d-flex justify-content-end">
-                    <button type="button" class="btn btn-outline-primary" id="addLocalidadEdit">Agregar</button>
-                </div>
-
-                <!-- Tabla -->
-                <table class="datatables-basic table mb-3 mt-2 stepper-table" id="tableLocalidadEdit">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Departamento</th>
-                            <th>Municipio</th>
-                            <th>Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbodyLocalidadEdith" name="tbodyLocalidadEdith">
-                        <!-- Aquí se agregarán las filas dinámicamente -->
-                    </tbody>
-                </table>
-
-                <div class="d-flex justify-content-end">
-                    <button id="btnSubmEdit" type="submit" class="btn btn-primary mr-1 data-submit">Actualizar</button>
-                    <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-                </div>
             </div>
-        </form>
+            <div class="form-group col-md-6">
+              <label class="form-label" for="municipioEdit">Municipio</label>
+              <select name="municipio" id="municipioEdit" aria-describedby="municipioError" required
+                class="form-control" autocomplete="off">
+                <option disabled selected>Selecciona una Municipio</option>
+              </select>
+              <div id="municipioErrorVacioedit" class="invalid-feedback">Por favor, seleccione un municipio.</div>
+              <div id="municipioErrorDuplicadoedit" class="invalid-feedback">Municipio ya existen en la tabla.</div>
+            </div>
+          </div>
+          <div class="btn-crear d-flex justify-content-end">
+            <button type="button" class="btn btn-outline-primary" id="addLocalidadEdit">Agregar</button>
+          </div>
+          <div class="table-responsive">
+            <table
+              class="datatables-basic table mb-4 mt-2 stepper-table table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl"
+              id="tableLocalidadEdit">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Departamento</th>
+                  <th>Municipio</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyLocalidadEdith" name="tbodyLocalidadEdith">
+                <!-- Aquí se agregarán las filas dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+          <div class="d-flex justify-content-end">
+            <button id="btnSubmEdit" type="submit" class="btn btn-primary mr-1 data-submit">Actualizar</button>
+            <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+          </div>
+        </div>
+      </form>
     </div>
-</div>
-
+  </div>
 
   <div class="modal modal-slide-in new-user-modal fade" id="modalDelete">
     <div class="modal-dialog">
       <form id="formDelete" class="add-new-user modal-content pt-0" autocomplete="off">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
         <div class="modal-header mb-1">
-          <h5 class="modal-title" id="exampleModalLabel">Inhabilitar un proyecto</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Inhabilitar el Proyecto</h5>
         </div>
         <div class="modal-body flex-grow-1">
           <div class="form-group">
             <input id="idDelete" type="hidden">
-            <p>¿Está seguro que desea <b>inhabilitar este proyecto?</b></p>
+            <p>¿Está seguro que desea <b>Inhabilitar este Proyecto?</b></p>
           </div>
-          <button id="BtnDelete" type="button" class="btn btn-danger mr-1 data-submit">Confirmar</button>
+          <button id="BtnDelete" type="button" class="btn btn-danger mr-1 data-submit">Confirmar </button>
           <button type="reset" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
         </div>
       </form>
     </div>
   </div>
   <!-- END: Content-->
+  </div>
+  <!-- END: Content-->
 
   <!-- BEGIN: Footer-->
   <footer class="footer footer-static footer-light">
-    <p class="clearfix mb-0"><span class="float-md-left d-block d-md-inline-block mt-25">&copy; 2024<a class="ml-25" href="#" target="_blank">LEALTAD</a><span class="d-none d-sm-inline-block">, Reservados todos los derechos.</span></span><span class="float-md-right d-none d-md-block">Desarrollado por: SOLUCIONES-UN<i data-feather="code"></i></span></p>
+    <p class="clearfix mb-0"><span class="float-md-left d-block d-md-inline-block mt-25">&copy; 2024<a class="ml-25"
+          href="#" target="_blank">LEALTAD</a><span class="d-none d-sm-inline-block">, Reservados todos los
+          derechos.</span></span><span class="float-md-right d-none d-md-block">Desarrollado por: SOLUCIONES-UN<i
+          data-feather="code"></i></span></p>
   </footer>
   <button class="btn btn-primary btn-icon scroll-top" type="button"><i data-feather="arrow-up"></i></button>
   <!-- END: Footer-->
@@ -395,7 +437,7 @@
   <script src="../app-assets/vendors/js/tables/datatable/responsive.bootstrap4.min.js"></script>
   <script src="../app-assets/vendors/js/extensions/toastr.min.js"></script>
   <!-- END: Page Vendor JS-->
-  
+
   <!-- BEGIN: Theme JS-->
   <script src="../app-assets/js/core/app-menu.min.js"></script>
   <script src="../app-assets/js/core/app.min.js"></script>

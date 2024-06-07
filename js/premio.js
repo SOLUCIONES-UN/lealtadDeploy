@@ -195,7 +195,7 @@ const getPremios = () => {
             url: `${url}Premio`,
             type: "GET",
             datatype: "json",
-            dataSrc:"",
+            dataSrc:"premio",
             headers: headers,
         },
         columns: [
@@ -454,7 +454,7 @@ const getTrasacciones = (idTransaccion) => {
     fetch(`${url}Transaccion`, requestOptions)
         .then(response => response.json())
         .then(result => {
-            result.forEach(element => {
+            result.Transaccion.forEach(element => {
 
                 var opc  = `<option value="${element.id}">${element.descripcion}</option>`;
                 if(element.id === idTransaccion){
