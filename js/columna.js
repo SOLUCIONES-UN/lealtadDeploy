@@ -1,5 +1,5 @@
 const url = "https://lealtadv2be.onrender.com/";
-// const url = "https://lealtadv2be.onrender.com/";
+
 let token = localStorage.getItem("token");
 
 let isPageOpen = true;
