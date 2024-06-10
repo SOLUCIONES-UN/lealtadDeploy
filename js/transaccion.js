@@ -353,6 +353,7 @@ const getTablaDB = (id, isEdith = false) => {
 
 
   $("#tabla").empty();
+
   $("#tabla").append(
     '<option value="0" selected disabled>Selecciona una opción</option>'
   );
