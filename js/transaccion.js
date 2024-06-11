@@ -1,6 +1,9 @@
-const url = "http://localhost:3000/";
-let token = localStorage.getItem("token");
+// const url = "https://lealtadv2be.onrender.com/";
+// let token = localStorage.getItem("token");
 
+
+const url = "https://lealtadv2be.onrender.com/";
+let token = localStorage.getItem("token");
 $(function () {
   getColumnas();
   GetProjects();
