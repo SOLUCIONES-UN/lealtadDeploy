@@ -1,4 +1,4 @@
-const url = "https://lealtadv2be.onrender.com/";
+const url = 'http://localhost:3000/';
 let token = localStorage.getItem("token");
 
 $(function() {
@@ -88,11 +88,6 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
     });
 
     $('#formEdit').submit(function () {
-        const nombreEdit = $('#nombreEdit').val();
-
-        if (!validarNombreEdit(nombreEdit)) {
-            return false;
-        }
 
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
