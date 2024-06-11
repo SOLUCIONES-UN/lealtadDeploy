@@ -53,7 +53,7 @@ $(function () {
   //evento submit del formulario
   $("#formNew").submit(function () {
     $("#btnSubmit").prop("disabled", true);
-    const descripcion = $("#descripcion").val();
+    const descripcion = $("#descripcion").val().trim();
 
     if (!validarDescripcion(descripcion)) {
       $("#btnSubmit").prop("disabled", false);
@@ -65,7 +65,7 @@ $(function () {
     myHeaders.append("Authorization", tokenMenu);
 
     var raw = JSON.stringify({
-      descripcion: $("#descripcion").val(),
+      descripcion: $("#descripcion").val().trim(),
       icono: $("#icono").val(),
     });
 
@@ -99,7 +99,7 @@ $(function () {
   $("#formEdit").submit(function (event) {
     // event.preventDefault();
     // $('#btnSubmitEdit').prop('disabled', true);
-    const descripcion = $("#descripcionEdit").val();
+    const descripcion = $("#descripcionEdit").val().trim();
 
     if (!validarDescripcion(descripcion)) {
       return false;
@@ -113,7 +113,7 @@ $(function () {
     console.log("ID del menú:", id);
 
     var raw = JSON.stringify({
-      descripcion: $("#descripcionEdit").val(),
+      descripcion: $("#descripcionEdit").val().trim(),
       icono: $("#iconoEdit").val(),
     });
 

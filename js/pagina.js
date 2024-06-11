@@ -40,7 +40,7 @@ $(function () {
   //evento submit del formulario
   $("#formNew").submit(function () {
     $('#btnSubmit').prop('disabled', true);
-    const descripcion = $("#descripcion").val();
+    const descripcion = $("#descripcion").val().trim();
 
     if (!validarDescripcion(descripcion)) {
       $('#btnSubmit').prop('disabled', false);
@@ -51,7 +51,7 @@ $(function () {
     myHeaders.append("Authorization", token);
 
     var raw = JSON.stringify({
-      descripcion: $("#descripcion").val(),
+      descripcion: $("#descripcion").val().trim(),
       idMenu: $("#Menu").val(),
       path: $("#path").val(),
       icono: $("#Icono").val(),
@@ -85,7 +85,7 @@ $(function () {
 
   //eventos de edicion para un menu
   $("#formEdit").submit(function () {
-    const descripcion = $("#descripcionEdit").val();
+    const descripcion = $("#descripcionEdit").val().trim();
 
     if (!validarDescripcion(descripcion)) {
       return false;
@@ -97,7 +97,7 @@ $(function () {
     const id = $("#id").val();
 
     var raw = JSON.stringify({
-      descripcion: $("#descripcionEdit").val(),
+      descripcion: $("#descripcionEdit").val().trim(),
       path: $("#PathEdit").val(),
       icono: $("#IconoEdith").val(),
       idMenu: $("#MenuEdith").val(),

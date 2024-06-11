@@ -51,7 +51,7 @@ $(function () {
 
   //evento submit del formulario
   $("#formNew").submit(function () {
-    const nombre = $("#nombre").val();
+    const nombre = $("#nombre").val().trim();
 
     if (!validarNombre(nombre)) {
       return false;
@@ -67,7 +67,7 @@ $(function () {
     myHeaders.append("Authorization", token);
 
     var raw = JSON.stringify({
-      nombre: $("#nombre").val(),
+      nombre: $("#nombre").val().trim(),
       fila_insertada: $("#fInsertada").val(),
       fila_actualizada: $("#fActualizada").val(),
       idProyectos: $("#proyecto").val(),
@@ -106,7 +106,7 @@ $(function () {
   });
 
   $("#formEdit").submit(function () {
-    const nombre = $("#nombreEdit").val();
+    const nombre = $("#nombreEdit").val().trim();
 
     if (!validarNombre(nombre)) {
       return false;
@@ -122,7 +122,7 @@ $(function () {
     const id = $("#id").val();
 
     var raw = JSON.stringify({
-      nombre: $("#nombreEdit").val(),
+      nombre: $("#nombreEdit").val().trim(),
       fila_insertada: $("#fInsertadaEdit").val(),
       fila_actualizada: $("#fActualizadaEdit").val(),
       idTablas: $("#tablaEdit").val(),

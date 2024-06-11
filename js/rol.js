@@ -45,7 +45,7 @@ $(function () {
 
        
     $('#btnSubmit').prop('disabled', true);
-    const descripcion = $('#descripcion').val();
+    const descripcion = $('#descripcion').val().trim();
    
     
     
@@ -60,7 +60,7 @@ $(function () {
         myHeaders.append("Authorization", token);
 
         var raw = JSON.stringify({
-            "descripcion": $('#descripcion').val()
+            "descripcion": $('#descripcion').val().trim()
         });
 
         var requestOptions = {
@@ -93,7 +93,7 @@ $(function () {
 
 
     $('#formEdit').submit(function () {
-        const descripcion = $('#descripcionEdit').val();
+        const descripcion = $('#descripcionEdit').val().trim();
 
         if (!validarDescripcion(descripcion)) {
             return false;
@@ -105,7 +105,7 @@ $(function () {
         const id = $('#id').val();
 
         var raw = JSON.stringify({
-            "descripcion": $('#descripcionEdit').val()
+            "descripcion": $('#descripcionEdit').val().trim()
         });
 
         var requestOptions = {

@@ -1,4 +1,4 @@
-const url = "https://lealtadv2be.onrender.com/";
+const url = "http://localhost:3000/";
 let token = localStorage.getItem("token");
 
 $(function () {
@@ -9,25 +9,24 @@ $(function () {
   Usuario();
 
   function validarNombreYDescripcion(descripcion) {
-    const descripcionValida = /^[a-zA-Z0-9\s]+$/.test(descripcion.trim());
-
+    const descripcionValida = /^[^\d\s][a-zA-ZñÑáéíóúÁÉÍÓÚ\s]*[^\d\s]$/.test(
+      descripcion.trim()
+    );
     if (!descripcionValida) {
       $(".descripcion").addClass("is-invalid");
       $(".descripcion-error")
         .text(
-          "La descripción no admite caracteres especiales ni espacios en blanco"
+          "La descripción solo debe contener letras sin espacios en blanco ni números"
         )
         .addClass("text-danger");
       return false;
-    } else {
-      $(".descripcion").removeClass("is-invalid");
-      $(".descripcion-error").empty().removeClass("text-danger");
     }
-
+    $(".descripcion").removeClass("is-invalid");
+    $(".descripcion-error").empty().removeClass("text-danger");
     return true;
   }
 
-  // Eventos para limpiar el formulario
+  
   $("#modalNew, #modalEdit").on("show.bs.modal", function () {
     limpiarForm();
   });
@@ -42,9 +41,9 @@ $(function () {
       limpiarForm();
     });
 
-  //evento submit del formulario
+  
   $("#formNew").submit(function () {
-    const descripcion = $("#descripcion").val();
+    const descripcion = $("#descripcion").val().trim();
 
     if (!validarNombreYDescripcion(descripcion)) {
       return false;
@@ -56,6 +55,7 @@ $(function () {
 
     var raw = JSON.stringify({
       descripcion: descripcion,
+      descripcion: $("#descripcion").val().trim(),
       puntos: $("#puntos").val(),
       columna: $("#columna").val(),
       proyecto: $("#proyecto").val(),
@@ -87,8 +87,10 @@ $(function () {
     return false;
   });
 
+  
   $("#formEdit").submit(function () {
-    const descripcion = $("#descripcionEdit").val();
+    const descripcion = $("#descripcionEdit").val().trim();
+    const columna = $("columnaEdit").val();
 
     if (!validarNombreYDescripcion(descripcion)) {
       return false;
@@ -101,7 +103,7 @@ $(function () {
     const id = $("#id").val();
 
     var raw = JSON.stringify({
-      descripcion: $("#descripcionEdit").val(),
+      descripcion: $("#descripcionEdit").val().trim(),
       puntos: $("#puntosEdit").val(),
       columna: $("#columnaEdit").val(),
       proyecto: $("#proyectoEdit").val(),
@@ -143,7 +145,6 @@ $(function () {
       method: "DELETE",
       headers: myHeaders,
       redirect: "follow",
-      headers: { Authorization: token },
     };
 
     fetch(`${url}Transaccion/${id}`, requestOptions)
@@ -164,9 +165,7 @@ $(function () {
   });
 });
 
-
-
-//obtiene las Transaccions
+// Obtiene las Transaccs
 const getTransaccions = () => {
   return $("#tableData").dataTable({
     ajax: {
@@ -215,7 +214,6 @@ const getTransaccions = () => {
         },
       },
     ],
-    // order: [[1, 'asc']],
     dom:
       '<"d-flex justify-content-between align-items-center header-actions mx-1 row mt-75"' +
       '<"col-lg-12 col-xl-6" l>' +
@@ -230,7 +228,6 @@ const getTransaccions = () => {
       search: "Buscar",
       searchPlaceholder: "Buscar...",
     },
-    // Buttons with Dropdown
     buttons: [
       {
         text: "Nuevo",
@@ -241,25 +238,21 @@ const getTransaccions = () => {
         },
         init: function (api, node, config) {
           $(node).removeClass("btn-secondary");
-         
         },
       },
     ],
   });
 };
+
 const limpiarForm = () => {
-  $("#formNew").trigger("reset");
 
   $(".descripcion-error").empty().removeClass("text-danger");
 
   $("#descripcionEdit").removeClass("is-invalid");
 };
 
-const Alert = function (
-  message,
-  status 
-) {
-  toastr[`${status}`](message, `${status}`, {
+const Alert = function (message, status) {
+  toastr[status](message, status, {
     closeButton: true,
     tapToDismiss: false,
     positionClass: "toast-top-right",
@@ -277,16 +270,15 @@ const OpenEdit = (id) => {
   fetch(`${url}Transaccion/${id}`, requestOptions)
     .then((response) => response.json())
     .then((result) => {
-      console.log(result);
+      // Llena todos los campos con los datos del resultado
       $("#id").val(id);
       $("#descripcionEdit").val(result.descripcion);
       $("#proyectoEdit").val(result.columna.idProyectos);
       $("#tablaEdit").val(result.columna.idTablas);
-      $("#columnaEdit").val(result.idColumna);
+      $("#columnaEdit").val(result.columna);
 
-      
+     
       GetProjects(true);
-      getTablaDB(result.columna.idTablas, true);
 
       $("#modalEdit").modal("toggle");
     })
@@ -309,7 +301,7 @@ const GetProjects = (isEdit = false) => {
   };
 
   $("#proyecto").html(
-    '<option value="0" selected disabled>Selecciona una  opción</option>'
+    '<option value="0" selected disabled>Selecciona una Opcion</option>'
   );
   fetch(`${url}projects`, requestOptions)
     .then((response) => response.json())
@@ -323,11 +315,9 @@ const GetProjects = (isEdit = false) => {
       var selectProyectoEdit = document.getElementById("proyectoEdit");
 
       if (isEdit) {
-
         var currentProjectId = $("#proyectoEdit").val();
         getTablaDB(currentProjectId, true);
       } else {
-        
         selectProyecto.addEventListener("change", function () {
           var selectedId = this.value;
           getTablaDB(selectedId);
@@ -351,11 +341,9 @@ const getTablaDB = (id, isEdith = false) => {
     headers: { Authorization: token },
   };
 
-
   $("#tabla").empty();
-
   $("#tabla").append(
-    '<option value="0" selected disabled>Selecciona una opción</option>'
+    '<option value="0" selected disabled>Selecciona una Opción</option>'
   );
 
   fetch(`${url}tabla/${id}`, requestOptions)
@@ -371,34 +359,32 @@ const getTablaDB = (id, isEdith = false) => {
 
       if (isEdith) getColumnas(selectTablaDbEdit.value);
 
-      selectProyecto.addEventListener("change", function () {
-        var selectedId = this.value;
-        getColumnas(selectedId);
+      selectTablaDb.addEventListener("change", function () {
+        var selectedId2 = this.value;
+        getColumnas(selectedId2);
       });
 
-      selectProyectoEdit.addEventListener("change", function () {
-        var selectedId = this.value;
-        getColumnas(selectedId);
+      selectTablaDbEdit.addEventListener("change", function () {
+        var selectedId2 = this.value;
+        getColumnas(selectedId2);
       });
     })
     .catch((err) => console.log("error", err));
 };
 
-const getColumnas = (id_tabla) => {
+const getColumnas = (idTabla) => {
   var requestOptions = {
     method: "GET",
     redirect: "follow",
     headers: { Authorization: token },
   };
 
-  $("#columna").html(
-    '<option value="0" selected disabled>Selecciona una  opción</option>'
-  );
-  $("#columnaEdit").html(
-    '<option value="0" selected disabled>Selecciona una  opción</option>'
-  );
+  // Verificar si ya hay opciones en el select
+  if ($("#columnaEdit option").length > 1) {
+    return; // No hace falta volver a cargar las opciones
+  }
 
-  fetch(`${url}Columnabytablas/${id_tabla}`, requestOptions) 
+  fetch(`${url}Columna/bytablas/${idTabla}`, requestOptions)
     .then((response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -406,25 +392,13 @@ const getColumnas = (id_tabla) => {
       return response.json();
     })
     .then((result) => {
+      var opc = '';
       result.forEach((element) => {
-        var opc = `<option value="${element.id}">${element.nombre}</option>`;
-        $("#columna").append(opc);
-        $("#columnaEdit").append(opc);
+         opc += `<option value="${element.id}">${element.nombre}</option>`;
       });
 
-   
+      // Agregar las opciones al select
+      $("#columnaEdit").append(opc);
     })
-    .catch((err) => console.log("error", err));
-  return false;
+    .catch((error) => console.log("error", error));
 };
-
-// Evento de cambio del selector de tablas
-$("#tabla").on("change", function () {
-  var selectedId2 = $(this).val();
-  getColumnas(selectedId2);
-});
-
-$("#tablaEdit").on("change", function () {
-  var selectedId2 = $(this).val();
-  getColumnas(selectedId2);
-});

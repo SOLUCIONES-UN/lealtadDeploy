@@ -64,7 +64,7 @@ $(function () {
 
     $('#formNew').submit(function () {
 
-        const descripcion = $('#descripcion').val();
+        const descripcion = $('#descripcion').val().trim();
         const proyecto = $("#ruta").val();
 
         if (!validarDescripcion(descripcion)) {
@@ -80,7 +80,7 @@ $(function () {
         $("#btnSubmit").attr("disabled",true);
 
         var raw = JSON.stringify({
-            "nombre_tabla": $('#descripcion').val(),
+            "nombre_tabla": $('#descripcion').val().trim(),
             "idProyectos": $('#ruta').val()
         });
 
@@ -112,7 +112,7 @@ $(function () {
 
     $('#formEdit').submit(function () {
 
-        const descripcion = $('#descripcionEdit').val();
+        const descripcion = $('#descripcionEdit').val().trim();
 
         if (!validarDescripcion(descripcion)) {
             return false;
@@ -122,7 +122,7 @@ $(function () {
         const id = $('#id').val();
         
         var raw = JSON.stringify({
-            "nombre_tabla": $('#descripcionEdit').val(),
+            "nombre_tabla": $('#descripcionEdit').val().trim(),
             "idProyecto": $('#rutaEdit').val(),
         });
 

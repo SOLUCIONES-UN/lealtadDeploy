@@ -47,7 +47,7 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
 });
     //evento submit del formulario
     $('#formNew').submit(function(){
-        const nombre = $('#nombre').val();
+        const nombre = $('#nombre').val().trim();
 
         if (!validarNombre(nombre)) {
             return false;
@@ -58,8 +58,8 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
         myHeaders.append("Authorization", token);
 
         var raw = JSON.stringify({
-            "nombre": $('#nombre').val(),
-            "token": $('#token').val()
+            "nombre": $('#nombre').val().trim(),
+            "token": $('#token').val().trim()
         });
 
         var requestOptions = {
@@ -98,9 +98,9 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
         $("#btnSubmitEdit").attr("disabled", true);
 
         var raw = JSON.stringify({
-            "nombre": $('#nombreEdit').val(),
+            "nombre": $('#nombreEdit').val().trim(),
             "nemonico": $('#nemonicoEdit').val(),
-            "token": $('#tokenEdit').val()
+            "token": $('#tokenEdit').val().trim()
         });
 
         var requestOptions = {

@@ -112,7 +112,7 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
     $('#formNew').submit(function (event) {
         event.preventDefault();
     
-        const descripcion = $('#descripcion').val();
+        const descripcion = $('#descripcion').val().trim();
         const ruta = $('#ruta').val();
     
         if (!validarDescripcion(descripcion) || !validarRuta(ruta)) {
@@ -122,7 +122,7 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
         $("#btnSubmit").attr("disabled", true);
     
         var raw = JSON.stringify({
-            "descripcion": descripcion,
+            "descripcion": $('#descripcion').val().trim(),
             "ruta": ruta,
             "localidades": localidadesSeleccionadas 
         });
@@ -162,7 +162,7 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
     $('#formEdit').submit(function (event) {
         event.preventDefault();
     
-        const descripcion = $('#descripcionEdit').val();
+        const descripcion = $('#descripcionEdit').val().trim();
         const ruta = $('#rutaEdit').val();
     
         if (!validarDescripcion(descripcion) || !validarRuta(ruta)) {
@@ -173,7 +173,7 @@ $('#modalEdit').find('[data-dismiss="modal"]').click(function () {
     
         var raw = JSON.stringify({
             "id": id,
-            "descripcion": descripcion,
+            "descripcion": $('#descripcion').val().trim(),
             "ruta": ruta,
             "localidades": localidadesSeleccionadas 
         });
